@@ -7,6 +7,7 @@ export function createContentService(repository: ContentRepository = localConten
   return {
     getArticle: (slug: string) => repository.getArticleBySlug(slug),
     getMediaAsset: (id: string) => repository.getMediaAsset(id),
+    getLandingPage: (pageId: string) => repository.getLandingPage(pageId),
     getPage: (pageId: string) => repository.getPageContent(pageId),
     getProject: (slug: string) => repository.getProjectBySlug(slug),
     getRegion: (slug: string) => repository.getRegionBySlug(slug),

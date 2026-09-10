@@ -88,6 +88,30 @@ const pageSchema = z.object({
   title: z.string().min(1),
 });
 
+const landingPageSchema = z.object({
+  childLinks: z
+    .object({
+      href: z.string().startsWith("/"),
+      label: z.string().min(1),
+    })
+    .array(),
+  eyebrow: z.string().min(1),
+  investmentThesis: z.string().min(20),
+  lead: z.string().min(20),
+  mediaId: z.string().min(1),
+  pageId: z.string().regex(/^PAGE-\d{3}$/),
+  parentLinks: z
+    .object({
+      href: z.string().startsWith("/"),
+      label: z.string().min(1),
+    })
+    .array(),
+  primaryCta: z.string().min(1),
+  riskSummary: z.string().min(20),
+  secondaryCta: z.string().min(1),
+  status: statusSchema,
+});
+
 function readJson(relativePath) {
   const absolutePath = path.join(projectRoot, relativePath);
   return JSON.parse(readFileSync(absolutePath, "utf8"));
@@ -127,6 +151,7 @@ const regions = regionSchema.array().parse(readJson("src/content/data/regions.js
 const projects = projectSchema.array().parse(readJson("src/content/data/projects.json"));
 const articles = articleSchema.array().parse(readJson("src/content/data/articles.json"));
 const pages = pageSchema.array().parse(readJson("src/content/data/pages.json"));
+const landingPages = landingPageSchema.array().parse(readJson("src/content/data/landing-pages.json"));
 const seoEntries = z
   .object({
     canonical: z.string().startsWith("/"),
@@ -145,11 +170,16 @@ assertUnique(articles, "id", "articles");
 assertUnique(articles, "path", "articles");
 assertUnique(pages, "id", "pages");
 assertUnique(pages, "path", "pages");
+assertUnique(landingPages, "pageId", "landing pages");
 
 const mediaIds = new Set(media.map((asset) => asset.id));
 const regionIds = new Set(regions.map((region) => region.id));
 const projectIds = new Set(projects.map((project) => project.id));
 const seoByPageId = new Map(seoEntries.map((entry) => [entry.pageId, entry]));
+const knownPaths = new Set([
+  ...seoEntries.map((entry) => entry.canonical),
+  ...articles.map((article) => article.path),
+]);
 
 for (const asset of media) {
   const absoluteFile = path.join(projectRoot, "public", asset.src.replace(/^\//, ""));
@@ -190,6 +220,16 @@ for (const page of pages) {
   const seoEntry = seoByPageId.get(page.id);
   assertExists(seoEntry, `pages: unknown page id "${page.id}"`);
   assertExists(seoEntry?.canonical === page.path, `pages: ${page.id} path must match SEO canonical ${seoEntry?.canonical}`);
+}
+
+for (const landingPage of landingPages) {
+  const seoEntry = seoByPageId.get(landingPage.pageId);
+  assertExists(seoEntry?.kind === "static", `landing pages: ${landingPage.pageId} must target a static SEO PAGE-ID`);
+  assertExists(mediaIds.has(landingPage.mediaId), `landing pages: unknown mediaId "${landingPage.mediaId}" in ${landingPage.pageId}`);
+
+  for (const link of [...landingPage.parentLinks, ...landingPage.childLinks]) {
+    assertExists(knownPaths.has(link.href), `landing pages: unknown internal link "${link.href}" in ${landingPage.pageId}`);
+  }
 }
 
 assertExists(existsSync(path.join(projectRoot, ".velite", "index.js")), "Velite output is missing. Run pnpm content:build first.");

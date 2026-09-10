@@ -21,6 +21,10 @@ export class PayloadContentRepository implements ContentRepository {
     return this.notConnected();
   }
 
+  async getLandingPage() {
+    return this.notConnected();
+  }
+
   async getPageContent() {
     return this.notConnected();
   }

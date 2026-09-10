@@ -1,6 +1,7 @@
 import type {
   ArticleDTO,
   MediaAssetDTO,
+  LandingPageDTO,
   PageContent,
   ProjectDTO,
   RegionDTO,
@@ -12,6 +13,7 @@ export interface ContentRepository {
   getArticleBySlug(slug: string): Promise<ArticleDTO | null>;
   getMediaAsset(id: string): Promise<MediaAssetDTO | null>;
   getMediaAssets(): Promise<MediaAssetDTO[]>;
+  getLandingPage(pageId: string): Promise<LandingPageDTO | null>;
   getPageContent(pageId: string): Promise<PageContent | null>;
   getProjects(): Promise<ProjectDTO[]>;
   getProjectBySlug(slug: string): Promise<ProjectDTO | null>;

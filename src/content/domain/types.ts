@@ -83,6 +83,26 @@ export type PageContent = {
   mediaId?: string;
 };
 
+export type LandingPageDTO = {
+  pageId: string;
+  status: ContentStatus;
+  eyebrow: string;
+  lead: string;
+  investmentThesis: string;
+  riskSummary: string;
+  primaryCta: string;
+  secondaryCta: string;
+  parentLinks: Array<{
+    href: string;
+    label: string;
+  }>;
+  childLinks: Array<{
+    href: string;
+    label: string;
+  }>;
+  mediaId: string;
+};
+
 export type PersonDTO = {
   id: string;
   name: string;

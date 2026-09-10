@@ -117,6 +117,32 @@ export const pageContentSchema = z.object({
   title: z.string().min(1),
 });
 
+export const landingPageSchema = z.object({
+  childLinks: z
+    .object({
+      href: z.string().startsWith("/"),
+      label: z.string().min(1),
+    })
+    .array()
+    .default([]),
+  eyebrow: z.string().min(1),
+  investmentThesis: z.string().min(20),
+  lead: z.string().min(20),
+  mediaId: z.string().min(1),
+  pageId: z.string().regex(/^PAGE-\d{3}$/),
+  parentLinks: z
+    .object({
+      href: z.string().startsWith("/"),
+      label: z.string().min(1),
+    })
+    .array()
+    .default([]),
+  primaryCta: z.string().min(1),
+  riskSummary: z.string().min(20),
+  secondaryCta: z.string().min(1),
+  status: contentStatusSchema,
+});
+
 export const personSchema = z.object({
   bio: z.string().optional(),
   id: z.string().min(1),
