@@ -4,24 +4,42 @@ workflows:
       expected_commit_sha:
         type: string
         required: true
+        description: "Reviewed PR head SHA"
     tasks:
       - name: exact-head-standard
         cubes:
-          - name: contract
+          - name: docs-contract
             image: docker.io/library/node:24.20.0-bookworm
             script:
               - test "$SOURCECRAFT_COMMIT_SHA" = "${{ inputs.expected_commit_sha }}"
+              - git diff --check
+              - test -f AGENTS.md
+              - test -f 01_PRD.md
+              - test -f 02_PRODUCT_STRUCTURE.md
+              - test -f 03_ARCHITECTURE.md
+              - test -f 05_BACKLOG.md
+              - test "$(grep -c '^### PAGE-' 02_PRODUCT_STRUCTURE.md)" -eq 23
+              - test "$(grep -c '^| PAGE-[0-9][0-9][0-9]' 02_PRODUCT_STRUCTURE.md)" -eq 23
 
   merge-risky:
     inputs:
       expected_commit_sha:
         type: string
         required: true
+        description: "Reviewed risky PR head SHA"
     tasks:
       - name: exact-head-risky
         cubes:
-          - name: contract
+          - name: bootstrap-contract
             image: docker.io/library/node:24.20.0-bookworm
             script:
               - test "$SOURCECRAFT_COMMIT_SHA" = "${{ inputs.expected_commit_sha }}"
-
+              - git diff --check
+              - test -f .sourcecraft/ci.yaml
+              - test -f AGENTS.md
+              - test -f 01_PRD.md
+              - test -f 02_PRODUCT_STRUCTURE.md
+              - test -f 03_ARCHITECTURE.md
+              - test -f 05_BACKLOG.md
+              - test "$(grep -c '^### PAGE-' 02_PRODUCT_STRUCTURE.md)" -eq 23
+              - test "$(grep -c '^| PAGE-[0-9][0-9][0-9]' 02_PRODUCT_STRUCTURE.md)" -eq 23
