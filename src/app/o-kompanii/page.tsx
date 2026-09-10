@@ -1,0 +1,55 @@
+import { getStaticMetadata } from "@/seo/metadata";
+import { getSeoEntry } from "@/seo/registry";
+import { PageHero } from "@/components/marketing/page-hero";
+import { SectionShell } from "@/components/layout/section-shell";
+import { ProofBlock } from "@/components/marketing/proof-block";
+import { LeadFormSection } from "@/components/marketing/lead-form-section";
+
+export const metadata = getStaticMetadata("PAGE-020");
+
+export default function CompanyPage() {
+  const seo = getSeoEntry("PAGE-020");
+
+  return (
+    <main>
+      <PageHero
+        eyebrow="О компании"
+        title={seo.h1}
+        lead="«Море и Горы» позиционируется как инвестиционное бюро курортной недвижимости: фокус не на объёме каталога, а на объяснимом решении до сделки."
+        primaryCta={{ href: "/podbor/", label: "Обсудить задачу" }}
+        secondaryCta={{ href: "/metodika/", label: "Смотреть подход" }}
+        image={{
+          alt: "Панорамный вид курортного побережья для сайта Море и Горы",
+          height: 1524,
+          src: "/images/og/default.webp",
+          width: 2560,
+        }}
+        proof="Команда, опыт, реквизиты и сильные claims добавляются только после подтверждения владельцем."
+      />
+
+      <SectionShell>
+        <ProofBlock
+          title="Принципы, которые можно показывать уже сейчас"
+          items={[
+            {
+              title: "Без гарантированной доходности",
+              text: "Будущие показатели описываются как сценарии, а не обещания результата.",
+            },
+            {
+              title: "Риск до заявки",
+              text: "Ограничения региона, формата и проекта выводятся до CTA, а не прячутся внизу страницы.",
+            },
+            {
+              title: "Паспорта вместо витрины",
+              text: "Проект публикуется только после фактов, источников, verifiedAt и инвестиционного вывода.",
+            },
+          ]}
+        />
+      </SectionShell>
+
+      <SectionShell className="pt-0">
+        <LeadFormSection title="Понять, подходит ли наш подход" />
+      </SectionShell>
+    </main>
+  );
+}
