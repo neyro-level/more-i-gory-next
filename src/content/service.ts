@@ -11,6 +11,7 @@ export function createContentService(repository: ContentRepository = localConten
     getPage: (pageId: string) => repository.getPageContent(pageId),
     getProject: (slug: string) => repository.getProjectBySlug(slug),
     getRegion: (slug: string) => repository.getRegionBySlug(slug),
+    listArticles: () => repository.getArticles(),
 
     async listPublishedArticles() {
       const articles = await repository.getArticles();

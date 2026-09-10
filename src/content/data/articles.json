@@ -15,5 +15,61 @@
     "relatedProjectIds": [],
     "sourceIds": [],
     "path": "/analitika/sochi-ili-krym/"
+  },
+  {
+    "id": "article-kak-schitat-chistuyu-dohodnost",
+    "slug": "kak-schitat-chistuyu-dohodnost",
+    "status": "draft",
+    "title": "Как считать чистую доходность недвижимости | Море и Горы",
+    "description": "Черновой первый экран о расчёте чистой доходности курортной недвижимости после расходов, сезонности, налогов и управления.",
+    "primaryQuery": "как считать чистую доходность недвижимости",
+    "secondaryQueries": ["чистая доходность апартаментов", "доходность недвижимости после расходов"],
+    "targetPageId": "PAGE-017",
+    "relatedRegionIds": ["region-sochi", "region-krym"],
+    "relatedProjectIds": [],
+    "sourceIds": [],
+    "path": "/analitika/kak-schitat-chistuyu-dohodnost/"
+  },
+  {
+    "id": "article-riski-kurortnyh-apartamentov",
+    "slug": "riski-kurortnyh-apartamentov",
+    "status": "draft",
+    "title": "Риски курортных апартаментов для инвестора | Море и Горы",
+    "description": "Черновой первый экран о рисках курортных апартаментов: статус, оператор, договор управления, расходы и ликвидность.",
+    "primaryQuery": "риски курортных апартаментов",
+    "secondaryQueries": ["риски апартаментов для инвестора", "апартаменты с управлением риски"],
+    "targetPageId": "PAGE-017",
+    "relatedRegionIds": ["region-sochi", "region-krym"],
+    "relatedProjectIds": [],
+    "sourceIds": [],
+    "path": "/analitika/riski-kurortnyh-apartamentov/"
+  },
+  {
+    "id": "article-kak-proverit-operatora",
+    "slug": "kak-proverit-operatora",
+    "status": "draft",
+    "title": "Как проверить оператора апартаментов | Море и Горы",
+    "description": "Черновой первый экран о проверке оператора апартаментов, договора управления, комиссий, отчётности и ответственности.",
+    "primaryQuery": "как проверить оператора апартаментов",
+    "secondaryQueries": ["оператор апартаментов проверка", "договор управления апартаментами"],
+    "targetPageId": "PAGE-017",
+    "relatedRegionIds": ["region-sochi"],
+    "relatedProjectIds": [],
+    "sourceIds": [],
+    "path": "/analitika/kak-proverit-operatora/"
+  },
+  {
+    "id": "article-likvidnost-i-vyhod",
+    "slug": "likvidnost-i-vyhod",
+    "status": "draft",
+    "title": "Ликвидность и выход из инвестиционной недвижимости | Море и Горы",
+    "description": "Черновой первый экран о ликвидности курортной недвижимости, горизонте владения и сценариях выхода из объекта.",
+    "primaryQuery": "ликвидность инвестиционной недвижимости",
+    "secondaryQueries": ["как выйти из инвестиционной недвижимости", "ликвидность курортной недвижимости"],
+    "targetPageId": "PAGE-017",
+    "relatedRegionIds": ["region-sochi", "region-krym", "region-arkhyz", "region-altay"],
+    "relatedProjectIds": [],
+    "sourceIds": [],
+    "path": "/analitika/likvidnost-i-vyhod/"
   }
 ]
