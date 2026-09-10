@@ -46,5 +46,69 @@
       { "href": "/investicionnaya-nedvizhimost/sochi/apartamenty/", "label": "Апартаменты Сочи" }
     ],
     "mediaId": "media-region-sochi"
+  },
+  {
+    "pageId": "PAGE-008",
+    "status": "review",
+    "eyebrow": "Крымский SEO-кластер",
+    "lead": "Ялта — один из самых узнаваемых рынков Крыма, но инвестиционный смысл зависит от локации, правовой модели, сезонности и реальной ликвидности.",
+    "investmentThesis": "Страница должна отделять эмоциональный спрос на Ялту от проверяемого инвестиционного решения: зона, формат, бюджет, управление, ограничения и выход.",
+    "riskSummary": "Ключевой риск — переплатить за статус локации, не проверив документы, ограничения объекта, эксплуатацию и сценарий продажи.",
+    "primaryCta": "Получить подборку по Ялте",
+    "secondaryCta": "Вернуться к Крыму",
+    "parentLinks": [{ "href": "/investicionnaya-nedvizhimost/krym/", "label": "Крым" }],
+    "childLinks": [
+      { "href": "/investicionnaya-nedvizhimost/krym/sevastopol/", "label": "Севастополь" },
+      { "href": "/investicionnaya-nedvizhimost/krym/alushta/", "label": "Алушта" }
+    ],
+    "mediaId": "media-region-krym"
+  },
+  {
+    "pageId": "PAGE-009",
+    "status": "review",
+    "eyebrow": "Крымский SEO-кластер",
+    "lead": "Севастополь сочетает городской круглогодичный спрос и курортные сценарии, поэтому его нельзя оценивать только как сезонную недвижимость.",
+    "investmentThesis": "Страница помогает разделить районы, форматы владения, спрос, правовые ограничения и ликвидность для инвестора, который смотрит Севастополь как самостоятельный рынок.",
+    "riskSummary": "Ключевой риск — смешать городской спрос и курортную доходность, не проверив формат права, ограничения, спрос арендаторов и сценарий выхода.",
+    "primaryCta": "Получить подборку по Севастополю",
+    "secondaryCta": "Вернуться к Крыму",
+    "parentLinks": [{ "href": "/investicionnaya-nedvizhimost/krym/", "label": "Крым" }],
+    "childLinks": [
+      { "href": "/investicionnaya-nedvizhimost/krym/yalta/", "label": "Ялта" },
+      { "href": "/investicionnaya-nedvizhimost/krym/evpatoriya/", "label": "Евпатория" }
+    ],
+    "mediaId": "media-region-krym"
+  },
+  {
+    "pageId": "PAGE-010",
+    "status": "review",
+    "eyebrow": "Крымский SEO-кластер",
+    "lead": "Евпатория интересна семейным курортным спросом, но требует проверки сезонности, инфраструктуры, формата объекта и расходов владения.",
+    "investmentThesis": "Страница должна показать, когда Евпатория подходит под задачу капитала, а когда инвестору нужен более ликвидный или круглогодичный рынок.",
+    "riskSummary": "Ключевой риск — переоценить сезонный спрос и недооценить расходы, управление, транспортную доступность и ограниченность покупателей на выходе.",
+    "primaryCta": "Получить подборку по Евпатории",
+    "secondaryCta": "Вернуться к Крыму",
+    "parentLinks": [{ "href": "/investicionnaya-nedvizhimost/krym/", "label": "Крым" }],
+    "childLinks": [
+      { "href": "/investicionnaya-nedvizhimost/krym/yalta/", "label": "Ялта" },
+      { "href": "/investicionnaya-nedvizhimost/krym/sevastopol/", "label": "Севастополь" }
+    ],
+    "mediaId": "media-region-krym"
+  },
+  {
+    "pageId": "PAGE-011",
+    "status": "review",
+    "eyebrow": "Крымский SEO-кластер",
+    "lead": "Алушта — курортный рынок, где инвестиционный вывод зависит от конкретной локации, транспортной доступности, сезонности и формата объекта.",
+    "investmentThesis": "Страница должна помогать сравнивать Алушту с Ялтой и другими городами Крыма не по эмоции, а по бюджету, спросу, управлению, рискам и ликвидности.",
+    "riskSummary": "Ключевой риск — купить объект в привлекательной курортной зоне без подтверждённого спроса, управления и понятного сценария выхода.",
+    "primaryCta": "Получить подборку по Алуште",
+    "secondaryCta": "Вернуться к Крыму",
+    "parentLinks": [{ "href": "/investicionnaya-nedvizhimost/krym/", "label": "Крым" }],
+    "childLinks": [
+      { "href": "/investicionnaya-nedvizhimost/krym/yalta/", "label": "Ялта" },
+      { "href": "/investicionnaya-nedvizhimost/krym/evpatoriya/", "label": "Евпатория" }
+    ],
+    "mediaId": "media-region-krym"
   }
 ]
