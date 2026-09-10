@@ -127,6 +127,14 @@ const regions = regionSchema.array().parse(readJson("src/content/data/regions.js
 const projects = projectSchema.array().parse(readJson("src/content/data/projects.json"));
 const articles = articleSchema.array().parse(readJson("src/content/data/articles.json"));
 const pages = pageSchema.array().parse(readJson("src/content/data/pages.json"));
+const seoEntries = z
+  .object({
+    canonical: z.string().startsWith("/"),
+    kind: z.enum(["static", "dynamic"]),
+    pageId: z.string(),
+  })
+  .array()
+  .parse(readJson("src/seo/registry.json"));
 
 assertUnique(media, "id", "media registry");
 assertUnique(regions, "id", "regions");
@@ -141,6 +149,7 @@ assertUnique(pages, "path", "pages");
 const mediaIds = new Set(media.map((asset) => asset.id));
 const regionIds = new Set(regions.map((region) => region.id));
 const projectIds = new Set(projects.map((project) => project.id));
+const seoByPageId = new Map(seoEntries.map((entry) => [entry.pageId, entry]));
 
 for (const asset of media) {
   const absoluteFile = path.join(projectRoot, "public", asset.src.replace(/^\//, ""));
@@ -149,6 +158,9 @@ for (const asset of media) {
 
 for (const region of regions) {
   assertExists(mediaIds.has(region.heroMediaId), `regions: unknown heroMediaId "${region.heroMediaId}" in ${region.id}`);
+  const seoEntry = seoByPageId.get(region.pageId);
+  assertExists(seoEntry, `regions: unknown pageId "${region.pageId}" in ${region.id}`);
+  assertExists(seoEntry?.canonical === region.path, `regions: ${region.id} path must match SEO canonical ${seoEntry?.canonical}`);
 }
 
 for (const project of projects) {
@@ -162,6 +174,9 @@ for (const project of projects) {
 }
 
 for (const article of articles) {
+  const seoEntry = seoByPageId.get(article.targetPageId);
+  assertExists(seoEntry?.kind === "dynamic", `articles: ${article.id} must target a dynamic SEO PAGE-ID`);
+
   for (const regionId of article.relatedRegionIds) {
     assertExists(regionIds.has(regionId), `articles: unknown relatedRegionId "${regionId}" in ${article.id}`);
   }
@@ -169,6 +184,12 @@ for (const article of articles) {
   for (const projectId of article.relatedProjectIds) {
     assertExists(projectIds.has(projectId), `articles: unknown relatedProjectId "${projectId}" in ${article.id}`);
   }
+}
+
+for (const page of pages) {
+  const seoEntry = seoByPageId.get(page.id);
+  assertExists(seoEntry, `pages: unknown page id "${page.id}"`);
+  assertExists(seoEntry?.canonical === page.path, `pages: ${page.id} path must match SEO canonical ${seoEntry?.canonical}`);
 }
 
 assertExists(existsSync(path.join(projectRoot, ".velite", "index.js")), "Velite output is missing. Run pnpm content:build first.");

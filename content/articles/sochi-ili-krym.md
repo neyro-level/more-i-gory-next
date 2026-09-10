@@ -8,7 +8,7 @@ primaryQuery: "Сочи или Крым для инвестиций"
 secondaryQueries:
   - "инвестиции в недвижимость Сочи или Крым"
   - "курортная недвижимость Сочи Крым"
-targetPageId: "PAGE-018"
+targetPageId: "PAGE-017"
 relatedRegionIds:
   - "region-sochi"
   - "region-krym"
