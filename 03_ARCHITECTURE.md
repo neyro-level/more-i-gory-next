@@ -30,6 +30,17 @@ Browser
 → downstream CRM/routing
 ```
 
+## 1.1. Delivery Profile
+
+```text
+DELIVERY_PROFILE = COMMERCIAL
+```
+
+Основание: публичный клиентский сайт с заявками, SEO-трафиком, репутационным
+риском и будущей интеграцией AMS Leads API. Merge в `main` выполняется через
+SourceCraft PR и exact-head `STANDARD`/`RISKY` gate. Production release остаётся
+только отдельной командой владельца.
+
 ## 2. Stack
 
 Exact toolchain первого релиза:
@@ -186,6 +197,10 @@ Raw HTML запрещён.
 
 - все production routes известны build-time;
 - dynamic project/article routes используют static params;
+- route `/obekty/[slug]/` создаётся только при наличии минимум одного
+  `published` проекта, потому что Next static export запрещает пустой
+  `generateStaticParams()`; до этого в коде хранится готовый
+  `ProjectPassportTemplate`, а draft-проект не попадает в `out/`;
 - filter/query states не становятся routes;
 - trailing slash фиксируется единообразно;
 - custom 404 обязан отдавать 404;
