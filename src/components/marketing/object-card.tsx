@@ -30,7 +30,7 @@ export function ObjectCard({ href, image, location, risk, status, thesis, title 
           <Badge className="bg-brand-coral/10 text-brand-coral">{status}</Badge>
         </div>
         <CardTitle className="text-2xl">
-          <Link href={href}>{title}</Link>
+          <Link prefetch={false} href={href}>{title}</Link>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 text-sm leading-7 text-muted-foreground">

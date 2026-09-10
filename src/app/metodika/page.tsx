@@ -80,7 +80,7 @@ export default function MethodPage() {
       </SectionShell>
 
       <SectionShell className="pt-0">
-        <Link href="/podbor/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-navy px-6 text-white hover:bg-brand-navy/90")}>
+        <Link prefetch={false} href="/podbor/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-navy px-6 text-white hover:bg-brand-navy/90")}>
           Получить разбор по методике
         </Link>
       </SectionShell>

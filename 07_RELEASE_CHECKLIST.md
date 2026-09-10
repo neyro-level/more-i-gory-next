@@ -23,6 +23,7 @@
 - [ ] tests pass.
 - [ ] production build passes.
 - [ ] `pnpm verify` passes.
+- [ ] `pnpm verify:artifact` passes.
 
 ## 3. Content
 
@@ -52,6 +53,7 @@
 ## 5. Performance
 
 - [ ] Initial JS budget passes.
+- [ ] If Initial JS budget does not pass, current gzip value and reason are recorded before production.
 - [ ] Lazy chunk budget passes.
 - [ ] Project Passport transfer budget passes.
 - [ ] LCP lab target reviewed.
@@ -137,3 +139,19 @@ Database:
 - [ ] form end-to-end.
 - [ ] logs checked.
 - [ ] critical pages visually checked on mobile.
+
+## 12. Current PR-12 QA Snapshot
+
+Дата: 2026-09-10.
+
+- `pnpm verify`: PASS.
+- Static artifact: `out/`, 30 generated app routes.
+- `pnpm verify:artifact`: PASS with performance warning.
+- Initial route JS: 184 KB gzip; target is 110 KB gzip.
+- Largest lazy chunk: 70 KB gzip; target is 300 KB gzip.
+- Browser smoke on local static server:
+  - `/`: PASS, console clean, network 200.
+  - `/podbor/`: PASS, console clean, network 200, form labels/checkbox/button visible in accessibility tree.
+- Production release: NOT RUN.
+- Leads API: NOT ENABLED; `NEXT_PUBLIC_LEADS_ENABLED` remains off until human gate.
+- Legal texts: NOT APPROVED; `/privacy/` and `/consent/` are noindex gate pages, not final legal documents.

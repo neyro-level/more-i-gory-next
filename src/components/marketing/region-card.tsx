@@ -24,7 +24,7 @@ export function RegionCard({ href, image, risk, thesis, title }: RegionCardProps
       </div>
       <CardHeader>
         <CardTitle className="flex items-center justify-between gap-4 text-2xl">
-          <Link href={href} className="after:absolute after:inset-0">
+          <Link prefetch={false} href={href} className="after:absolute after:inset-0">
             {title}
           </Link>
           <ArrowUpRight aria-hidden="true" className="size-5 text-brand-coral" />

@@ -125,7 +125,7 @@ export default async function HomePage() {
         title="Пять ступеней инвестиционного решения"
         lead="Эта логика потом раскладывается в региональные страницы, паспорта проектов и аналитические материалы."
         actions={
-          <Link href="/metodika/" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}>
+          <Link prefetch={false} href="/metodika/" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}>
             Смотреть методику
           </Link>
         }
@@ -168,7 +168,7 @@ export default async function HomePage() {
         title="Сравниваем море и горы как разные инвестиционные рынки"
         lead="На старте фокус — Сочи, Крым, Архыз и Алтай. Расширение регионов пойдёт только после отдельного SEO и content gate."
         actions={
-          <Link href="/investicionnaya-nedvizhimost/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-navy px-6 text-white hover:bg-brand-navy/90")}>
+          <Link prefetch={false} href="/investicionnaya-nedvizhimost/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-navy px-6 text-white hover:bg-brand-navy/90")}>
             Сравнить регионы
           </Link>
         }
@@ -253,7 +253,7 @@ export default async function HomePage() {
             <Card key={item.href} className="rounded-[1.5rem]">
               <CardHeader>
                 <CardTitle className="text-2xl">
-                  <Link href={item.href}>{item.title}</Link>
+                  <Link prefetch={false} href={item.href}>{item.title}</Link>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-5 text-sm leading-7 text-muted-foreground">

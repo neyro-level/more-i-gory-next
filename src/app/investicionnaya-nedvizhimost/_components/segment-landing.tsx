@@ -64,7 +64,7 @@ export async function SegmentLanding({ pageId }: SegmentLandingProps) {
       >
         <div className="grid gap-4 md:grid-cols-3">
           {[...landing.parentLinks, ...landing.childLinks].map((link) => (
-            <Link key={link.href} href={link.href} className="rounded-[1.25rem] bg-white p-5 text-base font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <Link key={link.href} prefetch={false} href={link.href} className="rounded-[1.25rem] bg-white p-5 text-base font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
               {link.label}
             </Link>
           ))}

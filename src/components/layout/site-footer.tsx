@@ -25,22 +25,22 @@ export function SiteFooter() {
         <div className="grid gap-8 sm:grid-cols-2">
           <nav className="space-y-3 text-sm" aria-label="Навигация в подвале">
             {footerLinks.map((item) => (
-              <Link key={item.href} href={item.href} className="block text-white/70 transition hover:text-white">
+              <Link key={item.href} prefetch={false} href={item.href} className="block text-white/70 transition hover:text-white">
                 {item.label}
               </Link>
             ))}
           </nav>
           <nav className="space-y-3 text-sm" aria-label="Юридическая навигация">
-            <Link href="/o-kompanii/" className="block text-white/70 transition hover:text-white">
+            <Link prefetch={false} href="/o-kompanii/" className="block text-white/70 transition hover:text-white">
               О компании
             </Link>
-            <Link href="/kontakty/" className="block text-white/70 transition hover:text-white">
+            <Link prefetch={false} href="/kontakty/" className="block text-white/70 transition hover:text-white">
               Контакты
             </Link>
-            <Link href="/privacy/" className="block text-white/70 transition hover:text-white">
+            <Link prefetch={false} href="/privacy/" className="block text-white/70 transition hover:text-white">
               Политика конфиденциальности
             </Link>
-            <Link href="/consent/" className="block text-white/70 transition hover:text-white">
+            <Link prefetch={false} href="/consent/" className="block text-white/70 transition hover:text-white">
               Согласие на обработку данных
             </Link>
           </nav>

@@ -32,12 +32,12 @@ export function PageHero({ eyebrow, image, lead, primaryCta, proof, secondaryCta
             <h1 className="max-w-4xl text-4xl font-semibold leading-tight tracking-tight md:text-6xl">{title}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">{lead}</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href={primaryCta.href} className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-coral px-6 text-white hover:bg-brand-coral/90")}>
+              <Link prefetch={false} href={primaryCta.href} className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-coral px-6 text-white hover:bg-brand-coral/90")}>
                 {primaryCta.label}
                 <ArrowRight aria-hidden="true" className="ml-2 size-4" />
               </Link>
               {secondaryCta ? (
-                <Link href={secondaryCta.href} className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full px-6")}>
+                <Link prefetch={false} href={secondaryCta.href} className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full px-6")}>
                   {secondaryCta.label}
                 </Link>
               ) : null}

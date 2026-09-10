@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     default: "Недвижимость для инвестиций — курортные проекты | Море и Горы",
     template: "%s | Море и Горы",
   },
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

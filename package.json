@@ -16,7 +16,8 @@
     "verify:foundation": "node scripts/verify-foundation.mjs",
     "verify:content": "node scripts/validate-content.mjs",
     "verify:seo": "node scripts/validate-seo.mjs",
-    "verify": "pnpm content:build && pnpm typecheck && pnpm lint && pnpm verify:foundation && pnpm verify:content && pnpm verify:seo && pnpm build"
+    "verify:artifact": "node scripts/verify-static-artifact.mjs",
+    "verify": "pnpm content:build && pnpm typecheck && pnpm lint && pnpm verify:foundation && pnpm verify:content && pnpm verify:seo && pnpm build && pnpm verify:artifact"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",
