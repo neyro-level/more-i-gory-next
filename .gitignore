@@ -1,0 +1,28 @@
+# Dependencies and build output
+node_modules/
+.next/
+out/
+.velite/
+coverage/
+test-results/
+playwright-report/
+
+# Local environment and caches
+.env
+.env.*
+!.env.example
+.turbo/
+.cache/
+.eslintcache
+*.tsbuildinfo
+
+# Local research/browser artifacts
+.playwright-mcp/
+site-transfer-moreigori-2026-09-09/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
