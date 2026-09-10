@@ -3,8 +3,7 @@ import Link from "next/link";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/lib/button-variants";
 import { RegionCard } from "@/components/marketing/region-card";
 import { ProofBlock } from "@/components/marketing/proof-block";
 import { RiskBlock } from "@/components/marketing/risk-block";
@@ -103,7 +102,9 @@ export default async function HomePage() {
       <SectionShell className="bg-white" contained={false}>
         <div className="mx-auto grid max-w-[1200px] gap-8 px-5 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
           <div className="rounded-[2rem] bg-brand-navy p-8 text-white md:p-10">
-            <Badge className="rounded-full bg-white/10 text-white">Почему не каталог</Badge>
+            <span className="w-fit rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white">
+              Почему не каталог
+            </span>
             <h2 className="mt-6 text-3xl font-semibold md:text-5xl">Каталог показывает выбор. Инвестору нужно основание для решения.</h2>
           </div>
           <div className="grid gap-4">

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ObjectCard } from "@/components/marketing/object-card";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { contentService } from "@/content/service";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/lib/button-variants";
 import { cn } from "@/lib/utils";
 
 export const metadata = getStaticMetadata("PAGE-014");

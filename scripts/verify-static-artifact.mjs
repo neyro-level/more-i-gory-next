@@ -84,7 +84,7 @@ for (const source of scriptSources) {
 const initialRouteJsGzipKb = Math.round(initialRouteJsGzipBytes / 1024);
 const largestLazyChunkKb = Math.round(Math.max(0, ...chunkSizes) / 1024);
 const htmlSizeKb = Math.round(statSync(path.join(outDir, "index.html")).size / 1024);
-const status = initialRouteJsGzipKb <= initialRouteJsBudgetGzipKb ? "PASS" : "WARNING";
+const status = initialRouteJsGzipKb <= initialRouteJsBudgetGzipKb ? "PASS" : "FAIL";
 
 console.log(
   JSON.stringify(
@@ -104,4 +104,10 @@ console.log(
 
 if (largestLazyChunkKb > 300) {
   throw new Error(`Largest lazy chunk exceeds 300 KB gzip: ${largestLazyChunkKb} KB`);
+}
+
+if (initialRouteJsGzipKb > initialRouteJsBudgetGzipKb) {
+  throw new Error(
+    `Initial route JS exceeds ${initialRouteJsBudgetGzipKb} KB gzip: ${initialRouteJsGzipKb} KB`,
+  );
 }

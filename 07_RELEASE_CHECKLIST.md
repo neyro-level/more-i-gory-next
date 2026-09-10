@@ -140,18 +140,22 @@ Database:
 - [ ] logs checked.
 - [ ] critical pages visually checked on mobile.
 
-## 12. Current PR-12 QA Snapshot
+## 12. Current PR-13 QA Snapshot
 
 Дата: 2026-09-10.
 
 - `pnpm verify`: PASS.
 - Static artifact: `out/`, 30 generated app routes.
-- `pnpm verify:artifact`: PASS with performance warning.
-- Initial route JS: 184 KB gzip; target is 110 KB gzip.
-- Largest lazy chunk: 70 KB gzip; target is 300 KB gzip.
-- Browser smoke on local static server:
-  - `/`: PASS, console clean, network 200.
-  - `/podbor/`: PASS, console clean, network 200, form labels/checkbox/button visible in accessibility tree.
+- `pnpm verify:artifact`: PASS.
+- Initial route JS on `/`: 0 KB gzip after static no-JS export; target is 110 KB gzip.
+- Largest lazy chunk on `/`: 0 KB gzip; target is 300 KB gzip.
+- HTTP smoke on local static server:
+  - `/`: 200, no `_next/static/chunks` scripts in HTML.
+  - `/podbor/`: 200, form present, client runtime preserved.
+  - `/kontakty/`: 200, client runtime preserved for form.
+  - `/investicionnaya-nedvizhimost/sochi/`: 200.
+  - `/analitika/sochi-ili-krym/`: 200.
+  - `/privacy/`: 200, `noindex, follow`.
 - Production release: NOT RUN.
 - Leads API: NOT ENABLED; `NEXT_PUBLIC_LEADS_ENABLED` remains off until human gate.
 - Legal texts: NOT APPROVED; `/privacy/` and `/consent/` are noindex gate pages, not final legal documents.

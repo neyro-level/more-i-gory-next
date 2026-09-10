@@ -1,9 +1,7 @@
 import ExportedImage from "next-image-export-optimizer";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRight } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/lib/button-variants";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/layout/container";
 
@@ -28,13 +26,15 @@ export function PageHero({ eyebrow, image, lead, primaryCta, proof, secondaryCta
       <Container>
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
           <div className="flex flex-col justify-center rounded-[2rem] bg-white p-7 text-foreground shadow-2xl shadow-black/10 md:p-10">
-            <Badge className="mb-6 w-fit rounded-full bg-brand-coral/10 text-brand-coral">{eyebrow}</Badge>
+            <span className="mb-6 w-fit rounded-full bg-brand-coral/10 px-3 py-1 text-xs font-medium text-brand-coral">
+              {eyebrow}
+            </span>
             <h1 className="max-w-4xl text-4xl font-semibold leading-tight tracking-tight md:text-6xl">{title}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">{lead}</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link prefetch={false} href={primaryCta.href} className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-coral px-6 text-white hover:bg-brand-coral/90")}>
                 {primaryCta.label}
-                <ArrowRight aria-hidden="true" className="ml-2 size-4" />
+                <span aria-hidden="true" className="ml-2 text-base leading-none">→</span>
               </Link>
               {secondaryCta ? (
                 <Link prefetch={false} href={secondaryCta.href} className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full px-6")}>

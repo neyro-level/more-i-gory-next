@@ -220,6 +220,12 @@ Leaf Client Components:
 
 `"use client"` запрещён в `src/app/**` и больших композиционных секциях.
 
+Для полностью статических маркетинговых маршрутов после `next build`
+выполняется post-export stripping Next runtime scripts. Это не меняет HTML,
+metadata, CSS, изображения и ссылки, но убирает ненужную гидратацию там, где нет
+интерактива. Клиентский runtime сохраняется только для маршрутов с реальными
+Client leaves: на старте `/podbor/` и `/kontakty/`.
+
 Client Component:
 - получает только минимальные serializable props;
 - не импортирует Repository/Adapter;
@@ -423,6 +429,7 @@ Initial targets:
 - после запуска INP ≤ 200 ms p75.
 
 Budgets are project gates, not SEO ranking guarantees.
+`pnpm verify:artifact` обязан падать при превышении initial route JS budget.
 
 ## 25. `pnpm verify`
 

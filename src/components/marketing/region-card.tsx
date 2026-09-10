@@ -1,6 +1,5 @@
 import ExportedImage from "next-image-export-optimizer";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type RegionCardProps = {
@@ -27,7 +26,7 @@ export function RegionCard({ href, image, risk, thesis, title }: RegionCardProps
           <Link prefetch={false} href={href} className="after:absolute after:inset-0">
             {title}
           </Link>
-          <ArrowUpRight aria-hidden="true" className="size-5 text-brand-coral" />
+          <span aria-hidden="true" className="text-brand-coral">↗</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 text-sm leading-7 text-muted-foreground">

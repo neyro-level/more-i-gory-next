@@ -6,7 +6,7 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScenarioTable } from "@/components/marketing/scenario-table";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/lib/button-variants";
 import { cn } from "@/lib/utils";
 
 export const metadata = getStaticMetadata("PAGE-018");

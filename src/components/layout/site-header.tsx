@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Menu } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/lib/button-variants";
 import { cn } from "@/lib/utils";
 import { Container } from "./container";
 
@@ -45,13 +44,13 @@ export function SiteHeader() {
             )}
           >
             Получить разбор
-            <ArrowUpRight aria-hidden="true" className="ml-1 size-4" />
+            <span aria-hidden="true" className="ml-1 text-base leading-none">↗</span>
           </Link>
         </div>
 
         <details className="group relative lg:hidden">
           <summary className="grid size-11 cursor-pointer list-none place-items-center rounded-full border border-white/20 bg-white/10 text-white [&::-webkit-details-marker]:hidden">
-            <Menu aria-hidden="true" className="size-5" />
+            <span aria-hidden="true" className="text-xl leading-none">☰</span>
             <span className="sr-only">Открыть меню</span>
           </summary>
           <nav className="absolute right-0 top-14 z-50 grid min-w-64 gap-2 rounded-[1.5rem] bg-white p-3 text-brand-navy shadow-2xl" aria-label="Мобильная навигация">
