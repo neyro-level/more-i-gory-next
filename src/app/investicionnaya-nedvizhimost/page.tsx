@@ -44,7 +44,7 @@ export default async function FederalInvestmentHubPage() {
         title="Четыре направления — разные причины для входа"
         lead="На старте не расширяем архитектуру без необходимости: эти рынки дают понятный костяк для SEO и будущего каталога."
         actions={
-          <Link href="/metodika/" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}>
+          <Link prefetch={false} href="/metodika/" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}>
             Как мы сравниваем
           </Link>
         }
