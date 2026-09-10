@@ -1,23 +1,25 @@
 import { getStaticMetadata } from "@/seo/metadata";
+import { PageHero } from "@/components/marketing/page-hero";
 
 export const metadata = getStaticMetadata("PAGE-001");
 
 export default function HomePage() {
   return (
     <main>
-      <section className="mx-auto flex min-h-screen max-w-6xl flex-col justify-center gap-6 px-6 py-20">
-        <p className="text-sm uppercase tracking-wide text-muted-foreground">
-          Инвестиционное бюро курортной недвижимости
-        </p>
-        <h1 className="max-w-4xl text-4xl font-semibold leading-tight text-foreground md:text-6xl">
-          Курортная недвижимость для инвестиций — с понятной экономикой и рисками
-        </h1>
-        <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
-          Сравниваем Сочи, Крым, Архыз и Алтай, чтобы до сделки было видно:
-          зачем заходить в проект, где ограничения и какой сценарий выхода
-          реалистичен.
-        </p>
-      </section>
+      <PageHero
+        eyebrow="Инвестиционное бюро курортной недвижимости"
+        title="Курортная недвижимость для инвестиций — с понятной экономикой и рисками"
+        lead="Сравниваем Сочи, Крым, Архыз и Алтай, чтобы до сделки было видно: зачем заходить в проект, где ограничения и какой сценарий выхода реалистичен."
+        primaryCta={{ href: "/podbor/", label: "Получить инвестиционный разбор" }}
+        secondaryCta={{ href: "/investicionnaya-nedvizhimost/", label: "Сравнить регионы" }}
+        image={{
+          alt: "Панорамный вид курортного побережья для сайта Море и Горы",
+          height: 1524,
+          src: "/images/og/default.webp",
+          width: 2560,
+        }}
+        proof="Без обещаний гарантированной доходности: сначала факты, риски, экономика и сценарий выхода."
+      />
     </main>
   );
 }

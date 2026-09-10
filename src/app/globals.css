@@ -5,22 +5,31 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --border: oklch(0.922 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --color-brand-navy: #08192c;
+  --color-brand-coral: #ff6a55;
+  --color-surface-white: #ffffff;
+  --color-text-dark: #1a1a1a;
+  --color-text-light: #ffffff;
+  --color-navy-74: rgba(8, 25, 44, 0.74);
+  --color-navy-50: rgba(8, 25, 44, 0.5);
+  --color-navy-35: rgba(8, 25, 44, 0.35);
+
+  --muted: oklch(0.96 0.01 85);
+  --muted-foreground: oklch(0.43 0.02 250);
+  --border: oklch(0.88 0.01 250);
+  --primary: #08192c;
+  --primary-foreground: #ffffff;
+  --radius: 1rem;
+  --background: #f6f1ea;
+  --foreground: #1a1a1a;
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: #1a1a1a;
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: #1a1a1a;
+  --secondary: #ffffff;
+  --secondary-foreground: #08192c;
+  --accent: #ff6a55;
+  --accent-foreground: #ffffff;
   --destructive: oklch(0.577 0.245 27.325);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -47,6 +56,11 @@
   --color-border: var(--border);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-brand-navy: var(--color-brand-navy);
+  --color-brand-coral: var(--color-brand-coral);
+  --color-surface-white: var(--color-surface-white);
+  --color-text-dark: var(--color-text-dark);
+  --color-text-light: var(--color-text-light);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -93,8 +107,9 @@ html {
 body {
   margin: 0;
   font-family:
-    Arial,
+    var(--font-sans),
     "Helvetica Neue",
+    Arial,
     sans-serif;
 }
 
@@ -137,9 +152,13 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
   }
   html {
     @apply font-sans;
+  }
+
+  a {
+    @apply underline-offset-4;
   }
 }

@@ -3,6 +3,8 @@ import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { siteUrl } from "@/seo/metadata";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -21,7 +23,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={cn("font-sans", geist.variable)}>
-      <body>{children}</body>
+      <body>
+        <SiteHeader />
+        {children}
+        <SiteFooter />
+      </body>
     </html>
   );
 }
