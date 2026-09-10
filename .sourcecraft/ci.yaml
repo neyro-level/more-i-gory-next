@@ -27,6 +27,13 @@ workflows:
                   pnpm install --frozen-lockfile
                   pnpm verify
                 fi
+              - |
+                if [ -f package.json ]; then
+                  corepack enable
+                  corepack prepare pnpm@11.5.1 --activate
+                  pnpm install --frozen-lockfile
+                  pnpm verify
+                fi
 
   merge-risky:
     inputs:

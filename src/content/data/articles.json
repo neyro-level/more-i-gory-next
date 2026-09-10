@@ -1,0 +1,19 @@
+[
+  {
+    "id": "article-sochi-ili-krym",
+    "slug": "sochi-ili-krym",
+    "status": "draft",
+    "title": "Сочи или Крым для инвестиций — сравнение рынков",
+    "description": "Черновой первый экран аналитического материала о выборе между Сочи и Крымом для инвестиций в курортную недвижимость.",
+    "primaryQuery": "Сочи или Крым для инвестиций",
+    "secondaryQueries": [
+      "инвестиции в недвижимость Сочи или Крым",
+      "курортная недвижимость Сочи Крым"
+    ],
+    "targetPageId": "PAGE-018",
+    "relatedRegionIds": ["region-sochi", "region-krym"],
+    "relatedProjectIds": [],
+    "sourceIds": [],
+    "path": "/analitika/sochi-ili-krym/"
+  }
+]

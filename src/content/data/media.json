@@ -1,0 +1,38 @@
+[
+  {
+    "id": "media-og-default",
+    "src": "/images/og/default.webp",
+    "width": 2560,
+    "height": 1524,
+    "alt": "Панорамный вид курортного побережья для сайта Море и Горы",
+    "decorative": false,
+    "kind": "og"
+  },
+  {
+    "id": "media-region-sochi",
+    "src": "/images/regions/sochi-coast.webp",
+    "width": 1408,
+    "height": 1877,
+    "alt": "Побережье Сочи как регион для инвестиций в курортную недвижимость",
+    "decorative": false,
+    "kind": "region"
+  },
+  {
+    "id": "media-region-krym",
+    "src": "/images/regions/crimea-coast.webp",
+    "width": 2189,
+    "height": 1232,
+    "alt": "Крымское побережье как регион для инвестиций в недвижимость",
+    "decorative": false,
+    "kind": "region"
+  },
+  {
+    "id": "media-project-sample-cover",
+    "src": "/images/projects/sample-resort/cover.webp",
+    "width": 1478,
+    "height": 1000,
+    "alt": "Черновая обложка инвестиционного паспорта курортного проекта",
+    "decorative": false,
+    "kind": "project"
+  }
+]

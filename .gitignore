@@ -19,10 +19,11 @@ playwright-report/
 # Local research/browser artifacts
 .playwright-mcp/
 site-transfer-moreigori-2026-09-09/
+public/images/**/nextImageExportOptimizer/
+public/images/next-image-export-optimizer-hashes.json
 
 # OS/editor files
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
-

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "project-sample-resort",
+    "slug": "sample-resort",
+    "regionId": "region-sochi",
+    "status": "draft",
+    "title": "TODO: инвестиционный паспорт проекта",
+    "path": "/obekty/sample-resort/",
+    "coverMediaId": "media-project-sample-cover",
+    "verdict": "Черновой паспорт показывает структуру будущей карточки, но не публикуется до подтверждения фактов, цены, источников и инвестиционного вывода.",
+    "facts": [],
+    "budgetNote": "TODO: бюджет не указан до получения подтверждённых данных.",
+    "riskSummary": "До публикации нужно проверить документы, оператора, экономику, ограничения использования и сценарий выхода.",
+    "sourceIds": []
+  }
+]
