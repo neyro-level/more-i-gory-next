@@ -20,6 +20,13 @@ workflows:
               - test -f 05_BACKLOG.md
               - test "$(grep -c '^### PAGE-' 02_PRODUCT_STRUCTURE.md)" -eq 23
               - test "$(grep -c '^| PAGE-[0-9][0-9][0-9]' 02_PRODUCT_STRUCTURE.md)" -eq 23
+              - |
+                if [ -f package.json ]; then
+                  corepack enable
+                  corepack prepare pnpm@11.5.1 --activate
+                  pnpm install --frozen-lockfile
+                  pnpm verify
+                fi
 
   merge-risky:
     inputs:
