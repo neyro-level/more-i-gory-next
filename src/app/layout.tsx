@@ -2,17 +2,16 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { siteUrl } from "@/seo/metadata";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://moreigori.ru"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Недвижимость для инвестиций — курортные проекты | Море и Горы",
     template: "%s | Море и Горы",
   },
-  description:
-    "Недвижимость для инвестиций в Сочи, Крыму, Архызе и на Алтае: сравниваем проекты, экономику, риски и сценарии выхода.",
 };
 
 export default function RootLayout({
