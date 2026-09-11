@@ -27,9 +27,9 @@ export default function CompanyPage() {
         proof="Команда, опыт, реквизиты и сильные claims добавляются только после подтверждения владельцем."
       />
 
-      <SectionShell>
+      <SectionShell eyebrow="Принципы" title="На чём строится подход бюро">
         <ProofBlock
-          title="Принципы, которые можно показывать уже сейчас"
+          title={null}
           items={[
             {
               title: "Без гарантированной доходности",

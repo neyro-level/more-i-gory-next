@@ -4,6 +4,7 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LeadForm } from "@/ui/interactive/lead-form";
+import { NumberedSteps } from "@/components/marketing/numbered-steps";
 
 export const metadata = getStaticMetadata("PAGE-019");
 
@@ -35,25 +36,14 @@ export default function SelectionPage() {
       />
 
       <SectionShell eyebrow="Процесс" title="Что произойдёт после обращения">
-        <div className="grid gap-4 md:grid-cols-4">
-          {steps.map((step, index) => (
-            <Card key={step} className="rounded-surface bg-white">
-              <CardContent className="flex flex-col gap-4 p-5">
-                <span className="grid size-9 place-items-center rounded-full bg-brand-coral text-sm font-semibold text-white">
-                  {index + 1}
-                </span>
-                <p className="text-sm font-semibold leading-6">{step}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <NumberedSteps columns={4} items={steps.map((title) => ({ title }))} />
       </SectionShell>
 
       <SectionShell id="form" className="pt-0" eyebrow="Форма" title="Опишите инвестиционную задачу" lead="Форма уже проверяет поля на клиенте, но реальная отправка отключена до согласования юридических текстов и production Leads API.">
         <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
           <Card className="rounded-feature bg-brand-navy text-white">
             <CardHeader>
-              <CardTitle className="text-2xl">Что лучше указать</CardTitle>
+              <CardTitle className="text-card-title">Что лучше указать</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-3 text-sm leading-7 text-white/70">
               <p>Регион или несколько регионов.</p>

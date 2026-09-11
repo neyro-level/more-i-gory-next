@@ -64,5 +64,7 @@ Research объясняет причины решений, но не являе�
 
 ## Current Focus
 
-EPIC-17 — нормализация документации по AMS Product Development Standard 2.0.
-После завершения следующий рабочий поток — Content Approval.
+EPIC-18 UI Constitution Conformance 2.0 завершён в WORK: semantic typography,
+CTA variants, responsive matrix, composition-first pages и automated foundation
+guards подтверждены локально. Следующий продуктовый поток — Content Approval;
+review/merge и production выполняются только отдельными lifecycle-командами.

@@ -1,4 +1,4 @@
-import { StaticLink } from "@/components/navigation/static-link";
+import { ActionLink } from "@/components/navigation/action-link";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
@@ -7,8 +7,6 @@ import { RegionCard } from "@/components/marketing/region-card";
 import { ProofBlock } from "@/components/marketing/proof-block";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { contentService } from "@/content/service";
-import { buttonVariants } from "@/lib/button-variants";
-import { cn } from "@/lib/utils";
 
 export const metadata = getStaticMetadata("PAGE-002");
 
@@ -44,9 +42,9 @@ export default async function FederalInvestmentHubPage() {
         title="Четыре направления — разные причины для входа"
         lead="На старте не расширяем архитектуру без необходимости: эти рынки дают понятный костяк для SEO и будущего каталога."
         actions={
-          <StaticLink href="/metodika/" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}>
+          <ActionLink href="/metodika/" variant="outline">
             Как мы сравниваем
-          </StaticLink>
+          </ActionLink>
         }
       >
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

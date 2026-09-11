@@ -1,13 +1,11 @@
-import { StaticLink } from "@/components/navigation/static-link";
+import { ActionLink } from "@/components/navigation/action-link";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
-import { Card, CardContent } from "@/components/ui/card";
 import { ScenarioTable } from "@/components/marketing/scenario-table";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
-import { buttonVariants } from "@/lib/button-variants";
-import { cn } from "@/lib/utils";
+import { NumberedSteps } from "@/components/marketing/numbered-steps";
 
 export const metadata = getStaticMetadata("PAGE-018");
 
@@ -43,18 +41,7 @@ export default function MethodPage() {
         eyebrow="Каркас проверки"
         title="Что проверяется до инвестиционного вывода"
       >
-        <div className="grid gap-4 md:grid-cols-5">
-          {checks.map((item, index) => (
-            <Card key={item} className="rounded-surface bg-white">
-              <CardContent className="flex flex-col gap-4 p-5">
-                <span className="grid size-9 place-items-center rounded-full bg-brand-coral text-sm font-semibold text-white">
-                  {index + 1}
-                </span>
-                <p className="text-sm font-semibold leading-6">{item}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <NumberedSteps columns={5} items={checks.map((title) => ({ title }))} />
       </SectionShell>
 
       <SectionShell className="pt-0">
@@ -80,9 +67,9 @@ export default function MethodPage() {
       </SectionShell>
 
       <SectionShell className="pt-0">
-        <StaticLink href="/podbor/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-navy px-6 text-white hover:bg-brand-navy/90")}>
+        <ActionLink href="/podbor/">
           Получить разбор по методике
-        </StaticLink>
+        </ActionLink>
       </SectionShell>
 
       <SectionShell className="pt-0">

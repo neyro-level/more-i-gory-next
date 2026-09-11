@@ -10,7 +10,7 @@
     "build": "next build && node scripts/strip-static-route-js.mjs && next-image-export-optimizer",
     "export": "next build && node scripts/strip-static-route-js.mjs && next-image-export-optimizer",
     "start": "node scripts/serve-static.mjs",
-    "lint": "eslint .",
+    "lint": "eslint src scripts public/assets/lead-form.js next.config.ts velite.config.ts eslint.config.mjs postcss.config.mjs remoteOptimizedImages.cjs --cache --cache-location .next/eslint.cache",
     "typecheck": "tsc --noEmit",
     "content:build": "velite build --strict",
     "verify:foundation": "node scripts/verify-foundation.mjs",

@@ -1,10 +1,9 @@
-import { StaticLink } from "@/components/navigation/static-link";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { contentService } from "@/content/service";
+import { ArticleCard } from "@/components/marketing/article-card";
 
 export const metadata = getStaticMetadata("PAGE-016");
 
@@ -36,17 +35,13 @@ export default async function AnalyticsPage() {
       >
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {articles.map((article) => (
-            <Card key={article.id} className="rounded-surface bg-white">
-              <CardHeader>
-                <CardTitle className="text-2xl">
-                  <StaticLink href={article.path}>{article.title}</StaticLink>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-4 text-sm leading-7 text-muted-foreground">
-                <p>{article.description}</p>
-                <p className="text-xs uppercase tracking-[0.18em] text-brand-coral">{article.status} / noindex до gate</p>
-              </CardContent>
-            </Card>
+            <ArticleCard
+              key={article.id}
+              description={article.description}
+              href={article.path}
+              status={`${article.status} / noindex до gate`}
+              title={article.title}
+            />
           ))}
         </div>
       </SectionShell>

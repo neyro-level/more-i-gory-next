@@ -34,7 +34,13 @@
       for (const [field, hasError] of Object.entries(invalid)) {
         const input = form.elements.namedItem(field);
         const error = form.querySelector(`[data-error-for="${field}"]`);
-        if (input instanceof HTMLElement) input.setAttribute("aria-invalid", String(hasError));
+        if (input instanceof HTMLElement) {
+          input.setAttribute("aria-invalid", String(hasError));
+          const fieldContainer = input.closest("[data-lead-field]");
+          if (fieldContainer instanceof HTMLElement) {
+            fieldContainer.dataset.invalid = String(hasError);
+          }
+        }
         if (error instanceof HTMLElement) {
           error.textContent = hasError ? messages[field] : "";
           error.hidden = !hasError;

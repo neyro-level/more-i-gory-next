@@ -20,22 +20,22 @@ type ObjectCardProps = {
 
 export function ObjectCard({ href, image, location, risk, status, thesis, title }: ObjectCardProps) {
   return (
-    <Card className="rounded-surface bg-white">
+    <Card className="rounded-surface bg-card">
       <div className="relative aspect-[16/10]">
         <ExportedImage src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
       </div>
       <CardHeader>
         <div className="flex flex-wrap gap-2">
           <Badge variant="secondary">{location}</Badge>
-          <Badge className="bg-brand-coral/10 text-brand-coral">{status}</Badge>
+          <Badge variant="accent">{status}</Badge>
         </div>
-        <CardTitle className="text-2xl">
+        <CardTitle className="text-card-title">
           <StaticLink href={href}>{title}</StaticLink>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 text-sm leading-7 text-muted-foreground">
         <p>{thesis}</p>
-        <p className="border-l-2 border-brand-coral pl-4 text-foreground">{risk}</p>
+        <p className="border-l-2 border-action pl-4 text-foreground">{risk}</p>
       </CardContent>
     </Card>
   );

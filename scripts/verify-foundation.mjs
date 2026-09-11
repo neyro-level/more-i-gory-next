@@ -132,7 +132,24 @@ for (const primitive of requiredPrimitives) {
   }
 }
 
+const requiredProjectUi = [
+  "src/components/layout/container.tsx",
+  "src/components/layout/section-shell.tsx",
+  "src/components/marketing/article-card.tsx",
+  "src/components/marketing/numbered-steps.tsx",
+  "src/components/navigation/action-link.tsx",
+];
+
+for (const file of requiredProjectUi) {
+  if (!existsSync(join(root, file))) {
+    throw new Error(`Missing canonical project UI component: ${file}`);
+  }
+}
+
 const nextConfig = readFileSync(join(root, "next.config.ts"), "utf8");
+if (!nextConfig.includes("agentRules: false")) {
+  throw new Error("next.config.ts must not rewrite the canonical project AGENTS.md");
+}
 if (!nextConfig.includes('output: "export"')) {
   throw new Error('next.config.ts must keep output: "export"');
 }
@@ -162,6 +179,8 @@ const forbiddenProjectUiPatterns = [
   /\bspace-y-/,
   /rounded-\[(?:1\.25|1\.5|1\.75|2)rem\]/,
   /max-w-\[1200px\]/,
+  /\btext-(?:2xl|3xl|4xl|5xl|6xl)\b/,
+  /\b(?:bg|text)-brand-coral(?!-)/,
 ];
 
 for (const file of projectOwnedUiFiles) {
@@ -171,6 +190,49 @@ for (const file of projectOwnedUiFiles) {
       throw new Error(`Project UI must use semantic tokens and gap utilities in ${file}: ${pattern}`);
     }
   }
+}
+
+const buttonVariantConsumers = projectOwnedUiFiles.filter((file) => {
+  const text = readFileSync(file, "utf8");
+  return (
+    text.includes("buttonVariants") &&
+    !file.endsWith(join("src", "components", "navigation", "action-link.tsx")) &&
+    !file.endsWith(join("src", "lib", "button-variants.ts"))
+  );
+});
+
+if (buttonVariantConsumers.length > 0) {
+  throw new Error(
+    `Button-like links must use canonical ActionLink: ${buttonVariantConsumers.join(", ")}`,
+  );
+}
+
+const globalsCss = readFileSync(join(root, "src", "app", "globals.css"), "utf8");
+for (const token of [
+  "--text-page-title",
+  "--text-section-title",
+  "--text-card-title",
+  "--text-lead",
+  "--spacing-section",
+  "--color-action",
+]) {
+  if (!globalsCss.includes(token)) {
+    throw new Error(`Missing semantic UI token in globals.css: ${token}`);
+  }
+}
+
+const rootPage = readFileSync(join(root, "src", "app", "page.tsx"), "utf8");
+if (!rootPage.includes("CapitalTasksSection") || rootPage.split(/\r?\n/).length > 120) {
+  throw new Error("Home page must remain composition-first and below 120 lines");
+}
+
+const leadForm = readFileSync(join(root, "src", "ui", "interactive", "lead-form.tsx"), "utf8");
+if (
+  !leadForm.includes('<fieldset className="flex flex-col gap-6">') ||
+  !leadForm.includes('type="checkbox"') ||
+  leadForm.includes('from "@/components/ui/checkbox"')
+) {
+  throw new Error("Lead form must preserve the static semantic form contract");
 }
 const illegalClientFiles = sourceFiles.filter((file) => {
   const text = readFileSync(file, "utf8");

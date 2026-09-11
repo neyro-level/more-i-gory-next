@@ -1,14 +1,13 @@
-import { StaticLink } from "@/components/navigation/static-link";
+import { ActionLink } from "@/components/navigation/action-link";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ObjectCard } from "@/components/marketing/object-card";
+import { NumberedSteps } from "@/components/marketing/numbered-steps";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { contentService } from "@/content/service";
-import { buttonVariants } from "@/lib/button-variants";
-import { cn } from "@/lib/utils";
 
 export const metadata = getStaticMetadata("PAGE-014");
 
@@ -46,18 +45,7 @@ export default async function ObjectsPage() {
         title="Проект появляется здесь только после полного паспорта"
         lead="До подтверждения проектов каталог работает как объяснение отбора и точка входа в персональный разбор."
       >
-        <div className="grid gap-4 md:grid-cols-5">
-          {criteria.map((item, index) => (
-            <Card key={item} className="rounded-surface bg-white">
-              <CardContent className="flex flex-col gap-4 p-5">
-                <span className="grid size-9 place-items-center rounded-full bg-brand-coral text-sm font-semibold text-white">
-                  {index + 1}
-                </span>
-                <p className="text-sm font-semibold leading-6">{item}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <NumberedSteps columns={5} items={criteria.map((title) => ({ title }))} />
       </SectionShell>
 
       <SectionShell
@@ -96,18 +84,18 @@ export default async function ObjectsPage() {
             )}
           </div>
         ) : (
-          <Card className="rounded-feature bg-white">
+          <Card className="rounded-feature bg-card">
             <CardHeader>
-              <CardTitle className="text-2xl">Почему здесь нет фальшивых объектов</CardTitle>
+              <CardTitle className="text-card-title">Почему здесь нет фальшивых объектов</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col gap-5 text-base leading-8 text-muted-foreground">
+            <CardContent className="flex flex-col gap-5 text-body text-muted-foreground">
               <p>
                 Объект без цены, источников, риска, verifiedAt и инвестиционного вывода не публикуется.
                 Это защищает SEO от thin content и пользователя от рекламной имитации выбора.
               </p>
-              <StaticLink href="/podbor/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-navy px-6 text-white hover:bg-brand-navy/90")}>
+              <ActionLink href="/podbor/">
                 Запросить подборку вручную
-              </StaticLink>
+              </ActionLink>
             </CardContent>
           </Card>
         )}

@@ -14,7 +14,7 @@ export function SiteFooter() {
     <footer className="bg-brand-navy py-12 text-white">
       <Container className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
         <div className="flex flex-col gap-4">
-          <p className="text-2xl font-semibold">Море и Горы</p>
+          <p className="text-card-title font-semibold">Море и Горы</p>
           <p className="max-w-xl text-sm leading-7 text-white/65">
             Инвестиционное бюро курортной недвижимости. Помогаем сравнивать регионы, проекты,
             экономику, риски и сценарии выхода до сделки.
