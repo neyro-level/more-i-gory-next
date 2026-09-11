@@ -30,11 +30,11 @@ export default function ContactsPage() {
       <SectionShell eyebrow="Каналы" title="Что нужно подтвердить перед публикацией">
         <div className="grid gap-5 md:grid-cols-3">
           {["телефон и мессенджер", "email и ответственный", "адрес и карта"].map((item) => (
-            <Card key={item} className="rounded-surface bg-card">
+            <Card key={item} className="rounded-card bg-card">
               <CardHeader>
-                <CardTitle className="text-card-title">{item}</CardTitle>
+                <CardTitle className="text-h3">{item}</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm leading-7 text-muted-foreground">
+              <CardContent className="text-body-sm text-muted-foreground">
                 TODO после human gate: подтвердить актуальность, SLA ответа и соответствие юридическим текстам.
               </CardContent>
             </Card>

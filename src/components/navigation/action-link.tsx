@@ -21,6 +21,7 @@ export function ActionLink({
 }: ActionLinkProps) {
   return (
     <StaticLink
+      data-slot="action-link"
       href={href}
       className={cn(buttonVariants({ size, variant }), "w-full sm:w-auto", className)}
       {...props}

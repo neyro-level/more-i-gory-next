@@ -1,3 +1,13 @@
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 type ScenarioRow = {
   scenario: string;
   assumption: string;
@@ -10,19 +20,40 @@ type ScenarioTableProps = {
 
 export function ScenarioTable({ rows }: ScenarioTableProps) {
   return (
-    <div className="overflow-hidden rounded-surface border bg-card">
-      <div className="grid grid-cols-3 bg-brand-navy px-5 py-4 text-sm font-semibold text-white">
-        <div>Сценарий</div>
-        <div>Допущение</div>
-        <div>Вопрос инвестора</div>
-      </div>
-      {rows.map((row) => (
-        <div key={row.scenario} className="grid grid-cols-1 gap-3 border-t px-5 py-4 text-sm leading-7 md:grid-cols-3">
-          <div className="font-semibold">{row.scenario}</div>
-          <div className="text-muted-foreground">{row.assumption}</div>
-          <div>{row.investorQuestion}</div>
-        </div>
-      ))}
+    <div className="overflow-hidden rounded-card border bg-card">
+      <Table className="min-w-3xl text-body-sm">
+        <TableCaption className="sr-only">
+          Сценарии инвестиционного решения, допущения и вопросы для проверки.
+        </TableCaption>
+        <TableHeader className="bg-surface-dark text-surface-dark-foreground">
+          <TableRow className="hover:bg-surface-dark">
+            <TableHead className="px-5 py-4 text-surface-dark-foreground" scope="col">
+              Сценарий
+            </TableHead>
+            <TableHead className="px-5 py-4 text-surface-dark-foreground" scope="col">
+              Допущение
+            </TableHead>
+            <TableHead className="px-5 py-4 text-surface-dark-foreground" scope="col">
+              Вопрос инвестора
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.scenario}>
+              <TableCell className="px-5 py-4 font-semibold whitespace-normal">
+                {row.scenario}
+              </TableCell>
+              <TableCell className="px-5 py-4 whitespace-normal text-muted-foreground">
+                {row.assumption}
+              </TableCell>
+              <TableCell className="px-5 py-4 whitespace-normal">
+                {row.investorQuestion}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

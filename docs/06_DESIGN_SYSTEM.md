@@ -1,319 +1,199 @@
 # Design System — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.8
-**Дата:** 2026-09-11
-**Role:** самостоятельный source of truth визуального языка проекта
+**Версия:** 2.0
+**Дата:** 2026-09-12
+**Назначение:** проектная visual policy. Числовые значения живут только в
+src/app/globals.css.
 
-## 1. Visual Direction
+## 1. Visual Character
 
-```text
-deep navy premium base
-+ white rounded surfaces
-+ restrained coral accent
-+ large real sea/mountain/property photography
-+ calm investment presentation
-+ high information clarity
-```
+~~~text
+premium
+calm
+evidence-led
+spacious
+natural
+~~~
 
-Сайт должен выглядеть как инвестиционное бюро, а не marketplace.
+Сайт должен выглядеть как инвестиционное бюро, а не marketplace или
+развлекательный travel-портал. Фото создаёт контекст, данные помогают принять
+решение, коралловый остаётся сигналом действия.
 
-## 2. Core Principles
+## 2. Source / Status
 
-1. Премиальность без визуального шума.
-2. Фото несёт эмоцию, данные несут решение.
-3. Белые поверхности создают читаемые смысловые острова.
-4. Коралловый используется как action signal.
-5. SEO/content не прячется в carousel.
-6. Карточка проекта — вход в investment passport, не WooCommerce product.
-7. Инвестиционные таблицы/риски должны читаться легче рекламных блоков.
+- Main design source: утверждённое направление transfer package, нормализованное
+  в проектную систему; reference не является runtime source of truth.
+- Representative page: главная плюс PageHero/SectionShell templates.
+- Token source: src/app/globals.css.
+- AMS Distribution Mode: DISABLED.
+- Dark mode: DISABLED.
 
-## 3. Colors
+## 3. Semantic Colors / Surfaces
 
-```css
---color-brand-navy: #08192c;
---color-brand-coral: #bd402f;
---color-brand-coral-light: #ff9a8b; /* accent text on navy */
---color-surface-white: #ffffff;
---color-text-dark: #1a1a1a;
---color-text-light: #ffffff;
---color-navy-74: rgba(8, 25, 44, 0.74);
---color-navy-50: rgba(8, 25, 44, 0.50);
---color-navy-35: rgba(8, 25, 44, 0.35);
-```
+Approved roles:
+
+~~~text
+background / foreground
+card / card-foreground
+muted / muted-foreground
+primary / primary-foreground
+action / action-foreground / action-on-dark
+destructive / success / warning
+surface-dark / surface-dark-foreground
+border / input / ring
+~~~
+
+Navy используется как dark brand surface, coral — как action signal.
+Success, warning и destructive сообщают состояние не только цветом, но и
+текстом. Raw brand/color values в TSX запрещены.
 
 ## 4. Typography
 
-Текущий display и UI/body:
-- `Montserrat`, локально собираемый через `next/font` с Latin/Cyrillic subsets.
+Primary/display font: Montserrat variable через next/font.
 
-`EuropeExt` остаётся возможным будущим display-шрифтом только после получения
-лицензированного файла и отдельной визуальной проверки. До этого код не должен
-имитировать его системным fallback.
+- Cyrillic coverage: VERIFIED.
+- Approved weights: 400, 500, 600, 700.
+- Source/license: Google Fonts, OFL, VERIFIED.
+- EuropeExt: REQUIRES_OWNER_DECISION и лицензированный font file; в коде не
+  имитируется fallback-шрифтом.
 
-Fallback:
-- system sans.
+Approved roles:
 
-Responsive uses fixed breakpoint steps, not continuous viewport scaling.
+~~~text
+text-h1 / text-h2 / text-h3 / text-h4
+text-body-lg / text-body / text-body-sm
+text-label / text-caption
+~~~
 
-### 4.1. Semantic type scale
+HTML semantics и visual role независимы. Heading weight задаётся явно через
+font utilities, а не скрывается внутри typography token. Один logical H1
+обязателен для коммерческой/SEO-страницы. Article/legal text использует narrow
+container. Новая типографическая роль требует project decision.
 
-Типографика управляется из `src/app/globals.css`; page-компоненты не собирают
-собственные размеры заголовков из случайных utility-наборов.
+## 5. Containers / Section Rhythm
 
-| Роль | Mobile | Tablet / desktop | Canonical utility |
-|---|---:|---:|---|
-| Page / Hero H1 | 36 / 39px | 60 / 63px | `text-page-title md:text-page-title-lg` |
-| Section H1/H2 | 30 / 33px | 48 / 52px | `text-section-title md:text-section-title-lg` |
-| Card title | 24 / 29px | 24 / 29px | `text-card-title` |
-| Lead | 18 / 32px | 18 / 32px | `text-lead` |
-| Body | 16 / 28px | 16 / 28px | `text-body` |
-| Caption / eyebrow | 12 / 16px | 12 / 16px | `text-caption` |
+Containers:
 
-`PageHero` владеет Page H1, `SectionShell` — заголовком и lead секции,
-`CardTitle`/проектный card component — заголовком карточки. Исключение размера
-допустимо только для доказанной отдельной роли, а не локального украшения.
+~~~text
+site   → коммерческие страницы и основные композиции
+narrow → статьи, legal, сфокусированный текст и формы
+~~~
 
-## 5. Layout
+Wide container пока не определён: в текущем UI нет доказанной потребности.
+Horizontal padding принадлежит Container.
 
-- desktop content container ≈ 1200px;
-- generous vertical rhythm;
-- white rounded hero/surface blocks;
-- cards 16–24px radius;
-- major surfaces 24–32px;
-- buttons pill-shaped where appropriate.
+Section rhythm:
 
-Responsive contract:
+~~~text
+sm   → compact supporting/footer
+md   → default semantic section
+lg   → major separation
+hero → PageHero only
+~~~
 
-- mobile: `< 768px`, одна колонка, full-width primary actions;
-- tablet: `768–1023px`, две колонки только когда content сохраняет читаемость;
-- laptop: `1024–1279px`, compact header с мобильным menu trigger;
-- desktop: `≥ 1280px`, полная навигация и многоколоночные композиции;
-- минимальная высота primary action и form control — `44px`;
-- reusable layout обязан иметь `min-width: 0` там, где длинный русский текст
-  может расширить grid/flex child.
+Vertical rhythm принадлежит SectionShell/semantic section, не page-level
+случайным значениям.
 
-## 6. Core Components
+## 6. Radii / Shadows
 
-### 6.0. UI foundation
+Approved roles:
 
-Официальный shadcn/ui используется как контролируемый источник primitives, а не
-как готовый визуальный бренд. Основа: Base UI, preset `nova`, Tailwind CSS 4,
-CSS variables, Lucide. Community registries и вторая UI-библиотека запрещены.
+~~~text
+control → controls, mobile navigation items
+card    → cards, compact surfaces and card media
+large   → hero, lead form and major feature surfaces
+~~~
 
-Registry contract:
+Project shadow role: shadow-surface для elevated hero/menu surfaces.
+shadcn primitives сохраняют свои внутренние preset radii/shadows; project
+composition не переопределяет их случайными значениями.
 
-- `@shadcn` — встроенный официальный источник CLI; отдельная запись в
-  `components.json.registries` не обязательна;
-- `registries: {}` — корректное текущее состояние, а не отсутствие shadcn;
-- проектные составные компоненты остаются локальными;
-- `@ams` добавляется только после появления утверждённого private registry;
-- любой иной namespace требует отдельного ADR и review.
+## 7. Buttons / Actions
 
-Базовые primitives:
+Canonical primitive: shadcn Button.
 
-- Button;
-- Card;
-- Badge;
-- Sheet;
-- Field;
-- Input;
-- Textarea;
-- Checkbox;
-- Alert;
-- Separator;
-- Breadcrumb;
-- Accordion.
+- variant=accent, size=cta — primary conversion;
+- variant=default, size=cta — strong navy action;
+- variant=outline, size=cta — secondary action;
+- button-like links использует project ActionLink поверх buttonVariants,
+  сохраняя обычный anchor для static export;
+- page files не меняют CTA color/radius/padding.
 
-Semantic action contract:
+## 8. Forms / States
 
-- `Button/ActionLink variant="accent" size="cta"` — primary conversion action;
-- `variant="default" size="cta"` — сильное navy-действие;
-- `variant="outline" size="cta"` — secondary action;
-- цвет, radius и horizontal padding CTA не переопределяются в page-файлах;
-- ссылку, выглядящую как button, рендерит project `ActionLink` поверх
-  `buttonVariants`, сохраняя семантику обычного `<a>` для static export.
+LeadForm — единственный visual pattern для текущего lead intent.
 
-Проектные компоненты:
+Required states:
 
-- Container;
-- SectionShell;
-- PageHero;
-- RegionCard;
-- ObjectCard;
-- ProofBlock;
-- RiskBlock;
-- ScenarioTable;
-- SourceList;
-- LeadFormSection;
-- SiteHeader;
-- SiteFooter.
+~~~text
+default / validating / validation-error / submitting
+server-disabled / server-error / success
+~~~
 
-### 6.1. Ownership rule
+Field label/help/error программно связаны; error status содержит текст.
+Transport, server validation, anti-spam и persistence принадлежат Technical Core.
 
-Project components владеют композицией и визуальной индивидуальностью.
-shadcn primitives владеют доступными интерактивными состояниями. Страницы не
-копируют primitive markup и не создают локальную вторую систему tokens.
+## 9. Media
 
-Слои реализации:
+Approved roles:
 
-```text
-src/components/ui/**          → canonical shadcn primitives
-src/ui/interactive/**         → разрешённые Client Component leaves
-src/components/layout/**      → shared layout
-src/components/marketing/**   → domain/project components
-src/app/**                    → page composition
-```
+~~~text
+aspect-hero   → PageHero on compact layouts
+aspect-card   → region card
+aspect-object → property/project card
+~~~
 
-Системные размеры задаются токенами: `max-w-site`, `rounded-surface`,
-`rounded-feature`, `rounded-hero`. Повторяющиеся arbitrary values для этих
-размеров запрещены. Вертикальная композиция использует `flex/grid` + `gap`,
-а не `space-y-*`.
+Media использует local registry, meaningful alt или explicit decorative
+treatment, stable wrapper и responsive sizes. Допустимы реальные ландшафты,
+региональный контекст, архитектура и подтверждённые project images.
 
-### SiteHeader
-- logo;
-- main nav;
-- phone/contact;
-- CTA;
-- нативное мобильное меню `<details>/<summary>` без React runtime;
-- `Sheet` допускается позже только как интерактивный leaf при доказанной UX-нужде.
+Запрещены random stock, decorative image walls, excessive dark overlays и
+дублированный carousel DOM.
 
-### HomeHero
-Must communicate:
-- investment resort real estate category;
-- what bureau does differently;
-- primary CTA;
-- secondary path to regions/projects.
+## 10. Icons / Motion
 
-### RegionCard
-- image;
-- region;
-- investment thesis;
-- normal anchor.
+- Canonical icons: Lucide only.
+- Icons support meaning; status remains readable as text.
+- Motion: CSS/Tailwind first, transform/opacity where useful.
+- Project transitions use semantic easing and approved duration utilities.
+- Global prefers-reduced-motion foundation обязателен.
+- Heavy parallax/hero animation and content hidden until animation are forbidden.
 
-### ObjectCard
-- image;
-- name;
-- region/area;
-- format;
-- entry budget if verified;
-- operator/stage if useful;
-- concise thesis;
-- key risk/updatedAt where appropriate;
-- CTA to passport.
+## 11. Responsive
 
-### ProofBlock
-New required component.
+Mobile is first-class.
 
-Purpose:
-show why selection can be trusted.
+- mobile: one column and full-width primary actions;
+- tablet: two columns only when content stays readable;
+- laptop: compact header/menu;
+- desktop: full navigation and multi-column composition;
+- controls/actions use the canonical touch-target size;
+- flex/grid children with long Russian text preserve min-width: 0;
+- no horizontal page overflow; wide semantic tables own local scrolling.
 
-May include:
-- methodology;
-- data sources;
-- review date;
-- reviewer;
-- compensation/conflict policy;
-- verified evidence.
+## 12. Shared Project Patterns
 
-### RiskBlock
-Separate from generic marketing cards.
+| Component | Layer | Contract |
+|---|---|---|
+| Container | layout | site/narrow width, horizontal padding, className via cn() |
+| SectionShell | layout | semantic section + SectionHeader composition, className via cn() |
+| PageHero | shared marketing | H1, lead, actions, optional LCP image |
+| ActionLink | navigation | canonical button-like anchor |
+| ArticleCard / RegionCard / ObjectCard | domain marketing | typed safe props, semantic card roles |
+| NumberedSteps | shared marketing | repeated ordered step composition |
+| ProofBlock / RiskBlock / SourceList | domain marketing | trust/evidence/risk patterns |
+| ScenarioTable | domain marketing | semantic shadcn Table with local mobile scroll |
+| LeadForm / LeadFormSection | form/shared marketing | functional form separated from wrapper |
 
-### ScenarioTable
-Conservative / Base / Optimistic with visible assumptions.
+Page files predominantly compose these sections. New page means a new
+composition of the same system, not a new visual language.
 
-### SourceList
-Readable provenance and dates.
+## 13. Approved Exceptions
 
-### LeadForm
-Compact, one-column on mobile, clear progress/error/success.
+| Date | Location | Exception | Reason | Owner decision |
+|---|---|---|---|---|
+| 2026-09-12 | LeadForm fields/checkbox | Native semantic wrappers and checkbox instead of hydrated shadcn Field/Checkbox | Static routes deliberately ship without React hydration; FormData enhancement remains framework-free | Approved by static architecture and UI remediation scope |
 
-Static-export exception: route не гидратирует React. Поэтому `Input`,
-`Textarea` и `Button` используют server-safe shadcn source, а consent checkbox
-остаётся нативным `<input type="checkbox">`, чтобы работать через `FormData` и
-framework-free progressive enhancement. Это platform constraint, а не второй
-checkbox component. Поля группируются семантическим `fieldset`, имеют
-`aria-invalid`, visible error и `data-invalid` state.
-
-### ArticlePage
-Readable long-form layout with TOC, source notes and related commercial links.
-
-## 7. Page Visual Priority
-
-Project Passport:
-1. verdict;
-2. facts;
-3. economics;
-4. risks;
-5. exit;
-6. visual gallery.
-
-Do not place large gallery before investment decision data unless UX testing proves otherwise.
-
-## 8. Images
-
-Use:
-- real landscapes;
-- recognizable regional context;
-- architecture;
-- actual project imagery.
-
-Avoid:
-- random stock;
-- over-dark overlays;
-- low-information decorative image walls;
-- duplicated carousel content in DOM.
-
-## 9. Motion
-
-Allowed:
-- subtle reveal;
-- card hover;
-- lightweight carousel;
-- mobile drawer.
-
-Not allowed:
-- content hidden until animation;
-- heavy parallax;
-- animation that delays reading;
-- motion copied from Elementor without product value.
-
-## 10. Responsive
-
-Mobile is a first-class target.
-
-Required:
-- no horizontal overflow;
-- one-column forms;
-- readable investment tables;
-- cards fit long Russian names;
-- CTA remains clear;
-- sticky/fixed UI only if it does not cover content.
-
-## 11. Accessibility
-
-- focus state;
-- semantic anchors/buttons;
-- contrast;
-- content image alt;
-- decorative assets hidden from screen readers;
-- no SEO meaning only in visual carousel.
-
-## 12. Transfer Rule
-
-Transfer package is visual evidence, not implementation source.
-
-Preserve:
-- palette;
-- mood;
-- image scale;
-- white rounded surfaces;
-- recognizable brand character.
-
-Do not preserve:
-- Elementor wrappers;
-- WooCommerce UI model;
-- old URL structure;
-- empty headings;
-- duplicated DOM carousel content;
-- old technical CSS/class system.
+If this exception repeats outside the static lead form, it requires a new
+decision. @ams distribution files are absent and must not be invented.

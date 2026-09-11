@@ -7,12 +7,12 @@ type SourceListProps = {
 
 export function SourceList({ items }: SourceListProps) {
   return (
-    <Card className="rounded-surface bg-card">
+    <Card className="rounded-card bg-card">
       <CardHeader>
-        <CardTitle className="text-card-title">Источники и проверка</CardTitle>
+        <CardTitle className="text-h3">Источники и проверка</CardTitle>
       </CardHeader>
       <CardContent>
-        <ul className="flex flex-col gap-4 text-sm leading-7 text-muted-foreground">
+        <ul className="flex flex-col gap-4 text-body-sm text-muted-foreground">
         {items.map((item) => (
           <li key={item.title} className="border-l-2 border-action pl-4">
             <span className="block font-semibold text-foreground">{item.title}</span>

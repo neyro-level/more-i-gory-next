@@ -8,8 +8,11 @@ import { SiteHeader } from "@/components/layout/site-header";
 
 const montserrat = Montserrat({
   display: "swap",
+  fallback: ["Arial", "sans-serif"],
   subsets: ["cyrillic"],
+  style: "normal",
   variable: "--font-montserrat",
+  weight: "variable",
 });
 
 export const metadata: Metadata = {

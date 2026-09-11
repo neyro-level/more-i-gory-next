@@ -84,9 +84,9 @@ export default async function ObjectsPage() {
             )}
           </div>
         ) : (
-          <Card className="rounded-feature bg-card">
+          <Card className="rounded-large bg-card">
             <CardHeader>
-              <CardTitle className="text-card-title">Почему здесь нет фальшивых объектов</CardTitle>
+              <CardTitle className="text-h3">Почему здесь нет фальшивых объектов</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-5 text-body text-muted-foreground">
               <p>

@@ -58,6 +58,31 @@ assert(existsSync(path.join(outDir, "robots.txt")), "robots.txt is missing.");
 assert(existsSync(path.join(outDir, "sitemap.xml")), "sitemap.xml is missing.");
 assert(existsSync(path.join(outDir, "404.html")), "404.html is missing.");
 
+const cssFiles = [];
+function collectCss(directory) {
+  for (const entry of requireDirectory(directory)) {
+    const resolved = path.join(directory, entry.name);
+    if (entry.isDirectory()) collectCss(resolved);
+    else if (entry.name.endsWith(".css")) cssFiles.push(resolved);
+  }
+}
+
+collectCss(path.join(outDir, "_next", "static"));
+const compiledCss = cssFiles.map((file) => readFileSync(file, "utf8")).join("\n");
+for (const utility of [
+  ".text-h1",
+  ".text-body-lg",
+  ".max-w-site",
+  ".max-w-narrow",
+  ".py-section-md",
+  ".rounded-card",
+  ".rounded-large",
+  ".duration-fast",
+  ".aspect-card",
+]) {
+  assert(compiledCss.includes(utility), "Compiled token fixture is missing " + utility);
+}
+
 for (const route of requiredRoutes) {
   assert(existsSync(routeHtmlPath(route)), `Missing static route: /${route}`);
 }

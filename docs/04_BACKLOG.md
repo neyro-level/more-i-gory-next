@@ -1,8 +1,8 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.9
-**Дата:** 2026-09-11
+**Версия:** 2.0
+**Дата:** 2026-09-12
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
@@ -15,6 +15,9 @@ Constitution Conformance.
 EPIC-18 UI Constitution Conformance 2.0 завершён в WORK: повторный аудит выявил
 и устранил drift между декларацией PR-19 и фактической реализацией semantic
 typography, CTA variants, responsive header, form states и page composition.
+
+EPIC-18 оформлен в SourceCraft PR-22 без merge. EPIC-19 продолжает его
+зависимым потоком и приводит foundation к AMS UI Skill Pack 4.2.
 
 Production не выпускался. Все коммерческие, аналитические и юридические страницы
 остаются под content/trust gate и не попадают в sitemap.
@@ -93,6 +96,56 @@ Local proof:
   после исправления страницы `/o-kompanii/`.
 
 Merge/SourceCraft Gate/production не выполнялись и требуют отдельной lifecycle-команды владельца.
+
+## 4.2. WORK COMPLETE — EPIC-19 AMS UI Skill Pack 4.2 Conformance
+
+Ветка: `codex/ui-constitution-4-2`
+Base: `codex/ui-constitution-conformance-v2` / SourceCraft PR-22
+Gate: `RISKY` — меняются token contract, motion/theme foundation и canonical
+Table primitive. Merge Gate пока не запускался.
+
+### Audit findings
+
+| Severity | Finding | Resolution |
+|---|---|---|
+| P1 | Dark mode не определён, но `dark:` и `.dark` foundation присутствовали | Dark mode зафиксирован как DISABLED; неактивные branches удалены |
+| P1 | Нет reduced-motion foundation при transitions/animations | Добавлен global prefers-reduced-motion contract |
+| P1 | Локальные typography/radius names расходились с 4.2 | Введены h1–h4, body roles, control/card/large |
+| P1 | Design System дублировал numeric token values | Документ переведён на policy; values оставлены в globals.css |
+| P1 | Не было UI Technical Core adapter и token compile proof | Добавлены Technical Core, UI drift gate и compiled CSS assertions |
+| P1 | ScenarioTable был визуальной div-grid без table semantics | Подключён официальный shadcn Table и semantic markup |
+| P2 | Form state message не различал warning/error/success | Добавлены semantic states и data-state contract |
+| P2 | Text glyphs использовались вместо canonical icons | Заменены на Lucide |
+| P2 | Laptop Hero обрезал secondary CTA внутри узкой колонки | Actions stack through laptop and become horizontal on desktop |
+
+### TASK-019.1 — Normalize UI foundation 4.2
+
+- [x] создать project UI Technical Core adapter;
+- [x] перевести Design System на policy-only contract;
+- [x] нормализовать semantic colors/type/radius/section/media/motion tokens;
+- [x] удалить inactive dark-mode branches;
+- [x] добавить reduced-motion behavior;
+- [x] подключить официальный shadcn Table без React hydration;
+- [x] перевести form status на validation/warning/error/success states;
+- [x] заменить glyph icons на Lucide;
+- [x] добавить mechanical UI drift gate;
+- [x] добавить compiled token fixture в static artifact verification;
+- [x] проверить responsive/accessibility/performance на production-like artifact.
+
+Local proof:
+
+- `pnpm verify` — PASS: content, typecheck, lint, foundation, UI drift, SEO,
+  static build, compiled token fixture и artifact;
+- 26 routes × 4 widths = 104 browser states;
+- page overflow, wrong H1, heading skips, duplicate IDs, orphan inputs,
+  missing alt, broken aria-describedby и touch targets <44px — 0;
+- LeadForm validation: 4 invalid controls, 4 associated descriptions,
+  visible semantic error state;
+- reduced motion: transition duration reduced to 0.01ms and smooth scroll disabled;
+- local mobile lab: LCP 328ms, CLS 0 on static localhost artifact;
+- visual review: 1440/1024/768/390; laptop Hero CTA regression fixed.
+
+Merge, SourceCraft Gate и production не выполнялись.
 
 ## 5. LATER — Production Release
 

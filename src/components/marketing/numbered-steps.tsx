@@ -19,9 +19,9 @@ export function NumberedSteps({ columns = 3, items }: NumberedStepsProps) {
   return (
     <div className={cn("grid gap-4", columnClasses[columns])}>
       {items.map((item, index) => (
-        <Card key={item.title} className="rounded-surface bg-card">
+        <Card key={item.title} className="rounded-card bg-card">
           <CardHeader className="gap-4 p-5">
-            <Badge variant="accent" className="size-9 justify-center rounded-full p-0 text-sm">
+            <Badge variant="accent" className="size-9 justify-center rounded-full p-0 text-label">
               {index + 1}
             </Badge>
             <CardTitle className="text-body font-semibold">{item.title}</CardTitle>

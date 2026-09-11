@@ -41,11 +41,11 @@ export default function SelectionPage() {
 
       <SectionShell id="form" className="pt-0" eyebrow="Форма" title="Опишите инвестиционную задачу" lead="Форма уже проверяет поля на клиенте, но реальная отправка отключена до согласования юридических текстов и production Leads API.">
         <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-          <Card className="rounded-feature bg-brand-navy text-white">
+          <Card className="rounded-large bg-surface-dark text-surface-dark-foreground">
             <CardHeader>
-              <CardTitle className="text-card-title">Что лучше указать</CardTitle>
+              <CardTitle className="text-h3">Что лучше указать</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col gap-3 text-sm leading-7 text-white/70">
+            <CardContent className="flex flex-col gap-3 text-body-sm text-surface-dark-foreground/70">
               <p>Регион или несколько регионов.</p>
               <p>Примерный бюджет и горизонт.</p>
               <p>Цель: доход, сохранение, личное использование, выход.</p>

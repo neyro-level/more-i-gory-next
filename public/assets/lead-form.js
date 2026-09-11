@@ -16,6 +16,8 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       status.hidden = true;
+      status.dataset.state = "default";
+      form.dataset.state = "validating";
 
       const data = new FormData(form);
       const values = {
@@ -49,16 +51,21 @@
 
       if (Object.values(invalid).some(Boolean)) {
         status.textContent = "Проверьте поля формы.";
+        status.dataset.state = "error";
+        form.dataset.state = "validation-error";
         status.hidden = false;
         return;
       }
 
       if (form.dataset.leadsEnabled !== "true") {
         status.textContent = "Форма готова технически, но отправка включается только после согласования Leads API и юридических текстов.";
+        status.dataset.state = "warning";
+        form.dataset.state = "server-disabled";
         status.hidden = false;
         return;
       }
 
+      form.dataset.state = "submitting";
       submitButton.disabled = true;
       submitButton.textContent = "Отправляем...";
 
@@ -77,8 +84,12 @@
         if (!response.ok) throw new Error("Lead endpoint returned an error.");
         form.reset();
         status.textContent = "Заявка отправлена. Мы вернёмся с первым шагом после обработки.";
+        status.dataset.state = "success";
+        form.dataset.state = "success";
       } catch {
         status.textContent = "Не удалось отправить заявку. Попробуйте позже или напишите напрямую.";
+        status.dataset.state = "error";
+        form.dataset.state = "server-error";
       } finally {
         status.hidden = false;
         submitButton.disabled = false;

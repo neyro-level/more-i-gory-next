@@ -40,6 +40,7 @@ Project-specific static Next.js: build-time content, `output: "export"`, Nginx,
 | Продукт, аудитория, требования и ключевые риски | [`01_PRD.md`](01_PRD.md) |
 | Страницы, URL, SEO, навигация, формы и user flows | [`02_PRODUCT_STRUCTURE.md`](02_PRODUCT_STRUCTURE.md) |
 | Stack, modules, content/data, integrations, security и production | [`03_ARCHITECTURE.md`](03_ARCHITECTURE.md) |
+| Короткие UI-relevant runtime facts и verification cadence | [`TECHNICAL_CORE.md`](TECHNICAL_CORE.md) |
 | NOW / NEXT / LATER, Epic, Task и technical debt | [`04_BACKLOG.md`](04_BACKLOG.md) |
 | Release readiness и post-deploy proof | [`05_RELEASE_CHECKLIST.md`](05_RELEASE_CHECKLIST.md) |
 | Визуальный язык, tokens и UI-компоненты | [`06_DESIGN_SYSTEM.md`](06_DESIGN_SYSTEM.md) |
@@ -64,7 +65,8 @@ Research объясняет причины решений, но не являе�
 
 ## Current Focus
 
-EPIC-18 UI Constitution Conformance 2.0 завершён в WORK: semantic typography,
-CTA variants, responsive matrix, composition-first pages и automated foundation
-guards подтверждены локально. Следующий продуктовый поток — Content Approval;
+EPIC-18 оформлен в SourceCraft PR-22. Зависимый EPIC-19 UI Skill Pack 4.2
+Conformance завершён в WORK: Technical Core adapter, normalized token contract,
+dark/motion policy, semantic Table, form states и automated drift gate
+подтверждены локально. Следующий продуктовый поток — Content Approval;
 review/merge и production выполняются только отдельными lifecycle-командами.
