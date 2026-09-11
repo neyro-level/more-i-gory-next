@@ -1,7 +1,7 @@
 # Release Checklist — «Море и Горы»
 
 **Статус:** Active — NOT READY FOR PRODUCTION
-**Версия:** 1.7
+**Версия:** 1.8
 **Дата:** 2026-09-11
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
@@ -33,6 +33,7 @@
 - [ ] full keyboard smoke on all representative routes;
 - [x] Lighthouse accessibility audit on `/`;
 - [x] SourceCraft RISKY exact-head gate PR-19.
+- [x] SourceCraft RISKY exact-head gate PR-20 (run 21).
 
 ## 3. Content and SEO gates
 

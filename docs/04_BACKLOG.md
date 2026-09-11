@@ -1,13 +1,13 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.7
+**Версия:** 1.8
 **Дата:** 2026-09-11
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
-PR-00..PR-19 слиты в `main`. Реализованы static Next foundation, Content
+PR-00..PR-20 слиты в `main`. Реализованы static Next foundation, Content
 Repository, SEO registry, дизайн-система, полная главная, 23 PAGE-ID, региональные
 экраны, каталог-шаблон, аналитика, формы, release-readiness baseline и UI
 Constitution Conformance.
@@ -25,18 +25,22 @@ Production не выпускался. Все коммерческие, анал�
 | PR-12..PR-15 | Static QA, no-JS export, JS budget, delivery profile и route gate | DONE |
 | PR-18 | Technical Production Readiness | DONE |
 | PR-19 | UI Constitution Conformance | DONE |
+| PR-20 | Documentation Standard 2.0 normalization | DONE |
 
 Git-история и SourceCraft PR являются доказательством отдельных merge, а не этот
 документ.
 
-## 3. NOW — EPIC-17 Documentation Standard 2.0
+## 3. COMPLETED — EPIC-17 Documentation Standard 2.0
 
 Ветка: `codex/docs-standard-2-normalization`
 Gate: `RISKY` — меняются SourceCraft docs-contract paths.
 
 ### TASK-017.1 — Normalize canonical documentation
 
-Status: REVIEW
+Status: MERGED
+
+Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
+`b53d852272417088884e58f817b72a8661f72128`.
 
 - [x] перенести канон в `docs/`;
 - [x] привести Backlog, Release Checklist и Design System к номерам `04–06`;
