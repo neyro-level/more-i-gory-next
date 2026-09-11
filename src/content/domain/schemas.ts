@@ -89,22 +89,36 @@ export const projectSchema = z
     }
   });
 
-export const articleSchema = z.object({
-  description: z.string().min(20),
-  id: z.string().min(1),
-  path: z.string().startsWith("/").endsWith("/"),
-  primaryQuery: z.string().min(1),
-  publishedAt: z.string().optional(),
-  relatedProjectIds: z.array(z.string()).default([]),
-  relatedRegionIds: z.array(z.string()).default([]),
-  reviewedAt: z.string().optional(),
-  secondaryQueries: z.array(z.string()).default([]),
-  slug: z.string().min(1),
-  sourceIds: z.array(z.string()).default([]),
-  status: contentStatusSchema,
-  targetPageId: z.string().min(1),
-  title: z.string().min(1),
-});
+export const articleSchema = z
+  .object({
+    description: z.string().min(20),
+    id: z.string().min(1),
+    path: z.string().startsWith("/").endsWith("/"),
+    primaryQuery: z.string().min(1),
+    publishedAt: z.string().optional(),
+    relatedProjectIds: z.array(z.string()).default([]),
+    relatedRegionIds: z.array(z.string()).default([]),
+    reviewedAt: z.string().optional(),
+    secondaryQueries: z.array(z.string()).default([]),
+    slug: z.string().min(1),
+    sourceIds: z.array(z.string()).default([]),
+    status: contentStatusSchema,
+    targetPageId: z.string().min(1),
+    title: z.string().min(1),
+  })
+  .superRefine((article, context) => {
+    if (article.status !== "published") return;
+
+    for (const field of ["publishedAt", "reviewedAt"] as const) {
+      if (!article[field]) {
+        context.addIssue({ code: "custom", message: `Published article requires ${field}.`, path: [field] });
+      }
+    }
+
+    if (article.sourceIds.length === 0) {
+      context.addIssue({ code: "custom", message: "Published article requires at least one source.", path: ["sourceIds"] });
+    }
+  });
 
 export const pageContentSchema = z.object({
   ctaPrimary: z.string().min(1),

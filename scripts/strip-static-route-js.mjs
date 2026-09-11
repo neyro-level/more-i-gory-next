@@ -4,7 +4,7 @@ import path from "node:path";
 const projectRoot = process.cwd();
 const outDir = path.join(projectRoot, "out");
 
-const clientRoutePrefixes = new Set(["kontakty", "podbor"]);
+const clientRoutePrefixes = new Set();
 
 function walk(directory) {
   return readdirSync(directory).flatMap((entry) => {

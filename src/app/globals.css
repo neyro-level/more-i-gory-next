@@ -6,7 +6,8 @@
 
 :root {
   --color-brand-navy: #08192c;
-  --color-brand-coral: #ff6a55;
+  --color-brand-coral: #bd402f;
+  --color-brand-coral-light: #ff9a8b;
   --color-surface-white: #ffffff;
   --color-text-dark: #1a1a1a;
   --color-text-light: #ffffff;
@@ -28,7 +29,7 @@
   --popover-foreground: #1a1a1a;
   --secondary: #ffffff;
   --secondary-foreground: #08192c;
-  --accent: #ff6a55;
+  --accent: #bd402f;
   --accent-foreground: #ffffff;
   --destructive: oklch(0.577 0.245 27.325);
   --input: oklch(0.922 0 0);
@@ -58,6 +59,7 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-brand-navy: var(--color-brand-navy);
   --color-brand-coral: var(--color-brand-coral);
+  --color-brand-coral-light: var(--color-brand-coral-light);
   --color-surface-white: var(--color-surface-white);
   --color-text-dark: var(--color-text-dark);
   --color-text-light: var(--color-text-light);

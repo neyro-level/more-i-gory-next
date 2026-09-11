@@ -1,5 +1,5 @@
 import ExportedImage from "next-image-export-optimizer";
-import Link from "next/link";
+import { StaticLink } from "@/components/navigation/static-link";
 import type { ReactNode } from "react";
 import { buttonVariants } from "@/lib/button-variants";
 import { cn } from "@/lib/utils";
@@ -32,14 +32,14 @@ export function PageHero({ eyebrow, image, lead, primaryCta, proof, secondaryCta
             <h1 className="max-w-4xl text-4xl font-semibold leading-tight tracking-tight md:text-6xl">{title}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">{lead}</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link prefetch={false} href={primaryCta.href} className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-coral px-6 text-white hover:bg-brand-coral/90")}>
+              <StaticLink href={primaryCta.href} className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-coral px-6 text-white hover:bg-brand-coral/90")}>
                 {primaryCta.label}
                 <span aria-hidden="true" className="ml-2 text-base leading-none">→</span>
-              </Link>
+              </StaticLink>
               {secondaryCta ? (
-                <Link prefetch={false} href={secondaryCta.href} className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full px-6")}>
+                <StaticLink href={secondaryCta.href} className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full px-6")}>
                   {secondaryCta.label}
-                </Link>
+                </StaticLink>
               ) : null}
             </div>
             {proof ? <div className="mt-8 border-t pt-6 text-sm text-muted-foreground">{proof}</div> : null}

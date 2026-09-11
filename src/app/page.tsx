@@ -1,5 +1,5 @@
 import { getStaticMetadata } from "@/seo/metadata";
-import Link from "next/link";
+import { StaticLink } from "@/components/navigation/static-link";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -126,9 +126,9 @@ export default async function HomePage() {
         title="Пять ступеней инвестиционного решения"
         lead="Эта логика потом раскладывается в региональные страницы, паспорта проектов и аналитические материалы."
         actions={
-          <Link prefetch={false} href="/metodika/" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}>
+          <StaticLink href="/metodika/" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}>
             Смотреть методику
-          </Link>
+          </StaticLink>
         }
       >
         <div className="grid gap-4 lg:grid-cols-5">
@@ -169,9 +169,9 @@ export default async function HomePage() {
         title="Сравниваем море и горы как разные инвестиционные рынки"
         lead="На старте фокус — Сочи, Крым, Архыз и Алтай. Расширение регионов пойдёт только после отдельного SEO и content gate."
         actions={
-          <Link prefetch={false} href="/investicionnaya-nedvizhimost/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-navy px-6 text-white hover:bg-brand-navy/90")}>
+          <StaticLink href="/investicionnaya-nedvizhimost/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-navy px-6 text-white hover:bg-brand-navy/90")}>
             Сравнить регионы
-          </Link>
+          </StaticLink>
         }
       >
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -195,6 +195,7 @@ export default async function HomePage() {
 
       <SectionShell
         className="bg-brand-navy text-white"
+        tone="dark"
         eyebrow="Отбор проектов"
         title="Проекты появляются на сайте только после инвестиционного паспорта"
         lead="Мы не выводим выдуманные карточки ради объёма. Пока реальные паспорта не согласованы, сайт честно показывает критерии допуска."
@@ -254,7 +255,7 @@ export default async function HomePage() {
             <Card key={item.href} className="rounded-[1.5rem]">
               <CardHeader>
                 <CardTitle className="text-2xl">
-                  <Link prefetch={false} href={item.href}>{item.title}</Link>
+                  <StaticLink href={item.href}>{item.title}</StaticLink>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-5 text-sm leading-7 text-muted-foreground">

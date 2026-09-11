@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { StaticLink } from "@/components/navigation/static-link";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
@@ -39,7 +39,7 @@ export default async function AnalyticsPage() {
             <Card key={article.id} className="rounded-[1.5rem] bg-white">
               <CardHeader>
                 <CardTitle className="text-2xl">
-                  <Link prefetch={false} href={article.path}>{article.title}</Link>
+                  <StaticLink href={article.path}>{article.title}</StaticLink>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 text-sm leading-7 text-muted-foreground">

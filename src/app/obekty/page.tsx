@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { StaticLink } from "@/components/navigation/static-link";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
@@ -105,9 +105,9 @@ export default async function ObjectsPage() {
                 Объект без цены, источников, риска, verifiedAt и инвестиционного вывода не публикуется.
                 Это защищает SEO от thin content и пользователя от рекламной имитации выбора.
               </p>
-              <Link prefetch={false} href="/podbor/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-navy px-6 text-white hover:bg-brand-navy/90")}>
+              <StaticLink href="/podbor/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-navy px-6 text-white hover:bg-brand-navy/90")}>
                 Запросить подборку вручную
-              </Link>
+              </StaticLink>
             </CardContent>
           </Card>
         )}

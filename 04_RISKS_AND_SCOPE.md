@@ -1,8 +1,8 @@
 # Risks & Scope — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.0
-**Дата:** 2026-09-10
+**Версия:** 1.1
+**Дата:** 2026-09-11
 
 ## 1. MVP / Release 1
 
@@ -189,7 +189,7 @@ Mitigation:
 - hydration smoke;
 - bundle budgets.
 Trigger: `"use client"` spreads into large sections.
-Status: Open
+Status: Controlled by Server First guard, static anchors and artifact/browser gates
 
 ### RISK-011 — Dependency incompatibility
 Category: Architecture
@@ -199,7 +199,7 @@ Mitigation:
 - exact-version smoke for Markdown and image pipeline;
 - Adapter/fallback strategy.
 Trigger: Next patch breaks build pipeline.
-Status: Open
+Status: Controlled; exact versions smoke-tested, `sharp` override audited on 2026-09-11
 
 ### RISK-012 — Form data/privacy issue
 Category: Security / Compliance

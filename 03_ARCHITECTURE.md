@@ -1,8 +1,8 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.5
-**Дата:** 2026-09-10
+**Версия:** 1.6 Production Readiness
+**Дата:** 2026-09-11
 **Engineering baseline:** глобальный AMS Engineering Standard / Constitution
 **Важно:** этот документ фиксирует только проектную конкретику.
 
@@ -54,8 +54,9 @@ Exact toolchain первого релиза:
 | TypeScript | `6.0.3` | strict; TypeScript 7 не используется |
 | Tailwind CSS | `4.3.3` | CSS variables, global tokens |
 | Zod | `4.6.1` | build-time content validation |
-| Velite | `0.4.0` | candidate после compatibility smoke |
-| next-image-export-optimizer | `1.21.1` | candidate после compatibility smoke |
+| Velite | `0.4.0` | принят после Windows/dev/export smoke |
+| next-image-export-optimizer | `1.21.1` | принят после static export/image smoke |
+| sharp | `0.35.4` | единая override-версия для build pipeline |
 
 Также используются `sharp`, `concurrently`, Lucide и официальный shadcn/ui.
 Exact versions фиксируются в `package.json` и lockfile без ranges.
@@ -77,13 +78,13 @@ Content:
 - typed data для commercial entities;
 - Markdown для analytics;
 - Zod validation;
-- Velite — основной кандидат Markdown build pipeline после compatibility smoke;
+- Velite — действующий Markdown build pipeline;
 - fallback через Adapter без изменения публичных DTO.
 
 Images:
 - локальный media registry;
 - build-time optimization;
-- `next-image-export-optimizer` как кандидат после compatibility smoke;
+- `next-image-export-optimizer` как действующий build-time optimizer;
 - fallback — заранее оптимизированные локальные WebP/AVIF.
 
 Production:
@@ -140,20 +141,20 @@ components, DTO и URLs. Payload Admin, PostgreSQL и runtime delivery явля�
 
 ## 5. Data Architecture
 
-Минимальные DTO:
+Реализованные DTO первого релиза:
 - `SeoEntry`;
 - `PageContent`;
 - `RegionDTO`
-- `AreaDTO`
 - `ProjectDTO`
-- `LotDTO`
-- `DeveloperDTO`
-- `OperatorDTO`
 - `SourceDTO`
 - `ArticleDTO`
 - `PersonDTO`
 - `MediaAssetDTO`
-- `RedirectDTO`
+- `LandingPageDTO`.
+
+`AreaDTO`, `LotDTO`, `DeveloperDTO`, `OperatorDTO` и отдельный `RedirectDTO`
+не входят в текущий код. Они добавляются только вместе с реальной моделью данных,
+чтобы архитектурный документ не обещал несуществующий runtime-контракт.
 
 Правила:
 - `id` — стабильный AMS identifier;
@@ -224,7 +225,7 @@ Server by default:
 - risks;
 - navigation links.
 
-Leaf Client Components:
+Возможные будущие Leaf Client Components:
 - mobile menu;
 - qualification form;
 - controlled gallery;
@@ -235,13 +236,21 @@ Leaf Client Components:
 
 `"use client"` запрещён в `src/app/**` и больших композиционных секциях.
 
-Для полностью статических маркетинговых маршрутов после `next build`
+В текущем первом релизе React Client Components не требуются. Форма рендерится
+на сервере и получает framework-free progressive enhancement через
+`public/assets/lead-form.js`; при отключённом JavaScript отправка fail-closed.
+
+После `next build` для всех маршрутов
 выполняется post-export stripping Next runtime scripts. Это не меняет HTML,
 metadata, CSS, изображения и ссылки, но убирает ненужную гидратацию там, где нет
-интерактива. Клиентский runtime сохраняется только для маршрутов с реальными
-Client leaves: на старте `/podbor/` и `/kontakty/`.
+интерактива. Next runtime на старте не сохраняется ни для одного маршрута.
 
-Client Component:
+Post-export stripping — проектная оптимизация, а не встроенная возможность Next.js.
+Поэтому внутренние переходы используют обычные `<a>` и всегда загружают готовый
+HTML-документ, не запрашивая RSC payload. `pnpm verify:artifact` контролирует
+наличие HTML, metadata, ссылок и JS-бюджет после stripping.
+
+Будущий Client Component:
 - получает только минимальные serializable props;
 - не импортирует Repository/Adapter;
 - не получает полный DTO без необходимости;
@@ -274,7 +283,7 @@ Architecture обеспечивает:
 - robots;
 - sitemap from published registry;
 - crawlable anchors;
-- structured data from same content source;
+- structured data from same content source после прохождения content gate;
 - no client-only SEO text.
 
 ## 11. Images / Storage
@@ -298,7 +307,7 @@ Rules:
 
 ## 12. Maps
 
-Контакты:
+Контакты после подтверждения фактического адреса:
 ```text
 static preview
 → explicit user action
@@ -333,7 +342,7 @@ AMS Leads API:
 - anti-spam/captcha secret;
 - routing.
 
-Consent payload обязательно содержит `version`, `accepted` и `acceptedAt`.
+Consent payload обязательно содержит `consentVersion`, `accepted` и `acceptedAt`.
 Production endpoint, SLA и routing остаются human gate. До него форма работает
 только против явно заданного test/stub контура и не имитирует доставку лида.
 
@@ -349,7 +358,7 @@ N/A.
 N/A.
 
 ## 17. Caching
-Static files + HTTP caching на Nginx.
+HTML получает `no-cache`; versioned CSS/JS/images — длительное кеширование на Nginx.
 
 Никакой request-time application cache в первом релизе.
 
@@ -364,11 +373,11 @@ Static files + HTTP caching на Nginx.
 
 ## 19. Logging / Monitoring
 
-Minimum:
+Production gate:
 - Nginx access/error logs;
 - AMS Leads API logs;
 - deployment logs;
-- frontend runtime errors по выбранному monitoring tool, если подключён;
+- frontend runtime monitoring — отдельное решение перед production, если нужен внешний сервис;
 - post-deploy smoke.
 
 ## 20. Security Constraints
@@ -398,7 +407,8 @@ SourceCraft
 → live smoke
 ```
 
-Production не выполняет `git pull` и build.
+Production не выполняет `git pull` и build. Реальный upload/atomic-switch runbook
+остаётся human gate и не считается реализованным текущим примером Nginx.
 
 ## 22. Backup / Recovery
 
@@ -416,21 +426,23 @@ Rollback:
 
 ## 23. Testing Strategy
 
-Mandatory:
+Детерминированный gate `pnpm verify`:
 - typecheck;
 - lint;
-- unit validation for schemas/helpers;
 - content validation;
 - broken links/relations;
 - production build;
 - HTML/metadata validation;
-- browser smoke;
-- hydration smoke;
-- form E2E;
-- redirect verification;
-- mobile QA;
-- accessibility smoke;
 - bundle budget.
+
+Отдельный browser/release gate:
+- browser smoke и hydration console;
+- keyboard/mobile/accessibility smoke;
+- redirect/404 HTTP status;
+- form E2E против утверждённого Leads API.
+
+Этот gate нельзя объявлять пройденным без реально запущенного браузера и
+production-like HTTP/Nginx контура.
 
 ## 24. Performance Budgets
 
@@ -446,33 +458,33 @@ Initial targets:
 Budgets are project gates, not SEO ranking guarantees.
 `pnpm verify:artifact` обязан падать при превышении initial route JS budget.
 
-## 25. `pnpm verify`
+## 25. Verification Commands
 
-Должен проверять:
+`pnpm verify:quick` проверяет:
 - typecheck;
 - lint;
-- unit tests;
 - schemas;
 - content relations;
 - URL uniqueness;
 - Title/Description/H1 uniqueness;
+- no forbidden client boundaries;
+- no nondeterministic client first render;
+- no request-time Next APIs;
+- no `next/link` client navigation in the static shell.
+
+`pnpm verify` дополнительно проверяет:
+- static build и наличие `out/`;
+- production HTML H1/title/description/canonical;
 - canonical;
 - sitemap и robots;
 - broken links;
-- redirects;
 - Markdown;
 - media;
-- no forbidden client boundaries;
-- no nondeterministic client first render;
-- hydration smoke;
-- no request-time Next APIs;
-- no frontend secrets;
-- static build и наличие `out/`;
-- production HTML H1/title/description/canonical;
-- structured data;
-- bundle budgets;
-- browser smoke;
-- accessibility smoke.
+- 404 artifact;
+- bundle budgets.
+
+`pnpm audit --audit-level high` обязателен в `RISKY` SourceCraft gate.
+Browser, accessibility, Nginx и Leads E2E остаются отдельным release proof.
 
 ## 26. Architecture Constraints
 

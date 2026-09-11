@@ -1,8 +1,8 @@
 # Design System — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.5
-**Дата:** 2026-09-10
+**Версия:** 1.6
+**Дата:** 2026-09-11
 **Role:** самостоятельный source of truth визуального языка проекта
 
 ## 1. Visual Direction
@@ -32,7 +32,8 @@ deep navy premium base
 
 ```css
 --color-brand-navy: #08192c;
---color-brand-coral: #ff6a55;
+--color-brand-coral: #bd402f;
+--color-brand-coral-light: #ff9a8b; /* accent text on navy */
 --color-surface-white: #ffffff;
 --color-text-dark: #1a1a1a;
 --color-text-light: #ffffff;
@@ -43,11 +44,12 @@ deep navy premium base
 
 ## 4. Typography
 
-Display:
-- `EuropeExt, sans-serif`.
+Текущий display и UI/body:
+- `Montserrat`, локально собираемый через `next/font` с Latin/Cyrillic subsets.
 
-UI/body:
-- `Montserrat, sans-serif`.
+`EuropeExt` остаётся возможным будущим display-шрифтом только после получения
+лицензированного файла и отдельной визуальной проверки. До этого код не должен
+имитировать его системным fallback.
 
 Fallback:
 - system sans.

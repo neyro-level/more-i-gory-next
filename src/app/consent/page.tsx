@@ -9,7 +9,7 @@ export default function ConsentPage() {
 
   return (
     <main>
-      <SectionShell eyebrow="Юридический документ" title={seo.h1} lead="Текст согласия не опубликован до юридического согласования. Эта страница закрыта от индексации и не заменяет согласие пользователя.">
+      <SectionShell headingLevel={1} eyebrow="Юридический документ" title={seo.h1} lead="Текст согласия не опубликован до юридического согласования. Эта страница закрыта от индексации и не заменяет согласие пользователя.">
         <div className="rounded-[1.75rem] bg-white p-6 text-sm leading-7 text-muted-foreground md:p-8">
           Human gate: оператор данных, перечень данных, цели, действия с данными, срок согласия, порядок отзыва и версия согласия.
         </div>

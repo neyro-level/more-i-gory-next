@@ -1,161 +1,100 @@
 # Release Checklist — «Море и Горы»
 
-**Статус:** Active
-**Версия:** 1.5
-**Дата:** 2026-09-10
+**Статус:** Active — NOT READY FOR PRODUCTION
+**Версия:** 1.6
+**Дата:** 2026-09-11
 
-`N/A` допустимо только с явным объяснением.
+`[x]` означает реально полученное доказательство. Непроверенное не считается
+пройденным. Production выполняется только по отдельной команде владельца.
 
-## 1. Documentation
+## 1. Technical foundation
 
-- [ ] Canonical docs = Active.
-- [ ] No unresolved contradiction between PRD, Product Structure, Architecture and Scope.
-- [ ] All release tasks = DONE.
-- [ ] ADR status актуален.
-- [ ] Tech Debt updated.
+- [x] canonical docs и runtime повторно сверены;
+- [x] exact toolchain и frozen lockfile зафиксированы;
+- [x] static export и trailing slash включены;
+- [x] Server First boundary проверяется автоматически;
+- [x] metadata берётся из единого registry;
+- [x] draft/gated pages исключены из sitemap;
+- [x] HIGH/CRITICAL dependency advisories отсутствуют;
+- [x] SourceCraft workflows manual-only и exact-head;
+- [x] STANDARD gate не запускает verify дважды;
+- [x] RISKY gate выполняет install, audit и verify.
 
-## 2. Code
+## 2. Final branch proof
 
-- [ ] main/release branch актуальна.
-- [ ] frozen install passes.
-- [ ] lint passes.
-- [ ] typecheck passes.
-- [ ] tests pass.
-- [ ] production build passes.
-- [ ] `pnpm verify` passes.
-- [ ] `pnpm verify:artifact` passes.
+- [x] `pnpm install --frozen-lockfile`;
+- [x] `pnpm audit --audit-level high`;
+- [x] `pnpm verify` after final form-runtime optimization;
+- [x] rendered Title/Description/H1/canonical/robots contract;
+- [x] broken-link and 404 artifact checks;
+- [x] browser console without hydration/runtime errors;
+- [x] mobile layout smoke;
+- [ ] full keyboard smoke on all representative routes;
+- [x] Lighthouse accessibility audit on `/`;
+- [ ] SourceCraft RISKY exact-head gate before merge.
 
-## 3. Content
+## 3. Content and SEO gates
 
-- [ ] Published routes pass schema.
-- [ ] No broken relations.
-- [ ] No draft content in production.
-- [ ] Every Project Passport has sources and verifiedAt.
-- [ ] Sensitive financial claims have status/source/date.
-- [ ] No template-only regional duplication.
+- [ ] сильные утверждения подтверждены;
+- [ ] реальные проекты имеют sources и `verifiedAt`;
+- [ ] региональные страницы не являются шаблонными дублями;
+- [ ] статьи завершены, имеют источники, review и publication date;
+- [ ] методика и сведения о команде утверждены;
+- [ ] legacy URL inventory и прямые redirects утверждены;
+- [ ] для прошедших gate страниц включены index/sitemap;
+- [ ] structured data добавлены только по видимому утверждённому контенту.
 
-## 4. SEO
+До выполнения раздела все текущие страницы сохраняют `noindex, follow`, а sitemap
+не рекламирует их поисковым системам.
 
-- [ ] Unique title.
-- [ ] Unique description.
-- [ ] One logical H1.
-- [ ] self-canonical.
-- [ ] correct robots.
-- [ ] sitemap matches published registry.
-- [ ] breadcrumbs correct.
-- [ ] structured data matches visible content.
-- [ ] filter/query states do not create indexable duplicates.
-- [ ] legacy redirects direct and chain-free.
-- [ ] custom 404 returns 404.
-- [ ] trailing slash policy consistent.
-- [ ] old important URLs checked individually.
+## 4. Forms, privacy and integrations
 
-## 5. Performance
+- [ ] юридический оператор и реквизиты подтверждены;
+- [ ] privacy/consent тексты утверждены;
+- [ ] consent version утверждена;
+- [ ] production Leads API известен;
+- [ ] server validation, rate limit и CAPTCHA доказаны на backend;
+- [ ] форма прошла E2E delivery test;
+- [ ] ПДн отсутствуют в аналитике;
+- [ ] адрес и вариант карты утверждены.
 
-- [ ] Initial JS budget passes.
-- [ ] If Initial JS budget does not pass, current gzip value and reason are recorded before production.
-- [ ] Lazy chunk budget passes.
-- [ ] Project Passport transfer budget passes.
-- [ ] LCP lab target reviewed.
-- [ ] CLS lab target reviewed.
-- [ ] TBT lab target reviewed.
-- [ ] critical images optimized.
-- [ ] no unintended third-party code on first load.
+До этого `NEXT_PUBLIC_LEADS_ENABLED=false`, а пример Nginx возвращает `503` для
+`POST /api/leads`.
 
-## 6. Hydration / Browser
+## 5. Infrastructure and release
 
-- [ ] no hydration warnings.
-- [ ] no uncaught runtime errors.
-- [ ] hard reload works on representative routes.
-- [ ] core content available with JS disabled.
-- [ ] mobile menu works.
-- [ ] filters work.
-- [ ] gallery works.
-- [ ] form works.
-- [ ] deferred map fallback works.
+- [ ] production hostname/TLS определены;
+- [ ] Nginx config отрендерен с реальным окружением и прошёл `nginx -t`;
+- [ ] access/error logs определены;
+- [ ] versioned upload реализован;
+- [ ] atomic switch и rollback протестированы;
+- [ ] clean canonical `main` и exact SHA подтверждены;
+- [ ] выполнен один production release;
+- [ ] live 200/404/redirect/sitemap/robots/form smoke;
+- [ ] мобильная визуальная проверка production.
 
-Representative routes:
-- `/`;
-- `/investicionnaya-nedvizhimost/sochi/`;
-- `/investicionnaya-nedvizhimost/sochi/apartamenty/`;
-- `/investicionnaya-nedvizhimost/krym/yalta/`;
-- one Project Passport;
-- one Article;
-- `/podbor/`.
+## 6. Budgets
 
-## 7. Accessibility
+- [x] maximum route JavaScript: 1 KB gzip ≤ 110 KB (`/podbor/`);
+- [x] largest remaining script chunk: 1 KB gzip ≤ 300 KB;
+- [ ] Project Passport first screen ≤ 1.5 MB без lazy gallery;
+- [x] local lab LCP: 694 ms ≤ 2.5 s;
+- [x] local lab CLS: 0.00 ≤ 0.1;
+- [ ] TBT ≤ 200 ms;
+- [ ] после запуска INP ≤ 200 ms p75.
 
-- [ ] keyboard navigation.
-- [ ] visible focus.
-- [ ] meaningful alt.
-- [ ] form labels/errors.
-- [ ] contrast checked.
-- [ ] links vs buttons semantically correct.
-- [ ] no nested interactive controls.
+Числа фиксируются по итоговому content-complete artifact, а не переносятся из
+предыдущего PR.
 
-## 8. Forms / Privacy
+Текущий technical artifact: Lighthouse Accessibility 100, Best Practices 100.
+SEO 69 объясняется единственным ожидаемым fail: `noindex` до content gate.
+Локальные LCP/CLS без network throttling являются smoke, а не прогнозом field CWV.
 
-- [ ] Leads API test route passes.
-- [ ] server validation active.
-- [ ] rate limit active.
-- [ ] captcha/anti-spam secret server-side.
-- [ ] consent checkbox/text/version correct.
-- [ ] privacy/consent pages published.
-- [ ] analytics does not receive PII.
-- [ ] error state preserves user context.
+## 7. Current blockers
 
-## 9. Security
+Production сейчас блокируют не фундамент Next.js, а:
 
-- [ ] no secrets in repository/frontend bundle.
-- [ ] security headers.
-- [ ] CSP.
-- [ ] TLS.
-- [ ] raw HTML from Markdown impossible.
-- [ ] dependency audit reviewed.
-
-## 10. Infrastructure
-
-- [ ] versioned release path.
-- [ ] atomic switch tested.
-- [ ] rollback tested.
-- [ ] Nginx config validated.
-- [ ] access/error logs.
-- [ ] staging protected.
-- [ ] staging noindex.
-
-Database:
-- [ ] N/A — first release has no database.
-
-## 11. Post Deploy
-
-Этот раздел выполняется только по отдельной команде владельца. PR-00..PR-12
-заканчиваются release readiness и не разрешают production deploy.
-
-- [ ] live smoke.
-- [ ] representative redirects.
-- [ ] sitemap accessible.
-- [ ] robots accessible.
-- [ ] 404 correct.
-- [ ] form end-to-end.
-- [ ] logs checked.
-- [ ] critical pages visually checked on mobile.
-
-## 12. Current PR-13 QA Snapshot
-
-Дата: 2026-09-10.
-
-- `pnpm verify`: PASS.
-- Static artifact: `out/`, 30 generated app routes.
-- `pnpm verify:artifact`: PASS.
-- Initial route JS on `/`: 0 KB gzip after static no-JS export; target is 110 KB gzip.
-- Largest lazy chunk on `/`: 0 KB gzip; target is 300 KB gzip.
-- HTTP smoke on local static server:
-  - `/`: 200, no `_next/static/chunks` scripts in HTML.
-  - `/podbor/`: 200, form present, client runtime preserved.
-  - `/kontakty/`: 200, client runtime preserved for form.
-  - `/investicionnaya-nedvizhimost/sochi/`: 200.
-  - `/analitika/sochi-ili-krym/`: 200.
-  - `/privacy/`: 200, `noindex, follow`.
-- Production release: NOT RUN.
-- Leads API: NOT ENABLED; `NEXT_PUBLIC_LEADS_ENABLED` remains off until human gate.
-- Legal texts: NOT APPROVED; `/privacy/` and `/consent/` are noindex gate pages, not final legal documents.
+1. неутверждённый контент и реальные project passports;
+2. юридические тексты и production Leads API;
+3. release/rollback infrastructure proof;
+4. финальный exact-main browser/performance audit после контентных правок.

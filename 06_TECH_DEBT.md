@@ -1,38 +1,39 @@
 # Technical Debt Register — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.0
-**Дата:** 2026-09-10
+**Версия:** 1.1
+**Дата:** 2026-09-11
 
-На момент pre-development осознанного технического долга нет.
+Будущая функция не считается техническим долгом. Здесь только сознательные
+компромиссы уже существующей реализации.
 
-Важно:
-- будущие функции не являются technical debt;
-- fallback не является debt, если он принят как целевое решение;
-- запись создаётся только после сознательного компромисса в реализации.
+## TD-001 — Custom post-export Next runtime stripping
 
-## Template
+Status: Accepted
+Severity: Medium
 
-### TD-XXX — Name
+Маркетинговые HTML-файлы освобождаются от Next runtime после сборки. Это даёт
+нулевой initial JS на server-only routes, но является проектным post-processing,
+а не официальным режимом Next.js.
+
+Контроль: только обычные document links, artifact validation, browser/hydration
+smoke перед release. Пересмотреть при смене Next.js или появлении интерактивности
+на server-only маршрутах.
+
+## TD-002 — Release automation is not implemented
 
 Status: Open
-Severity: Low / Medium / High
-Created: YYYY-MM-DD
+Severity: High for production, none for local development
 
-#### Current Situation
-...
+Есть static artifact и пример Nginx, но нет доказанного versioned upload,
+atomic switch и rollback runbook. Production запрещён до отдельного release
+stream и proof на целевом сервере.
 
-#### Why This Is Debt
-...
+## TD-003 — Draft article shells exist in preview artifact
 
-#### Risk
-...
+Status: Accepted during content stage
+Severity: Low
 
-#### Trigger
-...
-
-#### Target Solution
-...
-
-#### Related
-EPIC / TASK / ADR.
+Пять первых экранов статей собираются для согласования, но имеют `noindex` и не
+попадают в sitemap. Перед production каждый материал либо проходит editorial
+gate, либо исключается из release artifact.

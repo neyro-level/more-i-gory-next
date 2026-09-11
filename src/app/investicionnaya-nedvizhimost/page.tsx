@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { StaticLink } from "@/components/navigation/static-link";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
@@ -44,9 +44,9 @@ export default async function FederalInvestmentHubPage() {
         title="Четыре направления — разные причины для входа"
         lead="На старте не расширяем архитектуру без необходимости: эти рынки дают понятный костяк для SEO и будущего каталога."
         actions={
-          <Link prefetch={false} href="/metodika/" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}>
+          <StaticLink href="/metodika/" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full")}>
             Как мы сравниваем
-          </Link>
+          </StaticLink>
         }
       >
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

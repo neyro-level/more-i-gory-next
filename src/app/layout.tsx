@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Geist } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { siteUrl } from "@/seo/metadata";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const montserrat = Montserrat({
+  display: "swap",
+  subsets: ["cyrillic"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: {
-    default: "Недвижимость для инвестиций — курортные проекты | Море и Горы",
-    template: "%s | Море и Горы",
-  },
+  title: "Недвижимость для инвестиций — курортные проекты | Море и Горы",
   icons: {
     icon: "/favicon.svg",
   },
@@ -25,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={cn("font-sans", geist.variable)}>
+    <html lang="ru" className={cn("font-sans", montserrat.variable)}>
       <body>
         <SiteHeader />
         {children}

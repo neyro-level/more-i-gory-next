@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { StaticLink } from "@/components/navigation/static-link";
 import { Container } from "./container";
 
 const footerLinks = [
@@ -19,30 +19,30 @@ export function SiteFooter() {
             Инвестиционное бюро курортной недвижимости. Помогаем сравнивать регионы, проекты,
             экономику, риски и сценарии выхода до сделки.
           </p>
-          <p className="text-xs text-white/45">© Море и Горы. Материалы сайта не являются индивидуальной инвестиционной рекомендацией.</p>
+          <p className="text-xs text-white/55">© Море и Горы. Материалы сайта не являются индивидуальной инвестиционной рекомендацией.</p>
         </div>
 
         <div className="grid gap-8 sm:grid-cols-2">
           <nav className="space-y-3 text-sm" aria-label="Навигация в подвале">
             {footerLinks.map((item) => (
-              <Link key={item.href} prefetch={false} href={item.href} className="block text-white/70 transition hover:text-white">
+              <StaticLink key={item.href} href={item.href} className="block text-white/70 transition hover:text-white">
                 {item.label}
-              </Link>
+              </StaticLink>
             ))}
           </nav>
           <nav className="space-y-3 text-sm" aria-label="Юридическая навигация">
-            <Link prefetch={false} href="/o-kompanii/" className="block text-white/70 transition hover:text-white">
+            <StaticLink href="/o-kompanii/" className="block text-white/70 transition hover:text-white">
               О компании
-            </Link>
-            <Link prefetch={false} href="/kontakty/" className="block text-white/70 transition hover:text-white">
+            </StaticLink>
+            <StaticLink href="/kontakty/" className="block text-white/70 transition hover:text-white">
               Контакты
-            </Link>
-            <Link prefetch={false} href="/privacy/" className="block text-white/70 transition hover:text-white">
+            </StaticLink>
+            <StaticLink href="/privacy/" className="block text-white/70 transition hover:text-white">
               Политика конфиденциальности
-            </Link>
-            <Link prefetch={false} href="/consent/" className="block text-white/70 transition hover:text-white">
+            </StaticLink>
+            <StaticLink href="/consent/" className="block text-white/70 transition hover:text-white">
               Согласие на обработку данных
-            </Link>
+            </StaticLink>
           </nav>
         </div>
       </Container>

@@ -1,5 +1,5 @@
 import ExportedImage from "next-image-export-optimizer";
-import Link from "next/link";
+import { StaticLink } from "@/components/navigation/static-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type RegionCardProps = {
@@ -23,9 +23,9 @@ export function RegionCard({ href, image, risk, thesis, title }: RegionCardProps
       </div>
       <CardHeader>
         <CardTitle className="flex items-center justify-between gap-4 text-2xl">
-          <Link prefetch={false} href={href} className="after:absolute after:inset-0">
+          <StaticLink href={href} className="after:absolute after:inset-0">
             {title}
-          </Link>
+          </StaticLink>
           <span aria-hidden="true" className="text-brand-coral">↗</span>
         </CardTitle>
       </CardHeader>

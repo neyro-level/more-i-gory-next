@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { StaticLink } from "@/components/navigation/static-link";
 import { buttonVariants } from "@/lib/button-variants";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -19,9 +19,9 @@ export function LeadFormSection({
           <h2 className="text-3xl font-semibold">{title}</h2>
           <p className="max-w-2xl text-white/70">{text}</p>
         </div>
-        <Link prefetch={false} href="/podbor/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-coral px-6 text-white hover:bg-brand-coral/90")}>
+        <StaticLink href="/podbor/" className={cn(buttonVariants({ size: "lg" }), "rounded-full bg-brand-coral px-6 text-white hover:bg-brand-coral/90")}>
           Перейти к подбору
-        </Link>
+        </StaticLink>
       </CardContent>
     </Card>
   );

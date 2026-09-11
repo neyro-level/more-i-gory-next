@@ -1,5 +1,5 @@
 import ExportedImage from "next-image-export-optimizer";
-import Link from "next/link";
+import { StaticLink } from "@/components/navigation/static-link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -30,7 +30,7 @@ export function ObjectCard({ href, image, location, risk, status, thesis, title 
           <Badge className="bg-brand-coral/10 text-brand-coral">{status}</Badge>
         </div>
         <CardTitle className="text-2xl">
-          <Link prefetch={false} href={href}>{title}</Link>
+          <StaticLink href={href}>{title}</StaticLink>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 text-sm leading-7 text-muted-foreground">

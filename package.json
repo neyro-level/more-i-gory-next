@@ -9,7 +9,7 @@
     "dev:next": "next dev",
     "build": "next build && node scripts/strip-static-route-js.mjs && next-image-export-optimizer",
     "export": "next build && node scripts/strip-static-route-js.mjs && next-image-export-optimizer",
-    "start": "next dev",
+    "start": "node scripts/serve-static.mjs",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "content:build": "velite build --strict",
@@ -17,22 +17,18 @@
     "verify:content": "node scripts/validate-content.mjs",
     "verify:seo": "node scripts/validate-seo.mjs",
     "verify:artifact": "node scripts/verify-static-artifact.mjs",
-    "verify": "pnpm content:build && pnpm typecheck && pnpm lint && pnpm verify:foundation && pnpm verify:content && pnpm verify:seo && pnpm build && pnpm verify:artifact"
+    "verify:quick": "pnpm content:build && pnpm typecheck && pnpm lint && pnpm verify:foundation && pnpm verify:content && pnpm verify:seo",
+    "verify": "pnpm verify:quick && pnpm build && pnpm verify:artifact"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",
     "class-variance-authority": "0.7.1",
     "cn": "0.2.6",
-    "concurrently": "10.0.5",
     "lucide-react": "1.43.0",
     "next": "16.3.4",
-    "next-image-export-optimizer": "1.21.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "shadcn": "4.21.0",
-    "sharp": "0.35.4",
     "tw-animate-css": "1.4.0",
-    "velite": "0.4.0",
     "zod": "4.6.1"
   },
   "devDependencies": {
@@ -40,9 +36,14 @@
     "@types/node": "24.10.0",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
+    "concurrently": "10.0.5",
     "eslint": "9.39.5",
     "eslint-config-next": "16.3.4",
+    "next-image-export-optimizer": "1.21.1",
+    "shadcn": "4.21.0",
+    "sharp": "0.35.4",
     "tailwindcss": "4.3.3",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "velite": "0.4.0"
   }
 }
