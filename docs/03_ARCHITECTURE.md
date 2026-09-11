@@ -1,7 +1,7 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.7 UI Constitution Conformance
+**Версия:** 1.8 Documentation Normalization
 **Дата:** 2026-09-11
 **Engineering baseline:** глобальный AMS Engineering Standard / Constitution
 **Важно:** этот документ фиксирует только проектную конкретику.
@@ -517,6 +517,17 @@ AI не имеет права без ADR:
 - менять hosting model.
 
 См.:
-- `ADR-001-static-next-export.md`
-- `ADR-002-content-repository-boundary.md`
-- `ADR-003-canonical-seo-url-model.md`
+- `adr/ADR-001-static-next-export.md`
+- `adr/ADR-002-content-repository-boundary.md`
+- `adr/ADR-003-canonical-seo-url-model.md`
+
+## 27. Architecture Risks and Revisit Triggers
+
+| ID | Риск | Текущий контроль | Revisit trigger |
+|---|---|---|---|
+| RISK-010 | Client JS или hydration снова распространяются на крупные секции | Server First guard, static anchors, artifact и browser gates | опубликованный route требует React Client Component или stripping перестаёт быть безопасным |
+| RISK-011 | Exact dependency перестаёт быть совместимой со static pipeline | frozen lockfile, audit, `pnpm verify`, Adapter/fallback | major upgrade Next.js либо сбой Velite/image pipeline |
+
+Пересмотр класса проекта обязателен, если появляются runtime CMS, PostgreSQL,
+auth, массовый каталог, realtime availability, worker или сложная интерактивная
+карта. До отдельного ADR и RISKY stream такие изменения запрещены.

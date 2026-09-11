@@ -1,7 +1,7 @@
 # Release Checklist — «Море и Горы»
 
 **Статус:** Active — NOT READY FOR PRODUCTION
-**Версия:** 1.6
+**Версия:** 1.7
 **Дата:** 2026-09-11
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
@@ -19,6 +19,7 @@
 - [x] SourceCraft workflows manual-only и exact-head;
 - [x] STANDARD gate не запускает verify дважды;
 - [x] RISKY gate выполняет install, audit и verify.
+- [x] канонические документы нормализованы в `docs/01…06`;
 
 ## 2. Final branch proof
 
@@ -31,7 +32,7 @@
 - [x] mobile layout smoke;
 - [ ] full keyboard smoke on all representative routes;
 - [x] Lighthouse accessibility audit on `/`;
-- [ ] SourceCraft RISKY exact-head gate before merge.
+- [x] SourceCraft RISKY exact-head gate PR-19.
 
 ## 3. Content and SEO gates
 

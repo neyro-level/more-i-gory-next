@@ -1,6 +1,6 @@
 # Project Brief — «Море и Горы»
 
-**Статус:** Active
+**Статус:** Superseded — перенесён в `../../01_PRD.md`
 **Версия:** 1.0
 **Дата:** 2026-09-10
 **Owner:** Product Owner / Architect

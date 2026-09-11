@@ -13,21 +13,21 @@
 
 ## Порядок чтения
 
-1. `README.md` — карта документов и текущая точка.
-2. `01_PRD.md` — продукт, аудитория, позиционирование.
-3. `02_PRODUCT_STRUCTURE.md` — PAGE-ID, URL, SEO, контент и публикация.
-4. `03_ARCHITECTURE.md` — stack, boundaries, build и integrations.
-5. `08_DESIGN_SYSTEM.md` — визуальная система.
-6. Текущий PR/Task из `05_BACKLOG.md`.
+1. `docs/README.md` — карта документов и текущая точка.
+2. `docs/01_PRD.md` — продукт, аудитория, позиционирование.
+3. `docs/02_PRODUCT_STRUCTURE.md` — PAGE-ID, URL, SEO, контент и публикация.
+4. `docs/03_ARCHITECTURE.md` — stack, boundaries, build и integrations.
+5. `docs/06_DESIGN_SYSTEM.md` — визуальная система.
+6. Текущий PR/Task из `docs/04_BACKLOG.md`.
 
-Исследования в `01_research/` и `Old doki/` — evidence, а не параллельный Source of Truth.
+Исследования в `docs/research/` — evidence, а не параллельный Source of Truth.
 
 ## Инварианты
 
 - `SERVER FIRST`; `"use client"` разрешён только в `src/ui/interactive/**`.
 - Страницы получают контент через `ContentService` и `ContentRepository`.
 - Только `published` сущности создают production routes и sitemap entries.
-- Новый индексируемый URL сначала фиксируется в `02_PRODUCT_STRUCTURE.md`.
+- Новый индексируемый URL сначала фиксируется в `docs/02_PRODUCT_STRUCTURE.md`.
 - Metadata берётся из единого registry.
 - Фильтры и параметры не создают индексируемые URL.
 - Нельзя выдумывать проекты, цены, доходность, кейсы, команду и юридические факты.

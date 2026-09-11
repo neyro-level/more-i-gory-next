@@ -1,6 +1,6 @@
 # Technical Debt Register — «Море и Горы»
 
-**Статус:** Active
+**Статус:** Superseded — technical debt перенесён в `../../04_BACKLOG.md`
 **Версия:** 1.1
 **Дата:** 2026-09-11
 

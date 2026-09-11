@@ -1,6 +1,6 @@
 # AMS STATIC SITE CORE STANDARD 1.1 — SOLO MINIMAL
 
-**Статус:** канонический стандарт AMS для статических коммерческих сайтов.
+**Статус:** Superseded — историческая локальная копия стандарта.
 **Модель:** solo owner / project manager + AI.
 **Production:** static HTML/CSS/JS → Nginx.
 **Принцип:** минимальная сложность сейчас; CMS/DB подключаются только по реальной бизнес-потребности.

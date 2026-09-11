@@ -13,11 +13,55 @@ const requiredFiles = [
   "src/components/navigation/static-link.tsx",
   "src/ui/interactive/.gitkeep",
   ".env.example",
+  "docs/README.md",
+  "docs/01_PRD.md",
+  "docs/02_PRODUCT_STRUCTURE.md",
+  "docs/03_ARCHITECTURE.md",
+  "docs/04_BACKLOG.md",
+  "docs/05_RELEASE_CHECKLIST.md",
+  "docs/06_DESIGN_SYSTEM.md",
 ];
 
 for (const file of requiredFiles) {
   if (!existsSync(join(root, file))) {
     throw new Error(`Missing required foundation file: ${file}`);
+  }
+}
+
+const forbiddenLegacyDocPaths = [
+  "00_PROJECT_BRIEF.md",
+  "01_PRD.md",
+  "02_PRODUCT_STRUCTURE.md",
+  "03_ARCHITECTURE.md",
+  "04_RISKS_AND_SCOPE.md",
+  "05_BACKLOG.md",
+  "06_TECH_DEBT.md",
+  "07_RELEASE_CHECKLIST.md",
+  "08_DESIGN_SYSTEM.md",
+  "01_research",
+  "Old doki",
+  "adr",
+];
+
+for (const legacyPath of forbiddenLegacyDocPaths) {
+  if (existsSync(join(root, legacyPath))) {
+    throw new Error(`Legacy documentation path must not return: ${legacyPath}`);
+  }
+}
+
+const canonicalDocs = requiredFiles.filter((file) => file.startsWith("docs/"));
+for (const file of canonicalDocs) {
+  const text = readFileSync(join(root, file), "utf8");
+  if (!text.includes("**Статус:** Active") && file !== "docs/README.md") {
+    throw new Error(`Canonical document must have Active status: ${file}`);
+  }
+}
+
+const docsIndex = readFileSync(join(root, "docs", "README.md"), "utf8");
+for (const file of canonicalDocs.filter((file) => file !== "docs/README.md")) {
+  const basename = file.split("/").at(-1);
+  if (!docsIndex.includes(basename)) {
+    throw new Error(`docs/README.md must reference canonical document: ${basename}`);
   }
 }
 

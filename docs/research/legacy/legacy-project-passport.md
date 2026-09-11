@@ -3,7 +3,7 @@
 **Проект:** Море и Горы
 **Домен:** https://moreigori.ru/
 **Дата:** 2026-09-09
-**Статус:** проектирование завершает подготовительный этап, сборка не начата
+**Статус:** Superseded — исторический паспорт до сборки
 **Класс:** обычный коммерческий статический сайт
 **Будущий стек:** Next.js 16 Active LTS, static export, React, TypeScript strict, Tailwind CSS, shadcn/ui, Zod и pnpm. Exact-версии фиксируются при scaffold в lockfile и version matrix.
 
