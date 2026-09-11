@@ -45,8 +45,8 @@ export default function MethodPage() {
       >
         <div className="grid gap-4 md:grid-cols-5">
           {checks.map((item, index) => (
-            <Card key={item} className="rounded-[1.5rem] bg-white">
-              <CardContent className="space-y-4 p-5">
+            <Card key={item} className="rounded-surface bg-white">
+              <CardContent className="flex flex-col gap-4 p-5">
                 <span className="grid size-9 place-items-center rounded-full bg-brand-coral text-sm font-semibold text-white">
                   {index + 1}
                 </span>

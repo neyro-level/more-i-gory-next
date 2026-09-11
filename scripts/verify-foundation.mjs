@@ -21,6 +21,73 @@ for (const file of requiredFiles) {
   }
 }
 
+const shadcnConfig = JSON.parse(
+  readFileSync(join(root, "components.json"), "utf8"),
+);
+const expectedShadcnConfig = {
+  style: "base-nova",
+  rsc: true,
+  tsx: true,
+  iconLibrary: "lucide",
+};
+
+for (const [key, expected] of Object.entries(expectedShadcnConfig)) {
+  if (shadcnConfig[key] !== expected) {
+    throw new Error(`components.json ${key} must be ${JSON.stringify(expected)}`);
+  }
+}
+
+if (
+  shadcnConfig.tailwind?.css !== "src/app/globals.css" ||
+  shadcnConfig.tailwind?.baseColor !== "neutral" ||
+  shadcnConfig.tailwind?.cssVariables !== true
+) {
+  throw new Error("components.json must keep the Tailwind 4 neutral CSS-variable contract");
+}
+
+const expectedAliases = {
+  components: "@/components",
+  hooks: "@/hooks",
+  lib: "@/lib",
+  ui: "@/components/ui",
+  utils: "@/lib/utils",
+};
+
+for (const [key, expected] of Object.entries(expectedAliases)) {
+  if (shadcnConfig.aliases?.[key] !== expected) {
+    throw new Error(`components.json alias ${key} must be ${expected}`);
+  }
+}
+
+const allowedRegistries = new Set(["@ams", "@shadcn"]);
+for (const registry of Object.keys(shadcnConfig.registries ?? {})) {
+  if (!allowedRegistries.has(registry)) {
+    throw new Error(`Community shadcn registry is not allowed: ${registry}`);
+  }
+}
+
+const requiredPrimitives = [
+  "accordion",
+  "alert",
+  "badge",
+  "breadcrumb",
+  "button",
+  "card",
+  "checkbox",
+  "field",
+  "input",
+  "label",
+  "separator",
+  "sheet",
+  "textarea",
+];
+
+for (const primitive of requiredPrimitives) {
+  if (!existsSync(join(root, "src", "components", "ui", `${primitive}.tsx`))) {
+    throw new Error(`Missing canonical shadcn primitive: ${primitive}`);
+  }
+}
+
 const nextConfig = readFileSync(join(root, "next.config.ts"), "utf8");
 if (!nextConfig.includes('output: "export"')) {
   throw new Error('next.config.ts must keep output: "export"');
@@ -41,6 +108,26 @@ function walk(dir) {
 const sourceFiles = walk(join(root, "src")).filter((file) =>
   /\.(ts|tsx)$/.test(file),
 );
+
+const projectOwnedUiFiles = sourceFiles.filter(
+  (file) =>
+    !file.includes(`${join("src", "components", "ui")}`) &&
+    !file.includes(`${join("src", "ui", "interactive")}`),
+);
+const forbiddenProjectUiPatterns = [
+  /\bspace-y-/,
+  /rounded-\[(?:1\.25|1\.5|1\.75|2)rem\]/,
+  /max-w-\[1200px\]/,
+];
+
+for (const file of projectOwnedUiFiles) {
+  const text = readFileSync(file, "utf8");
+  for (const pattern of forbiddenProjectUiPatterns) {
+    if (pattern.test(text)) {
+      throw new Error(`Project UI must use semantic tokens and gap utilities in ${file}: ${pattern}`);
+    }
+  }
+}
 const illegalClientFiles = sourceFiles.filter((file) => {
   const text = readFileSync(file, "utf8");
   return (

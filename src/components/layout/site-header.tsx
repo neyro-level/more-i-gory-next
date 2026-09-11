@@ -53,7 +53,7 @@ export function SiteHeader() {
             <span aria-hidden="true" className="text-xl leading-none">☰</span>
             <span className="sr-only">Открыть меню</span>
           </summary>
-          <nav className="absolute right-0 top-14 z-50 grid min-w-64 gap-2 rounded-[1.5rem] bg-white p-3 text-brand-navy shadow-2xl" aria-label="Мобильная навигация">
+          <nav className="absolute right-0 top-14 z-50 grid min-w-64 gap-2 rounded-surface bg-white p-3 text-brand-navy shadow-2xl" aria-label="Мобильная навигация">
             {navigation.map((item) => (
               <StaticLink key={item.href} href={item.href} className="rounded-2xl px-4 py-3 text-sm font-semibold hover:bg-muted">
                 {item.label}

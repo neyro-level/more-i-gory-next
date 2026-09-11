@@ -37,8 +37,8 @@ export default function SelectionPage() {
       <SectionShell eyebrow="Процесс" title="Что произойдёт после обращения">
         <div className="grid gap-4 md:grid-cols-4">
           {steps.map((step, index) => (
-            <Card key={step} className="rounded-[1.5rem] bg-white">
-              <CardContent className="space-y-4 p-5">
+            <Card key={step} className="rounded-surface bg-white">
+              <CardContent className="flex flex-col gap-4 p-5">
                 <span className="grid size-9 place-items-center rounded-full bg-brand-coral text-sm font-semibold text-white">
                   {index + 1}
                 </span>
@@ -51,11 +51,11 @@ export default function SelectionPage() {
 
       <SectionShell id="form" className="pt-0" eyebrow="Форма" title="Опишите инвестиционную задачу" lead="Форма уже проверяет поля на клиенте, но реальная отправка отключена до согласования юридических текстов и production Leads API.">
         <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-          <Card className="rounded-[1.75rem] bg-brand-navy text-white">
+          <Card className="rounded-feature bg-brand-navy text-white">
             <CardHeader>
               <CardTitle className="text-2xl">Что лучше указать</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm leading-7 text-white/70">
+            <CardContent className="flex flex-col gap-3 text-sm leading-7 text-white/70">
               <p>Регион или несколько регионов.</p>
               <p>Примерный бюджет и горизонт.</p>
               <p>Цель: доход, сохранение, личное использование, выход.</p>

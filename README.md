@@ -1,7 +1,7 @@
 # Документация проекта «Море и Горы»
 
 **Статус:** Active
-**Версия пакета:** 1.6 Technical Production Readiness
+**Версия пакета:** 1.7 UI Constitution Conformance
 **Дата:** 2026-09-11
 **Стандарт:** AMS Product Development Standard 2.0 (эквивалентный numbered root canon)
 **Профиль доставки:** COMMERCIAL
@@ -72,7 +72,8 @@ PR-00..PR-15 слиты в `main`. Для PAGE-001..023 в `02_PRODUCT_STRUCTURE
 индексация и content gate. Публикация страницы всё равно запрещена, пока её
 индивидуальный content gate не пройден.
 
-Текущий поток — technical production readiness. Его статус и оставшиеся human
+Technical production readiness завершён. Текущий рабочий поток — проверка
+соответствия UI-конституции и последующее согласование контента. Оставшиеся human
 gates находятся только в `05_BACKLOG.md` и `07_RELEASE_CHECKLIST.md`.
 
 ## 7. Зафиксированный результат первого цикла

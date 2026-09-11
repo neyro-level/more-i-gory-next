@@ -89,7 +89,7 @@ export default async function HomePage() {
       >
         <div className="grid gap-5 md:grid-cols-3">
           {capitalTasks.map((task) => (
-            <Card key={task.title} className="rounded-[1.5rem] bg-white">
+            <Card key={task.title} className="rounded-surface bg-white">
               <CardHeader>
                 <CardTitle className="text-2xl">{task.title}</CardTitle>
               </CardHeader>
@@ -100,8 +100,8 @@ export default async function HomePage() {
       </SectionShell>
 
       <SectionShell className="bg-white" contained={false}>
-        <div className="mx-auto grid max-w-[1200px] gap-8 px-5 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
-          <div className="rounded-[2rem] bg-brand-navy p-8 text-white md:p-10">
+        <div className="mx-auto grid max-w-site gap-8 px-5 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+          <div className="rounded-hero bg-brand-navy p-8 text-white md:p-10">
             <span className="w-fit rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white">
               Почему не каталог
             </span>
@@ -113,7 +113,7 @@ export default async function HomePage() {
               "Рекламная доходность не показывает сезонность, комиссии, простои и налоги.",
               "Красивое фото не отвечает на вопрос, кто управляет объектом и как из него выйти.",
             ].map((item) => (
-              <div key={item} className="rounded-[1.5rem] bg-background p-6 text-lg leading-8">
+              <div key={item} className="rounded-surface bg-background p-6 text-lg leading-8">
                 {item}
               </div>
             ))}
@@ -133,8 +133,8 @@ export default async function HomePage() {
       >
         <div className="grid gap-4 lg:grid-cols-5">
           {decisionSteps.map((step, index) => (
-            <Card key={step} className="rounded-[1.5rem] bg-white">
-              <CardContent className="space-y-5 p-6">
+            <Card key={step} className="rounded-surface bg-white">
+              <CardContent className="flex flex-col gap-5 p-6">
                 <span className="grid size-10 place-items-center rounded-full bg-brand-coral text-sm font-semibold text-white">
                   {index + 1}
                 </span>
@@ -202,7 +202,7 @@ export default async function HomePage() {
       >
         <div className="grid gap-5 md:grid-cols-3">
           {["Документы и формат права", "Экономика владения", "Управление и выход"].map((title) => (
-            <Card key={title} className="rounded-[1.5rem] bg-white/10 text-white ring-white/15">
+            <Card key={title} className="rounded-surface bg-white/10 text-white ring-white/15">
               <CardHeader>
                 <CardTitle className="text-2xl">{title}</CardTitle>
                 <CardDescription className="text-white/65">Обязательный критерий перед публикацией проекта.</CardDescription>
@@ -252,13 +252,13 @@ export default async function HomePage() {
       >
         <div className="grid gap-5 md:grid-cols-3">
           {analytics.map((item) => (
-            <Card key={item.href} className="rounded-[1.5rem]">
+            <Card key={item.href} className="rounded-surface">
               <CardHeader>
                 <CardTitle className="text-2xl">
                   <StaticLink href={item.href}>{item.title}</StaticLink>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-5 text-sm leading-7 text-muted-foreground">
+              <CardContent className="flex flex-col gap-5 text-sm leading-7 text-muted-foreground">
                 <p>{item.text}</p>
                 <p className="text-xs uppercase tracking-[0.18em] text-brand-coral">draft / noindex до редакционной проверки</p>
               </CardContent>

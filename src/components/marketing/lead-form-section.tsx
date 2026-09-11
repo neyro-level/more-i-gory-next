@@ -13,9 +13,9 @@ export function LeadFormSection({
   title = "Получить инвестиционный разбор",
 }: LeadFormSectionProps) {
   return (
-    <Card className="rounded-[2rem] bg-brand-navy text-white">
+    <Card className="rounded-hero bg-brand-navy text-white">
       <CardContent className="grid gap-8 p-8 md:grid-cols-[1fr_auto] md:items-center md:p-10">
-        <div className="space-y-4">
+        <div className="flex flex-col gap-4">
           <h2 className="text-3xl font-semibold">{title}</h2>
           <p className="max-w-2xl text-white/70">{text}</p>
         </div>

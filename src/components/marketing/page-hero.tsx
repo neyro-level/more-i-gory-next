@@ -25,7 +25,7 @@ export function PageHero({ eyebrow, image, lead, primaryCta, proof, secondaryCta
     <section className="bg-brand-navy py-10 text-white md:py-16">
       <Container>
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
-          <div className="flex flex-col justify-center rounded-[2rem] bg-white p-7 text-foreground shadow-2xl shadow-black/10 md:p-10">
+          <div className="flex flex-col justify-center rounded-hero bg-white p-7 text-foreground shadow-2xl shadow-black/10 md:p-10">
             <span className="mb-6 w-fit rounded-full bg-brand-coral/10 px-3 py-1 text-xs font-medium text-brand-coral">
               {eyebrow}
             </span>
@@ -46,7 +46,7 @@ export function PageHero({ eyebrow, image, lead, primaryCta, proof, secondaryCta
           </div>
 
           {image ? (
-            <div className="relative min-h-[420px] overflow-hidden rounded-[2rem] bg-white/10">
+            <div className="relative min-h-[420px] overflow-hidden rounded-hero bg-white/10">
               <ExportedImage src={image.src} alt={image.alt} fill priority sizes="(min-width: 1024px) 46vw, 100vw" className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/35 to-transparent" />
             </div>

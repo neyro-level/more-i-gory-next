@@ -36,13 +36,13 @@ export default async function AnalyticsPage() {
       >
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {articles.map((article) => (
-            <Card key={article.id} className="rounded-[1.5rem] bg-white">
+            <Card key={article.id} className="rounded-surface bg-white">
               <CardHeader>
                 <CardTitle className="text-2xl">
                   <StaticLink href={article.path}>{article.title}</StaticLink>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-sm leading-7 text-muted-foreground">
+              <CardContent className="flex flex-col gap-4 text-sm leading-7 text-muted-foreground">
                 <p>{article.description}</p>
                 <p className="text-xs uppercase tracking-[0.18em] text-brand-coral">{article.status} / noindex до gate</p>
               </CardContent>

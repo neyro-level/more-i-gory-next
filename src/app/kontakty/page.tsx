@@ -30,7 +30,7 @@ export default function ContactsPage() {
       <SectionShell eyebrow="Каналы" title="Что нужно подтвердить перед публикацией">
         <div className="grid gap-5 md:grid-cols-3">
           {["телефон и мессенджер", "email и ответственный", "адрес и карта"].map((item) => (
-            <Card key={item} className="rounded-[1.5rem] bg-white">
+            <Card key={item} className="rounded-surface bg-white">
               <CardHeader>
                 <CardTitle className="text-2xl">{item}</CardTitle>
               </CardHeader>

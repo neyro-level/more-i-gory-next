@@ -1,7 +1,7 @@
 # Design System — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.6
+**Версия:** 1.7
 **Дата:** 2026-09-11
 **Role:** самостоятельный source of truth визуального языка проекта
 
@@ -73,6 +73,15 @@ Responsive uses fixed breakpoint steps, not continuous viewport scaling.
 как готовый визуальный бренд. Основа: Base UI, preset `nova`, Tailwind CSS 4,
 CSS variables, Lucide. Community registries и вторая UI-библиотека запрещены.
 
+Registry contract:
+
+- `@shadcn` — встроенный официальный источник CLI; отдельная запись в
+  `components.json.registries` не обязательна;
+- `registries: {}` — корректное текущее состояние, а не отсутствие shadcn;
+- проектные составные компоненты остаются локальными;
+- `@ams` добавляется только после появления утверждённого private registry;
+- любой иной namespace требует отдельного ADR и review.
+
 Базовые primitives:
 
 - Button;
@@ -109,12 +118,28 @@ Project components владеют композицией и визуальной
 shadcn primitives владеют доступными интерактивными состояниями. Страницы не
 копируют primitive markup и не создают локальную вторую систему tokens.
 
+Слои реализации:
+
+```text
+src/components/ui/**          → canonical shadcn primitives
+src/ui/interactive/**         → разрешённые Client Component leaves
+src/components/layout/**      → shared layout
+src/components/marketing/**   → domain/project components
+src/app/**                    → page composition
+```
+
+Системные размеры задаются токенами: `max-w-site`, `rounded-surface`,
+`rounded-feature`, `rounded-hero`. Повторяющиеся arbitrary values для этих
+размеров запрещены. Вертикальная композиция использует `flex/grid` + `gap`,
+а не `space-y-*`.
+
 ### SiteHeader
 - logo;
 - main nav;
 - phone/contact;
 - CTA;
-- mobile drawer.
+- нативное мобильное меню `<details>/<summary>` без React runtime;
+- `Sheet` допускается позже только как интерактивный leaf при доказанной UX-нужде.
 
 ### HomeHero
 Must communicate:

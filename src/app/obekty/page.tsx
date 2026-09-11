@@ -48,8 +48,8 @@ export default async function ObjectsPage() {
       >
         <div className="grid gap-4 md:grid-cols-5">
           {criteria.map((item, index) => (
-            <Card key={item} className="rounded-[1.5rem] bg-white">
-              <CardContent className="space-y-4 p-5">
+            <Card key={item} className="rounded-surface bg-white">
+              <CardContent className="flex flex-col gap-4 p-5">
                 <span className="grid size-9 place-items-center rounded-full bg-brand-coral text-sm font-semibold text-white">
                   {index + 1}
                 </span>
@@ -96,11 +96,11 @@ export default async function ObjectsPage() {
             )}
           </div>
         ) : (
-          <Card className="rounded-[1.75rem] bg-white">
+          <Card className="rounded-feature bg-white">
             <CardHeader>
               <CardTitle className="text-2xl">Почему здесь нет фальшивых объектов</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-5 text-base leading-8 text-muted-foreground">
+            <CardContent className="flex flex-col gap-5 text-base leading-8 text-muted-foreground">
               <p>
                 Объект без цены, источников, риска, verifiedAt и инвестиционного вывода не публикуется.
                 Это защищает SEO от thin content и пользователя от рекламной имитации выбора.

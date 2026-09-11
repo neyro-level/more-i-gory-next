@@ -9,7 +9,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 const montserrat = Montserrat({
   display: "swap",
   subsets: ["cyrillic"],
-  variable: "--font-sans",
+  variable: "--font-montserrat",
 });
 
 export const metadata: Metadata = {

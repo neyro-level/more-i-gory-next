@@ -13,7 +13,7 @@ export function SiteFooter() {
   return (
     <footer className="bg-brand-navy py-12 text-white">
       <Container className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
-        <div className="space-y-4">
+        <div className="flex flex-col gap-4">
           <p className="text-2xl font-semibold">Море и Горы</p>
           <p className="max-w-xl text-sm leading-7 text-white/65">
             Инвестиционное бюро курортной недвижимости. Помогаем сравнивать регионы, проекты,
@@ -23,14 +23,14 @@ export function SiteFooter() {
         </div>
 
         <div className="grid gap-8 sm:grid-cols-2">
-          <nav className="space-y-3 text-sm" aria-label="Навигация в подвале">
+          <nav className="flex flex-col gap-3 text-sm" aria-label="Навигация в подвале">
             {footerLinks.map((item) => (
               <StaticLink key={item.href} href={item.href} className="block text-white/70 transition hover:text-white">
                 {item.label}
               </StaticLink>
             ))}
           </nav>
-          <nav className="space-y-3 text-sm" aria-label="Юридическая навигация">
+          <nav className="flex flex-col gap-3 text-sm" aria-label="Юридическая навигация">
             <StaticLink href="/o-kompanii/" className="block text-white/70 transition hover:text-white">
               О компании
             </StaticLink>

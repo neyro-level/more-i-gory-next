@@ -17,7 +17,7 @@ export function LeadForm() {
     <>
       <form
         action="/api/leads"
-        className="rounded-[1.75rem] bg-white p-6 text-foreground shadow-sm md:p-8"
+        className="rounded-feature bg-white p-6 text-foreground shadow-sm md:p-8"
         data-consent-version="draft-2026-09-10"
         data-lead-form
         data-leads-enabled={String(leadsEnabled)}

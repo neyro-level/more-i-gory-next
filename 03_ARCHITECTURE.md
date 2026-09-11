@@ -1,7 +1,7 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.6 Production Readiness
+**Версия:** 1.7 UI Constitution Conformance
 **Дата:** 2026-09-11
 **Engineering baseline:** глобальный AMS Engineering Standard / Constitution
 **Важно:** этот документ фиксирует только проектную конкретику.
@@ -53,20 +53,31 @@ Exact toolchain первого релиза:
 | React / React DOM | `19.3.0` | Server First |
 | TypeScript | `6.0.3` | strict; TypeScript 7 не используется |
 | Tailwind CSS | `4.3.3` | CSS variables, global tokens |
+| shadcn CLI | `4.21.0` | controlled primitive installation and inspection |
+| Base UI | `1.8.0` | accessible interactive primitive base |
+| Lucide React | `1.43.0` | single icon source |
+| class-variance-authority | `0.7.1` | typed primitive variants |
+| cn | `0.2.6` | canonical class merge utility used by preset |
 | Zod | `4.6.1` | build-time content validation |
 | Velite | `0.4.0` | принят после Windows/dev/export smoke |
 | next-image-export-optimizer | `1.21.1` | принят после static export/image smoke |
 | sharp | `0.35.4` | единая override-версия для build pipeline |
 
-Также используются `sharp`, `concurrently`, Lucide и официальный shadcn/ui.
+Также используется `concurrently` для совместного локального запуска Next.js и Velite.
 Exact versions фиксируются в `package.json` и lockfile без ranges.
 
 shadcn contract:
-- официальный registry `@shadcn`;
+- официальный встроенный registry `@shadcn`; он доступен CLI даже при
+  `"registries": {}` в `components.json`;
 - Base UI;
 - preset `nova`;
 - Tailwind CSS 4 и CSS variables;
 - `components.json` и project aliases;
+- CLI пишет primitives в `src/components/ui/**`; client-only реализации
+  изолируются в `src/ui/interactive/**` и реэкспортируются через canonical alias;
+- собственные составные компоненты хранятся локально в `src/components/**`;
+- частный namespace `@ams` не подключается, пока реально не существует
+  утверждённый registry endpoint;
 - community registries и вторая UI-библиотека запрещены без ADR.
 
 Build:
@@ -236,7 +247,9 @@ Server by default:
 
 `"use client"` запрещён в `src/app/**` и больших композиционных секциях.
 
-В текущем первом релизе React Client Components не требуются. Форма рендерится
+В текущем первом релизе опубликованные маршруты не импортируют React Client
+Components. Client-capable shadcn primitives установлены как будущие leaf-компоненты,
+но не входят в route graph и initial JavaScript. Форма рендерится
 на сервере и получает framework-free progressive enhancement через
 `public/assets/lead-form.js`; при отключённом JavaScript отправка fail-closed.
 
@@ -471,6 +484,9 @@ Budgets are project gates, not SEO ranking guarantees.
 - no nondeterministic client first render;
 - no request-time Next APIs;
 - no `next/link` client navigation in the static shell.
+- exact shadcn preset, aliases, approved registries и набор primitives;
+- semantic project tokens вместо повторяющихся arbitrary radius/container values;
+- `gap`-based vertical rhythm в project-owned UI.
 
 `pnpm verify` дополнительно проверяет:
 - static build и наличие `out/`;
