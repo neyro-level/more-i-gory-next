@@ -17,16 +17,16 @@ type RegionCardProps = {
 
 export function RegionCard({ href, image, risk, thesis, title }: RegionCardProps) {
   return (
-    <Card className="overflow-hidden rounded-surface bg-white">
+    <Card className="relative overflow-hidden rounded-surface bg-card">
       <div className="relative aspect-[4/3]">
         <ExportedImage src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 25vw, 100vw" className="object-cover" />
       </div>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between gap-4 text-2xl">
+        <CardTitle className="flex items-center justify-between gap-4 text-card-title">
           <StaticLink href={href} className="after:absolute after:inset-0">
             {title}
           </StaticLink>
-          <span aria-hidden="true" className="text-brand-coral">↗</span>
+          <span aria-hidden="true" className="text-action">↗</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 text-sm leading-7 text-muted-foreground">

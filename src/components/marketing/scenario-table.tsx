@@ -10,7 +10,7 @@ type ScenarioTableProps = {
 
 export function ScenarioTable({ rows }: ScenarioTableProps) {
   return (
-    <div className="overflow-hidden rounded-surface border bg-white">
+    <div className="overflow-hidden rounded-surface border bg-card">
       <div className="grid grid-cols-3 bg-brand-navy px-5 py-4 text-sm font-semibold text-white">
         <div>Сценарий</div>
         <div>Допущение</div>

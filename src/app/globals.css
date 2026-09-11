@@ -35,6 +35,8 @@
   --secondary-foreground: #08192c;
   --accent: #bd402f;
   --accent-foreground: #ffffff;
+  --action: #bd402f;
+  --action-foreground: #ffffff;
   --destructive: oklch(0.577 0.245 27.325);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -95,6 +97,8 @@
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
+  --color-action-foreground: var(--action-foreground);
+  --color-action: var(--action);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
   --color-popover-foreground: var(--popover-foreground);
@@ -104,6 +108,34 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  --text-page-title: 2.25rem;
+  --text-page-title--line-height: 1.08;
+  --text-page-title--letter-spacing: -0.035em;
+  --text-page-title-lg: 3.75rem;
+  --text-page-title-lg--line-height: 1.05;
+  --text-page-title-lg--letter-spacing: -0.04em;
+  --text-section-title: 1.875rem;
+  --text-section-title--line-height: 1.1;
+  --text-section-title--letter-spacing: -0.03em;
+  --text-section-title-lg: 3rem;
+  --text-section-title-lg--line-height: 1.08;
+  --text-section-title-lg--letter-spacing: -0.035em;
+  --text-card-title: 1.5rem;
+  --text-card-title--line-height: 1.2;
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 2rem;
+  --text-body: 1rem;
+  --text-body--line-height: 1.75rem;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+
+  --spacing-section: 4rem;
+  --spacing-section-lg: 6rem;
+  --spacing-page-inline: 1.25rem;
+  --spacing-page-inline-sm: 1.5rem;
+  --spacing-page-inline-lg: 2rem;
+  --shadow-surface: 0 1.5rem 4rem rgb(8 25 44 / 0.12);
 }
 
 * {
@@ -138,6 +170,8 @@ body {
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
+  --action: #bd402f;
+  --action-foreground: #ffffff;
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
@@ -170,5 +204,10 @@ body {
 
   a {
     @apply underline-offset-4;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 }

@@ -1,7 +1,7 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.8
+**Версия:** 1.9
 **Дата:** 2026-09-11
 **Правило:** это единственный source of truth текущей разработки.
 
@@ -11,6 +11,10 @@ PR-00..PR-20 слиты в `main`. Реализованы static Next foundation
 Repository, SEO registry, дизайн-система, полная главная, 23 PAGE-ID, региональные
 экраны, каталог-шаблон, аналитика, формы, release-readiness baseline и UI
 Constitution Conformance.
+
+EPIC-18 UI Constitution Conformance 2.0 завершён в WORK: повторный аудит выявил
+и устранил drift между декларацией PR-19 и фактической реализацией semantic
+typography, CTA variants, responsive header, form states и page composition.
 
 Production не выпускался. Все коммерческие, аналитические и юридические страницы
 остаются под content/trust gate и не попадают в sitemap.
@@ -60,6 +64,35 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 4. Утвердить юридические тексты, фактические реквизиты и consent version.
 5. После прохождения page gates перевести конкретные registry entries в
    `index=yes` / `sitemap=yes`.
+
+## 4.1. WORK COMPLETE — EPIC-18 UI Constitution Conformance 2.0
+
+Ветка: `codex/ui-constitution-conformance-v2`
+Gate: `STANDARD` — shared presentation/tokens без data, auth или runtime change.
+
+### TASK-018.1 — Normalize the project UI system
+
+- [x] проверить UI layers, shadcn config, primitive base и route templates;
+- [x] зафиксировать semantic type scale и responsive matrix;
+- [x] создать canonical `ActionLink` и semantic CTA variants;
+- [x] убрать 1024px header overflow и укрепить mobile grid constraints;
+- [x] вынести повторяемые numbered/article patterns в project components;
+- [x] перевести главную из page-level монолита в композицию секций;
+- [x] нормализовать form control sizes, validation states и native static exception;
+- [x] выполнить full project verify и browser regression на 1440/1024/768/390;
+- [x] зафиксировать финальный proof и закрыть Epic.
+
+Local proof:
+
+- `pnpm verify` — PASS: content, typecheck, lint, foundation, SEO, static build и artifact;
+- 26 маршрутов × 4 ширины = 104 состояния, horizontal overflow и CTA `<44px` — 0;
+- header breakpoint: desktop navigation только `≥1280px`, 1024/768/390 — compact menu;
+- form validation: четыре invalid state отражены одновременно через
+  `aria-invalid=true`, `data-invalid=true` и visible status;
+- semantic audit: один H1, labels, alt, unique IDs и heading hierarchy — PASS
+  после исправления страницы `/o-kompanii/`.
+
+Merge/SourceCraft Gate/production не выполнялись и требуют отдельной lifecycle-команды владельца.
 
 ## 5. LATER — Production Release
 

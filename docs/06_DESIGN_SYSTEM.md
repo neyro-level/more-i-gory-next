@@ -1,7 +1,7 @@
 # Design System — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.7
+**Версия:** 1.8
 **Дата:** 2026-09-11
 **Role:** самостоятельный source of truth визуального языка проекта
 
@@ -56,6 +56,24 @@ Fallback:
 
 Responsive uses fixed breakpoint steps, not continuous viewport scaling.
 
+### 4.1. Semantic type scale
+
+Типографика управляется из `src/app/globals.css`; page-компоненты не собирают
+собственные размеры заголовков из случайных utility-наборов.
+
+| Роль | Mobile | Tablet / desktop | Canonical utility |
+|---|---:|---:|---|
+| Page / Hero H1 | 36 / 39px | 60 / 63px | `text-page-title md:text-page-title-lg` |
+| Section H1/H2 | 30 / 33px | 48 / 52px | `text-section-title md:text-section-title-lg` |
+| Card title | 24 / 29px | 24 / 29px | `text-card-title` |
+| Lead | 18 / 32px | 18 / 32px | `text-lead` |
+| Body | 16 / 28px | 16 / 28px | `text-body` |
+| Caption / eyebrow | 12 / 16px | 12 / 16px | `text-caption` |
+
+`PageHero` владеет Page H1, `SectionShell` — заголовком и lead секции,
+`CardTitle`/проектный card component — заголовком карточки. Исключение размера
+допустимо только для доказанной отдельной роли, а не локального украшения.
+
 ## 5. Layout
 
 - desktop content container ≈ 1200px;
@@ -64,6 +82,16 @@ Responsive uses fixed breakpoint steps, not continuous viewport scaling.
 - cards 16–24px radius;
 - major surfaces 24–32px;
 - buttons pill-shaped where appropriate.
+
+Responsive contract:
+
+- mobile: `< 768px`, одна колонка, full-width primary actions;
+- tablet: `768–1023px`, две колонки только когда content сохраняет читаемость;
+- laptop: `1024–1279px`, compact header с мобильным menu trigger;
+- desktop: `≥ 1280px`, полная навигация и многоколоночные композиции;
+- минимальная высота primary action и form control — `44px`;
+- reusable layout обязан иметь `min-width: 0` там, где длинный русский текст
+  может расширить grid/flex child.
 
 ## 6. Core Components
 
@@ -96,6 +124,15 @@ Registry contract:
 - Separator;
 - Breadcrumb;
 - Accordion.
+
+Semantic action contract:
+
+- `Button/ActionLink variant="accent" size="cta"` — primary conversion action;
+- `variant="default" size="cta"` — сильное navy-действие;
+- `variant="outline" size="cta"` — secondary action;
+- цвет, radius и horizontal padding CTA не переопределяются в page-файлах;
+- ссылку, выглядящую как button, рендерит project `ActionLink` поверх
+  `buttonVariants`, сохраняя семантику обычного `<a>` для static export.
 
 Проектные компоненты:
 
@@ -190,6 +227,13 @@ Readable provenance and dates.
 
 ### LeadForm
 Compact, one-column on mobile, clear progress/error/success.
+
+Static-export exception: route не гидратирует React. Поэтому `Input`,
+`Textarea` и `Button` используют server-safe shadcn source, а consent checkbox
+остаётся нативным `<input type="checkbox">`, чтобы работать через `FormData` и
+framework-free progressive enhancement. Это platform constraint, а не второй
+checkbox component. Поля группируются семантическим `fieldset`, имеют
+`aria-invalid`, visible error и `data-invalid` state.
 
 ### ArticlePage
 Readable long-form layout with TOC, source notes and related commercial links.
