@@ -17,8 +17,9 @@
 2. `docs/01_PRD.md` — продукт, аудитория, позиционирование.
 3. `docs/02_PRODUCT_STRUCTURE.md` — PAGE-ID, URL, SEO, контент и публикация.
 4. `docs/03_ARCHITECTURE.md` — stack, boundaries, build и integrations.
-5. `docs/06_DESIGN_SYSTEM.md` — визуальная система.
-6. Текущий PR/Task из `docs/04_BACKLOG.md`.
+5. `docs/TECHNICAL_CORE.md` — UI-relevant runtime facts для UI scope.
+6. `docs/06_DESIGN_SYSTEM.md` — визуальная система.
+7. Текущий PR/Task из `docs/04_BACKLOG.md`.
 
 Исследования в `docs/research/` — evidence, а не параллельный Source of Truth.
 

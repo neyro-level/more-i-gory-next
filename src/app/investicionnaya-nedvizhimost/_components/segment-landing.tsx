@@ -45,9 +45,9 @@ export async function SegmentLanding({ pageId }: SegmentLandingProps) {
         lead="На старте здесь собран первый экран и смысловой каркас. Полный SEO-текст и shortlist появятся после подтверждения фактов и проектов."
       >
         <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-          <Card className="rounded-feature bg-card">
+          <Card className="rounded-large bg-card">
             <CardHeader>
-              <CardTitle className="text-card-title">Коммерческое сообщение</CardTitle>
+              <CardTitle className="text-h3">Коммерческое сообщение</CardTitle>
             </CardHeader>
             <CardContent className="text-body text-muted-foreground">
               {landing.investmentThesis}
@@ -64,7 +64,7 @@ export async function SegmentLanding({ pageId }: SegmentLandingProps) {
       >
         <div className="grid gap-4 md:grid-cols-3">
           {[...landing.parentLinks, ...landing.childLinks].map((link) => (
-            <StaticLink key={link.href} href={link.href} className="min-h-11 rounded-xl bg-card p-5 text-body font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <StaticLink key={link.href} href={link.href} className="min-h-11 rounded-card bg-card p-5 text-body font-semibold shadow-sm transition duration-fast ease-standard hover:-translate-y-0.5 hover:shadow-md">
               {link.label}
             </StaticLink>
           ))}

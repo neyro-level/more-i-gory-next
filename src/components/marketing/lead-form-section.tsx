@@ -11,11 +11,11 @@ export function LeadFormSection({
   title = "Получить инвестиционный разбор",
 }: LeadFormSectionProps) {
   return (
-    <Card className="rounded-hero bg-brand-navy text-white">
+    <Card className="rounded-large bg-surface-dark text-surface-dark-foreground">
       <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
         <CardHeader className="gap-4 p-8 md:p-10">
-          <CardTitle className="text-section-title text-white">{title}</CardTitle>
-          <p className="max-w-2xl text-white/70">{text}</p>
+          <CardTitle className="text-h2 text-surface-dark-foreground">{title}</CardTitle>
+          <p className="max-w-narrow text-body text-surface-dark-foreground/70">{text}</p>
         </CardHeader>
         <CardContent className="px-8 pb-8 md:p-10 md:pl-0">
           <ActionLink href="/podbor/" variant="accent">

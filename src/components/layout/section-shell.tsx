@@ -30,9 +30,9 @@ export function SectionShell({
       {(eyebrow || title || lead || actions) && (
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="flex min-w-0 max-w-3xl flex-col gap-4">
-            {eyebrow ? <p className={cn("text-caption font-semibold uppercase tracking-[0.18em]", tone === "dark" ? "text-brand-coral-light" : "text-action")}>{eyebrow}</p> : null}
-            {title ? <Heading className={cn("text-section-title font-semibold md:text-section-title-lg", tone === "dark" ? "text-white" : "text-foreground")}>{title}</Heading> : null}
-            {lead ? <p className={cn("text-lead", tone === "dark" ? "text-white/75" : "text-muted-foreground")}>{lead}</p> : null}
+            {eyebrow ? <p className={cn("text-caption font-semibold uppercase tracking-eyebrow", tone === "dark" ? "text-action-on-dark" : "text-action")}>{eyebrow}</p> : null}
+            {title ? <Heading className={cn("text-h2 font-semibold", tone === "dark" ? "text-surface-dark-foreground" : "text-foreground")}>{title}</Heading> : null}
+            {lead ? <p className={cn("text-body-lg", tone === "dark" ? "text-surface-dark-foreground/75" : "text-muted-foreground")}>{lead}</p> : null}
           </div>
           {actions ? <div className="w-full shrink-0 lg:w-auto">{actions}</div> : null}
         </div>
@@ -42,7 +42,7 @@ export function SectionShell({
   );
 
   return (
-    <section className={cn("py-section md:py-section-lg", className)} {...props}>
+    <section className={cn("py-section-md", className)} {...props}>
       {contained ? <Container>{content}</Container> : content}
     </section>
   );

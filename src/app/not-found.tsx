@@ -11,11 +11,11 @@ export default function NotFound() {
   return (
     <main className="py-24">
       <Container className="max-w-3xl text-center">
-        <p className="text-caption font-semibold uppercase tracking-[0.18em] text-action">Ошибка 404</p>
-        <h1 className="mt-4 text-page-title font-semibold text-brand-navy md:text-page-title-lg">
+        <p className="text-caption font-semibold uppercase tracking-eyebrow text-action">Ошибка 404</p>
+        <h1 className="mt-4 text-h1 font-semibold text-surface-dark">
           Такой страницы нет
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-body text-muted-foreground">
+        <p className="mx-auto mt-6 max-w-narrow text-body text-muted-foreground">
           Адрес мог измениться или быть введён с ошибкой. Вернитесь на главную или перейдите к сравнению регионов.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">

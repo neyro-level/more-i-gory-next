@@ -10,15 +10,15 @@ type ArticleCardProps = {
 
 export function ArticleCard({ description, href, status, title }: ArticleCardProps) {
   return (
-    <Card className="rounded-surface bg-card">
+    <Card className="rounded-card bg-card">
       <CardHeader>
-        <CardTitle className="text-card-title">
+        <CardTitle className="text-h3">
           <StaticLink href={href}>{title}</StaticLink>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 text-sm leading-7 text-muted-foreground">
+      <CardContent className="flex flex-col gap-4 text-body-sm text-muted-foreground">
         <p>{description}</p>
-        <p className="text-caption font-medium uppercase tracking-[0.18em] text-action">
+        <p className="text-caption font-medium uppercase tracking-eyebrow text-action">
           {status}
         </p>
       </CardContent>

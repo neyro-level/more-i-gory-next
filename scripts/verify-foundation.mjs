@@ -20,6 +20,7 @@ const requiredFiles = [
   "docs/04_BACKLOG.md",
   "docs/05_RELEASE_CHECKLIST.md",
   "docs/06_DESIGN_SYSTEM.md",
+  "docs/TECHNICAL_CORE.md",
 ];
 
 for (const file of requiredFiles) {
@@ -124,6 +125,7 @@ const requiredPrimitives = [
   "separator",
   "sheet",
   "textarea",
+  "table",
 ];
 
 for (const primitive of requiredPrimitives) {
@@ -209,11 +211,11 @@ if (buttonVariantConsumers.length > 0) {
 
 const globalsCss = readFileSync(join(root, "src", "app", "globals.css"), "utf8");
 for (const token of [
-  "--text-page-title",
-  "--text-section-title",
-  "--text-card-title",
-  "--text-lead",
-  "--spacing-section",
+  "--text-h1",
+  "--text-h2",
+  "--text-h3",
+  "--text-body-lg",
+  "--spacing-section-md",
   "--color-action",
 ]) {
   if (!globalsCss.includes(token)) {

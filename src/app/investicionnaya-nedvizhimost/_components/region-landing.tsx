@@ -48,9 +48,9 @@ export async function RegionLanding({ pageId, primaryCta, regionSlug, secondaryC
       >
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <RiskBlock title="Ключевое ограничение" text={region.riskSummary} />
-          <Card className="rounded-feature bg-card">
+          <Card className="rounded-large bg-card">
             <CardHeader>
-              <CardTitle className="text-card-title">Инвестиционный тезис</CardTitle>
+              <CardTitle className="text-h3">Инвестиционный тезис</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-5 text-body text-muted-foreground">
               <p>{region.investmentThesis}</p>

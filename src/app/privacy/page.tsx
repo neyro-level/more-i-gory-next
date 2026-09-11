@@ -11,8 +11,8 @@ export default function PrivacyPage() {
   return (
     <main>
       <SectionShell headingLevel={1} eyebrow="Юридический документ" title={seo.h1} lead="Юридический текст не опубликован до согласования. Эта страница закрыта от индексации и не заменяет политику конфиденциальности.">
-        <Card className="rounded-feature bg-card">
-          <CardContent className="p-6 text-sm leading-7 text-muted-foreground md:p-8">
+        <Card className="rounded-large bg-card">
+          <CardContent className="p-6 text-body-sm text-muted-foreground md:p-8">
             Human gate: оператор данных, фактические поля формы, цели обработки, системы хранения, аналитика, срок хранения и контакты для обращений.
           </CardContent>
         </Card>

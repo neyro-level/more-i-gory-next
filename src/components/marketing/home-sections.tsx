@@ -75,11 +75,11 @@ export function CapitalTasksSection() {
     >
       <div className="grid gap-5 md:grid-cols-3">
         {capitalTasks.map((task) => (
-          <Card key={task.title} className="rounded-surface bg-card">
+          <Card key={task.title} className="rounded-card bg-card">
             <CardHeader>
-              <CardTitle className="text-card-title">{task.title}</CardTitle>
+              <CardTitle className="text-h3">{task.title}</CardTitle>
             </CardHeader>
-            <CardContent className="text-sm leading-7 text-muted-foreground">{task.text}</CardContent>
+            <CardContent className="text-body-sm text-muted-foreground">{task.text}</CardContent>
           </Card>
         ))}
       </div>
@@ -97,17 +97,17 @@ export function DecisionSupportSection() {
   return (
     <SectionShell className="bg-card" contained={false}>
       <Container className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-        <div className="rounded-hero bg-brand-navy p-8 text-white md:p-10">
-          <span className="w-fit rounded-full bg-white/10 px-3 py-1 text-caption font-medium text-white">
+        <div className="rounded-large bg-surface-dark p-8 text-surface-dark-foreground md:p-10">
+          <span className="w-fit rounded-full bg-surface-dark-foreground/10 px-3 py-1 text-caption font-medium text-surface-dark-foreground">
             Почему не каталог
           </span>
-          <h2 className="mt-6 text-section-title font-semibold md:text-section-title-lg">
+          <h2 className="mt-6 text-h2 font-semibold">
             Каталог показывает выбор. Инвестору нужно основание для решения.
           </h2>
         </div>
         <div className="grid gap-4">
           {reasons.map((item) => (
-            <div key={item} className="rounded-surface bg-background p-6 text-lead">
+            <div key={item} className="rounded-card bg-background p-6 text-body-lg">
               {item}
             </div>
           ))}
@@ -144,6 +144,7 @@ export function MethodologySection() {
 export function RegionsSection({ regions }: { regions: HomeRegionCardModel[] }) {
   return (
     <SectionShell
+      className="py-section-lg"
       eyebrow="Регионы"
       title="Сравниваем море и горы как разные инвестиционные рынки"
       lead="На старте фокус — Сочи, Крым, Архыз и Алтай. Расширение регионов пойдёт только после отдельного SEO и content gate."
@@ -159,7 +160,7 @@ export function RegionsSection({ regions }: { regions: HomeRegionCardModel[] }) 
 export function ProjectAdmissionSection() {
   return (
     <SectionShell
-      className="bg-brand-navy text-white"
+      className="bg-surface-dark text-surface-dark-foreground"
       tone="dark"
       eyebrow="Отбор проектов"
       title="Проекты появляются на сайте только после инвестиционного паспорта"
@@ -167,10 +168,10 @@ export function ProjectAdmissionSection() {
     >
       <div className="grid gap-5 md:grid-cols-3">
         {["Документы и формат права", "Экономика владения", "Управление и выход"].map((title) => (
-          <Card key={title} className="rounded-surface bg-white/10 text-white ring-white/15">
+          <Card key={title} className="rounded-card bg-surface-dark-foreground/10 text-surface-dark-foreground ring-surface-dark-foreground/15">
             <CardHeader>
-              <CardTitle className="text-card-title">{title}</CardTitle>
-              <CardDescription className="text-white/65">Обязательный критерий перед публикацией проекта.</CardDescription>
+              <CardTitle className="text-h3">{title}</CardTitle>
+              <CardDescription className="text-surface-dark-foreground/65">Обязательный критерий перед публикацией проекта.</CardDescription>
             </CardHeader>
           </Card>
         ))}
