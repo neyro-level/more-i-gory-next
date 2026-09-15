@@ -7,13 +7,14 @@
 
 ## 1. Текущая точка
 
-В `main` завершён EPIC 0. В активной ветке EPIC 1 static export заменён на
-Next.js Node runtime без Payload. Владелец принял мастер-план
+В `main` завершены EPIC 0 и EPIC 1. В активной ветке EPIC 2 добавляются Payload,
+PostgreSQL adapter, users/jobs migration и controlled owner bootstrap. Владелец принял мастер-план
 перехода к `AMS_PROFILE=REALTY_BASE`; он импортирован в локальный Beads-граф без
 дублирования 137 атомарных задач в этом документе.
 
-NOW: EPIC 1 — Node.js runtime pivot без Payload. После его review, exact-head
-gate и merge следующий READY поток — EPIC 2: Payload + PostgreSQL.
+NOW: EPIC 2 — Payload + PostgreSQL foundation. Локальный PostgreSQL 18 и clean
+migration входят в технический scope; staging/production Managed PostgreSQL и
+новые secrets остаются отдельным инфраструктурным gate.
 Далее эпики выполняются только по dependency graph; один эпик = одна ветка/PR.
 
 Production не выпускался. Все коммерческие, аналитические и юридические страницы
@@ -30,6 +31,8 @@ Production не выпускался. Все коммерческие, анал�
 | PR-18 | Technical Production Readiness | DONE |
 | PR-19 | UI Constitution Conformance | DONE |
 | PR-20 | Documentation Standard 2.0 normalization | DONE |
+| PR-25 | EPIC 0 — governance, IA и manual CI policy | DONE |
+| PR-26 | EPIC 1 — Next.js Node runtime pivot | DONE |
 
 Git-история и SourceCraft PR являются доказательством отдельных merge, а не этот
 документ.
@@ -59,8 +62,8 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 | Состояние | Эпик | Результат |
 |---|---|---|
 | DONE | EPIC 0 | Project profile, operations/design adapters, Crimea-core IA, ADR-004..010, guards и manual CI policy |
-| NOW | EPIC 1 | static export → Node.js runtime; Payload ещё запрещён |
-| NEXT | EPIC 2 | Payload + PostgreSQL + migration foundation |
+| DONE | EPIC 1 | static export → Next.js Node runtime |
+| NOW | EPIC 2 | Payload + PostgreSQL + migration foundation |
 | BLOCKED BY GRAPH | EPIC 3..18 | data/gateway/UI/regions/leads/operations/feeds/analytics по зависимостям мастер-плана |
 
 Контентные, legal и production решения остаются human gates и не подменяются

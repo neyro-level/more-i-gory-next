@@ -6,10 +6,17 @@ const root = process.cwd();
 const requiredFiles = [
   "next.config.ts",
   "components.json",
-  "src/app/layout.tsx",
-  "src/app/page.tsx",
-  "src/app/globals.css",
-  "src/app/not-found.tsx",
+  "src/app/(site)/layout.tsx",
+  "src/app/(site)/page.tsx",
+  "src/app/(site)/globals.css",
+  "src/app/(site)/not-found.tsx",
+  "src/app/(payload)/layout.tsx",
+  "src/app/(payload)/admin/[[...segments]]/page.tsx",
+  "src/app/(payload)/api/[...slug]/route.ts",
+  "payload.config.ts",
+  "src/project/env.ts",
+  "src/project/collections/users.ts",
+  "src/core/data-access/system/bootstrap-owner.ts",
   "src/ui/interactive/.gitkeep",
   ".env.example",
   "docs/README.md",
@@ -92,7 +99,7 @@ for (const [key, expected] of Object.entries(expectedShadcnConfig)) {
 }
 
 if (
-  shadcnConfig.tailwind?.css !== "src/app/globals.css" ||
+  shadcnConfig.tailwind?.css !== "src/app/(site)/globals.css" ||
   shadcnConfig.tailwind?.baseColor !== "neutral" ||
   shadcnConfig.tailwind?.cssVariables !== true
 ) {
@@ -218,7 +225,7 @@ if (buttonVariantConsumers.length > 0) {
   );
 }
 
-const globalsCss = readFileSync(join(root, "src", "app", "globals.css"), "utf8");
+const globalsCss = readFileSync(join(root, "src", "app", "(site)", "globals.css"), "utf8");
 for (const token of [
   "--text-h1",
   "--text-h2",
@@ -232,7 +239,7 @@ for (const token of [
   }
 }
 
-const rootPage = readFileSync(join(root, "src", "app", "page.tsx"), "utf8");
+const rootPage = readFileSync(join(root, "src", "app", "(site)", "page.tsx"), "utf8");
 if (!rootPage.includes("CapitalTasksSection") || rootPage.split(/\r?\n/).length > 120) {
   throw new Error("Home page must remain composition-first and below 120 lines");
 }
@@ -259,11 +266,15 @@ if (illegalClientFiles.length > 0) {
   );
 }
 
-const forbiddenServerActions = sourceFiles.filter((file) =>
-  /["']use server["']/.test(readFileSync(file, "utf8")),
-);
+const forbiddenServerActions = sourceFiles.filter((file) => {
+  const normalized = file.replaceAll("\\", "/");
+  return (
+    /["']use server["']/.test(readFileSync(file, "utf8")) &&
+    !normalized.includes("/src/app/(payload)/")
+  );
+});
 if (forbiddenServerActions.length > 0) {
-  throw new Error(`Server Actions are outside the EPIC 1 runtime scope: ${forbiddenServerActions.join(", ")}`);
+  throw new Error(`Server Actions are allowed only in the generated Payload route group: ${forbiddenServerActions.join(", ")}`);
 }
 
 const restrictedNextHeadersFiles = sourceFiles.filter((file) => {
@@ -281,11 +292,15 @@ for (const file of restrictedNextHeadersFiles) {
   }
 }
 
-const overrideAccessConsumers = sourceFiles.filter((file) =>
-  /\boverrideAccess\b/.test(readFileSync(file, "utf8")),
-);
+const overrideAccessConsumers = sourceFiles.filter((file) => {
+  const normalized = file.replaceAll("\\", "/");
+  return (
+    /\boverrideAccess\s*:\s*true\b/.test(readFileSync(file, "utf8")) &&
+    !normalized.includes("/src/core/data-access/system/")
+  );
+});
 if (overrideAccessConsumers.length > 0) {
-  throw new Error(`overrideAccess is forbidden outside a future audited System Gateway: ${overrideAccessConsumers.join(", ")}`);
+  throw new Error(`overrideAccess: true is forbidden outside the audited System Gateway: ${overrideAccessConsumers.join(", ")}`);
 }
 
 const reusableUiFiles = sourceFiles.filter((file) => {

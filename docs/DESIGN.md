@@ -4,7 +4,7 @@
 **UX scope:** 'PUBLIC_COMMERCIAL' + 'CMS_NATIVE_ADMIN'
 
 Этот документ не является второй дизайн-системой. Визуальная политика находится
-в '06_DESIGN_SYSTEM.md', числовые tokens — только в 'src/app/globals.css'.
+в '06_DESIGN_SYSTEM.md', числовые tokens — только в 'src/app/(site)/globals.css'.
 Здесь зафиксировано, как существующий UI применяется после перехода к Realty
 Platform.
 
