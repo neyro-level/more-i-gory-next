@@ -1,12 +1,8 @@
 import type { Access, CollectionConfig } from "payload";
+import { isOwnerAccess, ownerOrSelfAccess } from "@/core/access";
 
-const isOwner: Access = ({ req }) => req.user?.collection === "users" && req.user.role === "owner";
-
-const ownerOrSelf: Access = ({ req }) => {
-  if (req.user?.collection !== "users") return false;
-  if (req.user.role === "owner") return true;
-  return { id: { equals: req.user.id } };
-};
+const isOwner: Access = isOwnerAccess;
+const ownerOrSelf: Access = ownerOrSelfAccess;
 
 export const Users: CollectionConfig = {
   slug: "users",

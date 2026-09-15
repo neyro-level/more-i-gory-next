@@ -1,24 +1,9 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { z } from "zod";
+import { seoEntrySchema } from "@more-i-gory/contracts";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-
-const seoEntrySchema = z.object({
-  canonical: z.string().startsWith("/"),
-  contentGate: z.string().min(1),
-  description: z.string().min(40),
-  h1: z.string().min(1),
-  index: z.enum(["yes", "gate", "trust_gate", "noindex"]),
-  kind: z.enum(["static", "dynamic"]),
-  pageId: z.string().regex(/^PAGE-\d{3}$/),
-  primaryQuery: z.string().min(1),
-  priority: z.enum(["P1", "P2", "P3"]),
-  secondaryQueries: z.array(z.string()),
-  sitemap: z.enum(["yes", "gate", "no"]),
-  title: z.string().min(10),
-});
 
 function readJson(relativePath) {
   return JSON.parse(readFileSync(path.join(projectRoot, relativePath), "utf8"));

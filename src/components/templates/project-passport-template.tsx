@@ -3,7 +3,7 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { RiskBlock } from "@/components/marketing/risk-block";
 import { SourceList } from "@/components/marketing/source-list";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
-import type { MediaAssetDTO, ProjectDTO } from "@/content/domain/types";
+import type { MediaAssetDTO, ProjectDTO } from "@more-i-gory/contracts";
 
 type ProjectPassportTemplateProps = {
   media: MediaAssetDTO | null;

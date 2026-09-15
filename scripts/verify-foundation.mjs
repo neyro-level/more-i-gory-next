@@ -16,7 +16,18 @@ const requiredFiles = [
   "payload.config.ts",
   "src/project/env.ts",
   "src/project/collections/users.ts",
+  "src/core/access/index.ts",
+  "src/core/data-access/public/gateway.ts",
+  "src/core/data-access/public/index.ts",
+  "src/core/data-access/system/index.ts",
+  "src/core/data-access/system/gateway.ts",
   "src/core/data-access/system/bootstrap-owner.ts",
+  "src/core/dto/index.ts",
+  "src/core/query/index.ts",
+  "src/core/security/outbound-http/index.ts",
+  "src/core/security/redaction/index.ts",
+  "src/core/observability/index.ts",
+  "src/core/lib/index.ts",
   "src/ui/interactive/.gitkeep",
   ".env.example",
   "docs/README.md",
@@ -296,11 +307,11 @@ const overrideAccessConsumers = sourceFiles.filter((file) => {
   const normalized = file.replaceAll("\\", "/");
   return (
     /\boverrideAccess\s*:\s*true\b/.test(readFileSync(file, "utf8")) &&
-    !normalized.includes("/src/core/data-access/system/")
+    !normalized.endsWith("/src/core/data-access/system/bootstrap-owner.ts")
   );
 });
 if (overrideAccessConsumers.length > 0) {
-  throw new Error(`overrideAccess: true is forbidden outside the audited System Gateway: ${overrideAccessConsumers.join(", ")}`);
+  throw new Error(`overrideAccess: true is forbidden outside registered System Gateway implementations: ${overrideAccessConsumers.join(", ")}`);
 }
 
 const reusableUiFiles = sourceFiles.filter((file) => {

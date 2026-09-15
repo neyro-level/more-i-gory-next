@@ -1,12 +1,16 @@
 import { getPayload } from "payload";
 import config from "../../../../payload.config.ts";
 
-type BootstrapOwnerInput = {
+export type BootstrapOwnerInput = {
   email: string;
   password: string;
 };
 
-export async function bootstrapOwner({ email, password }: BootstrapOwnerInput) {
+export type BootstrapOwnerResult = Readonly<{
+  status: "created" | "exists";
+}>;
+
+export async function bootstrapOwner({ email, password }: BootstrapOwnerInput): Promise<BootstrapOwnerResult> {
   const payload = await getPayload({ config });
   try {
     const owners = await payload.find({

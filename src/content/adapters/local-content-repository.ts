@@ -12,7 +12,7 @@ import {
   pageContentSchema,
   projectSchema,
   regionSchema,
-} from "../domain/schemas";
+} from "@more-i-gory/contracts";
 
 const mediaAssets = mediaAssetSchema.array().parse(mediaData);
 const landingPages = landingPageSchema.array().parse(landingPagesData);

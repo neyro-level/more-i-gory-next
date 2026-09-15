@@ -1,12 +1,12 @@
 import type {
   ArticleDTO,
-  MediaAssetDTO,
   LandingPageDTO,
+  MediaAssetDTO,
   PageContent,
   ProjectDTO,
   RegionDTO,
   SourceDTO,
-} from "./domain/types";
+} from "@more-i-gory/contracts";
 
 export interface ContentRepository {
   getArticles(): Promise<ArticleDTO[]>;
