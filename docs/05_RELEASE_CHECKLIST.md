@@ -1,8 +1,8 @@
 # Release Checklist — «Море и Горы»
 
 **Статус:** Active — NOT READY FOR PRODUCTION
-**Версия:** 1.8
-**Дата:** 2026-09-11
+**Версия:** 1.9 Node runtime
+**Дата:** 2026-09-15
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
 пройденным. Production выполняется только по отдельной команде владельца.
@@ -11,7 +11,7 @@
 
 - [x] canonical docs и runtime повторно сверены;
 - [x] exact toolchain и frozen lockfile зафиксированы;
-- [x] static export и trailing slash включены;
+- [x] Node runtime и trailing slash включены; static export удалён;
 - [x] Server First boundary проверяется автоматически;
 - [x] metadata берётся из единого registry;
 - [x] draft/gated pages исключены из sitemap;
@@ -27,7 +27,7 @@
 - [x] `pnpm audit --audit-level high`;
 - [x] `pnpm verify` after final form-runtime optimization;
 - [x] rendered Title/Description/H1/canonical/robots contract;
-- [x] broken-link and 404 artifact checks;
+- [x] runtime routes и 404 проверяются через `next start`;
 - [x] browser console without hydration/runtime errors;
 - [x] mobile layout smoke;
 - [ ] full keyboard smoke on all representative routes;
@@ -68,7 +68,7 @@
 - [ ] production hostname/TLS определены;
 - [ ] Nginx config отрендерен с реальным окружением и прошёл `nginx -t`;
 - [ ] access/error logs определены;
-- [ ] versioned upload реализован;
+- [ ] immutable image build и versioned rollout реализованы;
 - [ ] atomic switch и rollback протестированы;
 - [ ] clean canonical `main` и exact SHA подтверждены;
 - [ ] выполнен один production release;
@@ -77,15 +77,15 @@
 
 ## 6. Budgets
 
-- [x] maximum route JavaScript: 1 KB gzip ≤ 110 KB (`/podbor/`);
-- [x] largest remaining script chunk: 1 KB gzip ≤ 300 KB;
+- [x] maximum route JavaScript: 190 KB gzip ≤ 200 KB (`/podbor/`);
+- [x] largest initial script chunk: 70 KB gzip ≤ 300 KB;
 - [ ] Project Passport first screen ≤ 1.5 MB без lazy gallery;
 - [x] local lab LCP: 694 ms ≤ 2.5 s;
 - [x] local lab CLS: 0.00 ≤ 0.1;
 - [ ] TBT ≤ 200 ms;
 - [ ] после запуска INP ≤ 200 ms p75.
 
-Числа фиксируются по итоговому content-complete artifact, а не переносятся из
+Числа фиксируются по итоговому content-complete runtime build, а не переносятся из
 предыдущего PR.
 
 Текущий technical artifact: Lighthouse Accessibility 100, Best Practices 100.

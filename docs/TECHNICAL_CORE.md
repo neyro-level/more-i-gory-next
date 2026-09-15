@@ -8,7 +8,7 @@
 
 ## 1. Core Profile
 
-- Selected AMS Core: STATIC, project-specific static Next.js contract.
+- Selected AMS Core: REALTY_BASE transition, Next.js Node runtime; Payload starts in EPIC 2.
 - Canonical repository: SourceCraft integrator-p/more-i-gory-next.
 - Package manager: pnpm.
 - UX scope: PUBLIC_COMMERCIAL.
@@ -31,12 +31,12 @@ src/app/globals.css, primitives в src/components/ui.
 
 ## 3. Images
 
-- Mechanism: next-image-export-optimizer в static-export pipeline.
+- Mechanism: `next/image` и server-side optimizer Next.js.
 - Content images: зарегистрированный локальный media asset с width/height и alt.
 - Responsive contract: fill только вместе с stable wrapper и sizes.
-- LCP contract: единственный hero asset получает priority; card/gallery media
+- LCP contract: единственный hero asset получает `preload`; card/gallery media
   не загружается eager без причины.
-- Runtime remote images запрещены.
+- Runtime remote images запрещены до точных S3 `remotePatterns`.
 
 ## 4. Fonts
 
@@ -60,10 +60,9 @@ Official evidence:
 - Current mode: fail-closed до legal/Leads API approval.
 - PII/legal: consent version и policy gate из Product Structure/Architecture.
 
-Static exception: published routes не гидратируют React. Поэтому server-safe
-shadcn Input, Textarea, Button сочетаются с нативными semantic field wrappers и
-checkbox. Ошибки связаны через aria-describedby; control получает aria-invalid,
-wrapper — data-invalid.
+Форма остаётся server-first и использует framework-free progressive enhancement.
+Ошибки связаны через aria-describedby; control получает aria-invalid, wrapper —
+data-invalid.
 
 ## 6. Data Boundary
 
@@ -74,16 +73,15 @@ wrapper — data-invalid.
 
 ## 7. Deployment Target
 
-- Production model: static artifact → versioned Nginx release.
-- Next.js/Node.js runtime на production отсутствует.
-- Production-like proof выполняется на итоговом static artifact.
+- Production model: immutable Next.js image → один `next start` runtime → Nginx.
+- Production topology и rollout реализуются в EPIC 13.
+- Production-like proof EPIC 1 выполняется локально через итоговый build и `next start`.
 
 ## 8. Performance Budget
 
 - Mobile LCP: <= 2.5 s.
 - CLS: <= 0.1.
-- Initial route JavaScript budget: <= 110 KB gzip; фактически static routes
-  проходят post-export stripping.
+- Initial route JavaScript budget: <= 200 KB gzip; EPIC 1 baseline — 190 KB.
 - Measurement: production-like build и representative mobile profile.
 
 ## 9. Verification Cadence

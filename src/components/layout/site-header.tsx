@@ -1,5 +1,5 @@
 import { Menu } from "lucide-react";
-import { StaticLink } from "@/components/navigation/static-link";
+import Link from "next/link";
 import { ActionLink } from "@/components/navigation/action-link";
 import { Container } from "./container";
 
@@ -16,26 +16,26 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-surface-dark-foreground/10 bg-surface-dark/95 text-surface-dark-foreground backdrop-blur">
       <Container className="flex h-20 items-center justify-between gap-6">
-        <StaticLink href="/" className="group flex items-center gap-3">
+        <Link href="/" className="group flex items-center gap-3">
           <span className="grid size-11 place-items-center rounded-full bg-surface-dark-foreground text-label font-bold text-surface-dark">МГ</span>
           <span className="leading-tight">
             <span className="block text-body font-semibold">Море и Горы</span>
             <span className="block text-caption text-surface-dark-foreground/60">инвестиционное бюро</span>
           </span>
-        </StaticLink>
+        </Link>
 
         <nav className="hidden items-center gap-6 text-label text-surface-dark-foreground/75 xl:flex" aria-label="Основная навигация">
           {navigation.map((item) => (
-            <StaticLink key={item.href} href={item.href} className="transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+            <Link key={item.href} href={item.href} className="transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
               {item.label}
-            </StaticLink>
+            </Link>
           ))}
         </nav>
 
         <div className="hidden items-center gap-3 xl:flex">
-          <StaticLink href="/kontakty/" className="text-label text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+          <Link href="/kontakty/" className="text-label text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
             Связаться
-          </StaticLink>
+          </Link>
           <ActionLink href="/podbor/" variant="accent" showArrow>
             Получить разбор
           </ActionLink>
@@ -48,9 +48,9 @@ export function SiteHeader() {
           </summary>
           <nav className="absolute right-0 top-14 z-50 grid min-w-64 gap-2 rounded-card bg-card p-3 text-surface-dark shadow-surface" aria-label="Мобильная навигация">
             {navigation.map((item) => (
-              <StaticLink key={item.href} href={item.href} className="rounded-control px-4 py-3 text-label font-semibold transition-colors duration-fast ease-standard hover:bg-muted">
+              <Link key={item.href} href={item.href} className="rounded-control px-4 py-3 text-label font-semibold transition-colors duration-fast ease-standard hover:bg-muted">
                 {item.label}
-              </StaticLink>
+              </Link>
             ))}
             <ActionLink href="/podbor/" variant="accent" className="mt-1">
               Получить разбор

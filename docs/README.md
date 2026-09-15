@@ -7,7 +7,7 @@
 
 ## Что создаём
 
-«Море и Горы» — публичный статический Next.js-сайт инвестиционного бюро
+«Море и Горы» — публичный Next.js-сайт инвестиционного бюро
 курортной недвижимости. Он помогает сравнить регионы и проекты, проверить
 экономику, риски и сценарий выхода, а затем перейти к персональному разбору.
 
@@ -19,17 +19,17 @@
 
 ## Текущий статус
 
-- технический фундамент и статический preview собраны;
+- технический фундамент и Node runtime собраны;
 - production не выпускался;
 - все коммерческие и аналитические страницы остаются под content/trust gate;
-- принят переход к Realty Platform; EPIC 0 фиксирует governance и IA;
-- следующий технический этап после merge — EPIC 1, переход на Node.js runtime;
+- EPIC 0 зафиксировал governance и IA;
+- EPIC 1 перевёл сайт на Node.js runtime без Payload;
+- следующий технический этап — EPIC 2, Payload и PostgreSQL;
 - production release остаётся отдельным этапом после платформенной перестройки.
 
 ## Platform contract
 
-Текущее реализованное состояние до EPIC 1 — static Next.js preview с
-`output: "export"`. Принятая целевая модель — `AMS_PROFILE=REALTY_BASE`,
+Текущее реализованное состояние — Next.js Node runtime без Payload. Целевая модель — `AMS_PROFILE=REALTY_BASE`,
 Next.js + Payload + Managed PostgreSQL + S3 в одном Node.js runtime; решение
 зафиксировано в [`ADR-004`](adr/ADR-004-realty-platform-runtime.md). Переходный
 статус и exact-версии находятся в [`03_ARCHITECTURE.md`](03_ARCHITECTURE.md).
@@ -71,8 +71,8 @@ Research объясняет причины решений, но не являе�
 
 ## Current Focus
 
-Активна программа перехода к Realty Platform. EPIC 0 фиксирует документы, ADR и
-Crimea-core IA; после его merge READY становится EPIC 1 — runtime pivot без
-Payload. Атомарное состояние программы ведётся в импортированном Beads-графе,
+Активна программа перехода к Realty Platform. EPIC 0 завершён; EPIC 1 переводит
+runtime на Node.js без Payload. Следующий READY этап после merge — EPIC 2.
+Атомарное состояние программы ведётся в импортированном Beads-графе,
 а этот Backlog остаётся проектным source of truth верхнего уровня. Production не
 выпускался и текущим потоком не разрешён.

@@ -1,4 +1,4 @@
-import { StaticLink } from "@/components/navigation/static-link";
+import Link from "next/link";
 import { Container } from "./container";
 
 const footerLinks = [
@@ -25,24 +25,24 @@ export function SiteFooter() {
         <div className="grid gap-8 sm:grid-cols-2">
           <nav className="flex flex-col gap-3 text-label" aria-label="Навигация в подвале">
             {footerLinks.map((item) => (
-              <StaticLink key={item.href} href={item.href} className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+              <Link key={item.href} href={item.href} className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
                 {item.label}
-              </StaticLink>
+              </Link>
             ))}
           </nav>
           <nav className="flex flex-col gap-3 text-label" aria-label="Юридическая навигация">
-            <StaticLink href="/o-kompanii/" className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+            <Link href="/o-kompanii/" className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
               О компании
-            </StaticLink>
-            <StaticLink href="/kontakty/" className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+            </Link>
+            <Link href="/kontakty/" className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
               Контакты
-            </StaticLink>
-            <StaticLink href="/privacy/" className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+            </Link>
+            <Link href="/privacy/" className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
               Политика конфиденциальности
-            </StaticLink>
-            <StaticLink href="/consent/" className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+            </Link>
+            <Link href="/consent/" className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
               Согласие на обработку данных
-            </StaticLink>
+            </Link>
           </nav>
         </div>
       </Container>

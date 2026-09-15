@@ -16,7 +16,7 @@ Payload upload workflow и управляемых remote media. Одноврем
 wildcard запрещён.
 
 Каждое content image хранит width, height и meaningful alt. На странице только
-один LCP-кандидат получает priority; ниже критической зоны используется lazy,
+один LCP-кандидат получает `preload`; ниже критической зоны используется lazy,
 а `sizes` и стабильный aspect ratio обязательны. Существующие локальные masters
 переносятся в EPIC 6 после оптимизации и создания media-документов.
 

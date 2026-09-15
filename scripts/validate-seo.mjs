@@ -79,6 +79,6 @@ for (const entry of entries) {
 }
 
 const nextConfig = readFileSync(path.join(projectRoot, "next.config.ts"), "utf8");
-assert(!nextConfig.includes("redirects()"), "Static export project must not use Next.js runtime redirects.");
+assert(!nextConfig.includes("redirects()"), "Redirects require an approved explicit URL migration map.");
 
 console.log("SEO validation passed.");

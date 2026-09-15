@@ -10,7 +10,6 @@ const requiredFiles = [
   "src/app/page.tsx",
   "src/app/globals.css",
   "src/app/not-found.tsx",
-  "src/components/navigation/static-link.tsx",
   "src/ui/interactive/.gitkeep",
   ".env.example",
   "docs/README.md",
@@ -162,8 +161,8 @@ const nextConfig = readFileSync(join(root, "next.config.ts"), "utf8");
 if (!nextConfig.includes("agentRules: false")) {
   throw new Error("next.config.ts must not rewrite the canonical project AGENTS.md");
 }
-if (!nextConfig.includes('output: "export"')) {
-  throw new Error('next.config.ts must keep output: "export"');
+if (nextConfig.includes('output: "export"')) {
+  throw new Error('next.config.ts must use the Node.js runtime, not output: "export"');
 }
 if (!nextConfig.includes("trailingSlash: true")) {
   throw new Error("next.config.ts must keep trailingSlash: true");
@@ -260,18 +259,43 @@ if (illegalClientFiles.length > 0) {
   );
 }
 
-const forbiddenStaticImports = [
-  /from\s+["']next\/(?:headers|server)["']/,
-  /from\s+["']next\/link["']/,
-  /["']use server["']/,
-];
+const forbiddenServerActions = sourceFiles.filter((file) =>
+  /["']use server["']/.test(readFileSync(file, "utf8")),
+);
+if (forbiddenServerActions.length > 0) {
+  throw new Error(`Server Actions are outside the EPIC 1 runtime scope: ${forbiddenServerActions.join(", ")}`);
+}
 
-for (const file of sourceFiles) {
-  const text = readFileSync(file, "utf8");
-  for (const pattern of forbiddenStaticImports) {
-    if (pattern.test(text)) {
-      throw new Error(`Forbidden static-export dependency in ${file}: ${pattern}`);
-    }
+const restrictedNextHeadersFiles = sourceFiles.filter((file) => {
+  const normalized = file.replaceAll("\\", "/");
+  return (
+    normalized.includes("/src/core/ingest/") ||
+    normalized.includes("/src/core/cache/") ||
+    normalized.includes("/jobs/") ||
+    /(?:^|\/)job-handler\.(?:ts|tsx)$/.test(normalized)
+  );
+});
+for (const file of restrictedNextHeadersFiles) {
+  if (/from\s+["']next\/headers["']/.test(readFileSync(file, "utf8"))) {
+    throw new Error(`Guard 8: next/headers is forbidden in cache, ingest and job handlers: ${file}`);
+  }
+}
+
+const overrideAccessConsumers = sourceFiles.filter((file) =>
+  /\boverrideAccess\b/.test(readFileSync(file, "utf8")),
+);
+if (overrideAccessConsumers.length > 0) {
+  throw new Error(`overrideAccess is forbidden outside a future audited System Gateway: ${overrideAccessConsumers.join(", ")}`);
+}
+
+const reusableUiFiles = sourceFiles.filter((file) => {
+  const normalized = file.replaceAll("\\", "/");
+  return normalized.includes("/src/components/") || normalized.includes("/src/ui/");
+});
+const persistenceImportPattern = /from\s+["'](?:@payloadcms\/|payload(?:\/|["'])|@\/(?:collections|payload|persistence|core\/persistence)(?:\/|["']))/;
+for (const file of reusableUiFiles) {
+  if (persistenceImportPattern.test(readFileSync(file, "utf8"))) {
+    throw new Error(`Persistence must not be imported into reusable UI: ${file}`);
   }
 }
 

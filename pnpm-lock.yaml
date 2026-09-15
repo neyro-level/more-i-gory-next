@@ -60,9 +60,6 @@ importers:
       eslint-config-next:
         specifier: 16.3.4
         version: 16.3.4(@typescript-eslint/parser@8.70.0(eslint@9.39.5(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.5(jiti@2.7.0))(typescript@6.0.3)
-      next-image-export-optimizer:
-        specifier: 1.21.1
-        version: 1.21.1(@types/node@24.10.0)(next@16.3.4(@babel/core@7.29.7)(@types/node@24.10.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
       shadcn:
         specifier: 4.21.0
         version: 4.21.0(typescript@6.0.3)
@@ -2666,14 +2663,6 @@ packages:
     resolution: {integrity: sha512-NMPBRMJgiQHjbd8phG3Vebdx4kZ1H121rbl5IkMqeOsahptB9BKo/d7oJ3zTXqTgagn2bWlNSXkh0QUGM31RYg==}
     engines: {node: '>=18'}
 
-  next-image-export-optimizer@1.21.1:
-    resolution: {integrity: sha512-Ayt9OJErVqhDyIVxstNzSF9piZiPaJoHW+EvXnl2Ai0TXWS7g2oc29LNyFItnRLqpj32/m4wfUieIIoOP/ZBNg==}
-    engines: {node: '>=20.9.0'}
-    hasBin: true
-    peerDependencies:
-      next: ^14.2.18 || ^15.0.3 || ^16.0.0
-      react: '^18.2.0 || ^19.0.0-0 '
-
   next@16.3.4:
     resolution: {integrity: sha512-/Ztf6CeRH+ejEXUrYtqI4gkS66eFIHuSwqi60RgcpWKodxFZx2/dqVCMKBwILfAHXQ+F1b1vAudgj3mnxqtoIA==}
     engines: {node: '>=20.9.0'}
@@ -3348,11 +3337,6 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: '>=4.8.4 <6.1.0'
-
-  typescript@5.9.3:
-    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
-    engines: {node: '>=14.17'}
-    hasBin: true
 
   typescript@6.0.3:
     resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
@@ -6383,15 +6367,6 @@ snapshots:
     dependencies:
       content-type: 2.1.0
 
-  next-image-export-optimizer@1.21.1(@types/node@24.10.0)(next@16.3.4(@babel/core@7.29.7)(@types/node@24.10.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0):
-    dependencies:
-      next: 16.3.4(@babel/core@7.29.7)(@types/node@24.10.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      react: 19.3.0
-      sharp: 0.35.4(@types/node@24.10.0)
-      typescript: 5.9.3
-    transitivePeerDependencies:
-      - '@types/node'
-
   next@16.3.4(@babel/core@7.29.7)(@types/node@24.10.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       '@next/env': 16.3.4
@@ -7255,8 +7230,6 @@ snapshots:
       typescript: 6.0.3
     transitivePeerDependencies:
       - supports-color
-
-  typescript@5.9.3: {}
 
   typescript@6.0.3: {}
 
