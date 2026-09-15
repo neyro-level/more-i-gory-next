@@ -7,12 +7,13 @@
 
 ## 1. Текущая точка
 
-В `main` находится завершённый static Next preview. Владелец принял мастер-план
+В `main` завершён EPIC 0. В активной ветке EPIC 1 static export заменён на
+Next.js Node runtime без Payload. Владелец принял мастер-план
 перехода к `AMS_PROFILE=REALTY_BASE`; он импортирован в локальный Beads-граф без
 дублирования 137 атомарных задач в этом документе.
 
-NOW: EPIC 0 — документы, ADR и Crimea-core IA. После его review, exact-head gate
-и merge следующий READY поток — EPIC 1: Node.js runtime pivot без Payload.
+NOW: EPIC 1 — Node.js runtime pivot без Payload. После его review, exact-head
+gate и merge следующий READY поток — EPIC 2: Payload + PostgreSQL.
 Далее эпики выполняются только по dependency graph; один эпик = одна ветка/PR.
 
 Production не выпускался. Все коммерческие, аналитические и юридические страницы
@@ -57,9 +58,10 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 
 | Состояние | Эпик | Результат |
 |---|---|---|
-| NOW | EPIC 0 | Project profile, operations/design adapters, Crimea-core IA, ADR-004..010, guards и manual CI policy |
-| NEXT | EPIC 1 | static export → Node.js runtime; Payload ещё запрещён |
-| BLOCKED BY GRAPH | EPIC 2..18 | Payload/data/gateway/UI/regions/leads/operations/feeds/analytics по зависимостям мастер-плана |
+| DONE | EPIC 0 | Project profile, operations/design adapters, Crimea-core IA, ADR-004..010, guards и manual CI policy |
+| NOW | EPIC 1 | static export → Node.js runtime; Payload ещё запрещён |
+| NEXT | EPIC 2 | Payload + PostgreSQL + migration foundation |
+| BLOCKED BY GRAPH | EPIC 3..18 | data/gateway/UI/regions/leads/operations/feeds/analytics по зависимостям мастер-плана |
 
 Контентные, legal и production решения остаются human gates и не подменяются
 технической готовностью.
@@ -156,20 +158,19 @@ Merge, SourceCraft Gate и production не выполнялись.
 
 ### TD-001 — Custom post-export Next runtime stripping
 
-Status: Accepted
-Risk: Medium
+Status: Resolved by EPIC 1
+Risk: Closed
 
-Server-only маршруты освобождаются от Next runtime после build. Контроль:
-обычные document links, artifact validation и browser/hydration smoke. Пересмотр
-обязателен при смене Next.js или появлении React-интерактивности на этих routes.
+`strip-static-route-js`, static server и `StaticLink` удалены. Внутренние ссылки
+используют `next/link`; runtime проверяется через `next start` и route manifest.
 
 ### TD-002 — Production release automation не реализована
 
 Status: Open
 Risk: High for production; none for local development
 
-Есть static artifact и Nginx example, но нет доказанного versioned upload,
-atomic switch и rollback runbook. Production запрещён до отдельного release
+Есть локальный Node runtime, но нет доказанного immutable image rollout,
+Nginx reverse proxy и rollback runbook. Production запрещён до отдельного release
 stream на утверждённом сервере.
 
 ### TD-003 — Draft article shells находятся в preview artifact

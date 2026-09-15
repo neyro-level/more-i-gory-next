@@ -1,5 +1,5 @@
-import ExportedImage from "next-image-export-optimizer";
-import { StaticLink } from "@/components/navigation/static-link";
+import Image from "next/image";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -22,7 +22,7 @@ export function ObjectCard({ href, image, location, risk, status, thesis, title 
   return (
     <Card className="rounded-card bg-card">
       <div className="relative aspect-object">
-        <ExportedImage src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
+        <Image src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
       </div>
       <CardHeader>
         <div className="flex flex-wrap gap-2">
@@ -30,7 +30,7 @@ export function ObjectCard({ href, image, location, risk, status, thesis, title 
           <Badge variant="accent">{status}</Badge>
         </div>
         <CardTitle className="text-h3">
-          <StaticLink href={href}>{title}</StaticLink>
+          <Link href={href}>{title}</Link>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 text-body-sm text-muted-foreground">

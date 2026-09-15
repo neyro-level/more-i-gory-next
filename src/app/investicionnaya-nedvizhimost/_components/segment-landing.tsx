@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { StaticLink } from "@/components/navigation/static-link";
+import Link from "next/link";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -64,9 +64,9 @@ export async function SegmentLanding({ pageId }: SegmentLandingProps) {
       >
         <div className="grid gap-4 md:grid-cols-3">
           {[...landing.parentLinks, ...landing.childLinks].map((link) => (
-            <StaticLink key={link.href} href={link.href} className="min-h-11 rounded-card bg-card p-5 text-body font-semibold shadow-sm transition duration-fast ease-standard hover:-translate-y-0.5 hover:shadow-md">
+            <Link key={link.href} href={link.href} className="min-h-11 rounded-card bg-card p-5 text-body font-semibold shadow-sm transition duration-fast ease-standard hover:-translate-y-0.5 hover:shadow-md">
               {link.label}
-            </StaticLink>
+            </Link>
           ))}
         </div>
       </SectionShell>

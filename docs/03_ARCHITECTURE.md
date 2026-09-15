@@ -1,29 +1,26 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.0 Realty Platform transition
+**Версия:** 2.1 Node runtime transition
 **Дата:** 2026-09-15
 **Engineering baseline:** глобальный AMS Engineering Standard / Constitution
 **Важно:** этот документ фиксирует только проектную конкретику.
 
 ## 0. Transition contract
 
-До завершения EPIC 1 код и проверки отражают текущее static preview state. Это
-фактический runtime, а не целевая production architecture.
+EPIC 1 перевёл публичный сайт со static export на production Node.js runtime.
+Payload, PostgreSQL, auth и jobs ещё отсутствуют и вводятся только с EPIC 2.
 
 Принятая цель — `AMS_PROFILE=REALTY_BASE`: Next.js + Payload в одном Node.js
 runtime, Managed PostgreSQL, S3 и один jobs owner. Решение принято в
 [`ADR-004`](adr/ADR-004-realty-platform-runtime.md), project-specific профиль —
 в [`PROJECT.md`](PROJECT.md). Переход выполняется последовательно: EPIC 1
 удаляет static-only runtime, EPIC 2 добавляет Payload и PostgreSQL, следующие
-эпики вводят gateway, data и operations contracts. Static-разделы ниже являются
-описанием текущей реализации до соответствующего эпика и не конкурируют с
-принятой целью.
+эпики вводят gateway, data и operations contracts.
 
 ## 1. Architecture Summary
 
-Текущее реализованное состояние до EPIC 1 — воспроизводимый статический
-Next.js-preview.
+Текущее реализованное состояние — воспроизводимый Next.js Node runtime без CMS.
 
 ```text
 typed content / Markdown / media
@@ -31,8 +28,8 @@ typed content / Markdown / media
 → Repository Contract
 → Content Service
 → Next.js App Router build
-→ static HTML/CSS/JS artifact
-→ Nginx
+→ один `next start` Node.js process
+→ Nginx reverse proxy (EPIC 13)
 ```
 
 Формы идут отдельно:
@@ -64,7 +61,7 @@ Exact toolchain первого релиза:
 |---|---:|---|
 | Node.js | `24.20.0` | `.node-version`, CI |
 | pnpm | `11.5.1` | `packageManager`, lockfile |
-| Next.js | `16.3.4` | App Router, static export |
+| Next.js | `16.3.4` | App Router, Node.js runtime |
 | React / React DOM | `19.3.0` | Server First |
 | TypeScript | `6.0.3` | strict; TypeScript 7 не используется |
 | Tailwind CSS | `4.3.3` | CSS variables, global tokens |
@@ -75,8 +72,7 @@ Exact toolchain первого релиза:
 | cn | `0.2.6` | canonical class merge utility used by preset |
 | Zod | `4.6.1` | build-time content validation |
 | Velite | `0.4.0` | принят после Windows/dev/export smoke |
-| next-image-export-optimizer | `1.21.1` | принят после static export/image smoke |
-| sharp | `0.35.4` | единая override-версия для build pipeline |
+| sharp | `0.35.4` | image optimization dependency |
 
 Также используется `concurrently` для совместного локального запуска Next.js и Velite.
 Exact versions фиксируются в `package.json` и lockfile без ranges.
@@ -96,7 +92,7 @@ shadcn contract:
 - community registries и вторая UI-библиотека запрещены без ADR.
 
 Build:
-- `output: "export"`;
+- standard `next build` + `next start`;
 - `trailingSlash: true`;
 - pnpm + frozen lockfile.
 
@@ -109,31 +105,27 @@ Content:
 
 Images:
 - локальный media registry;
-- build-time optimization;
-- `next-image-export-optimizer` как действующий build-time optimizer;
+- `next/image` + server-side optimization;
 - fallback — заранее оптимизированные локальные WebP/AVIF.
 
 Production:
-- Nginx;
-- versioned releases;
-- atomic switch;
-- rollback на предыдущий artifact.
+- immutable Next.js image;
+- один jobs-active runtime;
+- Nginx reverse proxy;
+- versioned rollout и rollback по EPIC 13.
 
 Backend:
-- N/A для публичного рендера;
+- Next.js Node runtime для публичного рендера и image optimization;
 - отдельный AMS Leads API только для заявок.
 
-Database / ORM / CMS / Auth:
-- N/A в первом релизе.
+Database / ORM / CMS / Auth отсутствуют до EPIC 2.
 
-Запрещены в static контуре:
-- Server Actions;
-- request-time SSR;
-- Middleware/Proxy;
-- runtime cookies/headers;
-- runtime API routes;
-- runtime image optimization;
-- `use cache` и `cacheComponents`.
+Границы EPIC 1:
+- Server Actions, Middleware/Proxy и request-time business data не вводятся;
+- `next/headers` запрещён в `core/ingest/**`, `core/cache/**` и job handlers;
+- `overrideAccess` запрещён до появления audited System Gateway;
+- persistence/CMS imports в reusable UI запрещены;
+- `use cache` и `cacheComponents` не включены.
 
 ## 3. Architecture Layers
 
@@ -237,9 +229,8 @@ Raw HTML запрещён.
 - все production routes известны build-time;
 - dynamic project/article routes используют static params;
 - route `/obekty/[slug]/` создаётся только при наличии минимум одного
-  `published` проекта, потому что Next static export запрещает пустой
-  `generateStaticParams()`; до этого в коде хранится готовый
-  `ProjectPassportTemplate`, а draft-проект не попадает в `out/`;
+  `published` проекта; до этого в коде хранится готовый
+  `ProjectPassportTemplate`, а draft-проект не получает публичный route;
 - filter/query states не становятся routes;
 - trailing slash фиксируется единообразно;
 - custom 404 обязан отдавать 404;
@@ -274,21 +265,13 @@ Server by default:
 
 `"use client"` запрещён в `src/app/**` и больших композиционных секциях.
 
-В текущем первом релизе опубликованные маршруты не импортируют React Client
-Components. Client-capable shadcn primitives установлены как будущие leaf-компоненты,
-но не входят в route graph и initial JavaScript. Форма рендерится
-на сервере и получает framework-free progressive enhancement через
+Форма рендерится на сервере и получает framework-free progressive enhancement через
 `public/assets/lead-form.js`; при отключённом JavaScript отправка fail-closed.
 
-После `next build` для всех маршрутов
-выполняется post-export stripping Next runtime scripts. Это не меняет HTML,
-metadata, CSS, изображения и ссылки, но убирает ненужную гидратацию там, где нет
-интерактива. Next runtime на старте не сохраняется ни для одного маршрута.
-
-Post-export stripping — проектная оптимизация, а не встроенная возможность Next.js.
-Поэтому внутренние переходы используют обычные `<a>` и всегда загружают готовый
-HTML-документ, не запрашивая RSC payload. `pnpm verify:artifact` контролирует
-наличие HTML, metadata, ссылок и JS-бюджет после stripping.
+Внутренние переходы используют `next/link`; изображения — `next/image` с
+server-side optimizer. `pnpm verify:runtime` поднимает production `next start`,
+проверяет маршруты и SEO по реальному HTTP, а JavaScript считает по route
+manifest и фактически подключённым initial scripts.
 
 Будущий Client Component:
 - получает только минимальные serializable props;
@@ -338,7 +321,8 @@ public/assets/
 ```
 
 Rules:
-- remote runtime images запрещены;
+- `next/image` — единственный image component;
+- remote runtime images запрещены до включения точных S3 `remotePatterns`;
 - width/height или stable aspect ratio обязательны;
 - content image имеет meaningful alt;
 - decorative image = `alt=""` + explicit decorative flag;
@@ -349,7 +333,7 @@ Rules:
 
 Контакты после подтверждения фактического адреса:
 ```text
-static preview
+server-rendered placeholder
 → explicit user action
 → iframe
 ```
@@ -487,7 +471,7 @@ production-like HTTP/Nginx контура.
 ## 24. Performance Budgets
 
 Initial targets:
-- Initial route JS ≤ 110 KB gzip;
+- Initial route JS ≤ 200 KB gzip; baseline Node runtime EPIC 1 — 190 KB на `/podbor/`;
 - one lazy chunk ≤ 300 KB gzip;
 - Project Passport initial transfer ≤ 1.5 MB excluding lazy gallery;
 - lab LCP target ≤ 2.5 s;
@@ -496,7 +480,7 @@ Initial targets:
 - после запуска INP ≤ 200 ms p75.
 
 Budgets are project gates, not SEO ranking guarantees.
-`pnpm verify:artifact` обязан падать при превышении initial route JS budget.
+`pnpm verify:runtime` обязан падать при превышении initial route JS budget.
 
 ## 25. Verification Commands
 
@@ -509,22 +493,22 @@ Budgets are project gates, not SEO ranking guarantees.
 - Title/Description/H1 uniqueness;
 - no forbidden client boundaries;
 - no nondeterministic client first render;
-- no request-time Next APIs;
-- no `next/link` client navigation in the static shell.
+- no forbidden request-time APIs in ingest/cache/jobs;
+- no `overrideAccess` и persistence imports в reusable UI;
 - exact shadcn preset, aliases, approved registries и набор primitives;
 - semantic project tokens вместо повторяющихся arbitrary radius/container values;
 - `gap`-based vertical rhythm в project-owned UI.
 
 `pnpm verify` дополнительно проверяет:
-- static build и наличие `out/`;
-- production HTML H1/title/description/canonical;
+- production build и запуск `next start`;
+- HTTP 200 по всем текущим routes;
+- production HTML H1/title/description/canonical/robots;
 - canonical;
 - sitemap и robots;
-- broken links;
 - Markdown;
 - media;
-- 404 artifact;
-- bundle budgets.
+- runtime 404;
+- bundle budgets по route manifest и фактическим initial scripts.
 
 `pnpm audit --audit-level high` обязателен в `RISKY` SourceCraft gate.
 Browser, accessibility, Nginx и Leads E2E остаются отдельным release proof.
@@ -532,11 +516,10 @@ Browser, accessibility, Nginx и Leads E2E остаются отдельным r
 ## 26. Architecture Constraints
 
 AI не имеет права без ADR:
-- включать server runtime;
 - добавлять CMS/DB/Prisma;
 - менять canonical URL model;
 - менять Content Repository contract;
-- заменять static export;
+- возвращать static export или второй runtime;
 - добавлять auth;
 - добавлять global client state;
 - создавать second image/content pipeline;
@@ -552,8 +535,8 @@ AI не имеет права без ADR:
 
 | ID | Риск | Текущий контроль | Revisit trigger |
 |---|---|---|---|
-| RISK-010 | Client JS или hydration снова распространяются на крупные секции | Server First guard, static anchors, artifact и browser gates | опубликованный route требует React Client Component или stripping перестаёт быть безопасным |
-| RISK-011 | Exact dependency перестаёт быть совместимой со static pipeline | frozen lockfile, audit, `pnpm verify`, Adapter/fallback | major upgrade Next.js либо сбой Velite/image pipeline |
+| RISK-010 | Client JS или hydration распространяются на крупные секции | Server First guard, 200 KB route budget, runtime и browser gates | опубликованный route требует новый Client Component |
+| RISK-011 | Exact dependency перестаёт быть совместимой с Node runtime | frozen lockfile, audit, `pnpm verify`, runtime proof | major upgrade Next.js либо сбой Velite/image pipeline |
 
 Пересмотр класса проекта обязателен, если появляются runtime CMS, PostgreSQL,
 auth, массовый каталог, realtime availability, worker или сложная интерактивная

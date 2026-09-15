@@ -1,10 +1,10 @@
 import { ArrowRightIcon } from "lucide-react";
+import Link from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
 import { buttonVariants, type ButtonVariantProps } from "@/lib/button-variants";
 import { cn } from "@/lib/utils";
-import { StaticLink } from "./static-link";
 
-type ActionLinkProps = Omit<ComponentPropsWithoutRef<"a">, "href"> &
+type ActionLinkProps = Omit<ComponentPropsWithoutRef<typeof Link>, "href"> &
   ButtonVariantProps & {
     href: string;
     showArrow?: boolean;
@@ -20,7 +20,7 @@ export function ActionLink({
   ...props
 }: ActionLinkProps) {
   return (
-    <StaticLink
+    <Link
       data-slot="action-link"
       href={href}
       className={cn(buttonVariants({ size, variant }), "w-full sm:w-auto", className)}
@@ -28,6 +28,6 @@ export function ActionLink({
     >
       {children}
       {showArrow ? <ArrowRightIcon data-icon="inline-end" aria-hidden="true" /> : null}
-    </StaticLink>
+    </Link>
   );
 }

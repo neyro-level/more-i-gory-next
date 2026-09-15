@@ -116,8 +116,7 @@ Canonical primitive: shadcn Button.
 - variant=accent, size=cta — primary conversion;
 - variant=default, size=cta — strong navy action;
 - variant=outline, size=cta — secondary action;
-- button-like links использует project ActionLink поверх buttonVariants,
-  сохраняя обычный anchor для static export;
+- button-like links используют project ActionLink поверх buttonVariants и `next/link`;
 - page files не меняют CTA color/radius/padding.
 
 ## 8. Forms / States
