@@ -5,7 +5,7 @@
 ## Профиль проекта
 
 - Класс: публичный коммерческий сайт инвестиционного бюро недвижимости.
-- Режим: static Next.js; production runtime Next.js/Node.js отсутствует.
+- Режим: Next.js Node runtime с Payload; публичные SEO-страницы по возможности пререндерятся статически.
 - UX scope: `PUBLIC_COMMERCIAL`.
 - Repository mode: `SOURCECRAFT_PRIMARY_GITHUB_MIRROR`.
 - Canonical repository: `integrator-p/more-i-gory-next`.

@@ -226,12 +226,12 @@ Acceptance outcome: PAGE-001..023 описаны в `02_PRODUCT_STRUCTURE.md`; �
 
 ## 6. Non-Functional Requirements
 
-- Static HTML для всех SEO-page.
+- Пререндеренный HTML для всех SEO-page, где данные известны во время сборки.
 - Минимальный client bundle.
 - TypeScript strict.
 - Build validation контента и ссылок.
 - Предсказуемый rollback.
-- Отсутствие production Node.js runtime.
+- Один проверяемый Next.js + Payload Node.js runtime.
 - Mobile-first QA.
 - Crawlable HTML links.
 - Core Web Vitals контролируются как release quality metric, а не как обещание SEO-позиций.
@@ -239,27 +239,28 @@ Acceptance outcome: PAGE-001..023 описаны в `02_PRODUCT_STRUCTURE.md`; �
 
 ## 7. Integrations
 
-Первый релиз:
+Целевой первый релиз:
 - AMS Leads API;
 - аналитика сайта;
-- Яндекс Карты в отложенном iframe только для контактов.
+- Яндекс Карты в отложенном iframe только для контактов;
+- Payload Admin и PostgreSQL как единый CMS/data-контур.
 
 Не входят:
-- CMS;
 - CRM SDK напрямую из браузера;
-- БД;
 - импорт фидов;
-- auth;
 - личный кабинет.
 
 ## 8. Roles and Permissions
 
-Публичный сайт не имеет пользовательских ролей.
+Публичный сайт не имеет пользовательских ролей. В Payload Admin используются
+служебные роли `owner` и опциональная `editor`; самостоятельная регистрация
+закрыта.
 
 Редакторский процесс первого релиза:
 - Product Owner / Architect утверждает документы и контент;
 - AI подготавливает/реализует;
-- публикация происходит через git + CI/build.
+- утверждённый контент публикуется через Payload после включения соответствующих
+  коллекций; код и схема доставляются через git, migration и release gate.
 
 ## 9. Success Criteria
 
