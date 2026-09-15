@@ -1,7 +1,7 @@
 # Документация проекта «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.0
+**Версия:** 2.1 Payload foundation
 **Дата:** 2026-09-11
 **Стандарт:** AMS Product Development Standard 2.0
 
@@ -23,14 +23,16 @@
 - production не выпускался;
 - все коммерческие и аналитические страницы остаются под content/trust gate;
 - EPIC 0 зафиксировал governance и IA;
-- EPIC 1 перевёл сайт на Node.js runtime без Payload;
-- следующий технический этап — EPIC 2, Payload и PostgreSQL;
+- EPIC 1 перевёл сайт на Node.js runtime;
+- EPIC 2 добавляет Payload 3.89 и миграционный контур PostgreSQL 18; локальная
+  clean-DB проверка выполнена, Managed PostgreSQL для staging/production ещё не создавался;
 - production release остаётся отдельным этапом после платформенной перестройки.
 
 ## Platform contract
 
-Текущее реализованное состояние — Next.js Node runtime без Payload. Целевая модель — `AMS_PROFILE=REALTY_BASE`,
-Next.js + Payload + Managed PostgreSQL + S3 в одном Node.js runtime; решение
+Текущее реализованное состояние — Next.js + Payload в одном Node.js runtime,
+Payload Admin, users/jobs schema и migrations-only PostgreSQL adapter. Целевая
+модель — `AMS_PROFILE=REALTY_BASE`, Managed PostgreSQL + S3; решение
 зафиксировано в [`ADR-004`](adr/ADR-004-realty-platform-runtime.md). Переходный
 статус и exact-версии находятся в [`03_ARCHITECTURE.md`](03_ARCHITECTURE.md).
 
@@ -71,8 +73,9 @@ Research объясняет причины решений, но не являе�
 
 ## Current Focus
 
-Активна программа перехода к Realty Platform. EPIC 0 завершён; EPIC 1 переводит
-runtime на Node.js без Payload. Следующий READY этап после merge — EPIC 2.
+Активна программа перехода к Realty Platform. EPIC 0 и EPIC 1 завершены; EPIC 2
+реализует Payload/PostgreSQL foundation. Cloud provisioning остаётся отдельным
+инфраструктурным gate до закрытия эпика.
 Атомарное состояние программы ведётся в импортированном Beads-графе,
 а этот Backlog остаётся проектным source of truth верхнего уровня. Production не
 выпускался и текущим потоком не разрешён.

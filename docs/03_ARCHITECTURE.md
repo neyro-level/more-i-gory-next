@@ -1,7 +1,7 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.1 Node runtime transition
+**Версия:** 2.2 Payload foundation
 **Дата:** 2026-09-15
 **Engineering baseline:** глобальный AMS Engineering Standard / Constitution
 **Важно:** этот документ фиксирует только проектную конкретику.
@@ -9,7 +9,8 @@
 ## 0. Transition contract
 
 EPIC 1 перевёл публичный сайт со static export на production Node.js runtime.
-Payload, PostgreSQL, auth и jobs ещё отсутствуют и вводятся только с EPIC 2.
+EPIC 2 добавляет Payload 3.89, users/auth, Jobs schema и migrations-only adapter
+PostgreSQL. Публичный сайт до EPIC 8 продолжает читать текущий JSON/Markdown.
 
 Принятая цель — `AMS_PROFILE=REALTY_BASE`: Next.js + Payload в одном Node.js
 runtime, Managed PostgreSQL, S3 и один jobs owner. Решение принято в
@@ -20,7 +21,8 @@ runtime, Managed PostgreSQL, S3 и один jobs owner. Решение прин�
 
 ## 1. Architecture Summary
 
-Текущее реализованное состояние — воспроизводимый Next.js Node runtime без CMS.
+Текущее реализованное состояние — Next.js + Payload в одном Node runtime;
+локально schema проверяется на изолированной PostgreSQL 18 database.
 
 ```text
 typed content / Markdown / media
@@ -62,6 +64,8 @@ Exact toolchain первого релиза:
 | Node.js | `24.20.0` | `.node-version`, CI |
 | pnpm | `11.5.1` | `packageManager`, lockfile |
 | Next.js | `16.3.4` | App Router, Node.js runtime |
+| Payload / `@payloadcms/*` | `3.89.0` | CMS, Admin, auth, jobs, schema/migrations owner |
+| PostgreSQL | `18.6` local / `18` target | local proof; Managed staging/production pending |
 | React / React DOM | `19.3.0` | Server First |
 | TypeScript | `6.0.3` | strict; TypeScript 7 не используется |
 | Tailwind CSS | `4.3.3` | CSS variables, global tokens |
@@ -71,6 +75,7 @@ Exact toolchain первого релиза:
 | class-variance-authority | `0.7.1` | typed primitive variants |
 | cn | `0.2.6` | canonical class merge utility used by preset |
 | Zod | `4.6.1` | build-time content validation |
+| GraphQL | `16.14.2` | required Payload peer only; API disabled in config |
 | Velite | `0.4.0` | принят после Windows/dev/export smoke |
 | sharp | `0.35.4` | image optimization dependency |
 
@@ -115,15 +120,16 @@ Production:
 - versioned rollout и rollback по EPIC 13.
 
 Backend:
-- Next.js Node runtime для публичного рендера и image optimization;
-- отдельный AMS Leads API только для заявок.
+- Next.js + Payload Node runtime для public render, Admin и штатного REST;
+- Payload — единственный owner auth/schema/migrations; Prisma отсутствует;
+- PostgreSQL adapter работает только через committed migrations (`push:false`);
+- отдельный AMS Leads API пока остаётся будущим контуром заявок.
 
-Database / ORM / CMS / Auth отсутствуют до EPIC 2.
-
-Границы EPIC 1:
-- Server Actions, Middleware/Proxy и request-time business data не вводятся;
+Границы EPIC 2:
+- публичные страницы не переключаются на Payload до EPIC 8;
+- GraphQL отключён, anonymous users REST закрыт access rules;
 - `next/headers` запрещён в `core/ingest/**`, `core/cache/**` и job handlers;
-- `overrideAccess` запрещён до появления audited System Gateway;
+- `overrideAccess:true` разрешён только controlled owner bootstrap в System Gateway;
 - persistence/CMS imports в reusable UI запрещены;
 - `use cache` и `cacheComponents` не включены.
 

@@ -89,3 +89,4 @@ workflows:
               - pnpm install --frozen-lockfile --reporter=append-only
               - pnpm audit --audit-level high
               - pnpm verify
+              - pnpm verify:schema

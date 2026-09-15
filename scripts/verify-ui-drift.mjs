@@ -50,7 +50,7 @@ for (const file of sourceFiles) {
   }
 }
 
-const globalsPath = join(root, "src", "app", "globals.css");
+const globalsPath = join(root, "src", "app", "(site)", "globals.css");
 const globalsCss = readFileSync(globalsPath, "utf8");
 if (/@custom-variant\s+dark|^\.dark\s*\{/m.test(globalsCss)) {
   report("P1", globalsPath, "dark-mode foundation exists while project mode is disabled");

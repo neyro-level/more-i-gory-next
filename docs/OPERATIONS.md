@@ -19,8 +19,10 @@ migration требует отдельного recovery plan и явного ре
 
 ## Migrations
 
-'TODO EPIC 2/13': Payload migrations only для production; проверка на чистой и
-предыдущей непустой схеме; staging до production.
+Payload является единственным schema owner; `push:false`, schema меняется только
+committed migrations. `pnpm verify:schema` генерирует types и проверяет drift во
+временной директории, не загрязняя checkout. Clean local PostgreSQL 18 proof
+выполнен в EPIC 2. Staging/production migration и restore остаются EPIC 13 gate.
 
 ## Backup and restore
 

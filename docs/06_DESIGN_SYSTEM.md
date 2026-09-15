@@ -4,7 +4,7 @@
 **Версия:** 2.0
 **Дата:** 2026-09-12
 **Назначение:** проектная visual policy. Числовые значения живут только в
-src/app/globals.css.
+src/app/(site)/globals.css.
 
 ## 1. Visual Character
 
@@ -25,7 +25,7 @@ natural
 - Main design source: утверждённое направление transfer package, нормализованное
   в проектную систему; reference не является runtime source of truth.
 - Representative page: главная плюс PageHero/SectionShell templates.
-- Token source: src/app/globals.css.
+- Token source: src/app/(site)/globals.css.
 - AMS Distribution Mode: DISABLED.
 - Dark mode: DISABLED.
 

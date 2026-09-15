@@ -27,7 +27,7 @@ Exact versions берутся из package.json, lockfile и .node-version:
 - Lucide 1.43.0.
 
 UI foundation: CSS-first Tailwind 4, components.json, project tokens в
-src/app/globals.css, primitives в src/components/ui.
+src/app/(site)/globals.css, primitives в src/components/ui.
 
 ## 3. Images
 
@@ -69,7 +69,8 @@ data-invalid.
 - UI input: project DTO / safe view contract.
 - Formation layer: Content Service + Repository contracts.
 - Reusable UI не импортирует persistence/CMS/ORM types.
-- Payload/Prisma/Auth/DB отсутствуют в первом static release.
+- Payload 3.89 + PostgreSQL 18 foundation реализуется в EPIC 2; Prisma запрещён.
+- Публичный UI до EPIC 8 продолжает читать текущие JSON/Markdown adapters.
 
 ## 7. Deployment Target
 

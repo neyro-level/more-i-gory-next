@@ -1,7 +1,7 @@
 # Release Checklist — «Море и Горы»
 
 **Статус:** Active — NOT READY FOR PRODUCTION
-**Версия:** 1.9 Node runtime
+**Версия:** 2.0 Payload foundation
 **Дата:** 2026-09-15
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
@@ -12,6 +12,10 @@
 - [x] canonical docs и runtime повторно сверены;
 - [x] exact toolchain и frozen lockfile зафиксированы;
 - [x] Node runtime и trailing slash включены; static export удалён;
+- [x] Payload 3.89 подключён как единственный CMS/auth/schema owner;
+- [x] PostgreSQL adapter использует `push:false` и committed migrations;
+- [x] local PostgreSQL 18 clean migration + owner bootstrap доказаны;
+- [x] anonymous users REST закрыт, GraphQL отключён;
 - [x] Server First boundary проверяется автоматически;
 - [x] metadata берётся из единого registry;
 - [x] draft/gated pages исключены из sitemap;
@@ -66,6 +70,7 @@
 ## 5. Infrastructure and release
 
 - [ ] production hostname/TLS определены;
+- [ ] отдельные Managed PostgreSQL staging/production созданы и идентифицированы;
 - [ ] Nginx config отрендерен с реальным окружением и прошёл `nginx -t`;
 - [ ] access/error logs определены;
 - [ ] immutable image build и versioned rollout реализованы;

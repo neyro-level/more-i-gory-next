@@ -226,12 +226,12 @@ Acceptance outcome: PAGE-001..023 описаны в `02_PRODUCT_STRUCTURE.md`; �
 
 ## 6. Non-Functional Requirements
 
-- Static HTML для всех SEO-page.
+- Пререндеренный HTML для всех SEO-page, где данные известны во время сборки.
 - Минимальный client bundle.
 - TypeScript strict.
 - Build validation контента и ссылок.
 - Предсказуемый rollback.
-- Отсутствие production Node.js runtime.
+- Один проверяемый Next.js + Payload Node.js runtime.
 - Mobile-first QA.
 - Crawlable HTML links.
 - Core Web Vitals контролируются как release quality metric, а не как обещание SEO-позиций.
@@ -239,27 +239,28 @@ Acceptance outcome: PAGE-001..023 описаны в `02_PRODUCT_STRUCTURE.md`; �
 
 ## 7. Integrations
 
-Первый релиз:
+Целевой первый релиз:
 - AMS Leads API;
 - аналитика сайта;
-- Яндекс Карты в отложенном iframe только для контактов.
+- Яндекс Карты в отложенном iframe только для контактов;
+- Payload Admin и PostgreSQL как единый CMS/data-контур.
 
 Не входят:
-- CMS;
 - CRM SDK напрямую из браузера;
-- БД;
 - импорт фидов;
-- auth;
 - личный кабинет.
 
 ## 8. Roles and Permissions
 
-Публичный сайт не имеет пользовательских ролей.
+Публичный сайт не имеет пользовательских ролей. В Payload Admin используются
+служебные роли `owner` и опциональная `editor`; самостоятельная регистрация
+закрыта.
 
 Редакторский процесс первого релиза:
 - Product Owner / Architect утверждает документы и контент;
 - AI подготавливает/реализует;
-- публикация происходит через git + CI/build.
+- утверждённый контент публикуется через Payload после включения соответствующих
+  коллекций; код и схема доставляются через git, migration и release gate.
 
 ## 9. Success Criteria
 
@@ -285,8 +286,7 @@ Acceptance outcome: PAGE-001..023 описаны в `02_PRODUCT_STRUCTURE.md`; �
 - лоты как SEO pages;
 - индексируемые фильтры;
 - личный кабинет;
-- авторизация;
-- CMS/DB;
+- публичная авторизация и личные аккаунты;
 - realtime availability;
 - универсальная интерактивная карта объектов;
 - автоматические price landing pages;
@@ -312,7 +312,7 @@ Acceptance outcome: PAGE-001..023 описаны в `02_PRODUCT_STRUCTURE.md`; �
 | RISK-005 | Устаревшие инвестиционные данные | дата проверки, source ledger и регулярный review | Open |
 | RISK-006 | Вводящие в заблуждение ROI-утверждения | разделение fact/calculation/forecast/assumption, gross/net и legal review | Open |
 | RISK-007 | Скрытый брокерский конфликт | утвердить модель вознаграждения и политику раскрытия | Open |
-| RISK-008 | Перегрузка ручного ведения static content | небольшой курируемый каталог; CMS только после операционного trigger | Open |
+| RISK-008 | Ошибки при переходе с файлового контента в CMS | небольшой курируемый каталог; migrations-only schema; поэтапное переключение через typed gateways | Mitigating |
 | RISK-009 | Потеря legacy SEO | inventory, backlinks/traffic check, прямые 301 и post-launch monitoring | Open |
 | RISK-012 | Ошибка обработки формы или ПДн | отдельный Leads API, consent version, rate limit, CAPTCHA и отсутствие ПДн в аналитике | Open |
 

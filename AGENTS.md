@@ -5,7 +5,7 @@
 ## Профиль проекта
 
 - Класс: публичный коммерческий сайт инвестиционного бюро недвижимости.
-- Режим: static Next.js; production runtime Next.js/Node.js отсутствует.
+- Режим: Next.js Node runtime с Payload; публичные SEO-страницы по возможности пререндерятся статически.
 - UX scope: `PUBLIC_COMMERCIAL`.
 - Repository mode: `SOURCECRAFT_PRIMARY_GITHUB_MIRROR`.
 - Canonical repository: `integrator-p/more-i-gory-next`.
@@ -33,7 +33,7 @@
 - Фильтры и параметры не создают индексируемые URL.
 - Нельзя выдумывать проекты, цены, доходность, кейсы, команду и юридические факты.
 - Сырой transfer package не коммитится; разрешены только выбранные локальные ассеты.
-- Payload подключается в будущем отдельным Adapter; Prisma и второй ORM запрещены.
+- Payload уже владеет CMS/auth/schema; публичный read adapter переключается в EPIC 8. Prisma и второй ORM запрещены.
 
 ## Основные команды
 

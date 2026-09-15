@@ -66,7 +66,9 @@ function walk(directory) {
 }
 
 function routePatternFromManifestKey(key) {
-  const route = key.replace(/\/page$/, "") || "/";
+  const route = key
+    .replace(/\/page$/, "")
+    .replace(/\/(\([^/]+\))/g, "") || "/";
   const pattern = route
     .split("/")
     .map((segment) => {
