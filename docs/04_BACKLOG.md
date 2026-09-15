@@ -127,8 +127,8 @@ Table primitive. Merge Gate пока не запускался.
 - [x] перевести form status на validation/warning/error/success states;
 - [x] заменить glyph icons на Lucide;
 - [x] добавить mechanical UI drift gate;
-- [x] добавить compiled token fixture в static artifact verification;
-- [x] проверить responsive/accessibility/performance на production-like artifact.
+- [x] добавить compiled token fixture в runtime verification;
+- [x] проверить responsive/accessibility/performance на production-like runtime.
 
 Local proof:
 
