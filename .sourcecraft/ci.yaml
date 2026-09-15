@@ -11,7 +11,13 @@ workflows:
           - name: docs-contract
             image: docker.io/library/node:24.20.0-bookworm
             script:
-              - test "$SOURCECRAFT_COMMIT_SHA" = "${{ inputs.expected_commit_sha }}"
+              - |
+                actual_sha="$(git rev-parse HEAD)"
+                if [ "$actual_sha" != "${{ inputs.expected_commit_sha }}" ]; then
+                  echo "Exact-head mismatch: actual=$actual_sha expected=${{ inputs.expected_commit_sha }}"
+                  exit 1
+                fi
+                echo "Exact-head verified: $actual_sha"
               - git diff --check
               - test -f AGENTS.md
               - test -f docs/README.md
@@ -21,13 +27,21 @@ workflows:
               - test -f docs/04_BACKLOG.md
               - test -f docs/05_RELEASE_CHECKLIST.md
               - test -f docs/06_DESIGN_SYSTEM.md
-              - test "$(grep -c '^### PAGE-' docs/02_PRODUCT_STRUCTURE.md)" -eq 23
-              - test "$(grep -c '^| PAGE-[0-9][0-9][0-9]' docs/02_PRODUCT_STRUCTURE.md)" -eq 23
+              - test -f docs/PROJECT.md
+              - test -f docs/DESIGN.md
+              - test -f docs/OPERATIONS.md
+              - test -f docs/adr/ADR-004-realty-platform-runtime.md
+              - test -f docs/adr/ADR-005-crimea-core-ia.md
+              - test -f docs/adr/ADR-006-regions-collection.md
+              - test -f docs/adr/ADR-007-link-runtime-policy.md
+              - test -f docs/adr/ADR-008-image-pipeline.md
+              - test -f docs/adr/ADR-009-deferred-ingest.md
+              - test -f docs/adr/ADR-010-analytics-journal-module.md
               - |
                 if [ -f package.json ]; then
                   corepack enable
-                  corepack prepare pnpm@11.5.1 --activate
-                  pnpm install --frozen-lockfile
+                  pnpm --version
+                  pnpm install --frozen-lockfile --reporter=append-only
                   pnpm verify
                 fi
 
@@ -43,7 +57,13 @@ workflows:
           - name: bootstrap-contract
             image: docker.io/library/node:24.20.0-bookworm
             script:
-              - test "$SOURCECRAFT_COMMIT_SHA" = "${{ inputs.expected_commit_sha }}"
+              - |
+                actual_sha="$(git rev-parse HEAD)"
+                if [ "$actual_sha" != "${{ inputs.expected_commit_sha }}" ]; then
+                  echo "Exact-head mismatch: actual=$actual_sha expected=${{ inputs.expected_commit_sha }}"
+                  exit 1
+                fi
+                echo "Exact-head verified: $actual_sha"
               - git diff --check
               - test -f .sourcecraft/ci.yaml
               - test -f AGENTS.md
@@ -54,10 +74,18 @@ workflows:
               - test -f docs/04_BACKLOG.md
               - test -f docs/05_RELEASE_CHECKLIST.md
               - test -f docs/06_DESIGN_SYSTEM.md
-              - test "$(grep -c '^### PAGE-' docs/02_PRODUCT_STRUCTURE.md)" -eq 23
-              - test "$(grep -c '^| PAGE-[0-9][0-9][0-9]' docs/02_PRODUCT_STRUCTURE.md)" -eq 23
+              - test -f docs/PROJECT.md
+              - test -f docs/DESIGN.md
+              - test -f docs/OPERATIONS.md
+              - test -f docs/adr/ADR-004-realty-platform-runtime.md
+              - test -f docs/adr/ADR-005-crimea-core-ia.md
+              - test -f docs/adr/ADR-006-regions-collection.md
+              - test -f docs/adr/ADR-007-link-runtime-policy.md
+              - test -f docs/adr/ADR-008-image-pipeline.md
+              - test -f docs/adr/ADR-009-deferred-ingest.md
+              - test -f docs/adr/ADR-010-analytics-journal-module.md
               - corepack enable
-              - corepack prepare pnpm@11.5.1 --activate
-              - pnpm install --frozen-lockfile
+              - pnpm --version
+              - pnpm install --frozen-lockfile --reporter=append-only
               - pnpm audit --audit-level high
               - pnpm verify

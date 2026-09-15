@@ -29,7 +29,17 @@ for (const file of requiredFiles) {
   }
 }
 
-const forbiddenLegacyDocPaths = [
+const canonicalAdrDirectory = join(root, "docs", "adr");
+if (
+  !existsSync(canonicalAdrDirectory) ||
+  !statSync(canonicalAdrDirectory).isDirectory()
+) {
+  throw new Error("Canonical ADR directory must exist at docs/adr");
+}
+
+// These paths are resolved against the project root. Root-level `adr` remains
+// legacy, while the canonical `docs/adr` directory above is required.
+const forbiddenRootLegacyDocPaths = [
   "00_PROJECT_BRIEF.md",
   "01_PRD.md",
   "02_PRODUCT_STRUCTURE.md",
@@ -44,7 +54,7 @@ const forbiddenLegacyDocPaths = [
   "adr",
 ];
 
-for (const legacyPath of forbiddenLegacyDocPaths) {
+for (const legacyPath of forbiddenRootLegacyDocPaths) {
   if (existsSync(join(root, legacyPath))) {
     throw new Error(`Legacy documentation path must not return: ${legacyPath}`);
   }

@@ -1,6 +1,6 @@
 # ADR-001: Static Next.js Export as Public Site Runtime Model
 
-Status: Accepted
+Status: Superseded by ADR-004
 Date: 2026-09-10
 
 ## Context
@@ -48,3 +48,9 @@ Date: 2026-09-10
 - workflow/roles;
 - automated feeds;
 - background jobs.
+
+## Supersession Note
+
+Условия пересмотра наступили: приняты Payload Admin, PostgreSQL, server-side
+leads, jobs и будущие feeds. ADR-004 сохраняет историю static preview, но задаёт
+единственный целевой production runtime.

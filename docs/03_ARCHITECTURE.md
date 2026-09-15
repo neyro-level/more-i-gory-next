@@ -1,14 +1,29 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.8 Documentation Normalization
-**Дата:** 2026-09-11
+**Версия:** 2.0 Realty Platform transition
+**Дата:** 2026-09-15
 **Engineering baseline:** глобальный AMS Engineering Standard / Constitution
 **Важно:** этот документ фиксирует только проектную конкретику.
 
+## 0. Transition contract
+
+До завершения EPIC 1 код и проверки отражают текущее static preview state. Это
+фактический runtime, а не целевая production architecture.
+
+Принятая цель — `AMS_PROFILE=REALTY_BASE`: Next.js + Payload в одном Node.js
+runtime, Managed PostgreSQL, S3 и один jobs owner. Решение принято в
+[`ADR-004`](adr/ADR-004-realty-platform-runtime.md), project-specific профиль —
+в [`PROJECT.md`](PROJECT.md). Переход выполняется последовательно: EPIC 1
+удаляет static-only runtime, EPIC 2 добавляет Payload и PostgreSQL, следующие
+эпики вводят gateway, data и operations contracts. Static-разделы ниже являются
+описанием текущей реализации до соответствующего эпика и не конкурируют с
+принятой целью.
+
 ## 1. Architecture Summary
 
-Первый релиз — воспроизводимый статический Next.js-сайт.
+Текущее реализованное состояние до EPIC 1 — воспроизводимый статический
+Next.js-preview.
 
 ```text
 typed content / Markdown / media
@@ -122,6 +137,8 @@ Database / ORM / CMS / Auth:
 
 ## 3. Architecture Layers
 
+Текущая реализация до EPIC 8:
+
 ```text
 src/app
 → Content Service
@@ -132,9 +149,19 @@ src/app
 
 UI не импортирует контент-файлы напрямую.
 
-Будущая CMS подключается как `PayloadContentRepository`, не меняя page
-components, DTO и URLs. Payload Admin, PostgreSQL и runtime delivery являются
-отдельным будущим архитектурным решением; Prisma как второй ORM запрещён.
+Принятая цель EPIC 3/8:
+
+```text
+src/app
+→ Public Gateway
+→ serializable DTO
+→ presentation
+```
+
+Payload schema и `payload-types.ts` остаются server-only внутри
+`src/core/data-access/**`. `ContentService`, `ContentRepository` и local/Payload
+adapters удаляются в EPIC 8; принцип изоляции UI от persistence сохраняется.
+Prisma как второй ORM запрещён.
 
 ## 4. Domain Modules
 

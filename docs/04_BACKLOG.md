@@ -1,23 +1,19 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.0
-**Дата:** 2026-09-12
+**Версия:** 3.0 Realty Platform program
+**Дата:** 2026-09-15
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
-PR-00..PR-20 слиты в `main`. Реализованы static Next foundation, Content
-Repository, SEO registry, дизайн-система, полная главная, 23 PAGE-ID, региональные
-экраны, каталог-шаблон, аналитика, формы, release-readiness baseline и UI
-Constitution Conformance.
+В `main` находится завершённый static Next preview. Владелец принял мастер-план
+перехода к `AMS_PROFILE=REALTY_BASE`; он импортирован в локальный Beads-граф без
+дублирования 137 атомарных задач в этом документе.
 
-EPIC-18 UI Constitution Conformance 2.0 завершён в WORK: повторный аудит выявил
-и устранил drift между декларацией PR-19 и фактической реализацией semantic
-typography, CTA variants, responsive header, form states и page composition.
-
-EPIC-18 оформлен в SourceCraft PR-22 без merge. EPIC-19 продолжает его
-зависимым потоком и приводит foundation к AMS UI Skill Pack 4.2.
+NOW: EPIC 0 — документы, ADR и Crimea-core IA. После его review, exact-head gate
+и merge следующий READY поток — EPIC 1: Node.js runtime pivot без Payload.
+Далее эпики выполняются только по dependency graph; один эпик = одна ветка/PR.
 
 Production не выпускался. Все коммерческие, аналитические и юридические страницы
 остаются под content/trust gate и не попадают в sitemap.
@@ -57,18 +53,18 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 - [x] обновить project router и SourceCraft path guards;
 - [x] выполнить финальную проверку ссылок и `pnpm verify`.
 
-## 4. NEXT — Content Approval
+## 4. NOW / NEXT — Realty Platform migration
 
-Эти задачи не входят в EPIC-16:
+| Состояние | Эпик | Результат |
+|---|---|---|
+| NOW | EPIC 0 | Project profile, operations/design adapters, Crimea-core IA, ADR-004..010, guards и manual CI policy |
+| NEXT | EPIC 1 | static export → Node.js runtime; Payload ещё запрещён |
+| BLOCKED BY GRAPH | EPIC 2..18 | Payload/data/gateway/UI/regions/leads/operations/feeds/analytics по зависимостям мастер-плана |
 
-1. Утвердить сильные заявления, методику, команду и модель оплаты.
-2. Добавить реальные проекты, цены, источники, `verifiedAt` и инвестиционные выводы.
-3. Дописать пять аналитических материалов и провести editorial QA.
-4. Утвердить юридические тексты, фактические реквизиты и consent version.
-5. После прохождения page gates перевести конкретные registry entries в
-   `index=yes` / `sitemap=yes`.
+Контентные, legal и production решения остаются human gates и не подменяются
+технической готовностью.
 
-## 4.1. WORK COMPLETE — EPIC-18 UI Constitution Conformance 2.0
+## Appendix A — Completed EPIC-18 UI Constitution Conformance 2.0
 
 Ветка: `codex/ui-constitution-conformance-v2`
 Gate: `STANDARD` — shared presentation/tokens без data, auth или runtime change.
@@ -97,7 +93,7 @@ Local proof:
 
 Merge/SourceCraft Gate/production не выполнялись и требуют отдельной lifecycle-команды владельца.
 
-## 4.2. WORK COMPLETE — EPIC-19 AMS UI Skill Pack 4.2 Conformance
+## Appendix B — Completed EPIC-19 AMS UI Skill Pack 4.2 Conformance
 
 Ветка: `codex/ui-constitution-4-2`
 Base: `codex/ui-constitution-conformance-v2` / SourceCraft PR-22

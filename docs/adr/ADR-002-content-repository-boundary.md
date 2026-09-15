@@ -1,6 +1,6 @@
 # ADR-002: Content Repository Boundary
 
-Status: Accepted
+Status: Superseded by ADR-004
 Date: 2026-09-10
 
 ## Context
@@ -36,3 +36,9 @@ Page/UI
 ## Revisit When
 
 Только если слой объективно создаёт больше сложности, чем ценности, и это подтверждено реальной реализацией.
+
+## Supersession Note
+
+ADR-004 сохраняет принцип изоляции UI от persistence, но заменяет эту конкретную
+implementation chain на `Public Gateway → serializable DTO → presentation`.
+`ContentService`, `ContentRepository` и local/Payload adapters удаляются в EPIC 8.
