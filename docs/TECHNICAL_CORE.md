@@ -34,7 +34,7 @@ src/app/globals.css, primitives в src/components/ui.
 - Mechanism: `next/image` и server-side optimizer Next.js.
 - Content images: зарегистрированный локальный media asset с width/height и alt.
 - Responsive contract: fill только вместе с stable wrapper и sizes.
-- LCP contract: единственный hero asset получает priority; card/gallery media
+- LCP contract: единственный hero asset получает `preload`; card/gallery media
   не загружается eager без причины.
 - Runtime remote images запрещены до точных S3 `remotePatterns`.
 
