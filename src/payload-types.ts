@@ -74,6 +74,10 @@ export interface Config {
     redirects: Redirect;
     'feed-sources': FeedSource;
     properties: Property;
+    developers: Developer;
+    'residential-complexes': ResidentialComplex;
+    buildings: Building;
+    layouts: Layout;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -89,6 +93,10 @@ export interface Config {
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'feed-sources': FeedSourcesSelect<false> | FeedSourcesSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
+    developers: DevelopersSelect<false> | DevelopersSelect<true>;
+    'residential-complexes': ResidentialComplexesSelect<false> | ResidentialComplexesSelect<true>;
+    buildings: BuildingsSelect<false> | BuildingsSelect<true>;
+    layouts: LayoutsSelect<false> | LayoutsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -624,6 +632,9 @@ export interface Property {
   externalComplexName?: string | null;
   externalBuildingId?: string | null;
   externalLayoutId?: string | null;
+  complex?: (number | null) | ResidentialComplex;
+  building?: (number | null) | Building;
+  layout?: (number | null) | Layout;
   status: 'active' | 'archived';
   deactivatedAt?: string | null;
   deactivatedByRun?: string | null;
@@ -675,6 +686,244 @@ export interface Property {
       }[]
     | null;
   verifiedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "residential-complexes".
+ */
+export interface ResidentialComplex {
+  id: number;
+  slug: string;
+  title: string;
+  developer: number | Developer;
+  region: number | Region;
+  feedSource?: (number | null) | FeedSource;
+  externalComplexId?: string | null;
+  address?: {
+    locality?: string | null;
+    district?: string | null;
+    street?: string | null;
+    house?: string | null;
+    publicAddress?: string | null;
+    lat?: number | null;
+    lng?: number | null;
+  };
+  media?: (number | Media)[] | null;
+  blocks?:
+    | (
+        | {
+            eyebrow?: string | null;
+            title: string;
+            lead: string;
+            primaryCta?: {
+              label?: string | null;
+              href?: string | null;
+            };
+            secondaryCta?: {
+              label?: string | null;
+              href?: string | null;
+            };
+            proof?: string | null;
+            imagePath?: string | null;
+            imageAlt?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            eyebrow?: string | null;
+            title: string;
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'lead';
+          }
+        | {
+            title: string;
+            items: {
+              title: string;
+              text: string;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'thesis';
+          }
+        | {
+            title: string;
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'risk-block';
+          }
+        | {
+            eyebrow?: string | null;
+            title: string;
+            lead?: string | null;
+            steps: {
+              title: string;
+              text: string;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'numbered-steps';
+          }
+        | {
+            title: string;
+            proof: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'proof-block';
+          }
+        | {
+            title: string;
+            rows: {
+              scenario: string;
+              assumption: string;
+              investorQuestion: string;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'scenario-table';
+          }
+        | {
+            title: string;
+            lead?: string | null;
+            cards: {
+              title: string;
+              text: string;
+              link?: {
+                label?: string | null;
+                href?: string | null;
+              };
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cards-grid';
+          }
+        | {
+            title: string;
+            lead?: string | null;
+            items: {
+              title: string;
+              href: string;
+              location: string;
+              status: string;
+              thesis: string;
+              risk: string;
+              imagePath?: string | null;
+              imageAlt?: string | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'object-cards';
+          }
+        | {
+            title: string;
+            text: string;
+            primaryCta: {
+              label: string;
+              href: string;
+            };
+            secondaryCta?: {
+              label?: string | null;
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'rich-text';
+          }
+      )[]
+    | null;
+  seo: {
+    title?: string | null;
+    description?: string | null;
+    canonicalOverride?: string | null;
+    ogImagePath?: string | null;
+    robots: 'index-follow' | 'noindex-follow';
+    priority: 'P1' | 'P2' | 'P3';
+  };
+  status: 'hidden' | 'published' | 'archived';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "developers".
+ */
+export interface Developer {
+  id: number;
+  slug: string;
+  title: string;
+  description?: string | null;
+  media?: (number | Media)[] | null;
+  seo: {
+    title?: string | null;
+    description?: string | null;
+    canonicalOverride?: string | null;
+    ogImagePath?: string | null;
+    robots: 'index-follow' | 'noindex-follow';
+    priority: 'P1' | 'P2' | 'P3';
+  };
+  status: 'hidden' | 'published' | 'archived';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buildings".
+ */
+export interface Building {
+  id: number;
+  complex: number | ResidentialComplex;
+  externalBuildingId?: string | null;
+  name: string;
+  completionDeadline?: string | null;
+  status: 'hidden' | 'published' | 'archived';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "layouts".
+ */
+export interface Layout {
+  id: number;
+  complex: number | ResidentialComplex;
+  building?: (number | null) | Building;
+  externalLayoutId: string;
+  rooms?: number | null;
+  totalArea?: number | null;
+  plan?: (number | null) | Media;
+  status: 'hidden' | 'published' | 'archived';
   updatedAt: string;
   createdAt: string;
 }
@@ -821,6 +1070,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'feed-sources';
         value: number | FeedSource;
+      } | null)
+    | ({
+        relationTo: 'developers';
+        value: number | Developer;
+      } | null)
+    | ({
+        relationTo: 'residential-complexes';
+        value: number | ResidentialComplex;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1381,6 +1638,9 @@ export interface PropertiesSelect<T extends boolean = true> {
   externalComplexName?: T;
   externalBuildingId?: T;
   externalLayoutId?: T;
+  complex?: T;
+  building?: T;
+  layout?: T;
   status?: T;
   deactivatedAt?: T;
   deactivatedByRun?: T;
@@ -1432,6 +1692,263 @@ export interface PropertiesSelect<T extends boolean = true> {
         id?: T;
       };
   verifiedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "developers_select".
+ */
+export interface DevelopersSelect<T extends boolean = true> {
+  slug?: T;
+  title?: T;
+  description?: T;
+  media?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalOverride?: T;
+        ogImagePath?: T;
+        robots?: T;
+        priority?: T;
+      };
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "residential-complexes_select".
+ */
+export interface ResidentialComplexesSelect<T extends boolean = true> {
+  slug?: T;
+  title?: T;
+  developer?: T;
+  region?: T;
+  feedSource?: T;
+  externalComplexId?: T;
+  address?:
+    | T
+    | {
+        locality?: T;
+        district?: T;
+        street?: T;
+        house?: T;
+        publicAddress?: T;
+        lat?: T;
+        lng?: T;
+      };
+  media?: T;
+  blocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              lead?: T;
+              primaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              proof?: T;
+              imagePath?: T;
+              imageAlt?: T;
+              id?: T;
+              blockName?: T;
+            };
+        lead?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        thesis?:
+          | T
+          | {
+              title?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'risk-block'?:
+          | T
+          | {
+              title?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'numbered-steps'?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              lead?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'proof-block'?:
+          | T
+          | {
+              title?: T;
+              proof?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'scenario-table'?:
+          | T
+          | {
+              title?: T;
+              rows?:
+                | T
+                | {
+                    scenario?: T;
+                    assumption?: T;
+                    investorQuestion?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'cards-grid'?:
+          | T
+          | {
+              title?: T;
+              lead?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          href?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'object-cards'?:
+          | T
+          | {
+              title?: T;
+              lead?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    href?: T;
+                    location?: T;
+                    status?: T;
+                    thesis?: T;
+                    risk?: T;
+                    imagePath?: T;
+                    imageAlt?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              title?: T;
+              text?: T;
+              primaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'rich-text'?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalOverride?: T;
+        ogImagePath?: T;
+        robots?: T;
+        priority?: T;
+      };
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buildings_select".
+ */
+export interface BuildingsSelect<T extends boolean = true> {
+  complex?: T;
+  externalBuildingId?: T;
+  name?: T;
+  completionDeadline?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "layouts_select".
+ */
+export interface LayoutsSelect<T extends boolean = true> {
+  complex?: T;
+  building?: T;
+  externalLayoutId?: T;
+  rooms?: T;
+  totalArea?: T;
+  plan?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -8,6 +8,8 @@ import * as migration_20260916_205602_regions_collection from './20260916_205602
 import * as migration_20260916_215600_20260917_properties_collection from './20260916_215600_20260917_properties_collection';
 import * as migration_20260916_220752_20260917_properties_indexes_access from './20260916_220752_20260917_properties_indexes_access';
 import * as migration_20260916_221346_20260917_properties_locking_contract from './20260916_221346_20260917_properties_locking_contract';
+import * as migration_20260916_231730_newbuild_schema from './20260916_231730_newbuild_schema';
+import * as migration_20260916_232544_newbuild_property_links from './20260916_232544_newbuild_property_links';
 
 export const migrations = [
   {
@@ -58,6 +60,16 @@ export const migrations = [
   {
     up: migration_20260916_221346_20260917_properties_locking_contract.up,
     down: migration_20260916_221346_20260917_properties_locking_contract.down,
-    name: '20260916_221346_20260917_properties_locking_contract'
+    name: '20260916_221346_20260917_properties_locking_contract',
+  },
+  {
+    up: migration_20260916_231730_newbuild_schema.up,
+    down: migration_20260916_231730_newbuild_schema.down,
+    name: '20260916_231730_newbuild_schema',
+  },
+  {
+    up: migration_20260916_232544_newbuild_property_links.up,
+    down: migration_20260916_232544_newbuild_property_links.down,
+    name: '20260916_232544_newbuild_property_links'
   },
 ];

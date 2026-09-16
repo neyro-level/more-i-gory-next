@@ -21,6 +21,9 @@ test("properties collection exposes the approved EPIC 8.2 schema surface", () =>
     "externalComplexName",
     "externalBuildingId",
     "externalLayoutId",
+    "complex",
+    "building",
+    "layout",
     "status",
     "deactivatedAt",
     "deactivatedByRun",
@@ -81,9 +84,24 @@ test("properties collection keeps inventory defaults and relationships explicit"
   assert.equal(field("market").required, true);
   assert.equal(field("market").index, true);
   assert.equal(field("region").relationTo, "regions");
+  assert.equal(field("complex").relationTo, "residential-complexes");
+  assert.equal(field("building").relationTo, "buildings");
+  assert.equal(field("layout").relationTo, "layouts");
+  assert.equal(field("layout").hasMany, false);
   assert.equal(field("images").relationTo, "media");
   assert.equal(field("images").hasMany, true);
   assert.equal(Properties.versions, false);
+});
+
+test("properties collection links newbuild inventory by imported external ids without turning layouts into units", () => {
+  assert.equal(field("externalComplexId").type, "text");
+  assert.equal(field("externalBuildingId").type, "text");
+  assert.equal(field("externalLayoutId").type, "text");
+  assert.equal(field("complex").type, "relationship");
+  assert.equal(field("building").type, "relationship");
+  assert.equal(field("layout").type, "relationship");
+  assert.equal(field("layout").relationTo, "layouts");
+  assert.equal(field("unit"), undefined);
 });
 
 test("properties collection models manual passport domain arrays", () => {
@@ -124,5 +142,6 @@ test("properties collection declares required compound indexes", () => {
     { fields: ["feedSource", "externalId"], unique: true },
     { fields: ["origin", "status", "publishedAt"] },
     { fields: ["market", "region"] },
+    { fields: ["complex", "building", "layout"] },
   ]);
 });

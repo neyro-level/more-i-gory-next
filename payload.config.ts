@@ -4,12 +4,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildConfig } from "payload";
 import sharp from "sharp";
+import { Buildings } from "./src/project/collections/buildings.ts";
+import { Developers } from "./src/project/collections/developers.ts";
 import { FeedSources } from "./src/project/collections/feed-sources.ts";
-import { Pages } from "./src/project/collections/pages.ts";
+import { Layouts } from "./src/project/collections/layouts.ts";
 import { Media } from "./src/project/collections/media.ts";
+import { Pages } from "./src/project/collections/pages.ts";
 import { Properties } from "./src/project/collections/properties.ts";
 import { Regions } from "./src/project/collections/regions.ts";
 import { Redirects } from "./src/project/collections/redirects.ts";
+import { ResidentialComplexes } from "./src/project/collections/residential-complexes.ts";
 import { Users } from "./src/project/collections/users.ts";
 import { env } from "./src/project/env.ts";
 import { Navigation, SiteSettings } from "./src/project/globals/index.ts";
@@ -28,7 +32,19 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname, "src") },
     user: Users.slug,
   },
-  collections: [Users, Media, Pages, Regions, Redirects, FeedSources, Properties],
+  collections: [
+    Users,
+    Media,
+    Pages,
+    Regions,
+    Redirects,
+    FeedSources,
+    Properties,
+    Developers,
+    ResidentialComplexes,
+    Buildings,
+    Layouts,
+  ],
   db: postgresAdapter({
     migrationDir: schemaVerifyDir ? path.resolve(schemaVerifyDir, "migrations") : path.resolve(dirname, "migrations"),
     pool: { connectionString: env.DATABASE_URI },
