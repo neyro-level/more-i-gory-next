@@ -72,6 +72,8 @@ export interface Config {
     pages: Page;
     regions: Region;
     redirects: Redirect;
+    'feed-sources': FeedSource;
+    properties: Property;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -85,6 +87,8 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     regions: RegionsSelect<false> | RegionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
+    'feed-sources': FeedSourcesSelect<false> | FeedSourcesSelect<true>;
+    properties: PropertiesSelect<false> | PropertiesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -588,6 +592,94 @@ export interface Redirect {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "feed-sources".
+ */
+export interface FeedSource {
+  id: number;
+  code: string;
+  parser?: string | null;
+  market: 'secondary' | 'newbuild';
+  /**
+   * Secret Master reference only. Do not store raw feed credentials here.
+   */
+  feedUrlRef?: string | null;
+  enabled: boolean;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties".
+ */
+export interface Property {
+  id: number;
+  origin: 'feed' | 'manual';
+  feedSource?: (number | null) | FeedSource;
+  externalId?: string | null;
+  importHash?: string | null;
+  firstSeenAt?: string | null;
+  lastSeenAt?: string | null;
+  lastImportRun?: string | null;
+  externalComplexId?: string | null;
+  externalComplexName?: string | null;
+  externalBuildingId?: string | null;
+  externalLayoutId?: string | null;
+  status: 'active' | 'archived';
+  deactivatedAt?: string | null;
+  deactivatedByRun?: string | null;
+  needsReview: boolean;
+  publishedAt?: string | null;
+  slug?: string | null;
+  market: 'secondary' | 'newbuild';
+  category?: string | null;
+  dealType?: string | null;
+  priceMinor?: number | null;
+  currency?: string | null;
+  pricePerMeterMinor?: number | null;
+  rooms?: number | null;
+  totalArea?: number | null;
+  livingArea?: number | null;
+  kitchenArea?: number | null;
+  floor?: number | null;
+  floors?: number | null;
+  region?: (number | null) | Region;
+  locality?: string | null;
+  district?: string | null;
+  street?: string | null;
+  house?: string | null;
+  publicAddress?: string | null;
+  lat?: number | null;
+  lng?: number | null;
+  title: string;
+  description?: string | null;
+  images?: (number | Media)[] | null;
+  unitNumber?: string | null;
+  cadastralNumber?: string | null;
+  internalComment?: string | null;
+  ownerContact?: string | null;
+  verdict?: string | null;
+  facts?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  budgetNote?: string | null;
+  riskSummary?: string | null;
+  sources?:
+    | {
+        label: string;
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  verifiedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -725,6 +817,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'redirects';
         value: number | Redirect;
+      } | null)
+    | ({
+        relationTo: 'feed-sources';
+        value: number | FeedSource;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1253,6 +1349,89 @@ export interface RedirectsSelect<T extends boolean = true> {
   source?: T;
   destination?: T;
   permanent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "feed-sources_select".
+ */
+export interface FeedSourcesSelect<T extends boolean = true> {
+  code?: T;
+  parser?: T;
+  market?: T;
+  feedUrlRef?: T;
+  enabled?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties_select".
+ */
+export interface PropertiesSelect<T extends boolean = true> {
+  origin?: T;
+  feedSource?: T;
+  externalId?: T;
+  importHash?: T;
+  firstSeenAt?: T;
+  lastSeenAt?: T;
+  lastImportRun?: T;
+  externalComplexId?: T;
+  externalComplexName?: T;
+  externalBuildingId?: T;
+  externalLayoutId?: T;
+  status?: T;
+  deactivatedAt?: T;
+  deactivatedByRun?: T;
+  needsReview?: T;
+  publishedAt?: T;
+  slug?: T;
+  market?: T;
+  category?: T;
+  dealType?: T;
+  priceMinor?: T;
+  currency?: T;
+  pricePerMeterMinor?: T;
+  rooms?: T;
+  totalArea?: T;
+  livingArea?: T;
+  kitchenArea?: T;
+  floor?: T;
+  floors?: T;
+  region?: T;
+  locality?: T;
+  district?: T;
+  street?: T;
+  house?: T;
+  publicAddress?: T;
+  lat?: T;
+  lng?: T;
+  title?: T;
+  description?: T;
+  images?: T;
+  unitNumber?: T;
+  cadastralNumber?: T;
+  internalComment?: T;
+  ownerContact?: T;
+  verdict?: T;
+  facts?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  budgetNote?: T;
+  riskSummary?: T;
+  sources?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  verifiedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

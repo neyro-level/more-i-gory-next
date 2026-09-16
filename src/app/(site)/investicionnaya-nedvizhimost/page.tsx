@@ -6,7 +6,7 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { RegionCard } from "@/components/marketing/region-card";
 import { ProofBlock } from "@/components/marketing/proof-block";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
-import { contentService } from "@/content/service";
+import { getMediaAsset } from "@/content/media/media-assets";
 import { getRegionHubPlan } from "@/content/regions/region-route-plan";
 
 export const metadata = getStaticMetadata("PAGE-002");
@@ -14,12 +14,10 @@ export const metadata = getStaticMetadata("PAGE-002");
 export default async function FederalInvestmentHubPage() {
   const seo = getSeoEntry("PAGE-002");
   const regions = getRegionHubPlan();
-  const regionCards = await Promise.all(
-    regions.map(async (region) => ({
-      media: await contentService.getMediaAsset(region.mediaSourceLabel),
-      region,
-    })),
-  );
+  const regionCards = regions.map((region) => ({
+    media: getMediaAsset(region.mediaSourceLabel),
+    region,
+  }));
 
   return (
     <main>

@@ -14,12 +14,28 @@ test("legacy region/page JSON sources and obsolete landing components are remove
   }
 });
 
-test("local repository uses DTO sources instead of legacy region/page JSON", () => {
-  const source = readFileSync("src/content/adapters/local-content-repository.ts", "utf8");
+test("legacy content repository chain is removed after public routes moved to typed sources", () => {
+  for (const file of [
+    "src/content/adapters/local-content-repository.ts",
+    "src/content/adapters/payload-content-repository.ts",
+    "src/content/repository.ts",
+    "src/content/service.ts",
+    "src/content/data/media.json",
+    "src/content/data/projects.json",
+  ]) {
+    assert.equal(existsSync(file), false, `${file} should not exist`);
+  }
+});
 
-  assert.match(source, /regionDtos/);
-  assert.match(source, /pageContents/);
-  assert.doesNotMatch(source, /regionsData/);
-  assert.doesNotMatch(source, /pagesData/);
-  assert.doesNotMatch(source, /landingPagesData/);
+test("public pages use typed article and media modules instead of the legacy service", () => {
+  for (const file of [
+    "src/app/(site)/page.tsx",
+    "src/app/(site)/investicionnaya-nedvizhimost/page.tsx",
+    "src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx",
+    "src/app/(site)/analitika/page.tsx",
+    "src/app/(site)/analitika/[slug]/page.tsx",
+  ]) {
+    const source = readFileSync(file, "utf8");
+    assert.doesNotMatch(source, /contentService|@\/content\/service/, `${file} should not use contentService`);
+  }
 });

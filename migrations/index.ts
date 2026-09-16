@@ -5,6 +5,9 @@ import * as migration_20260916_063247_pages_drafts_redirects from './20260916_06
 import * as migration_20260916_063715_pages_seo_contract from './20260916_063715_pages_seo_contract';
 import * as migration_20260916_071855 from './20260916_071855';
 import * as migration_20260916_205602_regions_collection from './20260916_205602_regions_collection';
+import * as migration_20260916_215600_20260917_properties_collection from './20260916_215600_20260917_properties_collection';
+import * as migration_20260916_220752_20260917_properties_indexes_access from './20260916_220752_20260917_properties_indexes_access';
+import * as migration_20260916_221346_20260917_properties_locking_contract from './20260916_221346_20260917_properties_locking_contract';
 
 export const migrations = [
   {
@@ -40,6 +43,21 @@ export const migrations = [
   {
     up: migration_20260916_205602_regions_collection.up,
     down: migration_20260916_205602_regions_collection.down,
-    name: '20260916_205602_regions_collection'
+    name: '20260916_205602_regions_collection',
+  },
+  {
+    up: migration_20260916_215600_20260917_properties_collection.up,
+    down: migration_20260916_215600_20260917_properties_collection.down,
+    name: '20260916_215600_20260917_properties_collection',
+  },
+  {
+    up: migration_20260916_220752_20260917_properties_indexes_access.up,
+    down: migration_20260916_220752_20260917_properties_indexes_access.down,
+    name: '20260916_220752_20260917_properties_indexes_access',
+  },
+  {
+    up: migration_20260916_221346_20260917_properties_locking_contract.up,
+    down: migration_20260916_221346_20260917_properties_locking_contract.down,
+    name: '20260916_221346_20260917_properties_locking_contract'
   },
 ];

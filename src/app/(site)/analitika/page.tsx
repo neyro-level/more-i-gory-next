@@ -3,7 +3,7 @@ import { buildPageMetadata, getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
-import { contentService } from "@/content/service";
+import { articles } from "@/content/articles/articles";
 import { ArticleCard } from "@/components/marketing/article-card";
 import { CmsPage } from "@/components/page-blocks/cms-page";
 import { getCmsPageByPath } from "@/core/data-access/public";
@@ -30,7 +30,6 @@ export default async function AnalyticsPage() {
   if (page) return <CmsPage page={page} />;
 
   const seo = getSeoEntry("PAGE-016");
-  const articles = await contentService.listArticles();
 
   return (
     <main>

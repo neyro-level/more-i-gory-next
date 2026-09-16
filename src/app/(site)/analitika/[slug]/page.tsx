@@ -6,7 +6,7 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { RiskBlock } from "@/components/marketing/risk-block";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
-import { contentService } from "@/content/service";
+import { articles, getArticleBySlug } from "@/content/articles/articles";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -17,13 +17,12 @@ type ArticlePageProps = {
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const articles = await contentService.listArticles();
   return articles.filter((article) => article.status !== "archived").map((article) => ({ slug: article.slug }));
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = await contentService.getArticle(slug);
+  const article = getArticleBySlug(slug);
 
   if (!article) {
     return buildMetadata(getSeoEntry("PAGE-017"));
@@ -42,7 +41,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
-  const article = await contentService.getArticle(slug);
+  const article = getArticleBySlug(slug);
 
   if (!article || article.status === "archived") {
     notFound();

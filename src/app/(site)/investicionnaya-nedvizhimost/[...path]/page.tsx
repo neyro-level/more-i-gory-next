@@ -6,7 +6,7 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { RiskBlock } from "@/components/marketing/risk-block";
 import { ActionLink } from "@/components/navigation/action-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { contentService } from "@/content/service";
+import { getMediaAsset } from "@/content/media/media-assets";
 import { findRegionRouteBySegments, getRegionRelatedLinks, getRegionRoutePlan } from "@/content/regions/region-route-plan";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
@@ -43,7 +43,7 @@ export default async function RegionRoutePage({ params }: RegionRoutePageProps) 
   if (!entry || entry.status === "stub") notFound();
 
   const seo = getSeoEntry(entry.pageId);
-  const media = await contentService.getMediaAsset(entry.mediaSourceLabel);
+  const media = getMediaAsset(entry.mediaSourceLabel);
   const relatedLinks = getRegionRelatedLinks(entry);
 
   return (

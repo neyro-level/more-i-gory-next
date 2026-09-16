@@ -5,14 +5,14 @@ import { fileURLToPath } from "node:url";
 import {
   articleSchema,
   landingPageSchema,
-  mediaAssetSchema,
   pageContentSchema,
-  projectSchema,
   regionSchema,
   seoEntrySchema,
 } from "@more-i-gory/contracts";
 
-const [{ pageContents }, { regionDtos }] = await Promise.all([
+const [{ articles }, { mediaAssets }, { pageContents }, { regionDtos }] = await Promise.all([
+  import("../src/content/articles/articles.ts"),
+  import("../src/content/media/media-assets.ts"),
   import("../src/content/pages/static-pages.ts"),
   import("../src/content/regions/region-dtos.ts"),
 ]);
@@ -53,10 +53,9 @@ async function listFiles(directory) {
   return files.flat();
 }
 
-const media = mediaAssetSchema.array().parse(readJson("src/content/data/media.json"));
+const media = mediaAssets;
 const regions = regionSchema.array().parse(regionDtos);
-const projects = projectSchema.array().parse(readJson("src/content/data/projects.json"));
-const articles = articleSchema.array().parse(readJson("src/content/data/articles.json"));
+const parsedArticles = articleSchema.array().parse(articles);
 const pages = pageContentSchema.array().parse(pageContents);
 const landingPages = landingPageSchema.array().parse([]);
 const seoEntries = seoEntrySchema.array().parse(readJson("src/seo/registry.json"));
@@ -64,21 +63,18 @@ const seoEntries = seoEntrySchema.array().parse(readJson("src/seo/registry.json"
 assertUnique(media, "id", "media registry");
 assertUnique(regions, "id", "regions");
 assertUnique(regions, "path", "regions");
-assertUnique(projects, "id", "projects");
-assertUnique(projects, "path", "projects");
-assertUnique(articles, "id", "articles");
-assertUnique(articles, "path", "articles");
+assertUnique(parsedArticles, "id", "articles");
+assertUnique(parsedArticles, "path", "articles");
 assertUnique(pages, "id", "pages");
 assertUnique(pages, "path", "pages");
 assertUnique(landingPages, "pageId", "landing pages");
 
 const mediaIds = new Set(media.map((asset) => asset.id));
 const regionIds = new Set(regions.map((region) => region.id));
-const projectIds = new Set(projects.map((project) => project.id));
 const seoByPageId = new Map(seoEntries.map((entry) => [entry.pageId, entry]));
 const knownPaths = new Set([
   ...seoEntries.map((entry) => entry.canonical),
-  ...articles.map((article) => article.path),
+  ...parsedArticles.map((article) => article.path),
 ]);
 
 for (const asset of media) {
@@ -93,17 +89,7 @@ for (const region of regions) {
   assertExists(seoEntry?.canonical === region.path, `regions: ${region.id} path must match SEO canonical ${seoEntry?.canonical}`);
 }
 
-for (const project of projects) {
-  assertExists(regionIds.has(project.regionId), `projects: unknown regionId "${project.regionId}" in ${project.id}`);
-  assertExists(mediaIds.has(project.coverMediaId), `projects: unknown coverMediaId "${project.coverMediaId}" in ${project.id}`);
-
-  if (project.status === "published") {
-    assertExists(project.verifiedAt, `projects: published ${project.id} requires verifiedAt`);
-    assertExists(project.sourceIds.length > 0, `projects: published ${project.id} requires sourceIds`);
-  }
-}
-
-for (const article of articles) {
+for (const article of parsedArticles) {
   const seoEntry = seoByPageId.get(article.targetPageId);
   assertExists(seoEntry?.kind === "dynamic", `articles: ${article.id} must target a dynamic SEO PAGE-ID`);
 
@@ -111,9 +97,7 @@ for (const article of articles) {
     assertExists(regionIds.has(regionId), `articles: unknown relatedRegionId "${regionId}" in ${article.id}`);
   }
 
-  for (const projectId of article.relatedProjectIds) {
-    assertExists(projectIds.has(projectId), `articles: unknown relatedProjectId "${projectId}" in ${article.id}`);
-  }
+  assertExists(article.relatedProjectIds.length === 0, `articles: relatedProjectIds are disabled until Payload properties own public passports in ${article.id}`);
 }
 
 for (const page of pages) {

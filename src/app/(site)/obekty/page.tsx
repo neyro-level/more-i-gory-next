@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ObjectCard } from "@/components/marketing/object-card";
 import { NumberedSteps } from "@/components/marketing/numbered-steps";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
-import { contentService } from "@/content/service";
+import { listPublishedManualProperties } from "@/core/data-access/public";
 
 export const metadata = getStaticMetadata("PAGE-014");
 
@@ -21,7 +21,7 @@ const criteria = [
 
 export default async function ObjectsPage() {
   const seo = getSeoEntry("PAGE-014");
-  const projects = await contentService.listPublishedProjects();
+  const properties = await listPublishedManualProperties();
 
   return (
     <main>
@@ -51,37 +51,27 @@ export default async function ObjectsPage() {
       <SectionShell
         className="pt-0"
         eyebrow="Первые карточки"
-        title={projects.length > 0 ? "Опубликованные инвестиционные паспорта" : "Паспорта готовятся к публикации"}
+        title={properties.length > 0 ? "Опубликованные инвестиционные паспорта" : "Паспорта готовятся к публикации"}
         lead={
-          projects.length > 0
+          properties.length > 0
             ? "Каждая карточка ведёт на полный паспорт проекта."
             : "Сейчас в коде есть draft-шаблон, но он не выходит в public build и sitemap до проверки фактов."
         }
       >
-        {projects.length > 0 ? (
+        {properties.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {await Promise.all(
-              projects.map(async (project) => {
-                const media = await contentService.getMediaAsset(project.coverMediaId);
-                return (
-                  <ObjectCard
-                    key={project.id}
-                    href={project.path}
-                    image={{
-                      alt: media?.alt ?? project.title,
-                      height: media?.height ?? 1000,
-                      src: media?.src ?? "/images/projects/sample-resort/cover.webp",
-                      width: media?.width ?? 1478,
-                    }}
-                    location={project.regionId}
-                    risk={project.riskSummary}
-                    status="published"
-                    thesis={project.verdict}
-                    title={project.title}
-                  />
-                );
-              }),
-            )}
+            {properties.map((property) => (
+              <ObjectCard
+                key={property.id}
+                href={property.path}
+                image={property.image}
+                location={property.regionLabel}
+                risk={property.riskSummary}
+                status="published"
+                thesis={property.verdict}
+                title={property.title}
+              />
+            ))}
           </div>
         ) : (
           <Card className="rounded-large bg-card">

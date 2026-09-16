@@ -10,7 +10,7 @@ import {
   ResponsibilitySection,
   type HomeRegionCardModel,
 } from "@/components/marketing/home-sections";
-import { contentService } from "@/content/service";
+import { getMediaAsset } from "@/content/media/media-assets";
 import { getRegionHubPlan } from "@/content/regions/region-route-plan";
 import { getStaticMetadata } from "@/seo/metadata";
 
@@ -20,7 +20,7 @@ export default async function HomePage() {
   const regions = getRegionHubPlan().filter((region) => region.kind === "region");
   const regionCards: HomeRegionCardModel[] = await Promise.all(
     regions.map(async (region) => {
-      const media = await contentService.getMediaAsset(region.mediaSourceLabel);
+      const media = getMediaAsset(region.mediaSourceLabel);
       return {
         href: region.path,
         id: region.key,

@@ -79,6 +79,9 @@ export const Regions: CollectionConfig = {
   hooks: {
     beforeValidate: [validatePublishedSeo],
   },
+  lockDocuments: {
+    duration: 300,
+  },
   timestamps: true,
   versions: {
     drafts: true,

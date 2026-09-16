@@ -1,26 +1,21 @@
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { mediaAssetSchema } from "@more-i-gory/contracts";
+
+import { mediaAssets } from "../src/content/media/media-assets.ts";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const mediaRegistryPath = path.join(rootDir, "src", "content", "data", "media.json");
-
-function readMediaRegistry() {
-  return mediaAssetSchema.array().parse(JSON.parse(readFileSync(mediaRegistryPath, "utf8")));
-}
 
 export function getSeedMediaAssets() {
-  const assets = readMediaRegistry();
   const filenames = new Set();
 
-  for (const asset of assets) {
+  for (const asset of mediaAssets) {
     const filename = path.basename(asset.src);
     if (filenames.has(filename)) throw new Error(`Duplicate media filename: ${filename}`);
     filenames.add(filename);
   }
 
-  return assets;
+  return mediaAssets;
 }
 
 export function getPublicAssetPath(asset) {

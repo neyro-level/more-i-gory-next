@@ -4,8 +4,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildConfig } from "payload";
 import sharp from "sharp";
+import { FeedSources } from "./src/project/collections/feed-sources.ts";
 import { Pages } from "./src/project/collections/pages.ts";
 import { Media } from "./src/project/collections/media.ts";
+import { Properties } from "./src/project/collections/properties.ts";
 import { Regions } from "./src/project/collections/regions.ts";
 import { Redirects } from "./src/project/collections/redirects.ts";
 import { Users } from "./src/project/collections/users.ts";
@@ -26,7 +28,7 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname, "src") },
     user: Users.slug,
   },
-  collections: [Users, Media, Pages, Regions, Redirects],
+  collections: [Users, Media, Pages, Regions, Redirects, FeedSources, Properties],
   db: postgresAdapter({
     migrationDir: schemaVerifyDir ? path.resolve(schemaVerifyDir, "migrations") : path.resolve(dirname, "migrations"),
     pool: { connectionString: env.DATABASE_URI },

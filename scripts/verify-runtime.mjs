@@ -14,7 +14,7 @@ const initialRouteJsBudgetGzipKb = 200;
 const largestChunkBudgetGzipKb = 300;
 
 const seoRegistry = readJson("src/seo/registry.json");
-const articles = readJson("src/content/data/articles.json");
+const { articles } = await import("../src/content/articles/articles.ts");
 const concreteSeoEntries = [
   ...seoRegistry.filter((entry) => entry.kind === "static"),
   ...articles.map((article) => ({

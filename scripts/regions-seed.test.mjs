@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import test from "node:test";
 
+import { mediaAssets } from "../src/content/media/media-assets.ts";
 import { getPayloadRegionData, getRegionSeedPlan, regionSeedEntries } from "./seed-regions.mjs";
 
-const mediaSourceLabels = new Set(JSON.parse(readFileSync("src/content/data/media.json", "utf8")).map((asset) => asset.id));
+const mediaSourceLabels = new Set(mediaAssets.map((asset) => asset.id));
 
 test("region seed covers the EPIC 7 URL map without indexing draft content", () => {
   const plan = getRegionSeedPlan();
