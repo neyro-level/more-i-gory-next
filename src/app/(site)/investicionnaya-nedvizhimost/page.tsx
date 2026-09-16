@@ -7,15 +7,16 @@ import { RegionCard } from "@/components/marketing/region-card";
 import { ProofBlock } from "@/components/marketing/proof-block";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { contentService } from "@/content/service";
+import { getRegionHubPlan } from "@/content/regions/region-route-plan";
 
 export const metadata = getStaticMetadata("PAGE-002");
 
 export default async function FederalInvestmentHubPage() {
   const seo = getSeoEntry("PAGE-002");
-  const regions = await contentService.listRegions();
+  const regions = getRegionHubPlan();
   const regionCards = await Promise.all(
     regions.map(async (region) => ({
-      media: await contentService.getMediaAsset(region.heroMediaId),
+      media: await contentService.getMediaAsset(region.mediaSourceLabel),
       region,
     })),
   );
@@ -39,18 +40,18 @@ export default async function FederalInvestmentHubPage() {
 
       <SectionShell
         eyebrow="Сравнение рынков"
-        title="Четыре направления — разные причины для входа"
-        lead="На старте не расширяем архитектуру без необходимости: эти рынки дают понятный костяк для SEO и будущего каталога."
+        title="Карта регионов и сегментов для проверки"
+        lead="Показываем только те направления, которые входят в текущий regions-план. Заглушки не попадают в карту до отдельного решения по содержанию."
         actions={
           <ActionLink href="/metodika/" variant="outline">
             Как мы сравниваем
           </ActionLink>
         }
       >
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {regionCards.map(({ media, region }) => (
             <RegionCard
-              key={region.id}
+              key={region.key}
               href={region.path}
               image={{
                 alt: media?.alt ?? region.title,

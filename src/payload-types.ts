@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
+    regions: Region;
     redirects: Redirect;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
@@ -82,6 +83,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    regions: RegionsSelect<false> | RegionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
@@ -398,6 +400,182 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regions".
+ */
+export interface Region {
+  id: number;
+  title: string;
+  slug: string;
+  kind: 'region' | 'locality' | 'segment';
+  parent?: (number | null) | Region;
+  order: number;
+  lead: string;
+  investmentThesis: string;
+  riskSummary: string;
+  heroMedia: number | Media;
+  blocks: (
+    | {
+        eyebrow?: string | null;
+        title: string;
+        lead: string;
+        primaryCta?: {
+          label?: string | null;
+          href?: string | null;
+        };
+        secondaryCta?: {
+          label?: string | null;
+          href?: string | null;
+        };
+        proof?: string | null;
+        imagePath?: string | null;
+        imageAlt?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'hero';
+      }
+    | {
+        eyebrow?: string | null;
+        title: string;
+        text: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'lead';
+      }
+    | {
+        title: string;
+        items: {
+          title: string;
+          text: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'thesis';
+      }
+    | {
+        title: string;
+        text: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'risk-block';
+      }
+    | {
+        eyebrow?: string | null;
+        title: string;
+        lead?: string | null;
+        steps: {
+          title: string;
+          text: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'numbered-steps';
+      }
+    | {
+        title: string;
+        proof: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'proof-block';
+      }
+    | {
+        title: string;
+        rows: {
+          scenario: string;
+          assumption: string;
+          investorQuestion: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'scenario-table';
+      }
+    | {
+        title: string;
+        lead?: string | null;
+        cards: {
+          title: string;
+          text: string;
+          link?: {
+            label?: string | null;
+            href?: string | null;
+          };
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'cards-grid';
+      }
+    | {
+        title: string;
+        lead?: string | null;
+        items: {
+          title: string;
+          href: string;
+          location: string;
+          status: string;
+          thesis: string;
+          risk: string;
+          imagePath?: string | null;
+          imageAlt?: string | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'object-cards';
+      }
+    | {
+        title: string;
+        text: string;
+        primaryCta: {
+          label: string;
+          href: string;
+        };
+        secondaryCta?: {
+          label?: string | null;
+          href?: string | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'cta';
+      }
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'rich-text';
+      }
+  )[];
+  seo: {
+    title?: string | null;
+    description?: string | null;
+    canonicalOverride?: string | null;
+    ogImagePath?: string | null;
+    robots: 'index-follow' | 'noindex-follow';
+    priority: 'P1' | 'P2' | 'P3';
+  };
+  status: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -539,6 +717,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'regions';
+        value: number | Region;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -863,6 +1045,202 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regions_select".
+ */
+export interface RegionsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  kind?: T;
+  parent?: T;
+  order?: T;
+  lead?: T;
+  investmentThesis?: T;
+  riskSummary?: T;
+  heroMedia?: T;
+  blocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              lead?: T;
+              primaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              proof?: T;
+              imagePath?: T;
+              imageAlt?: T;
+              id?: T;
+              blockName?: T;
+            };
+        lead?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        thesis?:
+          | T
+          | {
+              title?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'risk-block'?:
+          | T
+          | {
+              title?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'numbered-steps'?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              lead?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'proof-block'?:
+          | T
+          | {
+              title?: T;
+              proof?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'scenario-table'?:
+          | T
+          | {
+              title?: T;
+              rows?:
+                | T
+                | {
+                    scenario?: T;
+                    assumption?: T;
+                    investorQuestion?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'cards-grid'?:
+          | T
+          | {
+              title?: T;
+              lead?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          href?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'object-cards'?:
+          | T
+          | {
+              title?: T;
+              lead?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    href?: T;
+                    location?: T;
+                    status?: T;
+                    thesis?: T;
+                    risk?: T;
+                    imagePath?: T;
+                    imageAlt?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              title?: T;
+              text?: T;
+              primaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'rich-text'?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalOverride?: T;
+        ogImagePath?: T;
+        robots?: T;
+        priority?: T;
+      };
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

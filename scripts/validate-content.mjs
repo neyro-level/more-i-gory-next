@@ -12,6 +12,11 @@ import {
   seoEntrySchema,
 } from "@more-i-gory/contracts";
 
+const [{ pageContents }, { regionDtos }] = await Promise.all([
+  import("../src/content/pages/static-pages.ts"),
+  import("../src/content/regions/region-dtos.ts"),
+]);
+
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 function readJson(relativePath) {
@@ -49,11 +54,11 @@ async function listFiles(directory) {
 }
 
 const media = mediaAssetSchema.array().parse(readJson("src/content/data/media.json"));
-const regions = regionSchema.array().parse(readJson("src/content/data/regions.json"));
+const regions = regionSchema.array().parse(regionDtos);
 const projects = projectSchema.array().parse(readJson("src/content/data/projects.json"));
 const articles = articleSchema.array().parse(readJson("src/content/data/articles.json"));
-const pages = pageContentSchema.array().parse(readJson("src/content/data/pages.json"));
-const landingPages = landingPageSchema.array().parse(readJson("src/content/data/landing-pages.json"));
+const pages = pageContentSchema.array().parse(pageContents);
+const landingPages = landingPageSchema.array().parse([]);
 const seoEntries = seoEntrySchema.array().parse(readJson("src/seo/registry.json"));
 
 assertUnique(media, "id", "media registry");

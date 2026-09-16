@@ -1,25 +1,22 @@
 import articlesData from "../data/articles.json";
 import mediaData from "../data/media.json";
-import landingPagesData from "../data/landing-pages.json";
-import pagesData from "../data/pages.json";
 import projectsData from "../data/projects.json";
-import regionsData from "../data/regions.json";
+import { pageContents } from "../pages/static-pages";
+import { regionDtos } from "../regions/region-dtos";
 import type { ContentRepository } from "../repository";
 import {
   articleSchema,
-  landingPageSchema,
   mediaAssetSchema,
-  pageContentSchema,
   projectSchema,
-  regionSchema,
+  type LandingPageDTO,
 } from "@more-i-gory/contracts";
 
 const mediaAssets = mediaAssetSchema.array().parse(mediaData);
-const landingPages = landingPageSchema.array().parse(landingPagesData);
-const regions = regionSchema.array().parse(regionsData);
+const landingPages: LandingPageDTO[] = [];
+const regions = regionDtos;
 const projects = projectSchema.array().parse(projectsData);
 const articles = articleSchema.array().parse(articlesData);
-const pages = pageContentSchema.array().parse(pagesData);
+const pages = pageContents;
 
 export const localContentRepository: ContentRepository = {
   async getArticleBySlug(slug) {

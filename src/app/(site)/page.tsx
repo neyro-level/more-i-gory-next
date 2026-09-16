@@ -11,18 +11,19 @@ import {
   type HomeRegionCardModel,
 } from "@/components/marketing/home-sections";
 import { contentService } from "@/content/service";
+import { getRegionHubPlan } from "@/content/regions/region-route-plan";
 import { getStaticMetadata } from "@/seo/metadata";
 
 export const metadata = getStaticMetadata("PAGE-001");
 
 export default async function HomePage() {
-  const regions = await contentService.listRegions();
+  const regions = getRegionHubPlan().filter((region) => region.kind === "region");
   const regionCards: HomeRegionCardModel[] = await Promise.all(
     regions.map(async (region) => {
-      const media = await contentService.getMediaAsset(region.heroMediaId);
+      const media = await contentService.getMediaAsset(region.mediaSourceLabel);
       return {
         href: region.path,
-        id: region.id,
+        id: region.key,
         image: {
           alt: media?.alt ?? region.title,
           height: media?.height ?? 1524,

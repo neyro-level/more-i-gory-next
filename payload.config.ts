@@ -6,6 +6,7 @@ import { buildConfig } from "payload";
 import sharp from "sharp";
 import { Pages } from "./src/project/collections/pages.ts";
 import { Media } from "./src/project/collections/media.ts";
+import { Regions } from "./src/project/collections/regions.ts";
 import { Redirects } from "./src/project/collections/redirects.ts";
 import { Users } from "./src/project/collections/users.ts";
 import { env } from "./src/project/env.ts";
@@ -25,7 +26,7 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname, "src") },
     user: Users.slug,
   },
-  collections: [Users, Media, Pages, Redirects],
+  collections: [Users, Media, Pages, Regions, Redirects],
   db: postgresAdapter({
     migrationDir: schemaVerifyDir ? path.resolve(schemaVerifyDir, "migrations") : path.resolve(dirname, "migrations"),
     pool: { connectionString: env.DATABASE_URI },
