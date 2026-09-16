@@ -20,7 +20,7 @@ export function RegionCard({ href, image, risk, thesis, title }: RegionCardProps
   return (
     <Card className="relative overflow-hidden rounded-card bg-card">
       <div className="relative aspect-card">
-        <Image src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 25vw, 100vw" className="object-cover" />
+        <Image src={image.src} alt={image.alt} fill loading="lazy" sizes="(min-width: 1024px) 25vw, 100vw" className="object-cover" />
       </div>
       <CardHeader>
         <CardTitle className="flex items-center justify-between gap-4 text-h3">

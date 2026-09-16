@@ -100,6 +100,7 @@ export function findArchitectureGuardViolations({ files, manifests }) {
       const approvedEnvLayer =
         filePath === "src/project/env.ts" ||
         filePath === "payload.config.ts" ||
+        (filePath === "next.config.ts" && envKeys.every((key) => ["S3_BUCKET", "S3_ENDPOINT"].includes(key))) ||
         (filePath.startsWith("src/ui/interactive/") && envKeys.every((key) => key.startsWith("NEXT_PUBLIC_")));
       if (!approvedEnvLayer) {
         addViolation(

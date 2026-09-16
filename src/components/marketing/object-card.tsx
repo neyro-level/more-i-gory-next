@@ -22,7 +22,7 @@ export function ObjectCard({ href, image, location, risk, status, thesis, title 
   return (
     <Card className="rounded-card bg-card">
       <div className="relative aspect-object">
-        <Image src={image.src} alt={image.alt} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
+        <Image src={image.src} alt={image.alt} fill loading="lazy" sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
       </div>
       <CardHeader>
         <div className="flex flex-wrap gap-2">

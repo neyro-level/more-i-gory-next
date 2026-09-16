@@ -20,6 +20,7 @@ test("clean architecture fixture passes all guards", () => {
       files: [
         { path: "src/core/data-access/system/bootstrap-owner.ts", content: "export const options = { overrideAccess: true };" },
         { path: "src/project/env.ts", content: "export const secret = process.env.PAYLOAD_SECRET;" },
+        { path: "next.config.ts", content: "export const bucket = process.env.S3_BUCKET; export const endpoint = process.env.S3_ENDPOINT;" },
       ],
       manifests: [{ path: "package.json", manifest: exactManifest }],
     }),
@@ -78,6 +79,13 @@ test("Guard 6 rejects configurable fetch outside Safe Outbound Client", () => {
 test("Guard 7 rejects process.env outside approved layer", () => {
   expectGuard(7, {
     files: [{ path: "src/core/leads/delivery.ts", content: "export const token = process.env.TELEGRAM_BOT_TOKEN;" }],
+    manifests: [],
+  });
+});
+
+test("Guard 7 rejects unrelated process.env access in next config", () => {
+  expectGuard(7, {
+    files: [{ path: "next.config.ts", content: "export const secret = process.env.PAYLOAD_SECRET;" }],
     manifests: [],
   });
 });

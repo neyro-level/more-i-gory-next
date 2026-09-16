@@ -5,11 +5,13 @@ import { fileURLToPath } from "node:url";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 import { Pages } from "./src/project/collections/pages.ts";
+import { Media } from "./src/project/collections/media.ts";
 import { Redirects } from "./src/project/collections/redirects.ts";
 import { Users } from "./src/project/collections/users.ts";
 import { env } from "./src/project/env.ts";
 import { Navigation, SiteSettings } from "./src/project/globals/index.ts";
 import { createJobsConfig } from "./src/project/jobs/config.ts";
+import { createStoragePlugins } from "./src/project/storage/s3.ts";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const schemaVerifyDir = process.env.PAYLOAD_SCHEMA_VERIFY_DIR;
@@ -23,7 +25,7 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname, "src") },
     user: Users.slug,
   },
-  collections: [Users, Pages, Redirects],
+  collections: [Users, Media, Pages, Redirects],
   db: postgresAdapter({
     migrationDir: schemaVerifyDir ? path.resolve(schemaVerifyDir, "migrations") : path.resolve(dirname, "migrations"),
     pool: { connectionString: env.DATABASE_URI },
@@ -33,6 +35,7 @@ export default buildConfig({
   graphQL: { disable: true },
   globals: [SiteSettings, Navigation],
   jobs: createJobsConfig(env.JOBS_AUTORUN),
+  plugins: createStoragePlugins(env),
   secret: env.PAYLOAD_SECRET,
   sharp,
   typescript: {
