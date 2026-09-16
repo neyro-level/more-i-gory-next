@@ -1,40 +1,13 @@
 import type { Metadata } from "next";
 import { getSeoEntry, type SeoEntry } from "./registry";
+import { buildPageMetadata, sourceFromSeoEntry } from "./page-metadata.ts";
+import { siteUrl } from "./site-url.ts";
 
-export const siteUrl = "https://moreigori.ru";
-
-function buildRobots(entry: SeoEntry): Metadata["robots"] {
-  if (entry.index === "yes") {
-    return { follow: true, index: true };
-  }
-
-  return {
-    follow: true,
-    index: false,
-  };
-}
+export { siteUrl };
+export { buildPageMetadata };
 
 export function buildMetadata(entry: SeoEntry): Metadata {
-  const canonical = entry.canonical;
-  const absoluteUrl = new URL(canonical, siteUrl).toString();
-
-  return {
-    alternates: {
-      canonical,
-    },
-    description: entry.description,
-    metadataBase: new URL(siteUrl),
-    openGraph: {
-      description: entry.description,
-      locale: "ru_RU",
-      siteName: "Море и Горы",
-      title: entry.title,
-      type: "website",
-      url: absoluteUrl,
-    },
-    robots: buildRobots(entry),
-    title: entry.title,
-  };
+  return buildPageMetadata(sourceFromSeoEntry(entry));
 }
 
 export function getStaticMetadata(pageId: string): Metadata {

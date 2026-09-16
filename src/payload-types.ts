@@ -68,6 +68,8 @@ export interface Config {
   blocks: {};
   collections: {
     users: User;
+    pages: Page;
+    redirects: Redirect;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -77,6 +79,8 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -87,8 +91,14 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+    navigation: Navigation;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -148,6 +158,189 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  slug: string;
+  path: string;
+  status: 'draft' | 'published' | 'archived';
+  summary?: string | null;
+  seo: {
+    title?: string | null;
+    description?: string | null;
+    canonicalOverride?: string | null;
+    ogImagePath?: string | null;
+    robots: 'index-follow' | 'noindex-follow';
+    priority: 'P1' | 'P2' | 'P3';
+  };
+  blocks: (
+    | {
+        eyebrow?: string | null;
+        title: string;
+        lead: string;
+        primaryCta?: {
+          label?: string | null;
+          href?: string | null;
+        };
+        secondaryCta?: {
+          label?: string | null;
+          href?: string | null;
+        };
+        proof?: string | null;
+        imagePath?: string | null;
+        imageAlt?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'hero';
+      }
+    | {
+        eyebrow?: string | null;
+        title: string;
+        text: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'lead';
+      }
+    | {
+        title: string;
+        items: {
+          title: string;
+          text: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'thesis';
+      }
+    | {
+        title: string;
+        text: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'risk-block';
+      }
+    | {
+        eyebrow?: string | null;
+        title: string;
+        lead?: string | null;
+        steps: {
+          title: string;
+          text: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'numbered-steps';
+      }
+    | {
+        title: string;
+        proof: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'proof-block';
+      }
+    | {
+        title: string;
+        rows: {
+          scenario: string;
+          assumption: string;
+          investorQuestion: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'scenario-table';
+      }
+    | {
+        title: string;
+        lead?: string | null;
+        cards: {
+          title: string;
+          text: string;
+          link?: {
+            label?: string | null;
+            href?: string | null;
+          };
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'cards-grid';
+      }
+    | {
+        title: string;
+        lead?: string | null;
+        items: {
+          title: string;
+          href: string;
+          location: string;
+          status: string;
+          thesis: string;
+          risk: string;
+          imagePath?: string | null;
+          imageAlt?: string | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'object-cards';
+      }
+    | {
+        title: string;
+        text: string;
+        primaryCta: {
+          label: string;
+          href: string;
+        };
+        secondaryCta?: {
+          label?: string | null;
+          href?: string | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'cta';
+      }
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'rich-text';
+      }
+  )[];
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: number;
+  source: string;
+  destination: string;
+  permanent: boolean;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -268,10 +461,19 @@ export interface PayloadJob {
  */
 export interface PayloadLockedDocument {
   id: number;
-  document?: {
-    relationTo: 'users';
-    value: number | User;
-  } | null;
+  document?:
+    | ({
+        relationTo: 'users';
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: number | Redirect;
+      } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
@@ -336,6 +538,208 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  path?: T;
+  status?: T;
+  summary?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonicalOverride?: T;
+        ogImagePath?: T;
+        robots?: T;
+        priority?: T;
+      };
+  blocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              lead?: T;
+              primaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              proof?: T;
+              imagePath?: T;
+              imageAlt?: T;
+              id?: T;
+              blockName?: T;
+            };
+        lead?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        thesis?:
+          | T
+          | {
+              title?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'risk-block'?:
+          | T
+          | {
+              title?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'numbered-steps'?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              lead?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'proof-block'?:
+          | T
+          | {
+              title?: T;
+              proof?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'scenario-table'?:
+          | T
+          | {
+              title?: T;
+              rows?:
+                | T
+                | {
+                    scenario?: T;
+                    assumption?: T;
+                    investorQuestion?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'cards-grid'?:
+          | T
+          | {
+              title?: T;
+              lead?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          href?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'object-cards'?:
+          | T
+          | {
+              title?: T;
+              lead?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    href?: T;
+                    location?: T;
+                    status?: T;
+                    thesis?: T;
+                    risk?: T;
+                    imagePath?: T;
+                    imageAlt?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              title?: T;
+              text?: T;
+              primaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'rich-text'?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  source?: T;
+  destination?: T;
+  permanent?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -408,6 +812,194 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  siteName: string;
+  shortName: string;
+  tagline?: string | null;
+  /**
+   * Owner-filled production origin, for example https://example.ru. Empty until domain is approved.
+   */
+  canonicalDomain?: string | null;
+  contacts?: {
+    phone?: string | null;
+    email?: string | null;
+    telegram?: string | null;
+    whatsapp?: string | null;
+    address?: string | null;
+    workingHours?: string | null;
+  };
+  socialLinks?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  defaultSeo: {
+    title?: string | null;
+    description?: string | null;
+    ogImagePath?: string | null;
+    robots: 'index-follow' | 'noindex-follow';
+  };
+  legalLinks?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  legalNotice?: string | null;
+  /**
+   * Public analytics identifiers only. Secrets and tokens stay in env/secret manager.
+   */
+  analytics?: {
+    yandexMetrikaId?: string | null;
+    vkPixelId?: string | null;
+    callTrackingId?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation".
+ */
+export interface Navigation {
+  id: number;
+  header?:
+    | {
+        label: string;
+        href: string;
+        openInNewTab?: boolean | null;
+        nofollow?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  headerCta?: {
+    label?: string | null;
+    href?: string | null;
+  };
+  footer?:
+    | {
+        label: string;
+        href: string;
+        openInNewTab?: boolean | null;
+        nofollow?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  legal?:
+    | {
+        label: string;
+        href: string;
+        openInNewTab?: boolean | null;
+        nofollow?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  shortName?: T;
+  tagline?: T;
+  canonicalDomain?: T;
+  contacts?:
+    | T
+    | {
+        phone?: T;
+        email?: T;
+        telegram?: T;
+        whatsapp?: T;
+        address?: T;
+        workingHours?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  defaultSeo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImagePath?: T;
+        robots?: T;
+      };
+  legalLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  legalNotice?: T;
+  analytics?:
+    | T
+    | {
+        yandexMetrikaId?: T;
+        vkPixelId?: T;
+        callTrackingId?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation_select".
+ */
+export interface NavigationSelect<T extends boolean = true> {
+  header?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        openInNewTab?: T;
+        nofollow?: T;
+        id?: T;
+      };
+  headerCta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  footer?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        openInNewTab?: T;
+        nofollow?: T;
+        id?: T;
+      };
+  legal?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        openInNewTab?: T;
+        nofollow?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

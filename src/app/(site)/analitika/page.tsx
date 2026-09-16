@@ -1,13 +1,34 @@
-import { getStaticMetadata } from "@/seo/metadata";
+import type { Metadata } from "next";
+import { buildPageMetadata, getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { contentService } from "@/content/service";
 import { ArticleCard } from "@/components/marketing/article-card";
+import { CmsPage } from "@/components/page-blocks/cms-page";
+import { getCmsPageByPath } from "@/core/data-access/public";
 
-export const metadata = getStaticMetadata("PAGE-016");
+const pagePath = "/analitika/";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getCmsPageByPath(pagePath);
+  if (page?.seo?.title && page.seo.description) {
+    return buildPageMetadata({
+      canonical: page.seo.canonicalOverride || page.path,
+      description: page.seo.description,
+      ogImagePath: page.seo.ogImagePath,
+      robots: page.seo.robots,
+      title: page.seo.title,
+    });
+  }
+
+  return getStaticMetadata("PAGE-016");
+}
 
 export default async function AnalyticsPage() {
+  const page = await getCmsPageByPath(pagePath);
+  if (page) return <CmsPage page={page} />;
+
   const seo = getSeoEntry("PAGE-016");
   const articles = await contentService.listArticles();
 

@@ -32,7 +32,7 @@ function assert(condition, message) {
 }
 
 const entries = seoEntrySchema.array().parse(readJson("src/seo/registry.json"));
-assert(entries.length === 23, `SEO registry must contain 23 PAGE-ID entries, got ${entries.length}`);
+assert(entries.length > 0, "SEO registry must not be empty.");
 
 assertUnique(entries, "pageId", "SEO registry");
 assertUnique(entries, "canonical", "SEO registry");

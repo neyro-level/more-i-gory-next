@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { getSiteChrome } from "@/core/data-access/public";
 import { siteUrl } from "@/seo/metadata";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -28,13 +29,31 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteChromePromise = getSiteChrome();
+
   return (
     <html lang="ru" className={cn("font-sans", montserrat.variable)}>
       <body>
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        <SiteChromeLayout siteChromePromise={siteChromePromise}>{children}</SiteChromeLayout>
       </body>
     </html>
+  );
+}
+
+async function SiteChromeLayout({
+  children,
+  siteChromePromise,
+}: Readonly<{
+  children: React.ReactNode;
+  siteChromePromise: ReturnType<typeof getSiteChrome>;
+}>) {
+  const siteChrome = await siteChromePromise;
+
+  return (
+    <>
+      <SiteHeader brand={siteChrome.brand} cta={siteChrome.navigation.headerCta} navigation={siteChrome.navigation.header} />
+        {children}
+      <SiteFooter brand={siteChrome.brand} legal={siteChrome.navigation.legal} legalNotice={siteChrome.legalNotice} navigation={siteChrome.navigation.footer} />
+    </>
   );
 }
