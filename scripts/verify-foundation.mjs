@@ -22,6 +22,7 @@ const requiredFiles = [
   "src/core/data-access/system/index.ts",
   "src/core/data-access/system/gateway.ts",
   "src/core/data-access/system/bootstrap-owner.ts",
+  "src/core/cache/invalidator.ts",
   "src/core/dto/index.ts",
   "src/core/query/index.ts",
   "src/core/security/outbound-http/index.ts",

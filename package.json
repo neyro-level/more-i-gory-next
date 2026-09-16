@@ -29,7 +29,10 @@
     "verify:guards:test": "node --test scripts/verify-architecture-guards.test.mjs",
     "test:public-gateway": "node --conditions=react-server --test scripts/public-gateway.test.mjs",
     "test:system-gateway": "node --conditions=react-server --test scripts/system-gateway.test.mjs",
-    "verify:quick": "pnpm content:build && pnpm typecheck && pnpm lint && pnpm verify:guards && pnpm verify:guards:test && pnpm test:public-gateway && pnpm test:system-gateway && pnpm verify:foundation && pnpm verify:ui-drift && pnpm verify:content && pnpm verify:seo",
+    "test:jobs-config": "node --conditions=react-server --test scripts/jobs-config.test.mjs",
+    "test:cache-invalidator": "node --conditions=react-server --test scripts/cache-invalidator.test.mjs",
+    "test:internal-revalidate": "node --conditions=react-server --test scripts/internal-revalidate.test.mjs",
+    "verify:quick": "pnpm content:build && pnpm typecheck && pnpm lint && pnpm verify:guards && pnpm verify:guards:test && pnpm test:public-gateway && pnpm test:system-gateway && pnpm test:jobs-config && pnpm test:cache-invalidator && pnpm test:internal-revalidate && pnpm verify:foundation && pnpm verify:ui-drift && pnpm verify:content && pnpm verify:seo",
     "verify": "node scripts/verify.mjs",
     "verify:daily": "pnpm verify"
   },

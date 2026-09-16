@@ -6,7 +6,7 @@ import { buildConfig } from "payload";
 import sharp from "sharp";
 import { Users } from "./src/project/collections/users.ts";
 import { env } from "./src/project/env.ts";
-import { systemHealthTask } from "./src/project/jobs/system-health.ts";
+import { createJobsConfig } from "./src/project/jobs/config.ts";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const schemaVerifyDir = process.env.PAYLOAD_SCHEMA_VERIFY_DIR;
@@ -28,15 +28,7 @@ export default buildConfig({
   }),
   editor: lexicalEditor(),
   graphQL: { disable: true },
-  jobs: {
-    access: {
-      cancel: ({ req }) => req.user?.collection === "users" && req.user.role === "owner",
-      queue: ({ req }) => req.user?.collection === "users" && req.user.role === "owner",
-      run: ({ req }) => req.user?.collection === "users" && req.user.role === "owner",
-    },
-    enableConcurrencyControl: true,
-    tasks: [systemHealthTask],
-  },
+  jobs: createJobsConfig(env.JOBS_AUTORUN),
   secret: env.PAYLOAD_SECRET,
   sharp,
   typescript: {
