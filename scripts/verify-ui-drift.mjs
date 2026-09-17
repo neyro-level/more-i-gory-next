@@ -125,7 +125,7 @@ for (const utility of requiredUtilities) {
   if (!combinedSource.includes(utility)) report("P2", globalsPath, "project token has no consumer " + utility);
 }
 
-const leadFormPath = join(root, "src", "components", "marketing", "lead-form.tsx");
+const leadFormPath = join(root, "src", "ui", "interactive", "lead-form-client.tsx");
 const leadForm = readFileSync(leadFormPath, "utf8");
 for (const field of ["name", "phone", "task", "accepted"]) {
   if (!leadForm.includes('id="' + field + '-error"') || !leadForm.includes('aria-describedby=')) {

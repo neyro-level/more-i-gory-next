@@ -35,7 +35,7 @@ Production и staging не используют общую БД, secrets или 
 | Backup | planned: automatic Managed PostgreSQL backup + S3 versioning; retention и provider-independent copy — `TODO` до EPIC 13 |
 | Restore proof | не выполнялся; обязательный фактический restore test в EPIC 13 |
 | Monitoring | planned: внешний uptime monitor + TLS alert; provider и alert destination — `TODO` до EPIC 13 |
-| Legal | privacy/consent, оператор ПДн, реквизиты и consent version не утверждены; `NEEDS_OWNER`, блокирует EPIC 10 |
+| Legal | оператор ПДн и публичные реквизиты утверждены владельцем; privacy/consent опубликованы как `privacy-2026-09-17` и `pdn-consent-2026-09-17`; банковские реквизиты не публикуются |
 | Core version | target мастер-плана — Realty Platform 5.5; локально доступен нормативный Core Standard 3.0, отдельного core package нет |
 
 Эта таблица фиксирует статусы, а не доказательство готовности. Planned integration

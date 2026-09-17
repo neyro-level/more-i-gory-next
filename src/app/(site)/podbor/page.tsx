@@ -52,7 +52,7 @@ export default function SelectionPage() {
               <p>Какие объекты уже смотрели и что вызывает сомнения.</p>
             </CardContent>
           </Card>
-          <LeadForm />
+          <LeadForm sourcePath="/podbor/" />
         </div>
       </SectionShell>
     </main>

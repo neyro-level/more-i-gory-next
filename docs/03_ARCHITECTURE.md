@@ -38,7 +38,7 @@ typed content / Markdown / media
 
 ```text
 Browser
-→ POST /api/leads
+→ POST /api/public/leads
 → Nginx
 → AMS Leads API
 → downstream CRM/routing
@@ -271,8 +271,9 @@ Server by default:
 
 `"use client"` запрещён в `src/app/**` и больших композиционных секциях.
 
-Форма рендерится на сервере и получает framework-free progressive enhancement через
-`public/assets/lead-form.js`; при отключённом JavaScript отправка fail-closed.
+Форма рендерится на сервере и получает минимальный client leaf в
+`src/ui/interactive/lead-form-client.tsx`; при отключённом JavaScript отправка
+fail-closed.
 
 Внутренние переходы используют `next/link`; изображения — `next/image` с
 server-side optimizer. `pnpm verify:runtime` поднимает production `next start`,
@@ -360,7 +361,7 @@ Project:
 
 Единственный public integration contract первого релиза:
 
-`POST /api/leads`
+`POST /api/public/leads`
 
 Frontend:
 - UX validation only.

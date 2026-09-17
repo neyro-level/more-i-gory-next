@@ -75,6 +75,8 @@ export interface Config {
     'feed-sources': FeedSource;
     'import-runs': ImportRun;
     'import-issues': ImportIssue;
+    leads: Lead;
+    'lead-deliveries': LeadDelivery;
     properties: Property;
     developers: Developer;
     'residential-complexes': ResidentialComplex;
@@ -96,6 +98,8 @@ export interface Config {
     'feed-sources': FeedSourcesSelect<false> | FeedSourcesSelect<true>;
     'import-runs': ImportRunsSelect<false> | ImportRunsSelect<true>;
     'import-issues': ImportIssuesSelect<false> | ImportIssuesSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
+    'lead-deliveries': LeadDeliveriesSelect<false> | LeadDeliveriesSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
     developers: DevelopersSelect<false> | DevelopersSelect<true>;
     'residential-complexes': ResidentialComplexesSelect<false> | ResidentialComplexesSelect<true>;
@@ -683,6 +687,73 @@ export interface ImportIssue {
     | string
     | number
     | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  status: 'new' | 'processing' | 'closed' | 'spam';
+  name: string;
+  phone: string;
+  email?: string | null;
+  message: string;
+  sourcePath: string;
+  formId?: string | null;
+  consent: {
+    accepted: boolean;
+    version: string;
+    acceptedAt: string;
+  };
+  utm?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-deliveries".
+ */
+export interface LeadDelivery {
+  id: number;
+  lead: number | Lead;
+  channelId: string;
+  status: 'pending' | 'sending' | 'sent' | 'failed' | 'abandoned';
+  attempts: number;
+  nextAttemptAt?: string | null;
+  idempotencyKey: string;
+  externalRef?: string | null;
+  lastErrorRedacted?: string | null;
+  claimedAt?: string | null;
+  heartbeatAt?: string | null;
+  attemptLog?:
+    | {
+        attemptedAt: string;
+        outcome: 'pending' | 'sending' | 'sent' | 'failed' | 'abandoned';
+        safeCode?: string | null;
+        redactedMessage?: string | null;
+        id?: string | null;
+      }[]
     | null;
   updatedAt: string;
   createdAt: string;
@@ -1754,6 +1825,57 @@ export interface ImportIssuesSelect<T extends boolean = true> {
   path?: T;
   message?: T;
   details?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  status?: T;
+  name?: T;
+  phone?: T;
+  email?: T;
+  message?: T;
+  sourcePath?: T;
+  formId?: T;
+  consent?:
+    | T
+    | {
+        accepted?: T;
+        version?: T;
+        acceptedAt?: T;
+      };
+  utm?: T;
+  metadata?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-deliveries_select".
+ */
+export interface LeadDeliveriesSelect<T extends boolean = true> {
+  lead?: T;
+  channelId?: T;
+  status?: T;
+  attempts?: T;
+  nextAttemptAt?: T;
+  idempotencyKey?: T;
+  externalRef?: T;
+  lastErrorRedacted?: T;
+  claimedAt?: T;
+  heartbeatAt?: T;
+  attemptLog?:
+    | T
+    | {
+        attemptedAt?: T;
+        outcome?: T;
+        safeCode?: T;
+        redactedMessage?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

@@ -259,7 +259,7 @@ if (!rootPage.includes("CapitalTasksSection") || rootPage.split(/\r?\n/).length 
   throw new Error("Home page must remain composition-first and below 120 lines");
 }
 
-const leadForm = readFileSync(join(root, "src", "components", "marketing", "lead-form.tsx"), "utf8");
+const leadForm = readFileSync(join(root, "src", "ui", "interactive", "lead-form-client.tsx"), "utf8");
 if (
   !leadForm.includes('<fieldset className="flex flex-col gap-6">') ||
   !leadForm.includes('type="checkbox"') ||
@@ -312,6 +312,7 @@ const overrideAccessConsumers = sourceFiles.filter((file) => {
   return (
     /\boverrideAccess\s*:\s*true\b/.test(readFileSync(file, "utf8")) &&
     !normalized.endsWith("/src/core/data-access/system/bootstrap-owner.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/create-lead.ts") &&
     !normalized.endsWith("/src/core/data-access/system/dispatch-due-feeds.ts") &&
     !normalized.endsWith("/src/core/data-access/system/import-feed-run.ts")
   );

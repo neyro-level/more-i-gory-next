@@ -23,6 +23,9 @@ test("header and footer render from site chrome props, not local navigation arra
   assert.equal(/const\s+footerLinks\s*=/.test(footerSource), false);
   assert.match(headerSource, /SiteHeader\(\{\s*brand,\s*cta,\s*navigation\s*\}/);
   assert.match(footerSource, /SiteFooter\(\{\s*brand,\s*legal,\s*legalNotice,\s*navigation\s*\}/);
+  assert.match(footerSource, /moregory-info@yandex\.com/);
+  assert.match(footerSource, /Колобова Ольга Викторовна/);
+  assert.equal(/расч[её]тн|корр\.?\s*сч[её]т|БИК|ВТБ/i.test(footerSource), false, "footer must not publish bank details");
 });
 
 test("site chrome maps CMS globals and falls back only for empty slots", async () => {

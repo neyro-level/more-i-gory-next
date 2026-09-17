@@ -55,7 +55,7 @@ Official evidence:
 ## 5. Leads / Forms
 
 - Canonical lead UI: LeadForm.
-- Transport: browser POST /api/leads через framework-free enhancement.
+- Transport: browser POST `/api/public/leads` через `src/ui/interactive/lead-form-client.tsx`.
 - Server validation/integration owner: отдельный AMS Leads API, не UI.
 - Current mode: fail-closed до legal/Leads API approval.
 - PII/legal: consent version и policy gate из Product Structure/Architecture.

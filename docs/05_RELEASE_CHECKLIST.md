@@ -55,17 +55,18 @@
 
 ## 4. Forms, privacy and integrations
 
-- [ ] юридический оператор и реквизиты подтверждены;
-- [ ] privacy/consent тексты утверждены;
-- [ ] consent version утверждена;
+- [x] юридический оператор и публичные реквизиты подтверждены владельцем;
+- [x] privacy/consent тексты утверждены владельцем;
+- [x] consent version утверждена: `pdn-consent-2026-09-17`;
 - [ ] production Leads API известен;
 - [ ] server validation, rate limit и CAPTCHA доказаны на backend;
 - [ ] форма прошла E2E delivery test;
 - [ ] ПДн отсутствуют в аналитике;
 - [ ] адрес и вариант карты утверждены.
 
-До этого `NEXT_PUBLIC_LEADS_ENABLED=false`, а пример Nginx возвращает `503` для
-`POST /api/leads`.
+До этого `NEXT_PUBLIC_LEADS_ENABLED=false`: `POST /api/public/leads` остаётся
+закрыт на уровне приложения, а Nginx-пример не содержит legacy-заглушку
+`/api/leads → 503`.
 
 ## 5. Infrastructure and release
 
@@ -102,6 +103,6 @@ SEO 69 объясняется единственным ожидаемым fail: 
 Production сейчас блокируют не фундамент Next.js, а:
 
 1. неутверждённый контент и реальные project passports;
-2. юридические тексты и production Leads API;
+2. production Leads API;
 3. release/rollback infrastructure proof;
 4. финальный exact-main browser/performance audit после контентных правок.
