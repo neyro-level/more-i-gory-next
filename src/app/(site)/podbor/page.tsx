@@ -3,7 +3,7 @@ import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LeadForm } from "@/ui/interactive/lead-form";
+import { LeadForm } from "@/components/marketing/lead-form";
 import { NumberedSteps } from "@/components/marketing/numbered-steps";
 
 export const metadata = getStaticMetadata("PAGE-019");

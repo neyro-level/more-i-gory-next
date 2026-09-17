@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { env } from "@/project/env";
 
-const leadsEnabled = process.env.NEXT_PUBLIC_LEADS_ENABLED === "true";
+const leadsEnabled = env.NEXT_PUBLIC_LEADS_ENABLED === "true";
 
 const fieldClassName = "flex flex-col gap-2 data-[invalid=true]:text-destructive";
 const labelClassName = "text-label font-medium text-foreground";

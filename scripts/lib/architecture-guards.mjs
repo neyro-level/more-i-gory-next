@@ -7,6 +7,12 @@ const privilegedSystemFiles = new Set([
 ]);
 const privateFieldPattern = /\b(?:apartmentNumber|cadastralNumber|internalComment|ownerContact|credentials|diagnosticRawData)\b/;
 const lowLevelDbImportPattern = /(?:from\s+|import\s*\(|require\s*\()\s*["'](?:@payloadcms\/db-postgres|drizzle-orm(?:\/[^"']*)?|pg|postgres)["']/;
+const moduleSpecifierPattern =
+  /(?:import\s+(?:type\s+)?[^"'()]*?\s+from\s+|export\s+(?:type\s+)?[^"']*?\s+from\s+|import\s*\(\s*|require\s*\(\s*)["']([^"']+)["']/g;
+const darkVariantPattern = /(?:^|[\s"'`])(?:[\w!*\-[\]():/>&=.]+:)*dark:/;
+const rawDesignColorPattern = /#[0-9a-f]{3,8}\b|\brgb\(|\bhsl\(|\boklch\(/i;
+const arbitraryDesignLiteralPattern =
+  /(?:^|[\s"'`])((?:[\w!*\-[\]():/>&=.]+:)*(?:aspect|bg|border|gap|grid-cols|max-w|min-h|px|py|ring|rounded|text)-\[[^\]\s]+\])/g;
 
 function normalizePath(filePath) {
   return filePath.replaceAll("\\", "/");
@@ -14,6 +20,7 @@ function normalizePath(filePath) {
 
 function isProductionCode(filePath) {
   return (
+    filePath === "src/app/(site)/globals.css" ||
     codeFilePattern.test(filePath) &&
     (filePath.startsWith("src/") ||
       filePath.startsWith("packages/") ||
@@ -48,6 +55,61 @@ function processEnvKeys(content) {
     keys.push(match[1] ?? match[2]);
   }
   return keys;
+}
+
+function moduleSpecifiers(content) {
+  return [...content.matchAll(moduleSpecifierPattern)].map((match) => match[1]);
+}
+
+function isRelativeSpecifier(specifier) {
+  return specifier.startsWith(".");
+}
+
+function isForbiddenUiSpecifier(specifier) {
+  return (
+    specifier === "@payload-config" ||
+    specifier === "payload" ||
+    specifier.startsWith("payload/") ||
+    specifier.startsWith("@payloadcms/") ||
+    specifier === "pg" ||
+    specifier.startsWith("pg/") ||
+    specifier === "postgres" ||
+    specifier.startsWith("postgres/") ||
+    specifier === "drizzle-orm" ||
+    specifier.startsWith("drizzle-orm/") ||
+    specifier === "@prisma/client" ||
+    specifier === "prisma" ||
+    specifier.startsWith("@/project/") ||
+    specifier.startsWith("@/core/data-access/")
+  );
+}
+
+function isForbiddenUiDependency(name) {
+  return (
+    name === "payload" ||
+    name.startsWith("@payloadcms/") ||
+    name === "pg" ||
+    name === "postgres" ||
+    name === "drizzle-orm" ||
+    name === "@prisma/client" ||
+    name === "prisma"
+  );
+}
+
+function arbitraryDesignLiterals(content) {
+  return [...content.matchAll(arbitraryDesignLiteralPattern)]
+    .map((match) => match[1])
+    .filter((token) => !isAllowedStructuralLiteral(token));
+}
+
+function isAllowedStructuralLiteral(token) {
+  return (
+    /grid-cols-\[(?:\d+(?:\.\d+)?fr|auto)(?:_(?:\d+(?:\.\d+)?fr|auto))*\]$/.test(token) ||
+    /rounded-\[min\(var\(--radius-md\),\d+px\)\]$/.test(token) ||
+    /rounded-\[4px\]$/.test(token) ||
+    /text-\[0\.8rem\]$/.test(token) ||
+    /ring-\[3px\]$/.test(token)
+  );
 }
 
 export function findArchitectureGuardViolations({ files, manifests }) {
@@ -122,6 +184,43 @@ export function findArchitectureGuardViolations({ files, manifests }) {
     if (nextHeadersRestricted && /from\s+["']next\/headers["']/.test(content)) {
       addViolation(violations, 8, filePath, "next/headers is forbidden in cache, ingest and job handlers");
     }
+
+    if (filePath.startsWith("packages/contracts/")) {
+      for (const specifier of moduleSpecifiers(content)) {
+        if (!isRelativeSpecifier(specifier) && specifier !== "zod") {
+          addViolation(violations, 9, filePath, `packages/contracts may import only relative modules and zod, got ${specifier}`);
+        }
+      }
+    }
+
+    if (filePath.startsWith("packages/ui/")) {
+      for (const specifier of moduleSpecifiers(content)) {
+        if (isForbiddenUiSpecifier(specifier)) {
+          addViolation(violations, 9, filePath, `packages/ui must not depend on persistence or project data layers, got ${specifier}`);
+        }
+      }
+    }
+
+    if (darkVariantPattern.test(content)) {
+      addViolation(violations, 10, filePath, "dark variant is forbidden while project dark mode is disabled");
+    }
+
+    const isGlobalsCss = filePath === "src/app/(site)/globals.css";
+    if (isGlobalsCss && /@custom-variant\s+dark|^\.dark\s*\{/m.test(content)) {
+      addViolation(violations, 10, filePath, "dark-mode foundation is forbidden while project dark mode is disabled");
+    }
+
+    if (!isGlobalsCss) {
+      const arbitraryLiterals = arbitraryDesignLiterals(content);
+      if (rawDesignColorPattern.test(content) || arbitraryLiterals.length > 0) {
+        addViolation(
+          violations,
+          11,
+          filePath,
+          `design literals must live in globals.css or the structural allowlist (${arbitraryLiterals.join(", ") || "raw color"})`,
+        );
+      }
+    }
   }
 
   for (const entry of manifests) {
@@ -130,6 +229,14 @@ export function findArchitectureGuardViolations({ files, manifests }) {
       for (const [name, version] of Object.entries(entry.manifest[section] ?? {})) {
         if (!isExactDependencyVersion(name, version)) {
           addViolation(violations, 5, filePath, `${section}.${name} must use an exact version, got ${version}`);
+        }
+
+        if (filePath === "packages/contracts/package.json" && name !== "zod") {
+          addViolation(violations, 9, filePath, `packages/contracts package dependencies are limited to zod, got ${name}`);
+        }
+
+        if (filePath === "packages/ui/package.json" && isForbiddenUiDependency(name)) {
+          addViolation(violations, 9, filePath, `packages/ui package.json must not depend on persistence packages, got ${name}`);
         }
       }
     }

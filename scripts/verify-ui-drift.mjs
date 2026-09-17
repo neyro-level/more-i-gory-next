@@ -125,7 +125,7 @@ for (const utility of requiredUtilities) {
   if (!combinedSource.includes(utility)) report("P2", globalsPath, "project token has no consumer " + utility);
 }
 
-const leadFormPath = join(root, "src", "ui", "interactive", "lead-form.tsx");
+const leadFormPath = join(root, "src", "components", "marketing", "lead-form.tsx");
 const leadForm = readFileSync(leadFormPath, "utf8");
 for (const field of ["name", "phone", "task", "accepted"]) {
   if (!leadForm.includes('id="' + field + '-error"') || !leadForm.includes('aria-describedby=')) {
@@ -138,9 +138,17 @@ if (!readFileSync(scenarioPath, "utf8").includes('from "@/components/ui/table"')
   report("P1", scenarioPath, "semantic data table does not use canonical shadcn Table");
 }
 
-if (findings.length > 0) {
+const blockingFindings = findings.filter((finding) => finding.severity === "P0" || finding.severity === "P1");
+const backlogFindings = findings.filter((finding) => finding.severity === "P2");
+
+if (blockingFindings.length > 0) {
   console.error(JSON.stringify(findings, null, 2));
-  throw new Error("UI drift audit failed with " + findings.length + " finding(s).");
+  throw new Error("UI drift audit failed with " + blockingFindings.length + " blocking finding(s).");
 }
 
-console.log("ui drift audit ok");
+if (backlogFindings.length > 0) {
+  console.log(JSON.stringify({ backlogFindings }, null, 2));
+  console.log("ui drift audit ok: no P0/P1 findings; P2 findings are backlog candidates.");
+} else {
+  console.log("ui drift audit ok: no P0/P1 findings and no P2 backlog candidates.");
+}

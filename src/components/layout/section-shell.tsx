@@ -8,6 +8,7 @@ type SectionShellProps = ComponentPropsWithoutRef<"section"> & {
   lead?: string;
   actions?: ReactNode;
   contained?: boolean;
+  containerSize?: "site" | "narrow";
   headingLevel?: 1 | 2;
   tone?: "default" | "dark";
 };
@@ -17,6 +18,7 @@ export function SectionShell({
   children,
   className,
   contained = true,
+  containerSize = "site",
   eyebrow,
   headingLevel = 2,
   lead,
@@ -29,7 +31,7 @@ export function SectionShell({
     <div className="flex min-w-0 flex-col gap-10">
       {(eyebrow || title || lead || actions) && (
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div className="flex min-w-0 max-w-3xl flex-col gap-4">
+          <div className="flex min-w-0 max-w-narrow flex-col gap-4">
             {eyebrow ? <p className={cn("text-caption font-semibold uppercase tracking-eyebrow", tone === "dark" ? "text-action-on-dark" : "text-action")}>{eyebrow}</p> : null}
             {title ? <Heading className={cn("text-h2 font-semibold", tone === "dark" ? "text-surface-dark-foreground" : "text-foreground")}>{title}</Heading> : null}
             {lead ? <p className={cn("text-body-lg", tone === "dark" ? "text-surface-dark-foreground/75" : "text-muted-foreground")}>{lead}</p> : null}
@@ -43,7 +45,7 @@ export function SectionShell({
 
   return (
     <section className={cn("py-section-md", className)} {...props}>
-      {contained ? <Container>{content}</Container> : content}
+      {contained ? <Container size={containerSize}>{content}</Container> : content}
     </section>
   );
 }

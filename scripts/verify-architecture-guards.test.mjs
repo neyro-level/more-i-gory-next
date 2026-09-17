@@ -10,6 +10,19 @@ const exactManifest = {
   },
 };
 
+const cleanContractsManifest = {
+  dependencies: {
+    zod: "4.6.1",
+  },
+};
+
+const cleanUiManifest = {
+  dependencies: {
+    "@more-i-gory/contracts": "workspace:*",
+    react: "19.3.0",
+  },
+};
+
 function expectGuard(guard, snapshot) {
   assert.throws(() => assertArchitectureGuards(snapshot), new RegExp(`Guard ${guard}:`));
 }
@@ -21,8 +34,16 @@ test("clean architecture fixture passes all guards", () => {
         { path: "src/core/data-access/system/bootstrap-owner.ts", content: "export const options = { overrideAccess: true };" },
         { path: "src/project/env.ts", content: "export const secret = process.env.PAYLOAD_SECRET;" },
         { path: "next.config.ts", content: "export const bucket = process.env.S3_BUCKET; export const endpoint = process.env.S3_ENDPOINT;" },
+        { path: "packages/contracts/src/index.ts", content: 'import { z } from "zod"; export { pageSchema } from "./schemas.ts";' },
+        { path: "packages/ui/src/index.ts", content: 'import type { PageContent } from "@more-i-gory/contracts"; export type UiPage = PageContent;' },
+        { path: "src/components/marketing/layout.tsx", content: 'export const className = "grid grid-cols-[auto_1fr] focus-visible:ring-[3px]";' },
+        { path: "src/components/ui/button.tsx", content: 'export const className = "rounded-[min(var(--radius-md),10px)] rounded-[4px] text-[0.8rem]";' },
       ],
-      manifests: [{ path: "package.json", manifest: exactManifest }],
+      manifests: [
+        { path: "package.json", manifest: exactManifest },
+        { path: "packages/contracts/package.json", manifest: cleanContractsManifest },
+        { path: "packages/ui/package.json", manifest: cleanUiManifest },
+      ],
     }),
   );
 });
@@ -95,4 +116,51 @@ test("Guard 8 rejects next/headers in jobs", () => {
     files: [{ path: "src/project/jobs/delivery.ts", content: 'import { headers } from "next/headers";' }],
     manifests: [],
   });
+});
+
+test("Guard 9 rejects framework runtime in contracts sources and manifest", () => {
+  expectGuard(9, {
+    files: [{ path: "packages/contracts/src/page.ts", content: 'import type { Metadata } from "next";' }],
+    manifests: [{ path: "packages/contracts/package.json", manifest: { dependencies: { next: "16.3.4", zod: "4.6.1" } } }],
+  });
+});
+
+test("Guard 9 rejects persistence and project data dependencies in ui", () => {
+  expectGuard(9, {
+    files: [{ path: "packages/ui/src/card.tsx", content: 'import { getPayload } from "payload"; import { env } from "@/project/env";' }],
+    manifests: [{ path: "packages/ui/package.json", manifest: { dependencies: { payload: "3.89.0" } } }],
+  });
+});
+
+test("Guard 10 rejects dark variants while dark mode is disabled", () => {
+  expectGuard(10, {
+    files: [{ path: "src/components/marketing/card.tsx", content: 'export const className = "bg-card dark:bg-background";' }],
+    manifests: [],
+  });
+});
+
+test("Guard 10 rejects dark foundation while dark mode is disabled", () => {
+  expectGuard(10, {
+    files: [{ path: "src/app/(site)/globals.css", content: "@custom-variant dark (&:where(.dark, .dark *));" }],
+    manifests: [],
+  });
+});
+
+test("Guard 11 rejects raw design literals outside globals.css", () => {
+  expectGuard(11, {
+    files: [{ path: "src/components/marketing/card.tsx", content: 'export const className = "bg-[#ffffff] text-[20px]";' }],
+    manifests: [],
+  });
+});
+
+test("Guard 11 allows structural arbitrary values", () => {
+  assert.doesNotThrow(() =>
+    assertArchitectureGuards({
+      files: [
+        { path: "src/components/marketing/grid.tsx", content: 'export const className = "grid lg:grid-cols-[0.85fr_1.15fr] has-[>svg]:grid-cols-[auto_1fr]";' },
+        { path: "src/components/ui/button.tsx", content: 'export const className = "rounded-[min(var(--radius-md),12px)] rounded-[4px] text-[0.8rem] focus-visible:ring-[3px]";' },
+      ],
+      manifests: [],
+    }),
+  );
 });

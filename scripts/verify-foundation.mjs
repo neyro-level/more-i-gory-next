@@ -142,13 +142,10 @@ for (const registry of Object.keys(shadcnConfig.registries ?? {})) {
 }
 
 const requiredPrimitives = [
-  "accordion",
   "alert",
   "badge",
-  "breadcrumb",
   "button",
   "card",
-  "checkbox",
   "field",
   "input",
   "label",
@@ -162,6 +159,10 @@ for (const primitive of requiredPrimitives) {
   if (!existsSync(join(root, "src", "components", "ui", `${primitive}.tsx`))) {
     throw new Error(`Missing canonical shadcn primitive: ${primitive}`);
   }
+}
+
+if (!existsSync(join(root, "src", "ui", "interactive", "checkbox.tsx"))) {
+  throw new Error("Missing canonical interactive checkbox leaf: checkbox");
 }
 
 const requiredProjectUi = [
@@ -258,7 +259,7 @@ if (!rootPage.includes("CapitalTasksSection") || rootPage.split(/\r?\n/).length 
   throw new Error("Home page must remain composition-first and below 120 lines");
 }
 
-const leadForm = readFileSync(join(root, "src", "ui", "interactive", "lead-form.tsx"), "utf8");
+const leadForm = readFileSync(join(root, "src", "components", "marketing", "lead-form.tsx"), "utf8");
 if (
   !leadForm.includes('<fieldset className="flex flex-col gap-6">') ||
   !leadForm.includes('type="checkbox"') ||

@@ -48,5 +48,15 @@ operations. Custom Views допустимы только для workflow, кот
 - статус не передаётся только цветом;
 - layout не допускает horizontal overflow.
 
+## EPIC 9 conformance record
+
+- `Container` использует только утверждённые размеры `site` и `narrow`; сужение
+  контейнера через случайные `max-w-*` в page-level `className` не является
+  допустимым новым паттерном.
+- `SectionShell` владеет вертикальным rhythm и передаёт `containerSize` в
+  `Container`; legal/404/focused text используют `narrow`.
+- Новые типографические роли не вводились: используются роли из
+  `06_DESIGN_SYSTEM.md`.
+
 Любое отклонение от '06_DESIGN_SYSTEM.md', новый token role или новый UI owner
 фиксируется здесь только после доказанной потребности и owner decision.

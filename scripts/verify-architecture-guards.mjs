@@ -20,8 +20,9 @@ const files = [
   ...sourceRoots.flatMap((sourceRoot) => walk(sourceRoot)),
   "payload.config.ts",
   "next.config.ts",
+  "src/app/(site)/globals.css",
 ]
-  .filter((filePath) => codeFilePattern.test(filePath))
+  .filter((filePath) => codeFilePattern.test(filePath) || filePath === "src/app/(site)/globals.css")
   .map((filePath) => ({
     content: readFileSync(path.join(projectRoot, filePath), "utf8"),
     path: filePath,
@@ -34,4 +35,4 @@ const manifests = ["package.json", ...walk("packages").filter((filePath) => file
   }));
 
 assertArchitectureGuards({ files, manifests });
-console.log("Architecture guards 1-8 passed.");
+console.log("Architecture guards passed.");
