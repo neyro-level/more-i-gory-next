@@ -92,6 +92,18 @@ test("typed cache targets map approved domain changes to paths and tags", () => 
     { kind: "tag", tag: "catalog" },
     { kind: "path", path: "/obekty/" },
   ]);
+  assert.deepEqual(cacheTargets.catalogSlice("krym/novostroyki"), [
+    { kind: "tag", tag: "catalog-slice:krym:novostroyki" },
+    { kind: "path", path: "/investicionnaya-nedvizhimost/krym/novostroyki/" },
+    { kind: "tag", tag: "catalog" },
+    { kind: "path", path: "/obekty/" },
+  ]);
+  assert.deepEqual(cacheTargets.complexPage("sample-complex"), [
+    { kind: "tag", tag: "complex:sample-complex" },
+    { kind: "path", path: "/novostroyki/sample-complex/" },
+    { kind: "tag", tag: "catalog" },
+    { kind: "path", path: "/obekty/" },
+  ]);
   assert.deepEqual(cacheTargets.propertyPage("sample-resort"), [
     { kind: "tag", tag: "property:sample-resort" },
     { kind: "path", path: "/obekty/sample-resort/" },
@@ -143,7 +155,33 @@ test("typed cache targets are combined into one deduplicated batch", async () =>
   ]);
 });
 
+test("import cache targets cover catalog group, complex pages and affected slices in one batch", async () => {
+  const batches = [];
+  const invalidator = createCacheInvalidator({
+    branch: "http",
+    invalidateBatch: async (batch) => batches.push(batch),
+  });
+  const batch = cacheTargets.importAffectedBatch({
+    complexSlugs: ["sample-complex", "sample-complex"],
+    sliceSlugs: ["krym/novostroyki"],
+  });
+
+  await invalidator.invalidate(batch);
+
+  assert.equal(batches.length, 1);
+  assert.deepEqual(batches[0], [
+    { kind: "tag", tag: "catalog" },
+    { kind: "path", path: "/obekty/" },
+    { kind: "tag", tag: "complex:sample-complex" },
+    { kind: "path", path: "/novostroyki/sample-complex/" },
+    { kind: "tag", tag: "catalog-slice:krym:novostroyki" },
+    { kind: "path", path: "/investicionnaya-nedvizhimost/krym/novostroyki/" },
+  ]);
+});
+
 test("typed cache targets reject unsafe slugs", () => {
+  assert.throws(() => cacheTargets.catalogSlice("krym?draft=true"));
+  assert.throws(() => cacheTargets.complexPage("sample?draft=true"));
   assert.throws(() => cacheTargets.propertyPage("../secret"));
   assert.throws(() => cacheTargets.regionPage("krym?draft=true"));
   assert.throws(() => cacheTargets.pageDoc("https://example.com"));

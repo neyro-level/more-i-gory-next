@@ -29,12 +29,12 @@ test("jobs autorun follows the validated JOBS_AUTORUN flag", async () => {
   assert.equal(await enabled.shouldAutoRun?.({}), true);
 });
 
-test("imports queue is declared without import tasks before EPIC 16", () => {
+test("imports queue keeps scheduling disabled while EPIC 16 registers import tasks explicitly", () => {
   const config = createJobsConfig("false");
   const taskSlugs = config.tasks?.map((task) => task.slug) ?? [];
 
-  assert.deepEqual(taskSlugs, ["systemHealth"]);
-  assert.equal(taskSlugs.some((slug) => slug.toLowerCase().includes("import")), false);
+  assert.deepEqual(taskSlugs, ["systemHealth", "dispatchDueFeeds", "importFeed"]);
+  assert.equal(jobsAutoRun.find((entry) => entry.queue === "imports")?.disableScheduling, true);
 });
 
 test("existing jobs operations remain owner-only", async () => {

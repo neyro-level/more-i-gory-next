@@ -105,6 +105,35 @@ export const cacheTargets = {
       { kind: "path", path: "/obekty/" },
     ];
   },
+  catalogSlice(slug: string): CacheInvalidationTargetBatch {
+    const normalized = normalizeSlug(slug, "catalog slice slug");
+    return [
+      { kind: "tag", tag: `catalog-slice:${tagSlug(slug, "catalog slice slug")}` },
+      { kind: "path", path: `/investicionnaya-nedvizhimost/${normalized}/` },
+      ...this.catalogGroup(),
+    ];
+  },
+  complexPage(slug: string): CacheInvalidationTargetBatch {
+    const normalized = normalizeSlug(slug, "complex slug");
+    return [
+      { kind: "tag", tag: `complex:${tagSlug(slug, "complex slug")}` },
+      { kind: "path", path: `/novostroyki/${normalized}/` },
+      ...this.catalogGroup(),
+    ];
+  },
+  importAffectedBatch({
+    complexSlugs = [],
+    sliceSlugs = [],
+  }: Readonly<{
+    complexSlugs?: readonly string[];
+    sliceSlugs?: readonly string[];
+  }>): CacheInvalidationTargetBatch {
+    return createCacheInvalidationBatch(
+      this.catalogGroup(),
+      ...complexSlugs.map((slug) => this.complexPage(slug)),
+      ...sliceSlugs.map((slug) => this.catalogSlice(slug)),
+    );
+  },
   navigation(): CacheInvalidationTargetBatch {
     return [{ kind: "tag", tag: "navigation" }];
   },

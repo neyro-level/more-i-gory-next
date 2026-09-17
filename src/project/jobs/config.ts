@@ -1,5 +1,7 @@
 import type { JobsConfig } from "payload";
 
+import { dispatchDueFeedsTask } from "./imports/dispatch-due-feeds.ts";
+import { importFeedTask } from "./imports/import-feed.ts";
 import { systemHealthTask } from "./system-health.ts";
 
 type JobsAutoRunConfig = Extract<
@@ -24,6 +26,6 @@ export function createJobsConfig(jobsAutorun: "false" | "true"): JobsConfig {
     autoRun: jobsAutoRun,
     enableConcurrencyControl: true,
     shouldAutoRun: () => jobsAutorun === "true",
-    tasks: [systemHealthTask],
+    tasks: [systemHealthTask, dispatchDueFeedsTask, importFeedTask],
   };
 }

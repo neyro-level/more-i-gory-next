@@ -10,6 +10,10 @@ import * as migration_20260916_220752_20260917_properties_indexes_access from '.
 import * as migration_20260916_221346_20260917_properties_locking_contract from './20260916_221346_20260917_properties_locking_contract';
 import * as migration_20260916_231730_newbuild_schema from './20260916_231730_newbuild_schema';
 import * as migration_20260916_232544_newbuild_property_links from './20260916_232544_newbuild_property_links';
+import * as migration_20260917_000415_ingest_collections from './20260917_000415_ingest_collections';
+import * as migration_20260917_001601_ingest_jobs_tasks from './20260917_001601_ingest_jobs_tasks';
+import * as migration_20260917_005004_safe_deactivation_approval_marker from './20260917_005004_safe_deactivation_approval_marker';
+import * as migration_20260917_005724_import_run_heartbeat_interrupted from './20260917_005724_import_run_heartbeat_interrupted';
 
 export const migrations = [
   {
@@ -70,6 +74,26 @@ export const migrations = [
   {
     up: migration_20260916_232544_newbuild_property_links.up,
     down: migration_20260916_232544_newbuild_property_links.down,
-    name: '20260916_232544_newbuild_property_links'
+    name: '20260916_232544_newbuild_property_links',
+  },
+  {
+    up: migration_20260917_000415_ingest_collections.up,
+    down: migration_20260917_000415_ingest_collections.down,
+    name: '20260917_000415_ingest_collections',
+  },
+  {
+    up: migration_20260917_001601_ingest_jobs_tasks.up,
+    down: migration_20260917_001601_ingest_jobs_tasks.down,
+    name: '20260917_001601_ingest_jobs_tasks',
+  },
+  {
+    up: migration_20260917_005004_safe_deactivation_approval_marker.up,
+    down: migration_20260917_005004_safe_deactivation_approval_marker.down,
+    name: '20260917_005004_safe_deactivation_approval_marker',
+  },
+  {
+    up: migration_20260917_005724_import_run_heartbeat_interrupted.up,
+    down: migration_20260917_005724_import_run_heartbeat_interrupted.down,
+    name: '20260917_005724_import_run_heartbeat_interrupted'
   },
 ];

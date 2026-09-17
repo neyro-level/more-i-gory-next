@@ -73,6 +73,8 @@ export interface Config {
     regions: Region;
     redirects: Redirect;
     'feed-sources': FeedSource;
+    'import-runs': ImportRun;
+    'import-issues': ImportIssue;
     properties: Property;
     developers: Developer;
     'residential-complexes': ResidentialComplex;
@@ -92,6 +94,8 @@ export interface Config {
     regions: RegionsSelect<false> | RegionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'feed-sources': FeedSourcesSelect<false> | FeedSourcesSelect<true>;
+    'import-runs': ImportRunsSelect<false> | ImportRunsSelect<true>;
+    'import-issues': ImportIssuesSelect<false> | ImportIssuesSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
     developers: DevelopersSelect<false> | DevelopersSelect<true>;
     'residential-complexes': ResidentialComplexesSelect<false> | ResidentialComplexesSelect<true>;
@@ -110,10 +114,12 @@ export interface Config {
   globals: {
     'site-settings': SiteSetting;
     navigation: Navigation;
+    'payload-jobs-stats': PayloadJobsStat;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
+    'payload-jobs-stats': PayloadJobsStatsSelect<false> | PayloadJobsStatsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -123,6 +129,8 @@ export interface Config {
   jobs: {
     tasks: {
       systemHealth: TaskSystemHealth;
+      dispatchDueFeeds: TaskDispatchDueFeeds;
+      importFeed: TaskImportFeed;
       inline: {
         input: unknown;
         output: unknown;
@@ -612,6 +620,70 @@ export interface FeedSource {
    */
   feedUrlRef?: string | null;
   enabled: boolean;
+  refreshIntervalMinutes: number;
+  nextDueAt?: string | null;
+  lastAttemptAt?: string | null;
+  lastSuccessfulRunAt?: string | null;
+  lastFullRunAt?: string | null;
+  safetyThresholdPercent: number;
+  maxDeactivationsPerRun: number;
+  lastOfferCount?: number | null;
+  lastEtag?: string | null;
+  lastModified?: string | null;
+  lastFeedHash?: string | null;
+  deactivationApproval: 'required' | 'approved' | 'rejected';
+  deactivationApprovalConsumedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-runs".
+ */
+export interface ImportRun {
+  id: number;
+  feedSource: number | FeedSource;
+  status: 'queued' | 'running' | 'completed' | 'suspicious' | 'failed' | 'skipped' | 'interrupted';
+  mode: 'incremental' | 'full';
+  jobId?: string | null;
+  startedAt?: string | null;
+  heartbeatAt?: string | null;
+  finishedAt?: string | null;
+  feedHash?: string | null;
+  etag?: string | null;
+  lastModified?: string | null;
+  offeredCount?: number | null;
+  createdCount: number;
+  updatedCount: number;
+  skippedCount: number;
+  deactivatedCount: number;
+  issueCount: number;
+  summary?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-issues".
+ */
+export interface ImportIssue {
+  id: number;
+  feedSource: number | FeedSource;
+  importRun: number | ImportRun;
+  severity: 'info' | 'warning' | 'error' | 'critical';
+  code: string;
+  externalId?: string | null;
+  path?: string | null;
+  message: string;
+  details?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -996,7 +1068,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'systemHealth';
+        taskSlug: 'inline' | 'systemHealth' | 'dispatchDueFeeds' | 'importFeed';
         taskID: string;
         input?:
           | {
@@ -1029,7 +1101,7 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'systemHealth') | null;
+  taskSlug?: ('inline' | 'systemHealth' | 'dispatchDueFeeds' | 'importFeed') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -1037,6 +1109,15 @@ export interface PayloadJob {
    * Used for concurrency control. Jobs with the same key are subject to exclusive/supersedes rules.
    */
   concurrencyKey?: string | null;
+  meta?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1619,6 +1700,60 @@ export interface FeedSourcesSelect<T extends boolean = true> {
   market?: T;
   feedUrlRef?: T;
   enabled?: T;
+  refreshIntervalMinutes?: T;
+  nextDueAt?: T;
+  lastAttemptAt?: T;
+  lastSuccessfulRunAt?: T;
+  lastFullRunAt?: T;
+  safetyThresholdPercent?: T;
+  maxDeactivationsPerRun?: T;
+  lastOfferCount?: T;
+  lastEtag?: T;
+  lastModified?: T;
+  lastFeedHash?: T;
+  deactivationApproval?: T;
+  deactivationApprovalConsumedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-runs_select".
+ */
+export interface ImportRunsSelect<T extends boolean = true> {
+  feedSource?: T;
+  status?: T;
+  mode?: T;
+  jobId?: T;
+  startedAt?: T;
+  heartbeatAt?: T;
+  finishedAt?: T;
+  feedHash?: T;
+  etag?: T;
+  lastModified?: T;
+  offeredCount?: T;
+  createdCount?: T;
+  updatedCount?: T;
+  skippedCount?: T;
+  deactivatedCount?: T;
+  issueCount?: T;
+  summary?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-issues_select".
+ */
+export interface ImportIssuesSelect<T extends boolean = true> {
+  feedSource?: T;
+  importRun?: T;
+  severity?: T;
+  code?: T;
+  externalId?: T;
+  path?: T;
+  message?: T;
+  details?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1989,6 +2124,7 @@ export interface PayloadJobsSelect<T extends boolean = true> {
   waitUntil?: T;
   processing?: T;
   concurrencyKey?: T;
+  meta?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2119,6 +2255,24 @@ export interface Navigation {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats".
+ */
+export interface PayloadJobsStat {
+  id: number;
+  stats?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -2214,6 +2368,16 @@ export interface NavigationSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats_select".
+ */
+export interface PayloadJobsStatsSelect<T extends boolean = true> {
+  stats?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -2228,6 +2392,30 @@ export interface CollectionsWidget {
  */
 export interface TaskSystemHealth {
   input?: unknown;
+  output: {
+    status: string;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskDispatchDueFeeds".
+ */
+export interface TaskDispatchDueFeeds {
+  input?: unknown;
+  output: {
+    claimed: number;
+    queued: number;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskImportFeed".
+ */
+export interface TaskImportFeed {
+  input: {
+    feedSourceId: string;
+    importRunId: string;
+  };
   output: {
     status: string;
   };

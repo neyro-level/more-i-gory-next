@@ -7,6 +7,8 @@ import sharp from "sharp";
 import { Buildings } from "./src/project/collections/buildings.ts";
 import { Developers } from "./src/project/collections/developers.ts";
 import { FeedSources } from "./src/project/collections/feed-sources.ts";
+import { ImportIssues } from "./src/project/collections/import-issues.ts";
+import { ImportRuns } from "./src/project/collections/import-runs.ts";
 import { Layouts } from "./src/project/collections/layouts.ts";
 import { Media } from "./src/project/collections/media.ts";
 import { Pages } from "./src/project/collections/pages.ts";
@@ -39,6 +41,8 @@ export default buildConfig({
     Regions,
     Redirects,
     FeedSources,
+    ImportRuns,
+    ImportIssues,
     Properties,
     Developers,
     ResidentialComplexes,

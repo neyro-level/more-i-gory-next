@@ -2,6 +2,8 @@ const codeFilePattern = /\.(?:[cm]?[jt]sx?)$/;
 const exactVersionPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
 const privilegedSystemFiles = new Set([
   "src/core/data-access/system/bootstrap-owner.ts",
+  "src/core/data-access/system/dispatch-due-feeds.ts",
+  "src/core/data-access/system/import-feed-run.ts",
 ]);
 const privateFieldPattern = /\b(?:apartmentNumber|cadastralNumber|internalComment|ownerContact|credentials|diagnosticRawData)\b/;
 const lowLevelDbImportPattern = /(?:from\s+|import\s*\(|require\s*\()\s*["'](?:@payloadcms\/db-postgres|drizzle-orm(?:\/[^"']*)?|pg|postgres)["']/;

@@ -22,6 +22,8 @@ const requiredFiles = [
   "src/core/data-access/system/index.ts",
   "src/core/data-access/system/gateway.ts",
   "src/core/data-access/system/bootstrap-owner.ts",
+  "src/core/data-access/system/dispatch-due-feeds.ts",
+  "src/core/data-access/system/import-feed-run.ts",
   "src/core/cache/invalidator.ts",
   "src/core/dto/index.ts",
   "src/core/query/index.ts",
@@ -308,7 +310,9 @@ const overrideAccessConsumers = sourceFiles.filter((file) => {
   const normalized = file.replaceAll("\\", "/");
   return (
     /\boverrideAccess\s*:\s*true\b/.test(readFileSync(file, "utf8")) &&
-    !normalized.endsWith("/src/core/data-access/system/bootstrap-owner.ts")
+    !normalized.endsWith("/src/core/data-access/system/bootstrap-owner.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/dispatch-due-feeds.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/import-feed-run.ts")
   );
 });
 if (overrideAccessConsumers.length > 0) {
