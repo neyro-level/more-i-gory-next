@@ -1,21 +1,42 @@
 # Operations — «Море и Горы»
 
-**Статус:** Draft skeleton — заполняется в EPIC 13
+**Статус:** Active technical preview runbook
 **Режим:** BUILD
-**Production:** не выпускался
+**Production:** technical preview domain `more-previu.tw1.ru`; final domain `moreigori.ru`
+is reserved for a later cutover and is not changed by this runbook.
 
 Документ станет единственным проектным runbook для эксплуатации. Пока runtime,
 окружения и доступы не реализованы, команды и реквизиты не выдумываются.
 
 ## Deploy
 
-'TODO EPIC 13': exact-main artifact, migrations, versioned release, atomic
-switch, Nginx reload и live smoke. Build на production host запрещён.
+Production release uses an exact `main` SHA and a Linux-built Next.js
+standalone artifact. The server receives the already built artifact, not source
+that must resolve dependencies or build on the production host.
+
+Artifact contents:
+
+- `.next/standalone/`;
+- `.next/static/`;
+- `public/`;
+- release metadata with the exact git SHA.
+
+Runtime command:
+
+```text
+HOSTNAME=127.0.0.1 PORT=3000 NODE_ENV=production node server.js
+```
+
+The active release is selected by an atomic `current` symlink switch. Nginx
+proxies `more-previu.tw1.ru` to the local runtime. `moreigori.ru` is not pointed
+to this server until the owner approves the final domain cutover.
 
 ## Rollback
 
-'TODO EPIC 13': переключение на known-good release без rebuild. Destructive
-migration требует отдельного recovery plan и явного решения владельца.
+Rollback is an atomic switch of `current` to the previous successful release,
+then service restart and live smoke. It does not rebuild the application.
+Destructive migration requires a separate recovery plan and explicit owner
+decision.
 
 ## Migrations
 

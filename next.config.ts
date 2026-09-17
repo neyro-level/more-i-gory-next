@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
       S3_ENDPOINT: process.env.S3_ENDPOINT,
     }),
   },
+  output: "standalone",
   trailingSlash: true,
   poweredByHeader: false,
 };

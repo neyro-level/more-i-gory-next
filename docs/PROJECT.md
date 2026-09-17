@@ -15,9 +15,9 @@ Source of Truth проекта.
 | Параметр | Значение |
 |---|---|
 | Проект | «Море и Горы» — инвестиционное бюро курортной недвижимости |
-| Production domain | `TODO: подтвердить до EPIC 5` |
+| Production domain | `more-previu.tw1.ru` technical preview; final `moreigori.ru` reserved for later cutover and currently not used by this release |
 | Staging domain | `TODO: подтвердить до EPIC 2/13` |
-| Production runtime | один Next.js + Payload runtime и один jobs-active process |
+| Production runtime | один Next.js standalone + Payload runtime за host Nginx; jobs остаются `JOBS_AUTORUN=false` до отдельного production jobs gate |
 | Production database | отдельная Timeweb Managed PostgreSQL, регион `TODO` |
 | Staging database | отдельная Timeweb Managed PostgreSQL, без production PII |
 | Manual media | Timeweb S3 через Payload upload adapter |

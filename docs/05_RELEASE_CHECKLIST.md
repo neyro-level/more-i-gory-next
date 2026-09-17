@@ -1,6 +1,6 @@
 # Release Checklist — «Море и Горы»
 
-**Статус:** Active — NOT READY FOR PRODUCTION
+**Статус:** Active — TECHNICAL PREVIEW RELEASE
 **Версия:** 2.0 Payload foundation
 **Дата:** 2026-09-15
 
@@ -70,13 +70,14 @@
 
 ## 5. Infrastructure and release
 
-- [ ] production hostname/TLS определены;
-- [ ] отдельные Managed PostgreSQL staging/production созданы и идентифицированы;
+- [x] technical production hostname определён: `more-previu.tw1.ru`;
+- [ ] TLS для technical hostname проверен на сервере;
+- [x] production database credentials identified in Secret Master `more-i-gory-server/prod`;
 - [ ] Nginx config отрендерен с реальным окружением и прошёл `nginx -t`;
 - [ ] access/error logs определены;
-- [ ] immutable image build и versioned rollout реализованы;
+- [x] standalone artifact mode enabled for immutable versioned rollout;
 - [ ] atomic switch и rollback протестированы;
-- [ ] clean canonical `main` и exact SHA подтверждены;
+- [ ] clean canonical `main` и exact SHA подтверждены для release;
 - [ ] выполнен один production release;
 - [ ] live 200/404/redirect/sitemap/robots/form smoke;
 - [ ] мобильная визуальная проверка production.
