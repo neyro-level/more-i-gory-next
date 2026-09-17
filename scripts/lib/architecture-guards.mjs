@@ -2,13 +2,17 @@ const codeFilePattern = /\.(?:[cm]?[jt]sx?)$/;
 const exactVersionPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
 const privilegedSystemFiles = new Set([
   "src/core/data-access/system/bootstrap-owner.ts",
+  "src/core/data-access/system/catalog-lifecycle.ts",
   "src/core/data-access/system/create-lead.ts",
   "src/core/data-access/system/lead-delivery.ts",
+  "src/core/data-access/system/jobs.ts",
+  "src/core/data-access/system/lead-retention.ts",
   "src/core/data-access/system/dispatch-due-feeds.ts",
   "src/core/data-access/system/import-feed-run.ts",
 ]);
 const privateFieldPattern = /\b(?:apartmentNumber|cadastralNumber|internalComment|ownerContact|credentials|diagnosticRawData)\b/;
 const lowLevelDbImportPattern = /(?:from\s+|import\s*\(|require\s*\()\s*["'](?:@payloadcms\/db-postgres|drizzle-orm(?:\/[^"']*)?|pg|postgres)["']/;
+const payloadJobsCollectionAccessPattern = /\bcollection\s*:\s*["']payload-jobs["']/;
 const moduleSpecifierPattern =
   /(?:import\s+(?:type\s+)?[^"'()]*?\s+from\s+|export\s+(?:type\s+)?[^"']*?\s+from\s+|import\s*\(\s*|require\s*\(\s*)["']([^"']+)["']/g;
 const darkVariantPattern = /(?:^|[\s"'`])(?:[\w!*\-[\]():/>&=.]+:)*dark:/;
@@ -127,6 +131,13 @@ export function findArchitectureGuardViolations({ files, manifests }) {
       !privilegedSystemFiles.has(filePath)
     ) {
       addViolation(violations, 1, filePath, "overrideAccess: true is allowed only in registered System Gateway implementations");
+    }
+
+    if (
+      payloadJobsCollectionAccessPattern.test(content) &&
+      filePath !== "src/core/data-access/system/jobs.ts"
+    ) {
+      addViolation(violations, 1, filePath, "payload-jobs access must go through trusted System Gateway jobs recovery");
     }
 
     const lowLevelDbAllowed =

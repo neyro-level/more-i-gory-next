@@ -1,3 +1,9 @@
+import {
+  type RecoverableLeadDelivery,
+  planLeadDeliveryRecovery,
+} from "../../leads/delivery-recovery.ts";
+import { findLiveDeliverLeadJobIds } from "./jobs.ts";
+
 type LeadDeliveryTransitionInput = {
   leadDeliveryId: string;
 };
@@ -31,6 +37,14 @@ type LeadDeliveryManualRetryRecord = LeadDeliveryRecord & {
 };
 
 type PayloadLike = {
+  find?: (args: {
+    collection: "lead-deliveries";
+    depth: 0;
+    limit: number;
+    overrideAccess: true;
+    pagination: false;
+    where: Record<string, unknown>;
+  }) => Promise<{ docs?: RecoverableLeadDelivery[] }>;
   findByID?: (args: {
     collection: "lead-deliveries";
     depth: 0;
@@ -55,6 +69,7 @@ type PayloadLike = {
 };
 
 const defaultMaxManualRetryAuditRows = 20;
+const defaultMaintenanceIntervalMinutes = 5;
 
 function compactManualRetryAudit(
   entries: readonly ManualRetryAuditEntry[],
@@ -217,4 +232,73 @@ export async function recordLeadDeliveryFailureAndMaybeRetry(
   }
 
   return "failed";
+}
+
+export async function recoverLeadDeliveries(
+  payload: PayloadLike & Parameters<typeof findLiveDeliverLeadJobIds>[0],
+  input: { maintenanceIntervalMinutes?: number } = {},
+  now = new Date(),
+): Promise<{ recovered: number; requeued: number }> {
+  const nowIso = now.toISOString();
+  const maintenanceIntervalMinutes =
+    input.maintenanceIntervalMinutes ?? defaultMaintenanceIntervalMinutes;
+  const liveLeadDeliveryJobIds = await findLiveDeliverLeadJobIds(payload);
+  const result = await payload.find?.({
+    collection: "lead-deliveries",
+    depth: 0,
+    limit: 1000,
+    overrideAccess: true,
+    pagination: false,
+    where: {
+      or: [
+        { status: { equals: "sending" } },
+        {
+          and: [
+            { status: { equals: "pending" } },
+            {
+              or: [
+                { nextAttemptAt: { less_than_equal: nowIso } },
+                { nextAttemptAt: { exists: false } },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  });
+
+  const actions = planLeadDeliveryRecovery({
+    deliveries: result?.docs ?? [],
+    liveLeadDeliveryJobIds,
+    maintenanceIntervalMinutes,
+    now,
+  });
+
+  let requeued = 0;
+  for (const action of actions) {
+    const update = await payload.update({
+      collection: "lead-deliveries",
+      data: action.data,
+      overrideAccess: true,
+      where: {
+        and: [
+          { id: { equals: String(action.id) } },
+          { status: { equals: action.reason === "stale-sending" ? "sending" : "pending" } },
+        ],
+      },
+    });
+    const updated = update as { docs?: LeadDeliveryRecord[] };
+    if (Array.isArray(updated.docs) && updated.docs.length > 0) {
+      await payload.jobs?.queue({
+        input: { leadDeliveryId: String(action.id) },
+        overrideAccess: true,
+        queue: "lead-deliveries",
+        task: "deliverLead",
+        waitUntil: now,
+      });
+      requeued += 1;
+    }
+  }
+
+  return { recovered: actions.length, requeued };
 }

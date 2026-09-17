@@ -16,6 +16,8 @@ import * as migration_20260917_005004_safe_deactivation_approval_marker from './
 import * as migration_20260917_005724_import_run_heartbeat_interrupted from './20260917_005724_import_run_heartbeat_interrupted';
 import * as migration_20260917_031908_leads_outbox_schema from './20260917_031908_leads_outbox_schema';
 import * as migration_20260917_103447_schema_drift from './20260917_103447_schema_drift';
+import * as migration_20260917_112944_maintenance_jobs from './20260917_112944_maintenance_jobs';
+import * as migration_20260917_125114 from './20260917_125114';
 
 export const migrations = [
   {
@@ -106,6 +108,16 @@ export const migrations = [
   {
     up: migration_20260917_103447_schema_drift.up,
     down: migration_20260917_103447_schema_drift.down,
-    name: '20260917_103447_schema_drift'
+    name: '20260917_103447_schema_drift',
+  },
+  {
+    up: migration_20260917_112944_maintenance_jobs.up,
+    down: migration_20260917_112944_maintenance_jobs.down,
+    name: '20260917_112944_maintenance_jobs',
+  },
+  {
+    up: migration_20260917_125114.up,
+    down: migration_20260917_125114.down,
+    name: '20260917_125114'
   },
 ];

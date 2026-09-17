@@ -72,6 +72,61 @@ test("Guard 1 allows registered lead delivery System Gateway transition", () => 
   );
 });
 
+test("Guard 1 allows registered lead retention System Gateway cleanup", () => {
+  assert.deepEqual(
+    findArchitectureGuardViolations({
+      files: [{ path: "src/core/data-access/system/lead-retention.ts", content: "const options = { overrideAccess: true };" }],
+      manifests: [],
+    }),
+    [],
+  );
+});
+
+test("Guard 1 allows registered jobs recovery System Gateway access", () => {
+  assert.deepEqual(
+    findArchitectureGuardViolations({
+      files: [{ path: "src/core/data-access/system/jobs.ts", content: "const options = { overrideAccess: true };" }],
+      manifests: [],
+    }),
+    [],
+  );
+});
+
+test("Guard 1 allows payload-jobs access only in the trusted jobs recovery module", () => {
+  assert.deepEqual(
+    findArchitectureGuardViolations({
+      files: [{ path: "src/core/data-access/system/jobs.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],
+      manifests: [],
+    }),
+    [],
+  );
+
+  expectGuard(1, {
+    files: [{ path: "src/core/data-access/system/lead-delivery.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],
+    manifests: [],
+  });
+});
+
+test("Guard 1 allows jobsCollectionOverrides as the owner read-only diagnostic route", () => {
+  assert.deepEqual(
+    findArchitectureGuardViolations({
+      files: [{ path: "src/project/jobs/config.ts", content: "export const config = { jobsCollectionOverrides: ({ defaultJobsCollection }) => defaultJobsCollection };" }],
+      manifests: [],
+    }),
+    [],
+  );
+});
+
+test("Guard 1 allows registered catalog lifecycle System Gateway access", () => {
+  assert.deepEqual(
+    findArchitectureGuardViolations({
+      files: [{ path: "src/core/data-access/system/catalog-lifecycle.ts", content: "const options = { overrideAccess: true };" }],
+      manifests: [],
+    }),
+    [],
+  );
+});
+
 test("Guard 2 rejects low-level DB outside approved layers", () => {
   expectGuard(2, {
     files: [{ path: "src/app/api/public/route.ts", content: 'import postgres from "postgres";' }],

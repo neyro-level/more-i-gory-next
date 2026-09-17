@@ -25,6 +25,7 @@ test("leads collection keeps PII owner-only and models consent explicitly", () =
   assert.equal(Leads.slug, "leads");
   assert.deepEqual(fieldNames(Leads), [
     "status",
+    "retentionStatus",
     "name",
     "phone",
     "email",
@@ -34,8 +35,13 @@ test("leads collection keeps PII owner-only and models consent explicitly", () =
     "consent",
     "utm",
     "metadata",
+    "piiAnonymizedAt",
+    "historyPurgeAt",
   ]);
   assert.deepEqual(optionValues(Leads, "status"), ["new", "processing", "closed", "spam"]);
+  assert.deepEqual(optionValues(Leads, "retentionStatus"), ["active", "pii_anonymized"]);
+  assert.equal(field(Leads, "retentionStatus").defaultValue, "active");
+  assert.equal(field(Leads, "historyPurgeAt").index, true);
   assert.deepEqual(field(Leads, "consent").fields.map((candidate) => candidate.name), [
     "accepted",
     "version",

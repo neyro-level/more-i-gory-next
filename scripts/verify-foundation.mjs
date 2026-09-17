@@ -22,8 +22,11 @@ const requiredFiles = [
   "src/core/data-access/system/index.ts",
   "src/core/data-access/system/gateway.ts",
   "src/core/data-access/system/bootstrap-owner.ts",
+  "src/core/data-access/system/catalog-lifecycle.ts",
   "src/core/data-access/system/create-lead.ts",
   "src/core/data-access/system/lead-delivery.ts",
+  "src/core/data-access/system/jobs.ts",
+  "src/core/data-access/system/lead-retention.ts",
   "src/core/data-access/system/dispatch-due-feeds.ts",
   "src/core/data-access/system/import-feed-run.ts",
   "src/core/cache/invalidator.ts",
@@ -309,13 +312,27 @@ for (const file of restrictedNextHeadersFiles) {
   }
 }
 
+const payloadJobsConsumers = sourceFiles.filter((file) => {
+  const normalized = file.replaceAll("\\", "/");
+  return (
+    /\bcollection\s*:\s*["']payload-jobs["']/.test(readFileSync(file, "utf8")) &&
+    !normalized.endsWith("/src/core/data-access/system/jobs.ts")
+  );
+});
+if (payloadJobsConsumers.length > 0) {
+  throw new Error(`payload-jobs access must go through trusted System Gateway jobs recovery: ${payloadJobsConsumers.join(", ")}`);
+}
+
 const overrideAccessConsumers = sourceFiles.filter((file) => {
   const normalized = file.replaceAll("\\", "/");
   return (
     /\boverrideAccess\s*:\s*true\b/.test(readFileSync(file, "utf8")) &&
     !normalized.endsWith("/src/core/data-access/system/bootstrap-owner.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/catalog-lifecycle.ts") &&
     !normalized.endsWith("/src/core/data-access/system/create-lead.ts") &&
     !normalized.endsWith("/src/core/data-access/system/lead-delivery.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/jobs.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/lead-retention.ts") &&
     !normalized.endsWith("/src/core/data-access/system/dispatch-due-feeds.ts") &&
     !normalized.endsWith("/src/core/data-access/system/import-feed-run.ts")
   );

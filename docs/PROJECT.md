@@ -97,10 +97,14 @@ status=active`. Unit/filter/layout URL не получают самостоят�
 ## 4. Retention и lifecycle
 
 - `archiveRetentionDays=60`;
-- `leadRetentionDays=TODO` — `NEEDS_OWNER` до EPIC 10/12;
+- `leadRetentionDays=100`;
+- `leadHistoryRecoveryDays=200`;
+- `leadHistoryPurgeDays=300`;
 - архивный объект сначала остаётся доступным с `noindex`, затем получает только
   релевантный `301` или `410`; redirect на главную запрещён;
-- удаление или анонимизация lead включает связанные `lead-deliveries`;
+- lead PII анонимизируется после 100 дней; восстановимая операционная история
+  без PII хранится ещё 200 дней; после 300 дней lead и связанные
+  `lead-deliveries` удаляются вместе;
 - staging не получает production leads или неанонимизированный PII dump.
 
 ## 5. Leads и routing

@@ -136,6 +136,10 @@ export interface Config {
       dispatchDueFeeds: TaskDispatchDueFeeds;
       importFeed: TaskImportFeed;
       deliverLead: TaskDeliverLead;
+      jobsJanitor: TaskJobsJanitor;
+      recoverLeadDeliveries: TaskRecoverLeadDeliveries;
+      catalogLifecycle: TaskCatalogLifecycle;
+      leadRetentionCleanup: TaskLeadRetentionCleanup;
       inline: {
         input: unknown;
         output: unknown;
@@ -699,6 +703,7 @@ export interface ImportIssue {
 export interface Lead {
   id: number;
   status: 'new' | 'processing' | 'closed' | 'spam';
+  retentionStatus: 'active' | 'pii_anonymized';
   name: string;
   phone: string;
   email?: string | null;
@@ -728,6 +733,8 @@ export interface Lead {
     | number
     | boolean
     | null;
+  piiAnonymizedAt?: string | null;
+  historyPurgeAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1097,6 +1104,8 @@ export interface PayloadKv {
     | null;
 }
 /**
+ * Read-only owner diagnostics for queued jobs. Mutations stay blocked.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
@@ -1148,7 +1157,16 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'systemHealth' | 'dispatchDueFeeds' | 'importFeed' | 'deliverLead';
+        taskSlug:
+          | 'inline'
+          | 'systemHealth'
+          | 'dispatchDueFeeds'
+          | 'importFeed'
+          | 'deliverLead'
+          | 'jobsJanitor'
+          | 'recoverLeadDeliveries'
+          | 'catalogLifecycle'
+          | 'leadRetentionCleanup';
         taskID: string;
         input?:
           | {
@@ -1181,7 +1199,19 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'systemHealth' | 'dispatchDueFeeds' | 'importFeed' | 'deliverLead') | null;
+  taskSlug?:
+    | (
+        | 'inline'
+        | 'systemHealth'
+        | 'dispatchDueFeeds'
+        | 'importFeed'
+        | 'deliverLead'
+        | 'jobsJanitor'
+        | 'recoverLeadDeliveries'
+        | 'catalogLifecycle'
+        | 'leadRetentionCleanup'
+      )
+    | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -1843,6 +1873,7 @@ export interface ImportIssuesSelect<T extends boolean = true> {
  */
 export interface LeadsSelect<T extends boolean = true> {
   status?: T;
+  retentionStatus?: T;
   name?: T;
   phone?: T;
   email?: T;
@@ -1858,6 +1889,8 @@ export interface LeadsSelect<T extends boolean = true> {
       };
   utm?: T;
   metadata?: T;
+  piiAnonymizedAt?: T;
+  historyPurgeAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2569,6 +2602,49 @@ export interface TaskDeliverLead {
   };
   output: {
     status: string;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskJobsJanitor".
+ */
+export interface TaskJobsJanitor {
+  input?: unknown;
+  output: {
+    status: string;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskRecoverLeadDeliveries".
+ */
+export interface TaskRecoverLeadDeliveries {
+  input?: unknown;
+  output: {
+    recovered: number;
+    requeued: number;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskCatalogLifecycle".
+ */
+export interface TaskCatalogLifecycle {
+  input?: unknown;
+  output: {
+    expired: number;
+    retained: number;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskLeadRetentionCleanup".
+ */
+export interface TaskLeadRetentionCleanup {
+  input?: unknown;
+  output: {
+    anonymized: number;
+    purged: number;
   };
 }
 /**

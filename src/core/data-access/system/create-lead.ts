@@ -61,6 +61,7 @@ export async function createLead(input: CreateLeadInput): Promise<CreateLeadResu
         metadata: input.metadata,
         name: input.name,
         phone: input.phone,
+        retentionStatus: "active",
         sourcePath: input.sourcePath,
         status: "new",
         utm: input.utm,

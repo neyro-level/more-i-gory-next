@@ -58,6 +58,28 @@ Backup не считается доказанным без успешного re
 новый runtime стартует с 'false', проходит readiness, старый останавливается,
 после подтверждения единственного владельца новый перезапускается с 'true'.
 
+### Payload jobs diagnostics
+
+`payload-jobs` — внутренняя системная коллекция Payload Jobs Queue. Обычный
+код проекта не читает и не меняет её напрямую: доверенный recovery-доступ
+разрешён только в `src/core/data-access/system/jobs.ts`.
+
+Owner-only read diagnostics включается через `jobsCollectionOverrides`, который
+поддерживается pinned Payload `3.89.0`: в Admin коллекция видима владельцу
+только для чтения. Create/update/delete для `payload-jobs` остаются запрещены.
+
+Ручная процедура:
+
+1. Проверить, что открыт именно production/staging контур задачи, а не соседний
+   проект.
+2. Смотреть только агрегированные поля jobs: `taskSlug`, `queue`,
+   `processing`, `waitUntil`, `completedAt`, `hasError`, `totalTried`.
+3. Не копировать в чат или issue raw `input`, `output`, `error` и `log`, если
+   там может быть PII или техническая диагностика.
+4. Recovery выполнять через штатные maintenance tasks и системные функции.
+5. Raw SQL не является default-методом диагностики или восстановления; он
+   требует отдельного incident/recovery plan и explicit owner decision.
+
 ## Imports
 
 Не активны до EPIC 16 и появления фактического feed. Будущий runbook обязан

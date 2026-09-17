@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   createJobsConfig,
   jobsAutoRun,
+  jobsCollectionDiagnosticOverrides,
 } from "../src/project/jobs/config.ts";
 
 const expectedAutoRun = [
@@ -33,7 +34,16 @@ test("imports queue keeps scheduling disabled while EPIC 16 registers import tas
   const config = createJobsConfig("false");
   const taskSlugs = config.tasks?.map((task) => task.slug) ?? [];
 
-  assert.deepEqual(taskSlugs, ["systemHealth", "dispatchDueFeeds", "importFeed", "deliverLead"]);
+  assert.deepEqual(taskSlugs, [
+    "systemHealth",
+    "dispatchDueFeeds",
+    "importFeed",
+    "deliverLead",
+    "jobsJanitor",
+    "recoverLeadDeliveries",
+    "catalogLifecycle",
+    "leadRetentionCleanup",
+  ]);
   assert.equal(jobsAutoRun.find((entry) => entry.queue === "imports")?.disableScheduling, true);
 });
 
@@ -46,4 +56,38 @@ test("existing jobs operations remain owner-only", async () => {
     assert.equal(await config.access?.[operation]?.(ownerRequest), true);
     assert.equal(await config.access?.[operation]?.(editorRequest), false);
   }
+});
+
+test("payload-jobs diagnostics are owner-only and read-only", async () => {
+  const config = createJobsConfig("false");
+  const defaultJobsCollection = {
+    access: {
+      create: () => true,
+      delete: () => true,
+      read: () => false,
+      update: () => true,
+    },
+    admin: {
+      group: "System",
+      hidden: true,
+    },
+    fields: [],
+    slug: "payload-jobs",
+  };
+
+  assert.equal(
+    config.jobsCollectionOverrides,
+    jobsCollectionDiagnosticOverrides.jobsCollectionOverrides,
+  );
+
+  const collection = config.jobsCollectionOverrides?.({ defaultJobsCollection });
+  const ownerRequest = { req: { user: { collection: "users", role: "owner" } } };
+  const editorRequest = { req: { user: { collection: "users", role: "editor" } } };
+
+  assert.equal(collection?.admin?.hidden, false);
+  assert.equal(await collection?.access?.read?.(ownerRequest), true);
+  assert.equal(await collection?.access?.read?.(editorRequest), false);
+  assert.equal(await collection?.access?.create?.(ownerRequest), false);
+  assert.equal(await collection?.access?.update?.(ownerRequest), false);
+  assert.equal(await collection?.access?.delete?.(ownerRequest), false);
 });

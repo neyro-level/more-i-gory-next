@@ -32,4 +32,5 @@ test("createLead uses one Payload transaction for lead and pending deliveries", 
   assert.ok(commitIndex < enqueueIndex, "enqueue must happen only after commit");
   assert.ok(rollbackIndex > commitIndex, "rollback path must exist in the catch branch");
   assert.match(source, /idempotencyKey:\s*`lead:\$\{lead\.id\}:channel:\$\{channelId\}`/);
+  assert.match(source, /retentionStatus:\s*"active"/);
 });
