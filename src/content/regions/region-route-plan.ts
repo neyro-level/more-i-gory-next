@@ -238,6 +238,10 @@ export function getRegionRelatedLinks(entry: RegionRouteEntry): RegionInternalLi
     { href: "/obekty/", label: "Объекты", relation: "objects" },
   );
 
+  if (entry.key === "krym-novostroyki") {
+    links.push({ href: "/novostroyki/", label: "Каталог ЖК", relation: "objects" });
+  }
+
   return links;
 }
 

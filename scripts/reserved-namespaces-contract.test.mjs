@@ -6,7 +6,8 @@ import test from "node:test";
 import { fallbackSiteChrome } from "../src/core/data-access/public/site-chrome-contract.ts";
 
 const siteAppDir = path.resolve("src/app/(site)");
-const reservedRootNamespaces = ["/novostroyki", "/zastroyshchik", "/komplex", "/journal", "/agenty"];
+const reservedRootNamespaces = ["/komplex", "/journal", "/agenty"];
+const activatedRootNamespaces = ["/novostroyki", "/zastroyshchik"];
 
 function isReservedRootPath(href) {
   return reservedRootNamespaces.some((namespace) => href === `${namespace}/` || href.startsWith(`${namespace}/`));
@@ -25,6 +26,15 @@ test("reserved E5 root namespaces are not occupied by public route folders", () 
   for (const namespace of reservedRootNamespaces) {
     const folder = namespace.slice(1);
     assert.equal(routeFolders.includes(folder), false, `${namespace} must stay reserved`);
+  }
+});
+
+test("EPIC 17 root namespaces are activated intentionally", () => {
+  const routeFolders = appRouteFolders();
+
+  for (const namespace of activatedRootNamespaces) {
+    const folder = namespace.slice(1);
+    assert.equal(routeFolders.includes(folder), true, `${namespace} must be an active EPIC 17 route`);
   }
 });
 

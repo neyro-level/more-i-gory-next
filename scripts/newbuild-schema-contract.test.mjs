@@ -128,11 +128,13 @@ test("property newbuild links target complex, building and layout collections wi
   assert.equal(field(Properties, "unit"), undefined);
 });
 
-test("newbuild schema foundation does not create public routes yet", () => {
+test("newbuild schema foundation still forbids low-level public collection routes", () => {
   const routeEntries = fs.readdirSync(siteAppDir, { recursive: true, withFileTypes: true });
-  const routeNames = routeEntries.map((entry) => entry.name);
+  const routeFolders = routeEntries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => path.relative(siteAppDir, path.join(entry.parentPath, entry.name)).replaceAll("\\", "/"));
 
-  for (const forbidden of ["developers", "residential-complexes", "buildings", "layouts", "novostroyki"]) {
-    assert.equal(routeNames.includes(forbidden), false, `${forbidden} public route must not exist in task 15-01`);
+  for (const forbidden of ["developers", "residential-complexes", "buildings", "layouts", "komplex"]) {
+    assert.equal(routeFolders.includes(forbidden), false, `${forbidden} public route must not exist as a low-level collection route`);
   }
 });

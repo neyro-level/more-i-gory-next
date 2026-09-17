@@ -3,6 +3,18 @@ import "server-only";
 export { createPublicGateway } from "./gateway.ts";
 export { getCmsPageByPath } from "./pages.ts";
 export {
+  activeNewbuildInventoryWhere,
+  getPublishedComplexBySlug,
+  getPublishedDeveloperBySlug,
+  listActiveNewbuildInventoryByComplex,
+  listPublishedComplexes,
+  listPublishedComplexSlugs,
+  listPublishedDevelopers,
+  listPublishedDeveloperSlugs,
+  publishedComplexesWhere,
+  publishedDevelopersWhere,
+} from "./newbuilds.ts";
+export {
   archiveRetentionDays,
   getArchivedPropertyAction,
   getManualPropertyRouteBySlug,
@@ -22,6 +34,7 @@ export type {
   PublicReadResult,
 } from "./gateway.ts";
 export type { ArchivedPropertyAction, PublicPropertyDTO } from "./properties.ts";
+export type { PublicComplexDTO, PublicDeveloperDTO, PublicNewbuildInventoryDTO } from "./newbuilds.ts";
 export type { SiteChrome, SiteNavigationLink } from "./site-chrome.ts";
 export type { PublicQueryContract } from "@/core/query";
 export type {

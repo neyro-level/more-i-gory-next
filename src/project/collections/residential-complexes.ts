@@ -2,7 +2,7 @@ import type { CollectionBeforeValidateHook, CollectionConfig } from "payload";
 
 import { pageBlocks } from "../blocks/page-blocks.ts";
 import { assertPublishedSeo, seoFields } from "../fields/seo.ts";
-import { isOwnerAccess } from "../globals/access.ts";
+import { isOwnerAccess, publicReadAccess } from "../globals/access.ts";
 
 const validatePublishedSeo: CollectionBeforeValidateHook = ({ data }) => {
   if (data) assertPublishedSeo(data);
@@ -25,7 +25,7 @@ export const ResidentialComplexes: CollectionConfig = {
   access: {
     create: isOwnerAccess,
     delete: isOwnerAccess,
-    read: isOwnerAccess,
+    read: publicReadAccess,
     update: isOwnerAccess,
   },
   admin: {

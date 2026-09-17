@@ -59,9 +59,9 @@ Production и staging не используют общую БД, secrets или 
 
 | Модуль | Статус | Условие активации |
 |---|---|---|
-| Newbuild schema | planned, unpublished | EPIC 15 после EPIC 8 |
-| XML/YRL ingest | disabled | EPIC 16 и фактически доступный feed |
-| Public newbuild catalog | disabled | EPIC 17 после доказанного ingest |
+| Newbuild schema | enabled | EPIC 15: hidden-by-default collections, no unit routes |
+| XML/YRL ingest | enabled, jobs explicit | EPIC 16: feed sources/import runs/issues; no autorun without configured source |
+| Public newbuild catalog | enabled | EPIC 17: `/novostroyki/`, `/novostroyki/<complex-slug>/`, `/zastroyshchik/<slug>/` |
 | Posts `/analitika/<slug>/` | disabled | EPIC 18 после EPIC 14 и решения владельца |
 | CRM delivery | disabled | отдельное решение; стартовый канал — Telegram |
 | Maps | disabled / `TODO` | отдельное решение provider/license до подключения |
@@ -74,18 +74,25 @@ Disabled module не требует env, jobs, коллекций или кли�
 Каноническая URL-карта принадлежит `02_PRODUCT_STRUCTURE.md`. До её обновления
 в EPIC 0 целевыми решениями считаются решения мастер-плана.
 
-Зарезервированы и не создаются раньше указанного эпика:
+Активированы:
 
-- `/analitika/<slug>/` — EPIC 18;
 - `/novostroyki/` — EPIC 17;
 - `/novostroyki/<complex-slug>/` — EPIC 17;
 - `/zastroyshchik/<slug>/` — EPIC 17;
+
+Зарезервированы и не создаются раньше указанного эпика:
+
+- `/analitika/<slug>/` — EPIC 18;
 - `/komplex/<slug>/` — reserved only;
 - `/journal/*` — reserved only, аналитика остаётся в `/analitika/*`;
 - `/agenty/*` — reserved only.
 
 `/obekty/` принадлежит только инвестиционным паспортам с `origin=manual`.
 Feed inventory `market=newbuild` не может попадать в этот публичный срез.
+`/novostroyki/` принадлежит опубликованным ЖК; активные предложения внутри
+карточки ЖК читаются только через `origin=feed AND market=newbuild AND
+status=active`. Unit/filter/layout URL не получают самостоятельный
+индексируемый маршрут без отдельного whitelist.
 
 ## 4. Retention и lifecycle
 
@@ -118,6 +125,10 @@ CACHE_INVALIDATION_MODE=http
 - `REVALIDATE_SECRET` хранится только в secret manager;
 - массовый import выполняет одну батчевую invalidation по typed targets, а не
   синхронный вызов на каждый объект.
+- catalog group инвалидирует tag `catalog`, `/obekty/` и `/novostroyki/`;
+- import по новостройкам дополнительно инвалидирует affected
+  `/novostroyki/<complex-slug>/` и segment slices вроде
+  `/investicionnaya-nedvizhimost/krym/novostroyki/`.
 
 ## 7. Env mapping
 

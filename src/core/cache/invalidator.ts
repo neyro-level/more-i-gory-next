@@ -103,6 +103,7 @@ export const cacheTargets = {
     return [
       { kind: "tag", tag: "catalog" },
       { kind: "path", path: "/obekty/" },
+      { kind: "path", path: "/novostroyki/" },
     ];
   },
   catalogSlice(slug: string): CacheInvalidationTargetBatch {

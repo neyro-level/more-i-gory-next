@@ -7,6 +7,7 @@ import { articles } from "@/content/articles/articles";
 import { ArticleCard } from "@/components/marketing/article-card";
 import { CmsPage } from "@/components/page-blocks/cms-page";
 import { getCmsPageByPath } from "@/core/data-access/public";
+import { ActionLink } from "@/components/navigation/action-link";
 
 const pagePath = "/analitika/";
 
@@ -52,6 +53,7 @@ export default async function AnalyticsPage() {
         eyebrow="Контентное ядро"
         title="Первые темы для SEO и продаж"
         lead="Каждая статья отвечает на отдельный информационно-коммерческий вопрос и должна вести к региону, объекту или подбору."
+        actions={<ActionLink href="/novostroyki/" variant="outline">Каталог новостроек</ActionLink>}
       >
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {articles.map((article) => (

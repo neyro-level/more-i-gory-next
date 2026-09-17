@@ -91,24 +91,28 @@ test("typed cache targets map approved domain changes to paths and tags", () => 
   assert.deepEqual(cacheTargets.catalogGroup(), [
     { kind: "tag", tag: "catalog" },
     { kind: "path", path: "/obekty/" },
+    { kind: "path", path: "/novostroyki/" },
   ]);
   assert.deepEqual(cacheTargets.catalogSlice("krym/novostroyki"), [
     { kind: "tag", tag: "catalog-slice:krym:novostroyki" },
     { kind: "path", path: "/investicionnaya-nedvizhimost/krym/novostroyki/" },
     { kind: "tag", tag: "catalog" },
     { kind: "path", path: "/obekty/" },
+    { kind: "path", path: "/novostroyki/" },
   ]);
   assert.deepEqual(cacheTargets.complexPage("sample-complex"), [
     { kind: "tag", tag: "complex:sample-complex" },
     { kind: "path", path: "/novostroyki/sample-complex/" },
     { kind: "tag", tag: "catalog" },
     { kind: "path", path: "/obekty/" },
+    { kind: "path", path: "/novostroyki/" },
   ]);
   assert.deepEqual(cacheTargets.propertyPage("sample-resort"), [
     { kind: "tag", tag: "property:sample-resort" },
     { kind: "path", path: "/obekty/sample-resort/" },
     { kind: "tag", tag: "catalog" },
     { kind: "path", path: "/obekty/" },
+    { kind: "path", path: "/novostroyki/" },
   ]);
   assert.deepEqual(cacheTargets.regionPage("krym"), [
     { kind: "tag", tag: "region:krym" },
@@ -151,6 +155,7 @@ test("typed cache targets are combined into one deduplicated batch", async () =>
     { kind: "path", path: "/obekty/sample-resort/" },
     { kind: "tag", tag: "catalog" },
     { kind: "path", path: "/obekty/" },
+    { kind: "path", path: "/novostroyki/" },
     { kind: "tag", tag: "navigation" },
   ]);
 });
@@ -172,6 +177,7 @@ test("import cache targets cover catalog group, complex pages and affected slice
   assert.deepEqual(batches[0], [
     { kind: "tag", tag: "catalog" },
     { kind: "path", path: "/obekty/" },
+    { kind: "path", path: "/novostroyki/" },
     { kind: "tag", tag: "complex:sample-complex" },
     { kind: "path", path: "/novostroyki/sample-complex/" },
     { kind: "tag", tag: "catalog-slice:krym:novostroyki" },

@@ -47,25 +47,28 @@ test("newbuild collections default to hidden and versioned editorial collections
   assert.equal(Layouts.versions, false);
 });
 
-test("newbuild catalog routes are not created before EPIC 17", () => {
+test("newbuild catalog route surface is limited to EPIC 17 public routes", () => {
   const siteAppDir = path.resolve("src/app/(site)");
   const routeEntries = fs.readdirSync(siteAppDir, { recursive: true, withFileTypes: true });
-  const routeNames = routeEntries.map((entry) => entry.name);
+  const routeFolders = routeEntries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => path.relative(siteAppDir, path.join(entry.parentPath, entry.name)).replaceAll("\\", "/"));
 
-  for (const forbidden of ["developers", "residential-complexes", "buildings", "layouts", "novostroyki"]) {
-    assert.equal(routeNames.includes(forbidden), false, `${forbidden} route must not exist before EPIC 17`);
+  assert.equal(routeFolders.includes("novostroyki"), true);
+  assert.equal(routeFolders.includes("novostroyki/[slug]"), true);
+  assert.equal(routeFolders.includes("zastroyshchik/[slug]"), true);
+
+  for (const forbidden of ["developers", "residential-complexes", "buildings", "layouts", "komplex"]) {
+    assert.equal(routeFolders.includes(forbidden), false, `${forbidden} route must not exist as a public root route`);
   }
 });
 
-test("newbuild catalog is outside sitemap and fallback navigation", () => {
+test("newbuild unit URLs stay outside sitemap and fallback navigation", () => {
   const registry = JSON.parse(fs.readFileSync("src/seo/registry.json", "utf8"));
   const newbuildEntries = registry.filter((entry) => entry.canonical.includes("/novostroyki/"));
 
   assert.ok(newbuildEntries.length > 0, "regional newbuild gate entries should stay explicit in SEO registry");
-  for (const entry of newbuildEntries) {
-    assert.notEqual(entry.sitemap, "yes", `${entry.pageId} must not be sitemap=yes before publication gate`);
-  }
-  assert.equal(registry.some((entry) => entry.canonical === "/novostroyki/"), false);
+  assert.equal(registry.some((entry) => entry.canonical.includes("/layouts/") || entry.canonical.includes("/unit/")), false);
 
   const fallbackLinks = [
     ...fallbackSiteChrome.navigation.header,
@@ -74,5 +77,5 @@ test("newbuild catalog is outside sitemap and fallback navigation", () => {
     ...fallbackSiteChrome.navigation.legal,
   ].map((item) => item.href);
 
-  assert.equal(fallbackLinks.some((href) => href.includes("/novostroyki/")), false);
+  assert.equal(fallbackLinks.some((href) => href.includes("/layouts/") || href.includes("/unit/")), false);
 });

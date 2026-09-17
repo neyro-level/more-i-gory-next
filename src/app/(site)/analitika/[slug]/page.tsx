@@ -6,6 +6,7 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { RiskBlock } from "@/components/marketing/risk-block";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
+import { ActionLink } from "@/components/navigation/action-link";
 import { articles, getArticleBySlug } from "@/content/articles/articles";
 
 type ArticlePageProps = {
@@ -73,6 +74,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           title="Почему статья пока не в индексе"
           text="Без полного текста, источников и проверки экспертных утверждений статья остаётся draft/noindex и не попадает в sitemap."
         />
+      </SectionShell>
+
+      <SectionShell
+        className="pt-0"
+        eyebrow="Коммерческая связка"
+        title="Перейти от материала к проверке рынка"
+        lead="Материал должен вести к региону, каталогу новостроек или персональному подбору, а не оставаться изолированной публикацией."
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          <ActionLink href="/novostroyki/" variant="outline">Каталог новостроек</ActionLink>
+          <ActionLink href="/investicionnaya-nedvizhimost/krym/novostroyki/" variant="outline">Новостройки Крыма</ActionLink>
+          <ActionLink href="/podbor/" variant="outline">Подбор</ActionLink>
+        </div>
       </SectionShell>
 
       <SectionShell className="pt-0">

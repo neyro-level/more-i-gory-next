@@ -3,7 +3,9 @@ import "server-only";
 import { unstable_cache } from "next/cache";
 import { getPayload } from "payload";
 
+import { listPublishedComplexes } from "@/core/data-access/public";
 import config from "../../payload.config.ts";
+import { newbuildComplexSitemapEntries } from "./newbuild-indexing.ts";
 import { seoRegistry } from "./registry";
 import { cmsPageSitemapEntries, mergeSitemapEntries, normalizeSitemapCanonical } from "./sitemap-source-contract.ts";
 import type { SitemapSourceEntry } from "./sitemap-source-contract.ts";
@@ -21,6 +23,7 @@ export function staticRegistrySitemapEntries(): readonly SitemapSourceEntry[] {
 
 async function readSitemapEntries(): Promise<readonly SitemapSourceEntry[]> {
   const staticEntries = staticRegistrySitemapEntries();
+  const complexEntries = newbuildComplexSitemapEntries(await listPublishedComplexes());
 
   try {
     const payload = await getPayload({ config });
@@ -39,9 +42,9 @@ async function readSitemapEntries(): Promise<readonly SitemapSourceEntry[]> {
       },
     });
 
-    return mergeSitemapEntries([...staticEntries, ...cmsPageSitemapEntries(pages.docs)]);
+    return mergeSitemapEntries([...staticEntries, ...complexEntries, ...cmsPageSitemapEntries(pages.docs)]);
   } catch {
-    return staticEntries;
+    return mergeSitemapEntries([...staticEntries, ...complexEntries]);
   }
 }
 
