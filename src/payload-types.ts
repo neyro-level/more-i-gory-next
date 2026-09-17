@@ -135,6 +135,7 @@ export interface Config {
       systemHealth: TaskSystemHealth;
       dispatchDueFeeds: TaskDispatchDueFeeds;
       importFeed: TaskImportFeed;
+      deliverLead: TaskDeliverLead;
       inline: {
         input: unknown;
         output: unknown;
@@ -746,6 +747,14 @@ export interface LeadDelivery {
   lastErrorRedacted?: string | null;
   claimedAt?: string | null;
   heartbeatAt?: string | null;
+  manualRetryAudit?:
+    | {
+        requestedAt: string;
+        actorRef: string;
+        reasonRedacted?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   attemptLog?:
     | {
         attemptedAt: string;
@@ -1139,7 +1148,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'systemHealth' | 'dispatchDueFeeds' | 'importFeed';
+        taskSlug: 'inline' | 'systemHealth' | 'dispatchDueFeeds' | 'importFeed' | 'deliverLead';
         taskID: string;
         input?:
           | {
@@ -1172,7 +1181,7 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'systemHealth' | 'dispatchDueFeeds' | 'importFeed') | null;
+  taskSlug?: ('inline' | 'systemHealth' | 'dispatchDueFeeds' | 'importFeed' | 'deliverLead') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -1867,6 +1876,14 @@ export interface LeadDeliveriesSelect<T extends boolean = true> {
   lastErrorRedacted?: T;
   claimedAt?: T;
   heartbeatAt?: T;
+  manualRetryAudit?:
+    | T
+    | {
+        requestedAt?: T;
+        actorRef?: T;
+        reasonRedacted?: T;
+        id?: T;
+      };
   attemptLog?:
     | T
     | {
@@ -2537,6 +2554,18 @@ export interface TaskImportFeed {
   input: {
     feedSourceId: string;
     importRunId: string;
+  };
+  output: {
+    status: string;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskDeliverLead".
+ */
+export interface TaskDeliverLead {
+  input: {
+    leadDeliveryId: string;
   };
   output: {
     status: string;

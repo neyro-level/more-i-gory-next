@@ -110,6 +110,14 @@ status=active`. Unit/filter/layout URL не получают самостоят�
 - success формы зависит от локального commit lead + pending deliveries, а не от
   ответа Telegram;
 - фактический Telegram destination и fallback routing: `TODO` до EPIC 11;
+- `deliverLead` использует concurrency key `delivery:<leadDeliveryId>` как
+  owner-approved safe proxy для пары `lead + channel`: запись
+  `lead-deliveries` имеет уникальный индекс по этой паре, а job input остаётся
+  минимальным и содержит только `leadDeliveryId`;
+- Telegram не даёт проекту полноценный idempotency key: после unknown timeout
+  возможен residual duplicate risk, поэтому `externalRef` сохраняется сразу
+  после подтверждённого remote create, а unknown outcome уходит в retry/recovery
+  без записи ПДн в error log;
 - новый token, chat ID и outbound host allowlist являются external secret gate;
 - phone, email, name, message и raw body не передаются в analytics или логи.
 

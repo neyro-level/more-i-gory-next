@@ -22,6 +22,8 @@ const requiredFiles = [
   "src/core/data-access/system/index.ts",
   "src/core/data-access/system/gateway.ts",
   "src/core/data-access/system/bootstrap-owner.ts",
+  "src/core/data-access/system/create-lead.ts",
+  "src/core/data-access/system/lead-delivery.ts",
   "src/core/data-access/system/dispatch-due-feeds.ts",
   "src/core/data-access/system/import-feed-run.ts",
   "src/core/cache/invalidator.ts",
@@ -313,6 +315,7 @@ const overrideAccessConsumers = sourceFiles.filter((file) => {
     /\boverrideAccess\s*:\s*true\b/.test(readFileSync(file, "utf8")) &&
     !normalized.endsWith("/src/core/data-access/system/bootstrap-owner.ts") &&
     !normalized.endsWith("/src/core/data-access/system/create-lead.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/lead-delivery.ts") &&
     !normalized.endsWith("/src/core/data-access/system/dispatch-due-feeds.ts") &&
     !normalized.endsWith("/src/core/data-access/system/import-feed-run.ts")
   );

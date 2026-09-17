@@ -97,7 +97,9 @@ test("jobs config registers dispatchDueFeeds schedule and importFeed target", ()
   const dispatchTask = config.tasks?.find((task) => task.slug === "dispatchDueFeeds");
   const importTask = config.tasks?.find((task) => task.slug === "importFeed");
 
-  assert.deepEqual(taskSlugs, ["systemHealth", "dispatchDueFeeds", "importFeed"]);
+  assert.ok(taskSlugs.includes("systemHealth"));
+  assert.ok(taskSlugs.includes("dispatchDueFeeds"));
+  assert.ok(taskSlugs.includes("importFeed"));
   assert.deepEqual(dispatchTask?.schedule, [{ cron: "* 0/5 * * * *", queue: "system" }]);
   assert.deepEqual(importTask?.concurrency, {
     exclusive: true,

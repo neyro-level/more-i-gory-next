@@ -25,6 +25,12 @@ const attemptLogFields = [
   { name: "redactedMessage", type: "textarea" },
 ] satisfies CollectionConfig["fields"];
 
+const manualRetryAuditFields = [
+  { name: "requestedAt", type: "date", required: true },
+  { name: "actorRef", type: "text", required: true },
+  { name: "reasonRedacted", type: "textarea" },
+] satisfies CollectionConfig["fields"];
+
 export const LeadDeliveries: CollectionConfig = {
   slug: "lead-deliveries",
   access: {
@@ -69,6 +75,12 @@ export const LeadDeliveries: CollectionConfig = {
     { name: "lastErrorRedacted", type: "textarea" },
     { name: "claimedAt", type: "date", index: true },
     { name: "heartbeatAt", type: "date", index: true },
+    {
+      name: "manualRetryAudit",
+      type: "array",
+      fields: manualRetryAuditFields,
+      maxRows: 20,
+    },
     {
       name: "attemptLog",
       type: "array",

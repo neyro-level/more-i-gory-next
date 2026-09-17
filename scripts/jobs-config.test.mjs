@@ -33,7 +33,7 @@ test("imports queue keeps scheduling disabled while EPIC 16 registers import tas
   const config = createJobsConfig("false");
   const taskSlugs = config.tasks?.map((task) => task.slug) ?? [];
 
-  assert.deepEqual(taskSlugs, ["systemHealth", "dispatchDueFeeds", "importFeed"]);
+  assert.deepEqual(taskSlugs, ["systemHealth", "dispatchDueFeeds", "importFeed", "deliverLead"]);
   assert.equal(jobsAutoRun.find((entry) => entry.queue === "imports")?.disableScheduling, true);
 });
 

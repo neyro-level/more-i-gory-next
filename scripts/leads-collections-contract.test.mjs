@@ -60,6 +60,7 @@ test("lead-deliveries collection exposes the approved transactional outbox field
     "lastErrorRedacted",
     "claimedAt",
     "heartbeatAt",
+    "manualRetryAudit",
     "attemptLog",
   ]);
   assert.equal(field(LeadDeliveries, "lead").relationTo, "leads");
@@ -79,6 +80,12 @@ test("lead-deliveries collection exposes the approved transactional outbox field
     "safeCode",
     "redactedMessage",
   ]);
+  assert.deepEqual(field(LeadDeliveries, "manualRetryAudit").fields.map((candidate) => candidate.name), [
+    "requestedAt",
+    "actorRef",
+    "reasonRedacted",
+  ]);
+  assert.equal(field(LeadDeliveries, "manualRetryAudit").maxRows, 20);
   assert.equal(anonymousAccess(LeadDeliveries, "create"), false);
   assert.equal(anonymousAccess(LeadDeliveries, "read"), false);
   assert.equal(anonymousAccess(LeadDeliveries, "update"), false);

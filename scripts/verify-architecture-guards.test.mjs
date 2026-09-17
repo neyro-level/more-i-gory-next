@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { assertArchitectureGuards } from "./lib/architecture-guards.mjs";
+import { assertArchitectureGuards, findArchitectureGuardViolations } from "./lib/architecture-guards.mjs";
 
 const exactManifest = {
   dependencies: {
@@ -60,6 +60,16 @@ test("Guard 1 rejects unregistered privileged files inside System Gateway", () =
     files: [{ path: "src/core/data-access/system/maintenance.ts", content: "const options = { overrideAccess: true };" }],
     manifests: [],
   });
+});
+
+test("Guard 1 allows registered lead delivery System Gateway transition", () => {
+  assert.deepEqual(
+    findArchitectureGuardViolations({
+      files: [{ path: "src/core/data-access/system/lead-delivery.ts", content: "const options = { overrideAccess: true };" }],
+      manifests: [],
+    }),
+    [],
+  );
 });
 
 test("Guard 2 rejects low-level DB outside approved layers", () => {
