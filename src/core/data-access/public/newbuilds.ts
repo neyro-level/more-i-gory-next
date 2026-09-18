@@ -7,6 +7,7 @@ import { z } from "zod";
 
 import config from "../../../../payload.config.ts";
 import { publicMediaSchema } from "./media-contract.ts";
+import { publicReadWithFallback } from "./read-fallback.ts";
 import type { Developer, Media, Property, Region, ResidentialComplex } from "../../../payload-types.ts";
 
 const fallbackCover = {
@@ -172,41 +173,45 @@ function mapPublicNewbuildInventory(property: PublicNewbuildInventoryRecord): Pu
 }
 
 async function readPublishedComplexes(slug?: string): Promise<readonly PublicComplexDTO[]> {
-  try {
-    const payload = await getPayload({ config });
-    const result = await payload.find({
-      collection: "residential-complexes",
-      depth: 2,
-      limit: slug ? 1 : 100,
-      overrideAccess: false,
-      pagination: false,
-      select: publicComplexSelect,
-      where: publishedComplexesWhere(slug),
-    });
+  return publicReadWithFallback({
+    fallback: [],
+    reader: "published-complexes",
+    read: async () => {
+      const payload = await getPayload({ config });
+      const result = await payload.find({
+        collection: "residential-complexes",
+        depth: 2,
+        limit: slug ? 1 : 100,
+        overrideAccess: false,
+        pagination: false,
+        select: publicComplexSelect,
+        where: publishedComplexesWhere(slug),
+      });
 
-    return result.docs.map((doc) => mapPublicComplex(doc as PublicComplexRecord));
-  } catch {
-    return [];
-  }
+      return result.docs.map((doc) => mapPublicComplex(doc as PublicComplexRecord));
+    },
+  });
 }
 
 async function readPublishedDevelopers(slug?: string): Promise<readonly PublicDeveloperDTO[]> {
-  try {
-    const payload = await getPayload({ config });
-    const result = await payload.find({
-      collection: "developers",
-      depth: 1,
-      limit: slug ? 1 : 100,
-      overrideAccess: false,
-      pagination: false,
-      select: publicDeveloperSelect,
-      where: publishedDevelopersWhere(slug),
-    });
+  return publicReadWithFallback({
+    fallback: [],
+    reader: "published-developers",
+    read: async () => {
+      const payload = await getPayload({ config });
+      const result = await payload.find({
+        collection: "developers",
+        depth: 1,
+        limit: slug ? 1 : 100,
+        overrideAccess: false,
+        pagination: false,
+        select: publicDeveloperSelect,
+        where: publishedDevelopersWhere(slug),
+      });
 
-    return result.docs.map((doc) => mapPublicDeveloper(doc as PublicDeveloperRecord));
-  } catch {
-    return [];
-  }
+      return result.docs.map((doc) => mapPublicDeveloper(doc as PublicDeveloperRecord));
+    },
+  });
 }
 
 export const listPublishedComplexes = unstable_cache(
@@ -254,20 +259,22 @@ export const listPublishedDeveloperSlugs = unstable_cache(
 );
 
 export async function listActiveNewbuildInventoryByComplex(complexId: string): Promise<readonly PublicNewbuildInventoryDTO[]> {
-  try {
-    const payload = await getPayload({ config });
-    const result = await payload.find({
-      collection: "properties",
-      depth: 0,
-      limit: 100,
-      overrideAccess: false,
-      pagination: false,
-      select: publicNewbuildInventorySelect,
-      where: activeNewbuildInventoryWhere(complexId),
-    });
+  return publicReadWithFallback({
+    fallback: [],
+    reader: "active-newbuild-inventory",
+    read: async () => {
+      const payload = await getPayload({ config });
+      const result = await payload.find({
+        collection: "properties",
+        depth: 0,
+        limit: 100,
+        overrideAccess: false,
+        pagination: false,
+        select: publicNewbuildInventorySelect,
+        where: activeNewbuildInventoryWhere(complexId),
+      });
 
-    return result.docs.map((doc) => mapPublicNewbuildInventory(doc as PublicNewbuildInventoryRecord));
-  } catch {
-    return [];
-  }
+      return result.docs.map((doc) => mapPublicNewbuildInventory(doc as PublicNewbuildInventoryRecord));
+    },
+  });
 }

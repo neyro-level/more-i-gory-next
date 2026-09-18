@@ -4,6 +4,7 @@ import { unstable_cache } from "next/cache";
 import { getPayload } from "payload";
 
 import { listPublishedComplexes } from "@/core/data-access/public";
+import { publicReadWithFallback } from "@/core/data-access/public/read-fallback.ts";
 import config from "../../payload.config.ts";
 import { newbuildComplexSitemapEntries } from "./newbuild-indexing.ts";
 import { seoRegistry } from "./registry";
@@ -25,28 +26,30 @@ async function readSitemapEntries(): Promise<readonly SitemapSourceEntry[]> {
   const staticEntries = staticRegistrySitemapEntries();
   const complexEntries = newbuildComplexSitemapEntries(await listPublishedComplexes());
 
-  try {
-    const payload = await getPayload({ config });
-    const pages = await payload.find({
-      collection: "pages",
-      depth: 0,
-      limit: 1000,
-      overrideAccess: false,
-      pagination: false,
-      select: {
-        path: true,
-        seo: true,
-        status: true,
-      },
-      where: {
-        status: { equals: "published" },
-      },
-    });
+  return publicReadWithFallback({
+    fallback: mergeSitemapEntries([...staticEntries, ...complexEntries]),
+    reader: "sitemap-cms-pages",
+    read: async () => {
+      const payload = await getPayload({ config });
+      const pages = await payload.find({
+        collection: "pages",
+        depth: 0,
+        limit: 1000,
+        overrideAccess: false,
+        pagination: false,
+        select: {
+          path: true,
+          seo: true,
+          status: true,
+        },
+        where: {
+          status: { equals: "published" },
+        },
+      });
 
-    return mergeSitemapEntries([...staticEntries, ...complexEntries, ...cmsPageSitemapEntries(pages.docs)]);
-  } catch {
-    return mergeSitemapEntries([...staticEntries, ...complexEntries]);
-  }
+      return mergeSitemapEntries([...staticEntries, ...complexEntries, ...cmsPageSitemapEntries(pages.docs)]);
+    },
+  });
 }
 
 export const getSitemapEntries = unstable_cache(readSitemapEntries, ["sitemap-entries"], {
