@@ -1,5 +1,3 @@
-import "server-only";
-
 import type { LeadDeliveryPayload } from "../../leads/delivery.ts";
 import type { LeadDeliveryAttemptLogEntry } from "../../leads/delivery-state.ts";
 
