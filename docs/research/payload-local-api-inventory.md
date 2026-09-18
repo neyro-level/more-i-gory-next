@@ -49,21 +49,23 @@
 | `src/core/data-access/system/dispatch-due-feeds.ts:69` | `find` | SYSTEM GATEWAY | `const dueFeeds = await payload.find({` |
 | `src/core/data-access/system/dispatch-due-feeds.ts:92` | `update` | SYSTEM GATEWAY | `const claim = await payload.update({` |
 | `src/core/data-access/system/dispatch-due-feeds.ts:118` | `create` | SYSTEM GATEWAY | `const importRun = await payload.create({` |
-| `src/core/data-access/system/dispatch-due-feeds.ts:126` | `jobs.queue` | SYSTEM GATEWAY | `const job = await payload.jobs.queue({` |
-| `src/core/data-access/system/dispatch-due-feeds.ts:136` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/dispatch-due-feeds.ts:129` | `jobs.queue` | SYSTEM GATEWAY | `job = await payload.jobs.queue({` |
+| `src/core/data-access/system/dispatch-due-feeds.ts:142` | `update` | SYSTEM GATEWAY | `await payload.update({` |
 | `src/core/data-access/system/import-feed-run.ts:20` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
-| `src/core/data-access/system/jobs.ts:32` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/system/lead-delivery.ts:88` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:121` | `findByID` | SYSTEM GATEWAY | `const existing = await payload.findByID?.({` |
-| `src/core/data-access/system/lead-delivery.ts:140` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:162` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
-| `src/core/data-access/system/lead-delivery.ts:179` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:201` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:225` | `update` | SYSTEM GATEWAY | `await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:246` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
-| `src/core/data-access/system/lead-delivery.ts:268` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
-| `src/core/data-access/system/lead-delivery.ts:301` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:314` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
+| `src/core/data-access/system/jobs-janitor.ts:48` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
+| `src/core/data-access/system/jobs-janitor.ts:76` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/jobs.ts:50` | `find` | SYSTEM GATEWAY | `payload.find({` |
+| `src/core/data-access/system/lead-delivery.ts:90` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:123` | `findByID` | SYSTEM GATEWAY | `const existing = await payload.findByID?.({` |
+| `src/core/data-access/system/lead-delivery.ts:142` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:164` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
+| `src/core/data-access/system/lead-delivery.ts:181` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:203` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:227` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:248` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
+| `src/core/data-access/system/lead-delivery.ts:272` | `find` | SYSTEM GATEWAY | `(await payload.find?.({` |
+| `src/core/data-access/system/lead-delivery.ts:307` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:320` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
 | `src/core/data-access/system/lead-retention.ts:47` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
 | `src/core/data-access/system/lead-retention.ts:75` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
 | `src/core/data-access/system/lead-retention.ts:98` | `delete` | SYSTEM GATEWAY | `await payload.delete({` |
@@ -74,12 +76,13 @@
 | `src/project/collections/properties.ts:41` | `req.payload` | CMS ADMIN | `(feedSourceId == null ? null : await loadFeedSourceMarket(req.payload, feedSourceId));` |
 | `src/project/collections/redirects.ts:15` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/collections/redirects.ts:23` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
-| `src/project/jobs/imports/dispatch-due-feeds.ts:23` | `req.payload` | SYSTEM GATEWAY | `const result = await dispatchDueFeeds(req.payload as unknown as Parameters<typeof dispatchDueFeeds>[0]);` |
+| `src/project/jobs/imports/dispatch-due-feeds.ts:24` | `req.payload` | SYSTEM GATEWAY | `const result = await dispatchDueFeeds(req.payload as unknown as Parameters<typeof dispatchDueFeeds>[0]);` |
 | `src/project/jobs/imports/import-feed.ts:29` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof transitionImportRunToRunning>[0],` |
 | `src/project/jobs/leads/deliver-lead.ts:189` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as PayloadLike,` |
-| `src/project/jobs/maintenance/scheduled-tasks.ts:105` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof recoverLeadDeliveries>[0],` |
-| `src/project/jobs/maintenance/scheduled-tasks.ts:132` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof catalogLifecycle>[0],` |
-| `src/project/jobs/maintenance/scheduled-tasks.ts:159` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof leadRetentionCleanup>[0],` |
+| `src/project/jobs/maintenance/scheduled-tasks.ts:94` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof jobsJanitor>[0],` |
+| `src/project/jobs/maintenance/scheduled-tasks.ts:121` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof recoverLeadDeliveries>[0],` |
+| `src/project/jobs/maintenance/scheduled-tasks.ts:148` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof catalogLifecycle>[0],` |
+| `src/project/jobs/maintenance/scheduled-tasks.ts:175` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof leadRetentionCleanup>[0],` |
 | `src/project/leads/owner-retry.ts:39` | `req.payload` | SYSTEM GATEWAY | `req.payload as Parameters<typeof retryAbandonedLeadDelivery>[0],` |
 | `src/seo/sitemap-source.ts:29` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/seo/sitemap-source.ts:30` | `find` | PUBLIC GATEWAY | `const pages = await payload.find({` |

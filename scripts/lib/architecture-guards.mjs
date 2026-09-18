@@ -7,6 +7,7 @@ const privilegedSystemFiles = new Set([
   "src/core/data-access/system/lead-delivery.ts",
   "src/core/data-access/system/load-lead-delivery.ts",
   "src/core/data-access/system/jobs.ts",
+  "src/core/data-access/system/jobs-janitor.ts",
   "src/core/data-access/system/lead-retention.ts",
   "src/core/data-access/system/dispatch-due-feeds.ts",
   "src/core/data-access/system/import-feed-run.ts",

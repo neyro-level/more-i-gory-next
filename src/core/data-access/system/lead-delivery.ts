@@ -2,6 +2,7 @@ import {
   type RecoverableLeadDelivery,
   planLeadDeliveryRecovery,
 } from "../../leads/delivery-recovery.ts";
+import { collectBoundedPages } from "../../lib/bounded-pagination.ts";
 import { findLiveDeliverLeadJobIds } from "./jobs.ts";
 
 type LeadDeliveryTransitionInput = {
@@ -42,9 +43,10 @@ type PayloadLike = {
     depth: 0;
     limit: number;
     overrideAccess: true;
-    pagination: false;
+    page: number;
+    pagination: true;
     where: Record<string, unknown>;
-  }) => Promise<{ docs?: RecoverableLeadDelivery[] }>;
+  }) => Promise<{ docs?: RecoverableLeadDelivery[]; hasNextPage?: boolean }>;
   findByID?: (args: {
     collection: "lead-deliveries";
     depth: 0;
@@ -265,32 +267,36 @@ export async function recoverLeadDeliveries(
   const maintenanceIntervalMinutes =
     input.maintenanceIntervalMinutes ?? defaultMaintenanceIntervalMinutes;
   const liveLeadDeliveryJobIds = await findLiveDeliverLeadJobIds(payload);
-  const result = await payload.find?.({
-    collection: "lead-deliveries",
-    depth: 0,
-    limit: 1000,
-    overrideAccess: true,
-    pagination: false,
-    where: {
-      or: [
-        { status: { equals: "sending" } },
-        {
-          and: [
-            { status: { equals: "pending" } },
+  const deliveries = await collectBoundedPages<RecoverableLeadDelivery>({
+    fetchPage: async (page, limit) =>
+      (await payload.find?.({
+        collection: "lead-deliveries",
+        depth: 0,
+        limit,
+        overrideAccess: true,
+        page,
+        pagination: true,
+        where: {
+          or: [
+            { status: { equals: "sending" } },
             {
-              or: [
-                { nextAttemptAt: { less_than_equal: nowIso } },
-                { nextAttemptAt: { exists: false } },
+              and: [
+                { status: { equals: "pending" } },
+                {
+                  or: [
+                    { nextAttemptAt: { less_than_equal: nowIso } },
+                    { nextAttemptAt: { exists: false } },
+                  ],
+                },
               ],
             },
           ],
         },
-      ],
-    },
+      })) ?? { docs: [] },
   });
 
   const actions = planLeadDeliveryRecovery({
-    deliveries: result?.docs ?? [],
+    deliveries,
     liveLeadDeliveryJobIds,
     maintenanceIntervalMinutes,
     now,

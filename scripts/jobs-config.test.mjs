@@ -8,10 +8,10 @@ import {
 } from "../src/project/jobs/config.ts";
 
 const expectedAutoRun = [
-  { disableScheduling: false, queue: "system" },
-  { disableScheduling: true, queue: "imports" },
-  { disableScheduling: false, queue: "maintenance" },
-  { disableScheduling: true, queue: "lead-deliveries" },
+  { disableScheduling: false, limit: 5, queue: "system" },
+  { disableScheduling: true, limit: 5, queue: "imports" },
+  { disableScheduling: false, limit: 5, queue: "maintenance" },
+  { disableScheduling: true, limit: 10, queue: "lead-deliveries" },
 ];
 
 test("jobs config declares the approved queue scheduling matrix", () => {
@@ -20,6 +20,13 @@ test("jobs config declares the approved queue scheduling matrix", () => {
   assert.deepEqual(jobsAutoRun, expectedAutoRun);
   assert.deepEqual(config.autoRun, expectedAutoRun);
   assert.equal(config.enableConcurrencyControl, true);
+
+  for (const entry of jobsAutoRun) {
+    assert.equal(typeof entry.queue, "string");
+    assert.equal(typeof entry.limit, "number");
+    assert.equal(typeof entry.disableScheduling, "boolean");
+    assert.ok(Number.isInteger(entry.limit) && entry.limit > 0);
+  }
 });
 
 test("jobs autorun follows the validated JOBS_AUTORUN flag", async () => {
@@ -90,4 +97,17 @@ test("payload-jobs diagnostics are owner-only and read-only", async () => {
   assert.equal(await collection?.access?.create?.(ownerRequest), false);
   assert.equal(await collection?.access?.update?.(ownerRequest), false);
   assert.equal(await collection?.access?.delete?.(ownerRequest), false);
+});
+
+test("jobs owner contract allows exactly one JOBS_AUTORUN=true in steady state", async () => {
+  const { assertJobsOwnerContract, readJobsAutorunFromEnvText } = await import("./lib/jobs-owner-contract.mjs");
+
+  assert.deepEqual(assertJobsOwnerContract("steady", ["false", "true"]), { mode: "steady", owners: 1 });
+  assert.deepEqual(assertJobsOwnerContract("handover-none", ["false", "false"]), {
+    mode: "handover-none",
+    owners: 0,
+  });
+  assert.throws(() => assertJobsOwnerContract("steady", ["true", "true"]), /exactly one/);
+  assert.throws(() => assertJobsOwnerContract("handover-none", ["true"]), /zero/);
+  assert.equal(readJobsAutorunFromEnvText("JOBS_AUTORUN=true\n"), "true");
 });

@@ -31,3 +31,5 @@
 |---|---|---|---|---|
 | TASK 21.6 | Решить, удалять ли workspace-пакет `packages/ui` после EPIC 32 | Пакет помечен reserved/inactive; FOLDER FORM каноничен; UI не переносился | При необходимости отдельный cleanup lockfile/workspace | нет |
 | TASK 24.1b | Применить Postgres enum conversion к существующим `properties.category` / `deal_type`, если отчёт 24.1a покажет строки вне контракта | Контракт, select-options, ingest/DTO reject и draft SQL зафиксированы в 24.1a; отчёт в `docs/research/property-enum-drift-report.md` | После 0 внеконтрактных строк миграция идёт автономно; иначе owner unlock EPIC 34 | нет |
+| TASK 25.8 вариант 1 | Postgres advisory lock при старте jobs-owner | Закрыт runbook + `scripts/assert-one-jobs-owner.mjs`; lock не внедрялся | Если proof 14.I покажет недостаточность runbook — отдельное усиление после EPIC 32 | нет |
+| TASK 25.8 вариант 2 | Служебная запись владения с TTL | То же; таблица/миграция не добавлялись | Если proof 14.I покажет недостаточность runbook — отдельное усиление после EPIC 32 | нет |

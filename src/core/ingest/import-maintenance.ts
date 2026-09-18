@@ -1,5 +1,8 @@
 const minuteMs = 60_000;
 
+export const defaultDispatcherIntervalMinutes = 5;
+export const defaultStaleRunningThresholdMinutes = 15;
+
 export type ImportRunMaintenanceStatus = "interrupted" | "queued" | "running";
 
 export type ImportRunMaintenanceRecord = {

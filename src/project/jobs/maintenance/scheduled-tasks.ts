@@ -1,6 +1,7 @@
 import type { TaskConfig } from "payload";
 
 import { catalogLifecycle } from "../../../core/data-access/system/catalog-lifecycle.ts";
+import { jobsJanitor } from "../../../core/data-access/system/jobs-janitor.ts";
 import { leadRetentionCleanup } from "../../../core/data-access/system/lead-retention.ts";
 import { recoverLeadDeliveries } from "../../../core/data-access/system/lead-delivery.ts";
 
@@ -10,10 +11,13 @@ type MaintenanceTaskSlug =
   | "catalogLifecycle"
   | "recoverLeadDeliveries";
 
-type MaintenanceTask = {
+type JobsJanitorTask = {
   input: Record<string, never>;
   output: {
-    status: "registered";
+    interrupted: number;
+    massDeactivationForbidden: true;
+    orphanQueued: number;
+    staleRunning: number;
   };
 };
 
@@ -49,37 +53,49 @@ type MaintenanceScheduleDefinition = Readonly<{
 export const maintenanceQueue = "maintenance" as const;
 
 export const maintenanceSchedules = [
+  // Seconds field must be `0`, not `*`: `* 0/5 * * * *` fires every second.
   { slug: "jobsJanitor", cron: "0 0/5 * * * *" },
   { slug: "recoverLeadDeliveries", cron: "30 0/5 * * * *" },
   { slug: "catalogLifecycle", cron: "0 0 * * * *" },
   { slug: "leadRetentionCleanup", cron: "0 30 2 * * *" },
 ] satisfies MaintenanceScheduleDefinition[];
 
-function createMaintenanceTask(
-  schedule: MaintenanceScheduleDefinition,
-): TaskConfig<MaintenanceTask> {
-  return {
-    slug: schedule.slug,
-    inputSchema: [],
-    outputSchema: [{ name: "status", type: "text", required: true }],
-    concurrency: {
-      exclusive: true,
-      key: () => `maintenance:${schedule.slug}`,
-      supersedes: false,
-    },
-    retries: 0,
-    schedule: [{ cron: schedule.cron, queue: maintenanceQueue }],
-    handler: async () => ({ output: { status: "registered" } }),
-  };
+function cronFor(slug: MaintenanceTaskSlug): string {
+  const schedule = maintenanceSchedules.find((entry) => entry.slug === slug);
+  if (!schedule) {
+    throw new Error(`Unknown maintenance schedule: ${slug}`);
+  }
+  return schedule.cron;
 }
 
-export const maintenanceTasks = maintenanceSchedules.map(createMaintenanceTask);
-const [
-  jobsJanitorTask,
-  ,
-  ,
-  ,
-] = maintenanceTasks;
+export const jobsJanitorTask: TaskConfig<JobsJanitorTask> = {
+  slug: "jobsJanitor",
+  inputSchema: [],
+  outputSchema: [
+    { name: "interrupted", type: "number", required: true },
+    { name: "massDeactivationForbidden", type: "checkbox", required: true },
+    { name: "orphanQueued", type: "number", required: true },
+    { name: "staleRunning", type: "number", required: true },
+  ],
+  concurrency: {
+    exclusive: true,
+    key: () => "maintenance:jobsJanitor",
+    supersedes: false,
+  },
+  retries: 0,
+  schedule: [
+    {
+      cron: cronFor("jobsJanitor"),
+      queue: maintenanceQueue,
+    },
+  ],
+  handler: async ({ req }) => {
+    const result = await jobsJanitor(
+      req.payload as unknown as Parameters<typeof jobsJanitor>[0],
+    );
+    return { output: result };
+  },
+};
 
 export const recoverLeadDeliveriesTask: TaskConfig<RecoverLeadDeliveriesTask> = {
   slug: "recoverLeadDeliveries",
@@ -96,7 +112,7 @@ export const recoverLeadDeliveriesTask: TaskConfig<RecoverLeadDeliveriesTask> = 
   retries: 0,
   schedule: [
     {
-      cron: maintenanceSchedules.find((schedule) => schedule.slug === "recoverLeadDeliveries")?.cron ?? "30 0/5 * * * *",
+      cron: cronFor("recoverLeadDeliveries"),
       queue: maintenanceQueue,
     },
   ],
@@ -123,7 +139,7 @@ export const catalogLifecycleTask: TaskConfig<CatalogLifecycleTask> = {
   retries: 0,
   schedule: [
     {
-      cron: maintenanceSchedules.find((schedule) => schedule.slug === "catalogLifecycle")?.cron ?? "0 0 * * * *",
+      cron: cronFor("catalogLifecycle"),
       queue: maintenanceQueue,
     },
   ],
@@ -150,7 +166,7 @@ export const leadRetentionCleanupTask: TaskConfig<LeadRetentionCleanupTask> = {
   retries: 0,
   schedule: [
     {
-      cron: maintenanceSchedules.find((schedule) => schedule.slug === "leadRetentionCleanup")?.cron ?? "0 30 2 * * *",
+      cron: cronFor("leadRetentionCleanup"),
       queue: maintenanceQueue,
     },
   ],
@@ -162,14 +178,19 @@ export const leadRetentionCleanupTask: TaskConfig<LeadRetentionCleanupTask> = {
   },
 };
 
-export const registeredMaintenanceTasks = [
-  jobsJanitorTask,
-  recoverLeadDeliveriesTask,
-  catalogLifecycleTask,
-  leadRetentionCleanupTask,
-] satisfies ReadonlyArray<
+type RegisteredMaintenanceTask =
   | TaskConfig<CatalogLifecycleTask>
+  | TaskConfig<JobsJanitorTask>
   | TaskConfig<LeadRetentionCleanupTask>
-  | TaskConfig<MaintenanceTask>
-  | TaskConfig<RecoverLeadDeliveriesTask>
->;
+  | TaskConfig<RecoverLeadDeliveriesTask>;
+
+export const maintenanceTasksBySlug = {
+  catalogLifecycle: catalogLifecycleTask,
+  jobsJanitor: jobsJanitorTask,
+  leadRetentionCleanup: leadRetentionCleanupTask,
+  recoverLeadDeliveries: recoverLeadDeliveriesTask,
+} as const satisfies Record<MaintenanceTaskSlug, RegisteredMaintenanceTask>;
+
+export const registeredMaintenanceTasks = maintenanceSchedules.map(
+  (schedule) => maintenanceTasksBySlug[schedule.slug],
+);

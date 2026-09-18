@@ -5,7 +5,7 @@ import { dispatchDueFeeds, calculateNextDueAt } from "../src/core/data-access/sy
 import { transitionImportRunToRunning } from "../src/core/data-access/system/import-feed-run.ts";
 import { createJobsConfig } from "../src/project/jobs/config.ts";
 
-function createPayloadMock({ claimSucceeds = true } = {}) {
+function createPayloadMock({ claimSucceeds = true, queueFails = false } = {}) {
   const calls = {
     create: [],
     queue: [],
@@ -39,6 +39,7 @@ function createPayloadMock({ claimSucceeds = true } = {}) {
     jobs: {
       async queue(args) {
         calls.queue.push(args);
+        if (queueFails) throw new Error("queue failed");
         return { id: 9001 };
       },
     },
@@ -89,6 +90,16 @@ test("dispatchDueFeeds skips enqueue when the conditional claim loses the race",
   assert.deepEqual(result, { claimed: 0, queued: 0 });
   assert.equal(calls.create.length, 0);
   assert.equal(calls.queue.length, 0);
+});
+
+test("dispatchDueFeeds leaves a queued import-run when enqueue fails", async () => {
+  const { calls, payload } = createPayloadMock({ queueFails: true });
+  const result = await dispatchDueFeeds(payload, new Date("2026-09-17T00:00:00.000Z"));
+
+  assert.deepEqual(result, { claimed: 1, queued: 0 });
+  assert.equal(calls.create.length, 1);
+  assert.equal(calls.queue.length, 1);
+  assert.equal(calls.update.filter((entry) => entry.collection === "import-runs").length, 0);
 });
 
 test("jobs config registers dispatchDueFeeds schedule and importFeed target", () => {

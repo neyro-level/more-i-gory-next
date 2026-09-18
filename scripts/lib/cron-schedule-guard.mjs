@@ -29,6 +29,23 @@ export function assertSafeScheduledCron(cron) {
   return parsed;
 }
 
+export function extractSixFieldCronLiterals(source) {
+  const literals = [];
+  const pattern = /"((?:[^"\s]+ ){5}[^"\s]+)"/g;
+
+  for (const match of String(source).matchAll(pattern)) {
+    const candidate = match[1];
+    try {
+      parseSixFieldCron(candidate);
+      literals.push(candidate);
+    } catch {
+      // Ignore non-cron six-token strings.
+    }
+  }
+
+  return literals;
+}
+
 export function firesPerHour(cron) {
   const parsed = assertSafeScheduledCron(cron);
   if (parsed.minutes === "*" && parsed.hours === "*") {

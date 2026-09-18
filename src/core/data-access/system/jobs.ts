@@ -1,3 +1,5 @@
+import { collectBoundedPages } from "../../lib/bounded-pagination.ts";
+
 type PayloadJobRecord = {
   input?: unknown;
 };
@@ -8,9 +10,10 @@ type PayloadJobsLike = {
     depth: 0;
     limit: number;
     overrideAccess: true;
-    pagination: false;
+    page: number;
+    pagination: true;
     where: Record<string, unknown>;
-  }) => Promise<{ docs?: PayloadJobRecord[] }>;
+  }) => Promise<{ docs?: PayloadJobRecord[]; hasNextPage?: boolean }>;
 };
 
 function readLeadDeliveryId(input: unknown): string | null {
@@ -29,28 +32,34 @@ function readLeadDeliveryId(input: unknown): string | null {
 export async function findLiveDeliverLeadJobIds(
   payload: PayloadJobsLike,
 ): Promise<ReadonlySet<string>> {
-  const result = await payload.find({
-    collection: "payload-jobs",
-    depth: 0,
-    limit: 1000,
-    overrideAccess: true,
-    pagination: false,
-    where: {
-      and: [
-        { taskSlug: { equals: "deliverLead" } },
-        { queue: { equals: "lead-deliveries" } },
-        {
-          or: [
-            { completedAt: { exists: false } },
-            { processing: { equals: true } },
-          ],
-        },
-      ],
-    },
+  const where = {
+    and: [
+      { taskSlug: { equals: "deliverLead" } },
+      { queue: { equals: "lead-deliveries" } },
+      {
+        or: [
+          { completedAt: { exists: false } },
+          { processing: { equals: true } },
+        ],
+      },
+    ],
+  } as const;
+
+  const docs = await collectBoundedPages<PayloadJobRecord>({
+    fetchPage: async (page, limit) =>
+      payload.find({
+        collection: "payload-jobs",
+        depth: 0,
+        limit,
+        overrideAccess: true,
+        page,
+        pagination: true,
+        where,
+      }),
   });
 
   return new Set(
-    (result.docs ?? [])
+    docs
       .map((job) => readLeadDeliveryId(job.input))
       .filter((leadDeliveryId): leadDeliveryId is string => leadDeliveryId !== null),
   );

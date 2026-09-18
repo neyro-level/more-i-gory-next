@@ -2627,7 +2627,10 @@ export interface TaskDeliverLead {
 export interface TaskJobsJanitor {
   input?: unknown;
   output: {
-    status: string;
+    interrupted: number;
+    massDeactivationForbidden: boolean;
+    orphanQueued: number;
+    staleRunning: number;
   };
 }
 /**

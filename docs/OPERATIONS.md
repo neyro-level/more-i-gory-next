@@ -64,9 +64,32 @@ Backup не считается доказанным без успешного re
 ## Jobs runtime
 
 Один jobs-capable runtime есть; `JOBS_AUTORUN=true` только у единственного
-jobs-active process после production jobs gate (EPIC 13). Handover: новый
-runtime стартует с `false`, проходит readiness, старый останавливается, после
-подтверждения единственного владельца новый перезапускается с `true`.
+jobs-active process после production jobs gate (EPIC 13). Machine-lock не
+вводится (TASK 25.8 вариант 3): проверка — runbook + deploy-шаг.
+
+Handover:
+
+```text
+new runtime JOBS_AUTORUN=false
+→ readiness
+→ stop old jobs owner
+→ assert no owner
+→ start new owner JOBS_AUTORUN=true
+→ health
+```
+
+Deploy-шаг (обязателен перед тем как новый runtime станет jobs owner):
+
+```bash
+node scripts/assert-one-jobs-owner.mjs --mode=handover-none --values=<old>,<new>
+node scripts/assert-one-jobs-owner.mjs --mode=steady --values=<old>,<new>
+```
+
+`--values` — фактические `JOBS_AUTORUN` всех Node runtime этого контура
+(`true`/`false`). Можно передать env-файлы: `--from-env-files=.env.a,.env.b`.
+Steady state обязан дать ровно один `true`. На шаге «assert no owner» —
+`--mode=handover-none` и ноль `true`. Переключение `false → true` только
+controlled restart, не live mutate.
 
 ### Payload jobs diagnostics
 

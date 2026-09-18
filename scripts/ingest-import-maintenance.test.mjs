@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { jobsJanitor } from "../src/core/data-access/system/jobs-janitor.ts";
 import {
   calculateOrphanQueuedThresholdMs,
   createImportRunHeartbeat,
@@ -90,4 +91,81 @@ test("jobsJanitor marks orphan queued import after threshold and ignores fresh q
       },
     ],
   );
+});
+
+test("jobsJanitor system task interrupts stale and orphan runs without deactivation", async () => {
+  const findCalls = [];
+  const updateCalls = [];
+  const payload = {
+    async find(args) {
+      findCalls.push(args);
+      return {
+        docs: [
+          {
+            heartbeatAt: "2026-09-17T02:40:00.000Z",
+            id: 101,
+            startedAt: "2026-09-17T02:30:00.000Z",
+            status: "running",
+          },
+          {
+            createdAt: "2026-09-17T02:40:00.000Z",
+            id: 201,
+            status: "queued",
+          },
+          {
+            createdAt: "2026-09-17T02:50:00.000Z",
+            id: 202,
+            status: "queued",
+          },
+        ],
+      };
+    },
+    async update(args) {
+      updateCalls.push(args);
+      return { docs: [{ id: args.where.and[0].id.equals }] };
+    },
+  };
+
+  assert.deepEqual(await jobsJanitor(payload, new Date("2026-09-17T03:00:00.000Z")), {
+    interrupted: 2,
+    massDeactivationForbidden: true,
+    orphanQueued: 1,
+    staleRunning: 1,
+  });
+  assert.equal(findCalls.length, 1);
+  assert.equal(findCalls[0].collection, "import-runs");
+  assert.equal(findCalls[0].overrideAccess, true);
+  assert.deepEqual(findCalls[0].where, { status: { in: ["queued", "running"] } });
+  assert.equal(updateCalls.length, 2);
+  assert.equal(updateCalls.every((call) => call.data.status === "interrupted"), true);
+  assert.equal(
+    updateCalls.some((call) => Object.hasOwn(call.data, "deactivatedCount") || Object.hasOwn(call.data, "baseline")),
+    false,
+  );
+});
+
+test("jobsJanitor later interrupts an import-run left queued after dispatcher queue failure", async () => {
+  const payload = {
+    async find() {
+      return {
+        docs: [
+          {
+            createdAt: "2026-09-17T02:40:00.000Z",
+            id: 501,
+            status: "queued",
+          },
+        ],
+      };
+    },
+    async update(args) {
+      return { docs: [{ id: args.where.and[0].id.equals }] };
+    },
+  };
+
+  assert.deepEqual(await jobsJanitor(payload, new Date("2026-09-17T03:00:00.000Z")), {
+    interrupted: 1,
+    massDeactivationForbidden: true,
+    orphanQueued: 1,
+    staleRunning: 0,
+  });
 });

@@ -16,10 +16,10 @@ function isOwnerRequest(args: { req: { user?: { collection?: string; role?: stri
 }
 
 export const jobsAutoRun = [
-  { disableScheduling: false, queue: "system" },
-  { disableScheduling: true, queue: "imports" },
-  { disableScheduling: false, queue: "maintenance" },
-  { disableScheduling: true, queue: "lead-deliveries" },
+  { disableScheduling: false, limit: 5, queue: "system" },
+  { disableScheduling: true, limit: 5, queue: "imports" },
+  { disableScheduling: false, limit: 5, queue: "maintenance" },
+  { disableScheduling: true, limit: 10, queue: "lead-deliveries" },
 ] satisfies JobsAutoRunConfig;
 
 export const jobsCollectionDiagnosticOverrides = {

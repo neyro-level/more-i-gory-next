@@ -123,15 +123,21 @@ export async function dispatchDueFeeds(payload: PayloadLike, now = new Date()): 
       },
       overrideAccess: true,
     });
-    const job = await payload.jobs.queue({
-      input: {
-        feedSourceId: String(feedSource.id),
-        importRunId: String(importRun.id),
-      },
-      overrideAccess: true,
-      queue: "imports",
-      task: "importFeed",
-    });
+
+    let job: QueuedJob;
+    try {
+      job = await payload.jobs.queue({
+        input: {
+          feedSourceId: String(feedSource.id),
+          importRunId: String(importRun.id),
+        },
+        overrideAccess: true,
+        queue: "imports",
+        task: "importFeed",
+      });
+    } catch {
+      continue;
+    }
 
     await payload.update({
       collection: "import-runs",
