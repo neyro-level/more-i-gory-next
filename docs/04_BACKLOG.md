@@ -1,21 +1,25 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 3.1 After EPIC 12
+**Версия:** 3.2 Remediation stream
 **Дата:** 2026-09-18
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
-В `origin/main` (`27ea4c2`) смержены EPIC 0–12, 15–17 и standalone production
-artifact. Публичный сайт по-прежнему рендерится через локальные content adapters;
-Payload владеет Admin, schema, jobs, media, leads и внутренними gateway.
-Владелец принял мастер-план `AMS_PROFILE=REALTY_BASE`; атомарные tasks остаются
-в локальном Beads-графе и не дублируются здесь.
+В `origin/main` (`BASE_SHA=27ea4c2393e970797da50c7dc78b614f815820bb`) смержены
+EPIC 0–12, 15–17 и standalone production artifact. Это **не** «до Payload»:
+Payload уже владеет Admin, schema, jobs, media, leads и внутренними gateway.
+Публичный сайт по-прежнему рендерится через локальные content adapters —
+это PARTIAL, не будущий этап.
 
-NOW: EPIC 13 — Nginx, runtime, backup/monitoring и operations proof на
-`more-previu.tw1.ru`. Managed PostgreSQL и production secrets — отдельные
-инфраструктурные gates. Один эпик = одна ветка/PR.
+Leads, ingest и EPIC 10–12 **есть в коде**, но end-to-end runtime не доказан:
+обработчики доставки/импорта и janitor ещё не выполняют бизнес-задачу. Их
+нельзя считать полностью завершёнными.
+
+NOW: remediation EPIC 19 (baseline docs) в ветке `work/epic-19`. Дальше по
+утверждённому графу v6: 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 →
+30 → 31 → 13 → 32 → 34 → 33. Один эпик = одна ветка/PR, `MERGE_AFTER_GATE`.
 
 Production не выпускался. Коммерческие и аналитические страницы остаются под
 content/trust/index gate, пока не пройден editorial gate.
@@ -72,28 +76,21 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 - [x] обновить project router и SourceCraft path guards;
 - [x] выполнить финальную проверку ссылок и `pnpm verify`.
 
-## 4. NOW / NEXT — Realty Platform migration
+## 4. NOW / NEXT — Realty Platform remediation
+
+Код EPIC 0–12 и 15–17 в `main` — foundation, не доказанный production runtime.
 
 | Состояние | Эпик | Результат |
 |---|---|---|
-| DONE | EPIC 0 | Project profile, operations/design adapters, Crimea-core IA, ADR-004..010, guards и manual CI policy |
-| DONE | EPIC 1 | static export → Next.js Node runtime |
-| DONE | EPIC 2 | Payload + PostgreSQL + migration foundation |
-| DONE | EPIC 3 | gateways, contracts и architecture guards |
-| DONE | EPIC 4 | Jobs и HTTP cache invalidation |
-| DONE | EPIC 5 | Globals, Pages и SEO CMS foundation |
-| DONE | EPIC 6 | Media и S3 pipeline |
-| DONE | EPIC 7 | Regions IA и Crimea core |
-| DONE | EPIC 8 | Properties foundation; public ContentService ещё на local adapters |
-| DONE | EPIC 9 | UI conformance |
-| DONE | EPIC 10 | Leads transactional outbox |
-| DONE | EPIC 11 | Lead delivery |
-| DONE | EPIC 12 | Maintenance, retention и recovery |
-| DONE | EPIC 15 | Newbuild schema foundation |
-| DONE | EPIC 16 | Ingest subsystem; jobs explicit, без autorun без source |
-| DONE | EPIC 17 | Public newbuild catalog namespaces |
-| NOW | EPIC 13 | Nginx, runtime, backup/restore, monitoring, preview host |
-| BLOCKED BY GRAPH | EPIC 14, 18 | analytics posts и оставшиеся product gates мастер-плана |
+| DONE (code) | EPIC 0–9, 15, 17 | foundation в `main`; public ContentService ещё на local adapters |
+| PARTIAL / NOT_PROVEN | EPIC 10–12, 16 | leads/delivery/maintenance/ingest код есть; E2E нет |
+| NOW | EPIC 19 | Baseline + docs Source of Truth |
+| NEXT (graph) | EPIC 20–26 | access, DTO, outbound, leads E2E, schema, jobs, ingest freeze |
+| NEXT (graph) | EPIC 27–31 | publish/cache, SEO, regions, UI 5.0, S3 |
+| NEXT (graph) | EPIC 13 | Timeweb runtime + staging на `more-previu.tw1.ru` |
+| NEXT (graph) | EPIC 32, 34 | proofs, owner queue |
+| FINAL | EPIC 33 | Production release gate; выкат только по отдельной команде |
+| OUT OF STREAM | EPIC 14, 18 | analytics posts и content gates |
 
 Контентные, legal и production решения остаются human gates и не подменяются
 технической готовностью.
