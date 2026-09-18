@@ -18,6 +18,7 @@ import { createResolveFeedUrlHandler } from "../../../core/ingest/resolve-feed-u
 import { createFinalizeImportHandler } from "../../../core/ingest/finalize-import.ts";
 import {
   finalizeUnchangedImportRun,
+  touchImportRunHeartbeat,
   transitionImportRunToRunning,
 } from "../../../core/data-access/system/import-feed-run.ts";
 import { createSafeOutboundClient, type SafeOutboundClient } from "../../../core/security/outbound-http/index.ts";
@@ -103,6 +104,31 @@ async function createFeedOutboundClient(): Promise<SafeOutboundClient> {
   });
 }
 
+export const importFeedHeartbeatIntervalMs = 60_000;
+
+export async function runImportFeedWithHeartbeat(args: {
+  clearHeartbeatInterval?: (handle: ReturnType<typeof setInterval>) => void;
+  lookupEnv: (name: string) => string | undefined | Promise<string | undefined>;
+  outbound: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>);
+  payload: ImportFeedPayload;
+  input: ImportFeedTask["input"];
+  setHeartbeatInterval?: typeof setInterval;
+}): Promise<Awaited<ReturnType<typeof runIngestPipeline>>> {
+  const schedule = args.setHeartbeatInterval ?? setInterval;
+  const clear = args.clearHeartbeatInterval ?? clearInterval;
+  const handle = schedule(() => {
+    void touchImportRunHeartbeat(args.payload, args.input);
+  }, importFeedHeartbeatIntervalMs);
+  try {
+    return await runIngestPipeline({
+      handlers: createImportFeedPipelineHandlers(args.payload, args.lookupEnv, args.outbound),
+      input: args.input,
+    });
+  } finally {
+    clear(handle);
+  }
+}
+
 export const importFeedTask: TaskConfig<ImportFeedTask> = {
   slug: "importFeed",
   inputSchema: [
@@ -116,13 +142,11 @@ export const importFeedTask: TaskConfig<ImportFeedTask> = {
   },
   retries: 0,
   handler: async ({ input, req }) => {
-    const result = await runIngestPipeline({
-      handlers: createImportFeedPipelineHandlers(
-        req.payload as unknown as ImportFeedPayload,
-        lookupFeedUrlRuntimeEnv,
-        createFeedOutboundClient,
-      ),
+    const result = await runImportFeedWithHeartbeat({
       input,
+      lookupEnv: lookupFeedUrlRuntimeEnv,
+      outbound: createFeedOutboundClient,
+      payload: req.payload as unknown as ImportFeedPayload,
     });
 
     return { output: { status: result.status === "running" ? "running" : result.status } };

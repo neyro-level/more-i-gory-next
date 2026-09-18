@@ -60,6 +60,7 @@
     "test:record-issues": "node --conditions=react-server --test scripts/record-issues.test.mjs",
     "test:run-safe-deactivation": "node --conditions=react-server --test scripts/run-safe-deactivation.test.mjs",
     "test:finalize-import": "node --conditions=react-server --test scripts/finalize-import.test.mjs",
+    "test:import-feed-heartbeat": "node --conditions=react-server --test scripts/import-feed-heartbeat.test.mjs",
     "test:ingest-field-ownership": "node --conditions=react-server --test scripts/ingest-field-ownership.test.mjs",
     "test:ingest-integration-block": "node --conditions=react-server --test scripts/ingest-integration-block.test.mjs",
     "test:ingest-import-maintenance": "node --conditions=react-server --test scripts/ingest-import-maintenance.test.mjs",

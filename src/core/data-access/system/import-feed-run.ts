@@ -7,6 +7,7 @@ type PayloadLike = {
   update: (args: {
     collection: "import-runs" | "feed-sources";
     data: Record<string, unknown>;
+    disableTransaction?: true;
     id?: number | string;
     overrideAccess: true;
     where?: Record<string, unknown>;
@@ -135,4 +136,28 @@ export async function markFeedSourceImportFinished(
     id: input.feedSourceId,
     overrideAccess: true,
   });
+}
+
+export async function touchImportRunHeartbeat(
+  payload: PayloadLike,
+  input: ImportFeedRunInput,
+  now = new Date(),
+): Promise<boolean> {
+  const transition = await payload.update({
+    collection: "import-runs",
+    data: {
+      heartbeatAt: now.toISOString(),
+    },
+    disableTransaction: true,
+    overrideAccess: true,
+    where: {
+      and: [
+        { id: { equals: input.importRunId } },
+        { feedSource: { equals: input.feedSourceId } },
+        { status: { equals: "running" } },
+      ],
+    },
+  });
+  const result = transition as { docs?: Array<{ id: number | string }> };
+  return Array.isArray(result.docs) && result.docs.length > 0;
 }
