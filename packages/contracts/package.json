@@ -2,6 +2,7 @@
   "name": "@more-i-gory/contracts",
   "version": "0.0.0",
   "private": true,
+  "description": "ACTIVE shared DTO and Zod contracts for FOLDER FORM.",
   "type": "module",
   "sideEffects": false,
   "exports": {
