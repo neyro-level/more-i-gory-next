@@ -53,7 +53,7 @@ test("a new channel registers only in the composition root", async () => {
   const dataAccess = readFileSync(new URL("../src/core/data-access/system/create-lead.ts", import.meta.url), "utf8");
   assert.equal(job.includes("registerLeadChannelFactory"), false);
   assert.equal(dataAccess.includes("registerLeadChannelFactory"), false);
-  assert.equal(job.includes("LeadDeliveryChannel"), false);
+  assert.match(job, /createLeadChannelRegistry/);
 
   registerLeadChannelFactory("probe", () => ({
     id: "probe",
