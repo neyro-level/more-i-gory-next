@@ -242,3 +242,54 @@ test("DNS lookup is pinned to the address already validated as public", async ()
 
   await outbound.request(baseRequest);
 });
+
+test("SSRF matrix allows only HTTPS allowlisted public targets", async () => {
+  const allowed = await client().request(baseRequest);
+  assert.equal(allowed.status, 200);
+
+  await rejectsWithSafeCode(
+    () => client().request({ ...baseRequest, url: new URL("http://api.telegram.org/botx/sendMessage") }),
+    "outbound_non_https",
+  );
+  await rejectsWithSafeCode(
+    () => client({ resolveHostAddresses: async () => ["127.0.0.1"] }).request(baseRequest),
+    "outbound_address_not_allowed",
+  );
+  await rejectsWithSafeCode(
+    () => client({ resolveHostAddresses: async () => ["10.1.2.3"] }).request(baseRequest),
+    "outbound_address_not_allowed",
+  );
+  await rejectsWithSafeCode(
+    () => client({ resolveHostAddresses: async () => ["169.254.1.1"] }).request(baseRequest),
+    "outbound_address_not_allowed",
+  );
+  await rejectsWithSafeCode(
+    () => client({ resolveHostAddresses: async () => ["fd12:3456:789a:1::1"] }).request(baseRequest),
+    "outbound_address_not_allowed",
+  );
+  await rejectsWithSafeCode(
+    () =>
+      client({
+        allowedHosts: ["api.telegram.org", "evil.local"],
+        fetchImpl: async () =>
+          new Response(null, {
+            headers: { location: "https://evil.local/private" },
+            status: 302,
+          }),
+        resolveHostAddresses: async (hostname) =>
+          hostname === "evil.local" ? ["192.168.0.10"] : ["149.154.167.220"],
+      }).request(baseRequest),
+    "outbound_address_not_allowed",
+  );
+  await rejectsWithSafeCode(
+    () =>
+      client({
+        fetchImpl: async () =>
+          new Response(null, {
+            headers: { location: "https://example.com/handoff" },
+            status: 302,
+          }),
+      }).request(baseRequest),
+    "outbound_host_not_allowed",
+  );
+});
