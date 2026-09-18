@@ -35,11 +35,14 @@ export async function handleOwnerRetryAbandonedLeadDelivery(req: PayloadRequest)
     return Response.json({ error: "invalid_id" }, { status: 400 });
   }
 
-  const retried = await retryAbandonedLeadDelivery(req.payload, {
-    actorRef: `owner:${String(req.user?.id ?? "unknown")}`,
-    leadDeliveryId,
-    reasonRedacted: await readReasonRedacted(req),
-  });
+  const retried = await retryAbandonedLeadDelivery(
+    req.payload as Parameters<typeof retryAbandonedLeadDelivery>[0],
+    {
+      actorRef: `owner:${String(req.user?.id ?? "unknown")}`,
+      leadDeliveryId,
+      reasonRedacted: await readReasonRedacted(req),
+    },
+  );
 
   if (!retried) {
     return Response.json({ error: "not_abandoned" }, { status: 409 });
