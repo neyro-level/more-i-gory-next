@@ -1,4 +1,5 @@
 import { lookup } from "node:dns/promises";
+import https from "node:https";
 import { isIP } from "node:net";
 
 export type SafeOutboundRequest = Readonly<{
@@ -85,7 +86,7 @@ async function defaultResolveHostAddresses(hostname: string): Promise<readonly s
 async function assertSafeUrl(
   url: URL,
   config: Required<Pick<SafeOutboundClientConfig, "allowedHosts" | "resolveHostAddresses">>,
-) {
+): Promise<readonly string[]> {
   if (url.protocol !== "https:") {
     throw new SafeOutboundRequestError("outbound_non_https");
   }
@@ -98,6 +99,69 @@ async function assertSafeUrl(
   if (addresses.length === 0 || addresses.some(isForbiddenIpAddress)) {
     throw new SafeOutboundRequestError("outbound_address_not_allowed");
   }
+
+  return addresses;
+}
+
+export function pickPinnedAddress(addresses: readonly string[]): { address: string; family: 4 | 6 } {
+  const ipv4 = addresses.find((address) => isIP(address) === 4);
+  if (ipv4) return { address: ipv4, family: 4 };
+
+  const ipv6 = addresses.find((address) => isIP(address) === 6);
+  if (ipv6) return { address: ipv6, family: 6 };
+
+  throw new SafeOutboundRequestError("outbound_address_not_allowed");
+}
+
+export function createPinnedLookup(addresses: readonly string[]) {
+  const pinned = pickPinnedAddress(addresses);
+  return function pinnedLookup(
+    _hostname: string,
+    _options: unknown,
+    callback: (error: Error | null, address: string, family: 4 | 6) => void,
+  ) {
+    callback(null, pinned.address, pinned.family);
+  };
+}
+
+function createPinnedHttpsFetch(lookupFn: ReturnType<typeof createPinnedLookup>): typeof fetch {
+  return (async (input, init = {}) => {
+    const url = input instanceof URL ? input : new URL(String(input));
+    const method = init.method ?? "GET";
+    const payload = init.body;
+
+    return await new Promise<Response>((resolve, reject) => {
+      const request = https.request(
+        url,
+        {
+          headers: init.headers as Record<string, string> | undefined,
+          lookup: lookupFn as typeof import("node:dns").lookup,
+          method,
+          servername: url.hostname,
+          signal: init.signal ?? undefined,
+        },
+        (incoming) => {
+          const chunks: Buffer[] = [];
+          incoming.on("data", (chunk) => {
+            chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+          });
+          incoming.on("end", () => {
+            const headers = new Headers();
+            for (const [key, value] of Object.entries(incoming.headers)) {
+              if (value === undefined) continue;
+              headers.append(key, Array.isArray(value) ? value.join(", ") : value);
+            }
+            resolve(new Response(Buffer.concat(chunks), { headers, status: incoming.statusCode ?? 0 }));
+          });
+          incoming.on("error", reject);
+        },
+      );
+
+      request.on("error", reject);
+      if (payload) request.write(Buffer.from(payload as ArrayBuffer));
+      request.end();
+    });
+  }) as typeof fetch;
 }
 
 async function readLimitedBody(response: Response, maxBytes: number): Promise<Uint8Array> {
@@ -183,7 +247,7 @@ function bodyInit(body: Uint8Array | undefined): ArrayBuffer | undefined {
 
 export function createSafeOutboundClient(config: SafeOutboundClientConfig): SafeOutboundClient {
   const allowedHosts = config.allowedHosts.map(normalizeHost);
-  const fetchImpl = config.fetchImpl ?? fetch;
+  const fetchImpl = config.fetchImpl;
   const maxRedirects = config.maxRedirects ?? defaultMaxRedirects;
   const resolveHostAddresses = config.resolveHostAddresses ?? defaultResolveHostAddresses;
 
@@ -195,14 +259,16 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
       let headers = request.headers ? { ...request.headers } : undefined;
 
       for (let redirectCount = 0; redirectCount <= maxRedirects; redirectCount += 1) {
-        await assertSafeUrl(url, { allowedHosts, resolveHostAddresses });
+        const addresses = await assertSafeUrl(url, { allowedHosts, resolveHostAddresses });
+        const pinnedLookup = createPinnedLookup(addresses);
+        const send = fetchImpl ?? createPinnedHttpsFetch(pinnedLookup);
 
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), request.timeoutMs);
 
         let response: Response;
         try {
-          response = await fetchImpl(url, {
+          response = await send(url, {
             body: method === "GET" ? undefined : bodyInit(body),
             headers,
             method,

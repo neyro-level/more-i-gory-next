@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createPinnedLookup,
   createSafeOutboundClient,
+  pickPinnedAddress,
   SafeOutboundRequestError,
 } from "../src/core/security/outbound-http/index.ts";
 
@@ -214,4 +216,29 @@ test("safe outbound client enforces max response size", async () => {
     () => outbound.request({ ...baseRequest, maxResponseBytes: 4 }),
     "outbound_response_too_large",
   );
+});
+
+test("DNS lookup is pinned to the address already validated as public", async () => {
+  assert.deepEqual(pickPinnedAddress(["149.154.167.220", "2a00:1450:4001:81b::200e"]), {
+    address: "149.154.167.220",
+    family: 4,
+  });
+
+  const lookup = createPinnedLookup(["149.154.167.220"]);
+  const pinned = await new Promise((resolve, reject) => {
+    lookup("evil.example", {}, (error, address, family) => {
+      if (error) reject(error);
+      else resolve({ address, family });
+    });
+  });
+  assert.deepEqual(pinned, { address: "149.154.167.220", family: 4 });
+
+  const outbound = client({
+    fetchImpl: async (url) => {
+      assert.equal(url.hostname, "api.telegram.org");
+      return new Response(encoder.encode("ok"), { status: 200 });
+    },
+  });
+
+  await outbound.request(baseRequest);
 });
