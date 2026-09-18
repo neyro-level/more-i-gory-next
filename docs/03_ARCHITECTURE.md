@@ -17,8 +17,12 @@ regions, properties, newbuild/ingest/catalog, leads и maintenance. Публич
 Принятая цель — `AMS_PROFILE=REALTY_BASE`: Next.js + Payload в одном Node.js
 runtime, Managed PostgreSQL, S3 и один jobs owner. Решение принято в
 [`ADR-004`](adr/ADR-004-realty-platform-runtime.md), project-specific профиль —
-в [`PROJECT.md`](PROJECT.md). Следующий технический эпик — EPIC 13 (Nginx,
-backup/restore, preview runtime).
+в [`PROJECT.md`](PROJECT.md).
+
+Remediation baseline (TASK 19.1): все дальнейшие изменения поверх
+`BASE_SHA=27ea4c2393e970797da50c7dc78b614f815820bb`, профиль `REALTY_BASE`,
+целевой стек AMS Realty Platform 5.5 и AMS UI Core 5.0. Карта — в
+[`README.md`](README.md#audit--remediation-baseline).
 
 ## 1. Architecture Summary
 

@@ -28,6 +28,30 @@
 - коммерческие и аналитические страницы остаются под content/trust/index gate;
 - Managed PostgreSQL staging/production и Nginx cutover — EPIC 13 / human gates.
 
+## Audit / remediation baseline
+
+Программа `more-i-gory-remediation-2026-09` v6 идёт **поверх** этого SHA, а не
+вместо него. Новые ветки эпиков 19–33 и 13 ответвляются от актуального
+`origin/main`, который на момент фиксации совпадает с baseline.
+
+```text
+BASE_SHA=27ea4c2393e970797da50c7dc78b614f815820bb
+PROFILE=REALTY_BASE
+TARGET_CORE=AMS Realty Platform 5.5
+UI_CORE=AMS UI Core 5.0
+```
+
+| Поле | Значение |
+|---|---|
+| Canonical main | SourceCraft `integrator-p/more-i-gory-next` @ `27ea4c2` |
+| Профиль | `AMS_PROFILE=REALTY_BASE`, режим BUILD |
+| Техническая конституция | [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) |
+| UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
+| Мастер-план | [`More-i-gory-plan №2.md`](More-i-gory-plan%20№2.md) v6 APPROVED |
+
+Нельзя описывать последующую работу как «до Payload» или как новый foundation
+ниже этого SHA.
+
 ## Platform contract
 
 Текущее реализованное состояние — Next.js + Payload в одном Node.js runtime,
