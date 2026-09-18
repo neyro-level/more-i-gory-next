@@ -6,7 +6,7 @@ import {
   transitionLeadDeliveryToSending,
 } from "../../../core/data-access/system/lead-delivery.ts";
 import { loadLeadDeliveryForSend } from "../../../core/data-access/system/load-lead-delivery.ts";
-import { LeadDeliveryFailure, type LeadDeliveryChannel } from "../../../core/leads/delivery.ts";
+import { LeadDeliveryFailure, type LeadDeliveryChannel, unknownLeadDeliveryFailure } from "../../../core/leads/delivery.ts";
 import { planRetryableLeadDeliveryFailure } from "../../../core/leads/delivery-state.ts";
 import type { StructuredLogger } from "../../../core/observability/index.ts";
 import {
@@ -65,12 +65,10 @@ function unknownChannelFailure(channelId: string): LeadDeliveryFailure {
 }
 
 function unexpectedFailure(): LeadDeliveryFailure {
-  return new LeadDeliveryFailure({
-    deliveryCertainty: "unknown",
-    redactedMessage: "Lead delivery failed before remote confirmation.",
-    retryable: true,
-    safeCode: "lead_delivery_unexpected",
-  });
+  return unknownLeadDeliveryFailure(
+    "lead_delivery_unexpected",
+    "Lead delivery failed before remote confirmation.",
+  );
 }
 
 async function recordFailure(

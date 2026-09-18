@@ -6,6 +6,7 @@ import {
   createTelegramLeadDeliveryChannel,
   LeadDeliveryFailure,
   redactLeadOutboundUrl,
+  unknownLeadDeliveryFailure,
 } from "../src/core/leads/delivery.ts";
 
 const decoder = new TextDecoder();
@@ -114,4 +115,34 @@ test("lead delivery implementation does not bypass outbound or env layers", () =
 test("outbound URL logs redact secrets deterministically", () => {
   const url = new URL("https://user:token@api.telegram.org/bot123456:secret-token/sendMessage?timeout=1");
   assert.equal(redactLeadOutboundUrl(url), "https://api.telegram.org/bot[redacted]/sendMessage");
+});
+
+test("unknown timeout stays retryable and is never treated as sent", async () => {
+  const policy = unknownLeadDeliveryFailure("channel_timeout", "Lead delivery failed before remote confirmation.");
+  assert.equal(policy.deliveryCertainty, "unknown");
+  assert.equal(policy.retryable, true);
+  assert.equal(policy.possibleDuplicate, true);
+  assert.equal(policy.classification, "retryable");
+
+  const channel = createTelegramLeadDeliveryChannel({
+    botToken: "123456:secret-token",
+    chatId: "-100123456",
+    outbound: {
+      async request() {
+        throw new Error("aborted");
+      },
+    },
+  });
+
+  await assert.rejects(
+    () => channel.deliver(payload),
+    (error) => {
+      assert.ok(error instanceof LeadDeliveryFailure);
+      assert.equal(error.deliveryCertainty, "unknown");
+      assert.equal(error.retryable, true);
+      assert.equal(error.possibleDuplicate, true);
+      assert.notEqual(error.deliveryCertainty, "confirmed");
+      return true;
+    },
+  );
 });

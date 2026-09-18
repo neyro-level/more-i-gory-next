@@ -28,6 +28,7 @@ export type LeadDeliveryResult = Readonly<{
 
 export type LeadDeliveryFailureInput = Readonly<{
   deliveryCertainty: Exclude<DeliveryCertainty, "confirmed">;
+  possibleDuplicate?: boolean;
   redactedMessage: string;
   retryable: boolean;
   safeCode: string;
@@ -35,6 +36,7 @@ export type LeadDeliveryFailureInput = Readonly<{
 
 export class LeadDeliveryFailure extends Error {
   readonly deliveryCertainty: Exclude<DeliveryCertainty, "confirmed">;
+  readonly possibleDuplicate: boolean;
   readonly redactedMessage: string;
   readonly retryable: boolean;
   readonly safeCode: string;
@@ -43,6 +45,7 @@ export class LeadDeliveryFailure extends Error {
     super(input.redactedMessage);
     this.name = "LeadDeliveryFailure";
     this.deliveryCertainty = input.deliveryCertainty;
+    this.possibleDuplicate = input.possibleDuplicate ?? false;
     this.redactedMessage = input.redactedMessage;
     this.retryable = input.retryable;
     this.safeCode = input.safeCode;
@@ -117,14 +120,13 @@ function formatTelegramLeadMessage(payload: LeadDeliveryPayload): string {
   ].join("\n");
 }
 
-function telegramFailure(input: {
-  deliveryCertainty: Exclude<DeliveryCertainty, "confirmed">;
-  retryable: boolean;
-  safeCode: string;
-}) {
+export function unknownLeadDeliveryFailure(safeCode: string, redactedMessage: string): LeadDeliveryFailure {
   return new LeadDeliveryFailure({
-    ...input,
-    redactedMessage: "Telegram lead delivery failed.",
+    deliveryCertainty: "unknown",
+    possibleDuplicate: true,
+    redactedMessage,
+    retryable: true,
+    safeCode,
   });
 }
 
@@ -152,11 +154,7 @@ export function createTelegramLeadDeliveryChannel(config: TelegramLeadDeliveryCo
         try {
           parsed = JSON.parse(decoder.decode(response.body)) as TelegramApiResponse;
         } catch {
-          throw telegramFailure({
-            deliveryCertainty: "unknown",
-            retryable: true,
-            safeCode: "telegram_invalid_response",
-          });
+          throw unknownLeadDeliveryFailure("telegram_invalid_response", "Telegram lead delivery failed.");
         }
 
         if (response.status >= 200 && response.status < 300 && parsed.ok === true) {
@@ -168,19 +166,20 @@ export function createTelegramLeadDeliveryChannel(config: TelegramLeadDeliveryCo
           };
         }
 
-        throw telegramFailure({
-          deliveryCertainty: response.status >= 500 || response.status === 429 ? "unknown" : "not_delivered",
-          retryable: response.status >= 500 || response.status === 429,
+        if (response.status >= 500 || response.status === 429) {
+          throw unknownLeadDeliveryFailure("telegram_rejected", "Telegram lead delivery failed.");
+        }
+
+        throw new LeadDeliveryFailure({
+          deliveryCertainty: "not_delivered",
+          redactedMessage: "Telegram lead delivery failed.",
+          retryable: false,
           safeCode: "telegram_rejected",
         });
       } catch (error) {
         if (error instanceof LeadDeliveryFailure) throw error;
 
-        throw telegramFailure({
-          deliveryCertainty: "unknown",
-          retryable: true,
-          safeCode: "telegram_unavailable",
-        });
+        throw unknownLeadDeliveryFailure("telegram_unavailable", "Telegram lead delivery failed.");
       }
     },
   };
