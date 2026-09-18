@@ -133,6 +133,28 @@ function redirectLocation(response: Response, currentUrl: URL): URL | null {
   return location ? new URL(location, currentUrl) : null;
 }
 
+type OutboundMethod = NonNullable<SafeOutboundRequest["method"]>;
+
+function nextRedirectRequest(
+  status: number,
+  method: OutboundMethod,
+  body: Uint8Array | undefined,
+): { method: OutboundMethod; body: Uint8Array | undefined } {
+  if (status === 303) {
+    return { method: "GET", body: undefined };
+  }
+
+  if (status === 301 || status === 302) {
+    return { method: "GET", body: undefined };
+  }
+
+  if (status === 307 || status === 308) {
+    return { method, body };
+  }
+
+  return { method, body };
+}
+
 function bodyInit(body: Uint8Array | undefined): ArrayBuffer | undefined {
   if (!body) return undefined;
   const copy = new Uint8Array(body.byteLength);
@@ -149,6 +171,8 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
   return {
     async request(request) {
       let url = new URL(request.url);
+      let method: OutboundMethod = request.method ?? "GET";
+      let body = request.body;
 
       for (let redirectCount = 0; redirectCount <= maxRedirects; redirectCount += 1) {
         await assertSafeUrl(url, { allowedHosts, resolveHostAddresses });
@@ -159,9 +183,9 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
         let response: Response;
         try {
           response = await fetchImpl(url, {
-            body: bodyInit(request.body),
+            body: method === "GET" ? undefined : bodyInit(body),
             headers: request.headers,
-            method: request.method ?? "GET",
+            method,
             redirect: "manual",
             signal: controller.signal,
           });
@@ -173,6 +197,9 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
 
         const nextUrl = redirectLocation(response, url);
         if (nextUrl) {
+          const next = nextRedirectRequest(response.status, method, body);
+          method = next.method;
+          body = next.body;
           url = nextUrl;
           continue;
         }

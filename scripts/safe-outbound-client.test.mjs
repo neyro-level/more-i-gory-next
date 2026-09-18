@@ -87,6 +87,83 @@ test("safe outbound client re-checks redirects before following them", async () 
   );
 });
 
+test("303 converts any method to GET without a body", async () => {
+  const calls = [];
+  const outbound = client({
+    fetchImpl: async (url, init) => {
+      calls.push({ method: init.method, hasBody: Boolean(init.body), href: String(url) });
+      if (calls.length === 1) {
+        return new Response(null, {
+          headers: { location: "https://api.telegram.org/follow" },
+          status: 303,
+        });
+      }
+      return new Response(encoder.encode("ok"), { status: 200 });
+    },
+  });
+
+  await outbound.request({
+    ...baseRequest,
+    body: encoder.encode("payload"),
+    method: "POST",
+  });
+
+  assert.equal(calls[0].method, "POST");
+  assert.equal(calls[0].hasBody, true);
+  assert.equal(calls[1].method, "GET");
+  assert.equal(calls[1].hasBody, false);
+});
+
+test("301 and 302 convert non-GET to GET without a body", async () => {
+  const calls = [];
+  const outbound = client({
+    fetchImpl: async (url, init) => {
+      calls.push({ method: init.method, hasBody: Boolean(init.body) });
+      if (calls.length === 1) {
+        return new Response(null, {
+          headers: { location: "https://api.telegram.org/follow" },
+          status: 302,
+        });
+      }
+      return new Response(encoder.encode("ok"), { status: 200 });
+    },
+  });
+
+  await outbound.request({
+    ...baseRequest,
+    body: encoder.encode("payload"),
+    method: "POST",
+  });
+
+  assert.equal(calls[1].method, "GET");
+  assert.equal(calls[1].hasBody, false);
+});
+
+test("307 and 308 preserve method and body when policy allows", async () => {
+  const calls = [];
+  const outbound = client({
+    fetchImpl: async (url, init) => {
+      calls.push({ method: init.method, hasBody: Boolean(init.body) });
+      if (calls.length === 1) {
+        return new Response(null, {
+          headers: { location: "https://api.telegram.org/follow" },
+          status: 307,
+        });
+      }
+      return new Response(encoder.encode("ok"), { status: 200 });
+    },
+  });
+
+  await outbound.request({
+    ...baseRequest,
+    body: encoder.encode("payload"),
+    method: "POST",
+  });
+
+  assert.equal(calls[1].method, "POST");
+  assert.equal(calls[1].hasBody, true);
+});
+
 test("safe outbound client enforces max response size", async () => {
   const outbound = client({
     fetchImpl: async () => new Response(encoder.encode("too-large")),
