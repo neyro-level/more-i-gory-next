@@ -120,6 +120,23 @@ test("internal revalidate accepts ingest catalog, complex and novostroyki target
   assert.deepEqual(calls, [targets]);
 });
 
+test("internal revalidate accepts developer, properties and zastroyshchik CMS targets", async () => {
+  const { config, calls } = createConfig();
+  const targets = [
+    { kind: "tag", tag: "developers" },
+    { kind: "tag", tag: "developer:sample-developer" },
+    { kind: "tag", tag: "properties" },
+    { kind: "tag", tag: "page" },
+    { kind: "path", path: "/zastroyshchik/sample-developer/" },
+  ];
+  const response = await handleInternalRevalidateRequest(
+    createRequest({ body: { targets } }),
+    config,
+  );
+  assert.equal(response.status, 200);
+  assert.deepEqual(calls, [targets]);
+});
+
 test("internal revalidate accepts nested approved region tags", async () => {
   const { config, calls } = createConfig();
   const response = await handleInternalRevalidateRequest(

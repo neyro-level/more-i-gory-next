@@ -150,6 +150,8 @@ test("/obekty routes use Payload properties public gateway, not legacy project J
   assert.match(detailPage, /robots:[\s\S]*index:\s*false/);
   assert.match(detailPage, /permanentRedirect\(archivedAction\.target\)/);
   assert.match(detailPage, /notFound/);
+  assert.match(detailPage, /generateStaticParams/);
+  assert.doesNotMatch(detailPage, /dynamicParams\s*=\s*false/);
   assert.doesNotMatch(detailPage, /contentService|getProject/);
   assert.match(template, /Статус: не актуально/);
   assert.match(template, /альтернатив/iu);

@@ -1,5 +1,7 @@
 import type { CollectionBeforeValidateHook, CollectionConfig, FieldAccess } from "payload";
 
+import { createCmsMutationInvalidationHook } from "../../core/cache/collection-invalidation.ts";
+
 import {
   embeddedFeedSourceMarket,
   feedMarketMismatchError,
@@ -249,6 +251,8 @@ export const Properties: CollectionConfig = {
     { fields: ["complex", "building", "layout"] },
   ],
   hooks: {
+    afterChange: [createCmsMutationInvalidationHook("properties")],
+    afterDelete: [createCmsMutationInvalidationHook("properties")],
     beforeValidate: [assertFeedPropertyInvariants, assertManualPublicationInvariants],
   },
   lockDocuments: false,

@@ -21,43 +21,48 @@ import {
   publicPropertySelect,
   type PublicPropertyDTO,
 } from "./properties-contract.ts";
+import { publicReadWithFallback } from "./read-fallback.ts";
 
 async function readPublishedManualProperties(slug?: string): Promise<readonly PublicPropertyDTO[]> {
-  try {
-    const payload = await getPayload({ config });
-    const result = await payload.find({
-      collection: "properties",
-      depth: 1,
-      limit: slug ? 1 : 100,
-      overrideAccess: false,
-      pagination: false,
-      select: publicPropertySelect,
-      where: propertyPublicationWhere(slug),
-    });
+  return publicReadWithFallback({
+    fallback: [],
+    reader: "published-manual-properties",
+    read: async () => {
+      const payload = await getPayload({ config });
+      const result = await payload.find({
+        collection: "properties",
+        depth: 1,
+        limit: slug ? 1 : 100,
+        overrideAccess: false,
+        pagination: false,
+        select: publicPropertySelect,
+        where: propertyPublicationWhere(slug),
+      });
 
-    return result.docs.map(mapPublicProperty);
-  } catch {
-    return [];
-  }
+      return result.docs.map(mapPublicProperty);
+    },
+  });
 }
 
 async function readManualPropertyRoutes(slug?: string): Promise<readonly PublicPropertyDTO[]> {
-  try {
-    const payload = await getPayload({ config });
-    const result = await payload.find({
-      collection: "properties",
-      depth: 1,
-      limit: slug ? 1 : 100,
-      overrideAccess: false,
-      pagination: false,
-      select: publicPropertySelect,
-      where: propertyRouteWhere(slug),
-    });
+  return publicReadWithFallback({
+    fallback: [],
+    reader: "manual-property-routes",
+    read: async () => {
+      const payload = await getPayload({ config });
+      const result = await payload.find({
+        collection: "properties",
+        depth: 1,
+        limit: slug ? 1 : 100,
+        overrideAccess: false,
+        pagination: false,
+        select: publicPropertySelect,
+        where: propertyRouteWhere(slug),
+      });
 
-    return result.docs.map(mapPublicProperty);
-  } catch {
-    return [];
-  }
+      return result.docs.map(mapPublicProperty);
+    },
+  });
 }
 
 export const listPublishedManualProperties = unstable_cache(

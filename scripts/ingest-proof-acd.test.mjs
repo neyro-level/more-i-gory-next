@@ -204,7 +204,7 @@ test("Proof A/C/D: fixture ingest covers baseline, 304, change, safety gate, int
   world.source.deactivationApproval = {
     approvedAt: "2026-09-18T11:00:00.000Z",
     decision: "approved",
-    expiresAt: "2026-09-18T23:00:00.000Z",
+    expiresAt: "2027-12-31T23:59:59.000Z",
     runId: "run-approve",
   };
   const approved = await runImport(world, {

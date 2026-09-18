@@ -127,6 +127,18 @@ export const cacheTargets = {
       ...this.navigation(),
     ];
   },
+  developerPage(slug: string): CacheInvalidationTargetBatch {
+    const normalized = normalizeSlug(slug, "developer slug");
+    return [
+      { kind: "tag", tag: `developer:${tagSlug(slug, "developer slug")}` },
+      { kind: "path", path: `/zastroyshchik/${normalized}/` },
+      { kind: "tag", tag: "developers" },
+      ...this.catalogGroup(),
+    ];
+  },
+  redirects(): CacheInvalidationTargetBatch {
+    return [{ kind: "tag", tag: "redirects" }, ...this.navigation()];
+  },
   siteSettings(): CacheInvalidationTargetBatch {
     return [
       { kind: "tag", tag: "site-settings" },

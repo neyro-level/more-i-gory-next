@@ -48,7 +48,56 @@ test("EPIC 17 routes use public newbuild gateway and keep /obekty manual-only", 
   assert.match(catalogPage, /listPublishedComplexes/);
   assert.match(complexPage, /getPublishedComplexBySlug/);
   assert.match(complexPage, /listActiveNewbuildInventoryByComplex/);
+  assert.match(complexPage, /generateStaticParams/);
+  assert.doesNotMatch(complexPage, /dynamicParams\s*=\s*false/);
   assert.match(developerPage, /getPublishedDeveloperBySlug/);
+  assert.match(developerPage, /generateStaticParams/);
+  assert.doesNotMatch(developerPage, /dynamicParams\s*=\s*false/);
   assert.match(objectsPage, /listPublishedManualProperties/);
   assert.doesNotMatch(objectsPage, /listPublishedComplexes|listActiveNewbuildInventoryByComplex/);
+});
+
+function httpStatusForPublishedSlugWithoutRebuild({
+  blockedDynamicParams,
+  buildTimeSlugs,
+  published,
+  requestedSlug,
+}) {
+  if (!published) return 404;
+  if (buildTimeSlugs.includes(requestedSlug)) return 200;
+  return blockedDynamicParams ? 404 : 200;
+}
+
+test("a newly published complex slug is requestable without a rebuild", async () => {
+  const complexPage = await readFile("src/app/(site)/novostroyki/[slug]/page.tsx", "utf8");
+  const blockedDynamicParams = /export const dynamicParams\s*=\s*false/.test(complexPage);
+
+  assert.equal(blockedDynamicParams, false);
+  assert.equal(
+    httpStatusForPublishedSlugWithoutRebuild({
+      blockedDynamicParams,
+      buildTimeSlugs: ["already-built-complex"],
+      published: true,
+      requestedSlug: "fresh-published-complex",
+    }),
+    200,
+  );
+  assert.equal(
+    httpStatusForPublishedSlugWithoutRebuild({
+      blockedDynamicParams: true,
+      buildTimeSlugs: ["already-built-complex"],
+      published: true,
+      requestedSlug: "fresh-published-complex",
+    }),
+    404,
+  );
+  assert.equal(
+    httpStatusForPublishedSlugWithoutRebuild({
+      blockedDynamicParams,
+      buildTimeSlugs: ["already-built-complex"],
+      published: false,
+      requestedSlug: "fresh-published-complex",
+    }),
+    404,
+  );
 });

@@ -26,6 +26,13 @@ test("CMS sitemap excludes drafts, archived and noindex pages", () => {
   ]);
 });
 
+test("CMS sitemap read logs infrastructure failure instead of silent merge-only fallback", () => {
+  const source = readFileSync("src/seo/sitemap-source.ts", "utf8");
+  assert.match(source, /publicReadWithFallback\(/);
+  assert.match(source, /reader:\s*"sitemap-cms-pages"/);
+  assert.doesNotMatch(source, /catch \{\s*return mergeSitemapEntries/s);
+});
+
 test("sitemap merge keeps first canonical occurrence", () => {
   assert.deepEqual(
     mergeSitemapEntries([

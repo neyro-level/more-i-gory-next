@@ -1,5 +1,7 @@
 import type { Field, GlobalConfig } from "payload";
 
+import { createCmsMutationInvalidationHook } from "../../core/cache/collection-invalidation.ts";
+
 import { isOwnerAccess, publicReadAccess } from "./access.ts";
 
 const navigationItemFields: Field[] = [
@@ -71,6 +73,9 @@ export const Navigation: GlobalConfig = {
       ],
     },
   ],
+  hooks: {
+    afterChange: [createCmsMutationInvalidationHook("navigation")],
+  },
   versions: {
     drafts: false,
     max: 20,

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { regionSchema } from "@more-i-gory/contracts";
@@ -121,4 +122,60 @@ test("Public Gateway propagates access denied without privileged fallback", asyn
   });
 
   await assert.rejects(() => gateway.findMany({ slug: "krym" }), (error) => error === denied);
+});
+
+test("publicReadWithFallback logs infrastructure failure and keeps UI fallback", async () => {
+  const { PUBLIC_READ_FAILED, publicReadWithFallback } = await import(
+    "../src/core/data-access/public/read-fallback.ts"
+  );
+  const issues = [];
+  const result = await publicReadWithFallback({
+    fallback: [],
+    logger: {
+      error(_message, context) {
+        issues.push(context);
+      },
+    },
+    read: async () => {
+      throw new Error("payload unavailable");
+    },
+    reader: "published-manual-properties",
+  });
+
+  assert.deepEqual(result, []);
+  assert.deepEqual(issues, [{ code: PUBLIC_READ_FAILED, reader: "published-manual-properties" }]);
+});
+
+test("publicReadWithFallback does not log empty published lists", async () => {
+  const { publicReadWithFallback } = await import("../src/core/data-access/public/read-fallback.ts");
+  let logged = false;
+  const result = await publicReadWithFallback({
+    fallback: [{ id: "fallback" }],
+    logger: {
+      error() {
+        logged = true;
+      },
+    },
+    read: async () => [],
+    reader: "published-manual-properties",
+  });
+
+  assert.deepEqual(result, []);
+  assert.equal(logged, false);
+});
+
+test("public catalog readers wrap Payload outage with publicReadWithFallback", () => {
+  const sources = [
+    "src/core/data-access/public/pages.ts",
+    "src/core/data-access/public/properties.ts",
+    "src/core/data-access/public/site-chrome.ts",
+    "src/core/data-access/public/newbuilds.ts",
+    "src/seo/sitemap-source.ts",
+  ];
+
+  for (const file of sources) {
+    const source = readFileSync(file, "utf8");
+    assert.match(source, /publicReadWithFallback\(/);
+    assert.doesNotMatch(source, /catch \{\s*return (null|\[\]|fallbackSiteChrome);/s);
+  }
 });

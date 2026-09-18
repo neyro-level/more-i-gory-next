@@ -8,6 +8,11 @@ import {
   createCacheInvalidator,
   invalidateAfterCommit,
 } from "../src/core/cache/invalidator.ts";
+import {
+  cmsCacheEntities,
+  cmsMutationCacheTargets,
+  createCmsMutationInvalidationHook,
+} from "../src/core/cache/collection-invalidation.ts";
 
 const targets = [
   { kind: "tag", tag: "catalog" },
@@ -127,6 +132,18 @@ test("typed cache targets map approved domain changes to paths and tags", () => 
   assert.deepEqual(cacheTargets.pageDoc("privacy"), [
     { kind: "tag", tag: "page:privacy" },
     { kind: "path", path: "/privacy/" },
+  ]);
+  assert.deepEqual(cacheTargets.developerPage("sample-developer"), [
+    { kind: "tag", tag: "developer:sample-developer" },
+    { kind: "path", path: "/zastroyshchik/sample-developer/" },
+    { kind: "tag", tag: "developers" },
+    { kind: "tag", tag: "catalog" },
+    { kind: "path", path: "/obekty/" },
+    { kind: "path", path: "/novostroyki/" },
+  ]);
+  assert.deepEqual(cacheTargets.redirects(), [
+    { kind: "tag", tag: "redirects" },
+    { kind: "tag", tag: "navigation" },
   ]);
   assert.deepEqual(cacheTargets.navigation(), [{ kind: "tag", tag: "navigation" }]);
   assert.deepEqual(cacheTargets.siteSettings(), [
@@ -248,4 +265,141 @@ test("post-commit invalidation reports success after one batch", async () => {
       context: { targetCount: 2 },
     },
   ]);
+});
+
+test("CMS mutations map to CacheInvalidator targets after commit", () => {
+  assert.deepEqual(cmsCacheEntities, [
+    "pages",
+    "properties",
+    "regions",
+    "residential-complexes",
+    "developers",
+    "redirects",
+    "site-settings",
+    "navigation",
+  ]);
+  assert.ok(cmsMutationCacheTargets("pages", { slug: "privacy" }).some((target) => target.kind === "tag" && target.tag === "page:privacy"));
+  assert.ok(cmsMutationCacheTargets("properties", { slug: "sample-resort" }).some((target) => target.kind === "tag" && target.tag === "properties"));
+  assert.ok(cmsMutationCacheTargets("regions", { slug: "yalta" }).some((target) => target.kind === "path" && target.path === "/investicionnaya-nedvizhimost/krym/yalta/"));
+  assert.ok(cmsMutationCacheTargets("residential-complexes", { slug: "sample-complex" }).some((target) => target.kind === "tag" && target.tag === "complex:sample-complex"));
+  assert.ok(cmsMutationCacheTargets("developers", { slug: "sample-developer" }).some((target) => target.kind === "path" && target.path === "/zastroyshchik/sample-developer/"));
+  assert.ok(cmsMutationCacheTargets("redirects").some((target) => target.kind === "tag" && target.tag === "redirects"));
+  assert.ok(cmsMutationCacheTargets("site-settings").some((target) => target.kind === "tag" && target.tag === "site-settings"));
+  assert.deepEqual(cmsMutationCacheTargets("navigation"), [{ kind: "tag", tag: "navigation" }]);
+});
+
+test("CMS collection hook invalidates after commit and does not throw on cache failure", async () => {
+  const batches = [];
+  const hook = createCmsMutationInvalidationHook("residential-complexes", {
+    invalidator: {
+      async invalidate(targets) {
+        batches.push(targets);
+      },
+    },
+    logger: { error() {}, info() {} },
+  });
+
+  await hook({ doc: { slug: "fresh-complex" } });
+  assert.equal(batches.length, 1);
+  assert.ok(batches[0].some((target) => target.kind === "tag" && target.tag === "complex:fresh-complex"));
+
+  const logs = [];
+  const failingHook = createCmsMutationInvalidationHook("pages", {
+    invalidator: {
+      async invalidate() {
+        throw new Error("revalidate unavailable");
+      },
+    },
+    logger: {
+      error: (message, context) => logs.push({ message, context }),
+      info() {},
+    },
+  });
+  await failingHook({ doc: { slug: "privacy" } });
+  assert.deepEqual(logs, [
+    {
+      message: "cache invalidation operational issue",
+      context: { code: "cache_invalidation_failed", targetCount: 2 },
+    },
+  ]);
+});
+
+test("B2 proof: CMS mutation HTTP-revalidates so the next public request sees fresh data", async () => {
+  const secret = "12345678901234567890123456789012";
+  const publicByTag = new Map([["complex:fresh-complex", { title: "stale title" }]]);
+  const outboundCalls = [];
+  const { handleInternalRevalidateRequest } = await import("../src/core/cache/revalidate-endpoint.ts");
+  const { createHttpRevalidateInvalidator } = await import("../src/core/cache/http-revalidate-invalidator.ts");
+
+  const httpInvalidator = await createHttpRevalidateInvalidator({
+    loadEnv: () => ({
+      INTERNAL_REVALIDATE_BASE_URL: "https://more-previu.tw1.ru",
+      REVALIDATE_SECRET: secret,
+    }),
+    outbound: {
+      async request(request) {
+        outboundCalls.push({ method: request.method, url: String(request.url) });
+        const response = await handleInternalRevalidateRequest(
+          new Request(request.url, {
+            body: request.body,
+            headers: request.headers,
+            method: request.method,
+          }),
+          {
+            invalidator: {
+              async invalidate(targets) {
+                for (const target of targets) {
+                  if (target.kind === "tag") publicByTag.delete(target.tag);
+                }
+              },
+            },
+            logger: { error() {}, info() {}, warn() {} },
+            secret,
+            store: new Map(),
+          },
+        );
+        return {
+          body: new Uint8Array(),
+          contentType: "application/json",
+          etag: null,
+          lastModified: null,
+          status: response.status,
+        };
+      },
+    },
+  });
+
+  assert.equal(publicByTag.get("complex:fresh-complex")?.title, "stale title");
+
+  const hook = createCmsMutationInvalidationHook("residential-complexes", {
+    invalidator: httpInvalidator,
+    logger: { error() {}, info() {} },
+  });
+  await hook({ doc: { slug: "fresh-complex", status: "published", title: "fresh title" } });
+
+  assert.deepEqual(outboundCalls, [
+    { method: "POST", url: "https://more-previu.tw1.ru/api/internal/revalidate" },
+  ]);
+  assert.equal(publicByTag.has("complex:fresh-complex"), false);
+
+  publicByTag.set("complex:fresh-complex", { title: "fresh title" });
+  assert.equal(publicByTag.get("complex:fresh-complex")?.title, "fresh title");
+});
+
+test("CMS collections and globals wire after-commit CacheInvalidator hooks", async () => {
+  const files = [
+    "src/project/collections/pages.ts",
+    "src/project/collections/properties.ts",
+    "src/project/collections/regions.ts",
+    "src/project/collections/residential-complexes.ts",
+    "src/project/collections/developers.ts",
+    "src/project/collections/redirects.ts",
+    "src/project/globals/site-settings.ts",
+    "src/project/globals/navigation.ts",
+  ];
+  for (const file of files) {
+    const source = await readFile(file, "utf8");
+    assert.match(source, /createCmsMutationInvalidationHook/);
+    assert.match(source, /afterChange/);
+  }
 });

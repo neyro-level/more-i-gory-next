@@ -15,8 +15,6 @@ type ProjectPassportPageProps = {
   }>;
 };
 
-export const dynamicParams = false;
-
 export async function generateStaticParams() {
   const slugs = await listManualPropertyRouteSlugs();
   return slugs.map((slug) => ({ slug }));

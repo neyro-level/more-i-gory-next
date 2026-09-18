@@ -1,5 +1,7 @@
 import type { GlobalConfig } from "payload";
 
+import { createCmsMutationInvalidationHook } from "../../core/cache/collection-invalidation.ts";
+
 import { isOwnerAccess, publicReadAccess } from "./access.ts";
 
 export const SiteSettings: GlobalConfig = {
@@ -131,6 +133,9 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
   ],
+  hooks: {
+    afterChange: [createCmsMutationInvalidationHook("site-settings")],
+  },
   versions: {
     drafts: false,
     max: 20,

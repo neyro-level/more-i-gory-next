@@ -1,5 +1,7 @@
 import type { CollectionBeforeValidateHook, CollectionConfig } from "payload";
 
+import { createCmsMutationInvalidationHook } from "../../core/cache/collection-invalidation.ts";
+
 import { pageBlocks } from "../blocks/page-blocks.ts";
 import { assertPublishedSeo, seoFields } from "../fields/seo.ts";
 import { isOwnerAccess, publicReadAccess } from "../globals/access.ts";
@@ -90,6 +92,8 @@ export const ResidentialComplexes: CollectionConfig = {
     },
   ],
   hooks: {
+    afterChange: [createCmsMutationInvalidationHook("residential-complexes")],
+    afterDelete: [createCmsMutationInvalidationHook("residential-complexes")],
     beforeValidate: [validatePublishedSeo],
   },
   indexes: [
