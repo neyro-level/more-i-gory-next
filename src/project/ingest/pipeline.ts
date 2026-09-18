@@ -2,6 +2,7 @@ import type { FeedParserResult } from "../../core/ingest/parsers/types.ts";
 import type { NormalizeFeedResult } from "../../core/ingest/normalize-feed.ts";
 import type { UpsertFeedSummary } from "../../core/ingest/upsert-feed.ts";
 import type { RecordedImportIssue } from "../../core/ingest/record-issues.ts";
+import type { SafeDeactivationPlan } from "../../core/ingest/safe-deactivation.ts";
 
 export const ingestStageOrder = [
   "claim-running",
@@ -41,6 +42,7 @@ export type IngestPipelineState = {
   normalize?: NormalizeFeedResult;
   upsert?: UpsertFeedSummary;
   recordedIssues?: RecordedImportIssue[];
+  deactivation?: SafeDeactivationPlan;
 };
 
 export type IngestStageContext = {

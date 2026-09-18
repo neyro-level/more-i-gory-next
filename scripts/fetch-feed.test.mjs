@@ -129,9 +129,21 @@ test("importFeed composition fetches after resolving the env-named URL", async (
       return { docs: [{ id: "501" }] };
     },
     async findByID(args) {
+      if (args.collection === "import-runs") return { mode: "incremental" };
       if (args.select?.feedUrlRef) return { feedUrlRef: "FEED_URL_PRIMARY" };
       if (args.select?.parser) return { parser: "yrl" };
       if (args.select?.market) return { market: "newbuild" };
+      if (args.select?.maxDeactivationsPerRun) {
+        return {
+          deactivationApproval: {},
+          lastFeedHash: "hash",
+          lastFullRunAt: "2026-09-01T00:00:00.000Z",
+          lastOfferCount: 10,
+          market: "newbuild",
+          maxDeactivationsPerRun: 20,
+          safetyThresholdPercent: 20,
+        };
+      }
       return { lastEtag: '"abc"', lastModified: null };
     },
     async find() {
@@ -165,7 +177,7 @@ test("importFeed composition fetches after resolving the env-named URL", async (
 
   assert.equal(requests[0].headers["If-None-Match"], '"abc"');
   assert.equal(result.state.fetch?.status, 200);
-  assert.equal(result.pendingStage, "safe-deactivation");
+  assert.equal(result.pendingStage, "finalize");
   assert.equal(result.state.conditional?.kind, "read-body");
   assert.equal(result.state.parse?.suspicious, false);
   assert.equal(result.state.upsert?.createdCount, 1);

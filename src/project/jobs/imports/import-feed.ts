@@ -4,10 +4,12 @@ import { loadFeedSourceConditionalState } from "../../../core/data-access/system
 import { loadFeedSourceParser } from "../../../core/data-access/system/load-feed-source-parser.ts";
 import { loadFeedSourceUrlRef } from "../../../core/data-access/system/load-feed-source-url-ref.ts";
 import { loadFeedSourceMarket } from "../../../core/data-access/system/load-feed-source-market.ts";
+import { loadFeedDeactivationPolicy } from "../../../core/data-access/system/apply-safe-deactivation.ts";
 import { createImportIssue } from "../../../core/data-access/system/create-import-issue.ts";
 import { findPropertiesByExternalId } from "../../../core/data-access/system/apply-feed-upsert.ts";
 import { createClassifyConditionalHandler } from "../../../core/ingest/classify-conditional.ts";
 import { createFetchFeedHandler, parseOutboundAllowedHosts } from "../../../core/ingest/fetch-feed.ts";
+import { createSafeDeactivationHandler } from "../../../core/ingest/run-safe-deactivation.ts";
 import { createRecordImportIssuesHandler } from "../../../core/ingest/record-issues.ts";
 import { createUpsertFeedHandler } from "../../../core/ingest/upsert-feed.ts";
 import { createNormalizeFeedHandler } from "../../../core/ingest/normalize-feed.ts";
@@ -40,7 +42,8 @@ type ImportFeedPayload = Parameters<typeof transitionImportRunToRunning>[0] &
   Parameters<typeof loadFeedSourceParser>[0] &
   Parameters<typeof loadFeedSourceMarket>[0] &
   Parameters<typeof findPropertiesByExternalId>[0] &
-  Parameters<typeof createImportIssue>[0];
+  Parameters<typeof createImportIssue>[0] &
+  Parameters<typeof loadFeedDeactivationPolicy>[0];
 
 export function createImportFeedPipelineHandlers(
   payload: ImportFeedPayload,
@@ -55,7 +58,8 @@ export function createImportFeedPipelineHandlers(
     | "parse"
     | "normalize"
     | "upsert"
-    | "record-issues",
+    | "record-issues"
+    | "safe-deactivation",
     IngestStageHandler
   >
 > {
@@ -80,6 +84,7 @@ export function createImportFeedPipelineHandlers(
     normalize: createNormalizeFeedHandler(),
     upsert: createUpsertFeedHandler({ payload }),
     "record-issues": createRecordImportIssuesHandler({ payload }),
+    "safe-deactivation": createSafeDeactivationHandler({ payload }),
   };
 }
 
