@@ -79,10 +79,22 @@ Payload Admin, users/jobs schema и migrations-only PostgreSQL adapter. Целе
 | Операционный runbook: deploy, rollback, backup, imports, leads и incidents | [`OPERATIONS.md`](OPERATIONS.md) |
 | Труднообратимые решения | [`adr/`](adr/) |
 | Исследования и исторические evidence | [`research/`](research/) |
+| Техническая конституция стека | [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) |
+| UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
+| Очередь отложенных решений | [`OWNER_QUEUE.md`](OWNER_QUEUE.md) |
 
 Research объясняет причины решений, но не является параллельным Source of Truth.
 Встроенные статусы старых файлов внутри `research/legacy/` являются историческими
 и отменены общим статусом каталога.
+
+## Approved exceptions
+
+Сознательное отклонение от конституций допускается (ориентир — редкие проектные
+исключения), но только письменно: что отклонено, почему, где зафиксировано.
+Молчаливое расхождение — дефект. Живые записи ведутся в [`OWNER_QUEUE.md`](OWNER_QUEUE.md)
+и профильном ADR; этот раздел не копирует конституции.
+
+Пока записей нет.
 
 ## Как работать с проектом
 

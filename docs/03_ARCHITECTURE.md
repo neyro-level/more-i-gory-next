@@ -3,8 +3,11 @@
 **Статус:** Active
 **Версия:** 2.3 After EPIC 12
 **Дата:** 2026-09-18
-**Engineering baseline:** глобальный AMS Engineering Standard / Constitution
-**Важно:** этот документ фиксирует только проектную конкретику.
+**Engineering baseline:** AMS Realty Platform Core 5.5 (норматив стека)
+**Важно:** этот документ фиксирует только проектную конкретику. Стек, границы
+данных и jobs сверяются с
+[`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md).
+Молчаливые отклонения запрещены.
 
 ## 0. Transition contract
 
