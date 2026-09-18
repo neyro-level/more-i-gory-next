@@ -184,6 +184,7 @@ test("ingest composition root claims then stops at the next unbound stage", asyn
     completedStages: ["claim-running"],
     pendingStage: "resolve-feed-url",
     status: "running",
+    state: {},
   });
 });
 

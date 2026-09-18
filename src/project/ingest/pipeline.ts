@@ -19,8 +19,13 @@ export type IngestPipelineInput = {
   importRunId: string;
 };
 
+export type IngestPipelineState = {
+  feedUrl?: string;
+};
+
 export type IngestStageContext = {
   input: IngestPipelineInput;
+  state: IngestPipelineState;
 };
 
 export type IngestStageResult = {
@@ -34,13 +39,16 @@ export type IngestPipelineResult = {
   completedStages: IngestStageId[];
   pendingStage: IngestStageId | null;
   status: "failed" | "running" | "skipped";
+  state: IngestPipelineState;
 };
 
 export async function runIngestPipeline(args: {
   handlers: Partial<Record<IngestStageId, IngestStageHandler>>;
   input: IngestPipelineInput;
+  state?: IngestPipelineState;
 }): Promise<IngestPipelineResult> {
   const completedStages: IngestStageId[] = [];
+  const state = args.state ?? {};
 
   for (const stage of ingestStageOrder) {
     const handler = args.handlers[stage];
@@ -49,10 +57,11 @@ export async function runIngestPipeline(args: {
         completedStages,
         pendingStage: stage,
         status: completedStages.includes("claim-running") ? "running" : "skipped",
+        state,
       };
     }
 
-    const result = await handler({ input: args.input });
+    const result = await handler({ input: args.input, state });
     completedStages.push(stage);
 
     if (!result.continue) {
@@ -60,6 +69,7 @@ export async function runIngestPipeline(args: {
         completedStages,
         pendingStage: null,
         status: result.status,
+        state,
       };
     }
   }
@@ -68,6 +78,7 @@ export async function runIngestPipeline(args: {
     completedStages,
     pendingStage: null,
     status: "running",
+    state,
   };
 }
 

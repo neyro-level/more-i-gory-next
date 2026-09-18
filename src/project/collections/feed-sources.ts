@@ -1,5 +1,6 @@
 import type { CollectionConfig } from "payload";
 
+import { validateFeedUrlRef } from "../../core/ingest/resolve-feed-url.ts";
 import { isOwnerAccess } from "../globals/access.ts";
 
 const validateInteger = (value: unknown) =>
@@ -43,6 +44,7 @@ export const FeedSources: CollectionConfig = {
       admin: {
         description: "Secret Master reference only. Do not store raw feed credentials here.",
       },
+      validate: validateFeedUrlRef,
     },
     { name: "enabled", type: "checkbox", defaultValue: false, required: true },
     { name: "refreshIntervalMinutes", type: "number", defaultValue: 60, required: true, validate: validateInteger },

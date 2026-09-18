@@ -31,6 +31,8 @@ const requiredFiles = [
   "src/core/data-access/system/lead-retention.ts",
   "src/core/data-access/system/dispatch-due-feeds.ts",
   "src/core/data-access/system/import-feed-run.ts",
+  "src/core/data-access/system/load-feed-source-market.ts",
+  "src/core/data-access/system/load-feed-source-url-ref.ts",
   "src/core/cache/invalidator.ts",
   "src/core/dto/index.ts",
   "src/core/query/index.ts",
@@ -339,7 +341,8 @@ const overrideAccessConsumers = sourceFiles.filter((file) => {
     !normalized.endsWith("/src/core/data-access/system/lead-retention.ts") &&
     !normalized.endsWith("/src/core/data-access/system/dispatch-due-feeds.ts") &&
     !normalized.endsWith("/src/core/data-access/system/import-feed-run.ts") &&
-    !normalized.endsWith("/src/core/data-access/system/load-feed-source-market.ts")
+    !normalized.endsWith("/src/core/data-access/system/load-feed-source-market.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/load-feed-source-url-ref.ts")
   );
 });
 if (overrideAccessConsumers.length > 0) {

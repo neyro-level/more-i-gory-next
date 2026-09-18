@@ -50,6 +50,8 @@ test("feed-sources exposes the approved scheduling, safety and secret-reference 
   assert.equal(field(FeedSources, "parser").index, true);
   assert.equal(field(FeedSources, "feedUrlRef").type, "text");
   assert.match(field(FeedSources, "feedUrlRef").admin.description, /Secret Master reference/);
+  assert.equal(field(FeedSources, "feedUrlRef").validate("FEED_URL_PRIMARY"), true);
+  assert.match(field(FeedSources, "feedUrlRef").validate("https://example.com/feed.xml"), /env name/);
   assert.equal(field(FeedSources, "refreshIntervalMinutes").defaultValue, 60);
   assert.equal(field(FeedSources, "safetyThresholdPercent").defaultValue, 20);
   assert.match(field(FeedSources, "safetyThresholdPercent").validate(101), /percent/);
