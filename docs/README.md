@@ -77,7 +77,7 @@ Payload Admin, users/jobs schema и migrations-only PostgreSQL adapter. Целе
 | Визуальный язык, tokens и UI-компоненты | [`06_DESIGN_SYSTEM.md`](06_DESIGN_SYSTEM.md) |
 | Адаптер дизайн-решений Realty Platform к визуальному канону проекта | [`DESIGN.md`](DESIGN.md) |
 | Операционный runbook: deploy, rollback, backup, imports, leads и incidents | [`OPERATIONS.md`](OPERATIONS.md) |
-| Труднообратимые решения | [`adr/`](adr/) |
+| Труднообратимые решения | [`adr/README.md`](adr/README.md) |
 | Исследования и исторические evidence | [`research/`](research/) |
 | Техническая конституция стека | [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) |
 | UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
