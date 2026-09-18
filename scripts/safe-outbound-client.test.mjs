@@ -164,6 +164,47 @@ test("307 and 308 preserve method and body when policy allows", async () => {
   assert.equal(calls[1].hasBody, true);
 });
 
+test("cross-host redirects drop auth-like headers and re-check host plus IP", async () => {
+  const resolved = [];
+  const calls = [];
+  const outbound = client({
+    allowedHosts: ["api.telegram.org", "core.telegram.org"],
+    resolveHostAddresses: async (hostname) => {
+      resolved.push(hostname);
+      return hostname === "core.telegram.org" ? ["149.154.167.221"] : ["149.154.167.220"];
+    },
+    fetchImpl: async (url, init) => {
+      calls.push({
+        href: String(url),
+        authorization: init.headers?.authorization ?? init.headers?.Authorization,
+        contentType: init.headers?.["content-type"] ?? init.headers?.["Content-Type"],
+      });
+      if (calls.length === 1) {
+        return new Response(null, {
+          headers: { location: "https://core.telegram.org/follow" },
+          status: 307,
+        });
+      }
+      return new Response(encoder.encode("ok"), { status: 200 });
+    },
+  });
+
+  await outbound.request({
+    ...baseRequest,
+    body: encoder.encode("payload"),
+    headers: {
+      authorization: "Bearer secret",
+      "content-type": "application/json",
+    },
+    method: "POST",
+  });
+
+  assert.equal(calls[0].authorization, "Bearer secret");
+  assert.equal(calls[1].authorization, undefined);
+  assert.equal(calls[1].contentType, "application/json");
+  assert.deepEqual(resolved, ["api.telegram.org", "core.telegram.org"]);
+});
+
 test("safe outbound client enforces max response size", async () => {
   const outbound = client({
     fetchImpl: async () => new Response(encoder.encode("too-large")),

@@ -155,6 +155,25 @@ function nextRedirectRequest(
   return { method, body };
 }
 
+const authLikeHeaderNames = new Set([
+  "authorization",
+  "cookie",
+  "proxy-authorization",
+  "x-api-key",
+  "x-auth-token",
+]);
+
+function headersWithoutAuth(headers: Readonly<Record<string, string>> | undefined): Record<string, string> | undefined {
+  if (!headers) return undefined;
+  return Object.fromEntries(
+    Object.entries(headers).filter(([name]) => !authLikeHeaderNames.has(name.toLowerCase())),
+  );
+}
+
+function isCrossHostRedirect(from: URL, to: URL): boolean {
+  return normalizeHost(from.hostname) !== normalizeHost(to.hostname);
+}
+
 function bodyInit(body: Uint8Array | undefined): ArrayBuffer | undefined {
   if (!body) return undefined;
   const copy = new Uint8Array(body.byteLength);
@@ -173,6 +192,7 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
       let url = new URL(request.url);
       let method: OutboundMethod = request.method ?? "GET";
       let body = request.body;
+      let headers = request.headers ? { ...request.headers } : undefined;
 
       for (let redirectCount = 0; redirectCount <= maxRedirects; redirectCount += 1) {
         await assertSafeUrl(url, { allowedHosts, resolveHostAddresses });
@@ -184,7 +204,7 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
         try {
           response = await fetchImpl(url, {
             body: method === "GET" ? undefined : bodyInit(body),
-            headers: request.headers,
+            headers,
             method,
             redirect: "manual",
             signal: controller.signal,
@@ -197,6 +217,9 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
 
         const nextUrl = redirectLocation(response, url);
         if (nextUrl) {
+          if (isCrossHostRedirect(url, nextUrl)) {
+            headers = headersWithoutAuth(headers);
+          }
           const next = nextRedirectRequest(response.status, method, body);
           method = next.method;
           body = next.body;
