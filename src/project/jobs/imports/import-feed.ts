@@ -1,8 +1,11 @@
 import type { TaskConfig } from "payload";
 
+import { loadFeedSourceConditionalState } from "../../../core/data-access/system/load-feed-source-conditional.ts";
 import { loadFeedSourceUrlRef } from "../../../core/data-access/system/load-feed-source-url-ref.ts";
+import { createFetchFeedHandler, parseOutboundAllowedHosts } from "../../../core/ingest/fetch-feed.ts";
 import { createResolveFeedUrlHandler } from "../../../core/ingest/resolve-feed-url.ts";
 import { transitionImportRunToRunning } from "../../../core/data-access/system/import-feed-run.ts";
+import { createSafeOutboundClient, type SafeOutboundClient } from "../../../core/security/outbound-http/index.ts";
 import {
   createImportFeedClaimHandler,
   runIngestPipeline,
@@ -20,12 +23,14 @@ type ImportFeedTask = {
 };
 
 type ImportFeedPayload = Parameters<typeof transitionImportRunToRunning>[0] &
-  Parameters<typeof loadFeedSourceUrlRef>[0];
+  Parameters<typeof loadFeedSourceUrlRef>[0] &
+  Parameters<typeof loadFeedSourceConditionalState>[0];
 
 export function createImportFeedPipelineHandlers(
   payload: ImportFeedPayload,
   lookupEnv: (name: string) => string | undefined | Promise<string | undefined>,
-): Partial<Record<"claim-running" | "resolve-feed-url", IngestStageHandler>> {
+  outbound: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>),
+): Partial<Record<"claim-running" | "resolve-feed-url" | "fetch", IngestStageHandler>> {
   return {
     "claim-running": createImportFeedClaimHandler((claimInput) =>
       transitionImportRunToRunning(payload, claimInput),
@@ -34,12 +39,23 @@ export function createImportFeedPipelineHandlers(
       loadFeedUrlRef: (feedSourceId) => loadFeedSourceUrlRef(payload, feedSourceId),
       lookupEnv,
     }),
+    fetch: createFetchFeedHandler({
+      loadConditionalState: (feedSourceId) => loadFeedSourceConditionalState(payload, feedSourceId),
+      outbound,
+    }),
   };
 }
 
 async function lookupFeedUrlRuntimeEnv(name: string): Promise<string | undefined> {
   const { lookupRuntimeEnv } = await import("../../env.ts");
   return lookupRuntimeEnv(name);
+}
+
+async function createFeedOutboundClient(): Promise<SafeOutboundClient> {
+  const { env } = await import("../../env.ts");
+  return createSafeOutboundClient({
+    allowedHosts: parseOutboundAllowedHosts(env.OUTBOUND_ALLOWED_HOSTS),
+  });
 }
 
 export const importFeedTask: TaskConfig<ImportFeedTask> = {
@@ -59,6 +75,7 @@ export const importFeedTask: TaskConfig<ImportFeedTask> = {
       handlers: createImportFeedPipelineHandlers(
         req.payload as unknown as ImportFeedPayload,
         lookupFeedUrlRuntimeEnv,
+        createFeedOutboundClient,
       ),
       input,
     });

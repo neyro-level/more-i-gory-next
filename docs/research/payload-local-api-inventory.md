@@ -70,6 +70,7 @@
 | `src/core/data-access/system/lead-retention.ts:75` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
 | `src/core/data-access/system/lead-retention.ts:98` | `delete` | SYSTEM GATEWAY | `await payload.delete({` |
 | `src/core/data-access/system/lead-retention.ts:103` | `delete` | SYSTEM GATEWAY | `await payload.delete({` |
+| `src/core/data-access/system/load-feed-source-conditional.ts:15` | `findByID` | SYSTEM GATEWAY | `const source = await payload.findByID({` |
 | `src/core/data-access/system/load-feed-source-market.ts:17` | `findByID` | SYSTEM GATEWAY | `const source = await payload.findByID({` |
 | `src/core/data-access/system/load-feed-source-url-ref.ts:15` | `findByID` | SYSTEM GATEWAY | `const source = await payload.findByID({` |
 | `src/core/data-access/system/load-lead-delivery.ts:100` | `findByID` | SYSTEM GATEWAY | `const delivery = (await payload.findByID({` |
@@ -78,7 +79,7 @@
 | `src/project/collections/redirects.ts:15` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/collections/redirects.ts:23` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/jobs/imports/dispatch-due-feeds.ts:24` | `req.payload` | SYSTEM GATEWAY | `const result = await dispatchDueFeeds(req.payload as unknown as Parameters<typeof dispatchDueFeeds>[0]);` |
-| `src/project/jobs/imports/import-feed.ts:60` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as ImportFeedPayload,` |
+| `src/project/jobs/imports/import-feed.ts:76` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as ImportFeedPayload,` |
 | `src/project/jobs/leads/deliver-lead.ts:189` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as PayloadLike,` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:94` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof jobsJanitor>[0],` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:121` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof recoverLeadDeliveries>[0],` |

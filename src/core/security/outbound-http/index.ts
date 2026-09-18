@@ -14,6 +14,8 @@ export type SafeOutboundRequest = Readonly<{
 export type SafeOutboundResponse = Readonly<{
   body: Uint8Array;
   contentType: string | null;
+  etag: string | null;
+  lastModified: string | null;
   status: number;
 }>;
 
@@ -296,6 +298,8 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
         return {
           body: await readLimitedBody(response, request.maxResponseBytes),
           contentType: response.headers.get("content-type"),
+          etag: response.headers.get("etag"),
+          lastModified: response.headers.get("last-modified"),
           status: response.status,
         };
       }

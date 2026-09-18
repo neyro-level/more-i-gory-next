@@ -11,7 +11,6 @@ import {
 } from "../src/core/ingest/resolve-feed-url.ts";
 import { FeedSources } from "../src/project/collections/feed-sources.ts";
 import { createImportFeedClaimHandler, runIngestPipeline } from "../src/project/ingest/pipeline.ts";
-import { createImportFeedPipelineHandlers } from "../src/project/jobs/imports/import-feed.ts";
 
 test("feedUrlRef accepts env names and rejects URLs", () => {
   assert.equal(validateFeedUrlRef(undefined), true);
@@ -116,9 +115,13 @@ test("importFeed composition resolves feedUrlRef through runtime lookup and neve
   };
 
   const result = await runIngestPipeline({
-    handlers: createImportFeedPipelineHandlers(payload, (name) =>
-      name === "FEED_URL_PRIMARY" ? "https://feeds.example/primary.xml" : undefined,
-    ),
+    handlers: {
+      "claim-running": createImportFeedClaimHandler(async () => true),
+      "resolve-feed-url": createResolveFeedUrlHandler({
+        loadFeedUrlRef: async () => "FEED_URL_PRIMARY",
+        lookupEnv: (name) => (name === "FEED_URL_PRIMARY" ? "https://feeds.example/primary.xml" : undefined),
+      }),
+    },
     input: { feedSourceId: "101", importRunId: "501" },
   });
 

@@ -21,6 +21,13 @@ export type IngestPipelineInput = {
 
 export type IngestPipelineState = {
   feedUrl?: string;
+  fetch?: {
+    body: Uint8Array;
+    contentType: string | null;
+    etag: string | null;
+    lastModified: string | null;
+    status: number;
+  };
 };
 
 export type IngestStageContext = {
