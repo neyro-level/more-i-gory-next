@@ -61,4 +61,11 @@ export function parseProjectEnv(source: NodeJS.ProcessEnv) {
   return rawEnvSchema.parse(source);
 }
 
+export function lookupRuntimeEnv(name: string, source: NodeJS.ProcessEnv = process.env): string | undefined {
+  const value = source[name];
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
 export const env = parseProjectEnv(process.env);

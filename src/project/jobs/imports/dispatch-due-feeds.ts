@@ -10,6 +10,8 @@ type DispatchDueFeedsTask = {
   };
 };
 
+export const ingestAutorunFrozen = true;
+
 export const dispatchDueFeedsTask: TaskConfig<DispatchDueFeedsTask> = {
   slug: "dispatchDueFeeds",
   inputSchema: [],
@@ -18,8 +20,7 @@ export const dispatchDueFeedsTask: TaskConfig<DispatchDueFeedsTask> = {
     { name: "queued", type: "number", required: true },
   ],
   retries: 0,
-  // Seconds field must be `0`, not `*`: `* 0/5 * * * *` fires every second.
-  schedule: [{ cron: "0 0/5 * * * *", queue: "system" }],
+  schedule: [],
   handler: async ({ req }) => {
     const result = await dispatchDueFeeds(req.payload as unknown as Parameters<typeof dispatchDueFeeds>[0]);
     return { output: result };

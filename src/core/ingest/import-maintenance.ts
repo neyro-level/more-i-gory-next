@@ -7,6 +7,7 @@ export type ImportRunMaintenanceStatus = "interrupted" | "queued" | "running";
 
 export type ImportRunMaintenanceRecord = {
   createdAt?: string;
+  feedSource?: number | string | { id?: number | string } | null;
   heartbeatAt?: string | null;
   id: string | number;
   startedAt?: string | null;

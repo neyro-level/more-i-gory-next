@@ -43,6 +43,8 @@ test("safe outbound client allows explicit HTTPS allowlisted hosts", async () =>
 
   assert.equal(response.status, 200);
   assert.equal(response.contentType, "text/plain");
+  assert.equal(response.etag, null);
+  assert.equal(response.lastModified, null);
   assert.equal(new TextDecoder().decode(response.body), "ok");
 });
 

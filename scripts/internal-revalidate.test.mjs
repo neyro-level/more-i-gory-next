@@ -104,6 +104,22 @@ test("internal revalidate rejects internal route targets", async () => {
   assert.equal(calls.length, 0);
 });
 
+test("internal revalidate accepts ingest catalog, complex and novostroyki targets", async () => {
+  const { config, calls } = createConfig();
+  const targets = [
+    { kind: "tag", tag: "catalog" },
+    { kind: "tag", tag: "complex:sample-complex" },
+    { kind: "tag", tag: "catalog-slice:krym" },
+    { kind: "path", path: "/novostroyki/sample-complex/" },
+  ];
+  const response = await handleInternalRevalidateRequest(
+    createRequest({ body: { targets } }),
+    config,
+  );
+  assert.equal(response.status, 200);
+  assert.deepEqual(calls, [targets]);
+});
+
 test("internal revalidate accepts nested approved region tags", async () => {
   const { config, calls } = createConfig();
   const response = await handleInternalRevalidateRequest(

@@ -3,7 +3,13 @@ import test from "node:test";
 
 import { dispatchDueFeeds, calculateNextDueAt } from "../src/core/data-access/system/dispatch-due-feeds.ts";
 import { transitionImportRunToRunning } from "../src/core/data-access/system/import-feed-run.ts";
+import {
+  createImportFeedClaimHandler,
+  ingestStageOrder,
+  runIngestPipeline,
+} from "../src/project/ingest/pipeline.ts";
 import { createJobsConfig } from "../src/project/jobs/config.ts";
+import { importFeedTask } from "../src/project/jobs/imports/import-feed.ts";
 
 function createPayloadMock({ claimSucceeds = true, queueFails = false } = {}) {
   const calls = {
@@ -111,7 +117,7 @@ test("jobs config registers dispatchDueFeeds schedule and importFeed target", ()
   assert.ok(taskSlugs.includes("systemHealth"));
   assert.ok(taskSlugs.includes("dispatchDueFeeds"));
   assert.ok(taskSlugs.includes("importFeed"));
-  assert.deepEqual(dispatchTask?.schedule, [{ cron: "0 0/5 * * * *", queue: "system" }]);
+  assert.deepEqual(dispatchTask?.schedule, []);
   assert.deepEqual(importTask?.concurrency, {
     exclusive: true,
     key: importTask.concurrency.key,
@@ -160,4 +166,39 @@ test("transitionImportRunToRunning returns false when queued to running claim fa
     await transitionImportRunToRunning(payload, { feedSourceId: "101", importRunId: "501" }),
     false,
   );
+});
+
+test("ingest composition root claims then stops at the next unbound stage", async () => {
+  assert.deepEqual(ingestStageOrder[0], "claim-running");
+  assert.ok(ingestStageOrder.includes("parse"));
+  assert.ok(ingestStageOrder.includes("finalize"));
+
+  const result = await runIngestPipeline({
+    handlers: {
+      "claim-running": createImportFeedClaimHandler(async () => true),
+    },
+    input: { feedSourceId: "101", importRunId: "501" },
+  });
+
+  assert.deepEqual(result, {
+    completedStages: ["claim-running"],
+    pendingStage: "resolve-feed-url",
+    status: "running",
+    state: {},
+  });
+});
+
+test("importFeed job delegates to the ingest composition root and skips without ingest on failed claim", async () => {
+  const result = await importFeedTask.handler?.({
+    input: { feedSourceId: "101", importRunId: "501" },
+    req: {
+      payload: {
+        async update() {
+          return { docs: [] };
+        },
+      },
+    },
+  });
+
+  assert.deepEqual(result, { output: { status: "skipped" } });
 });

@@ -27,6 +27,7 @@ export type ExistingImportedProperty = {
   feedSource?: string | number | null;
   importHash?: string | null;
   origin: "feed" | "manual";
+  title?: string | null;
 };
 
 export type OfferImportPlan =

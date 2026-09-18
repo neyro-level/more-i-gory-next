@@ -116,7 +116,9 @@ Owner-only read diagnostics включается через `jobsCollectionOverr
 ## Imports
 
 CODE EXISTS: коллекции и jobs ingest в `main`. RUNTIME NOT PROVEN на живом фиде.
-Autorun DISABLED (freeze): без configured source и без отдельной команды
+Каталог из фида заморожен до отдельной команды. Autorun DISABLED: `dispatchDueFeeds`
+без cron, очередь `imports` с `disableScheduling: true`. `FEED_SOURCE_*` не обязательны
+и после деплоя сами не запускают импорт. Без configured source и без отдельной команды
 владельца ingest не включается. Runbook обязан покрывать suspicious run, source
 isolation, deactivation approval, recovery и запрет массовой деактивации после
 неполного feed.
