@@ -18,7 +18,9 @@ Source of Truth проекта.
 | Production domain | `more-previu.tw1.ru` technical preview; final `moreigori.ru` reserved for later cutover and currently not used by this release |
 | Staging domain | `TODO: подтвердить до EPIC 13` |
 | Production runtime | один Next.js standalone + Payload runtime за host Nginx; jobs остаются `JOBS_AUTORUN=false` до отдельного production jobs gate |
-| Production database | отдельная Timeweb Managed PostgreSQL, регион `TODO` |
+| Production server | Timeweb `Moregory`, регион `ru-1`, Ubuntu 26.04; SSH aliases `moreigory` (deploy, sudo) и `moreigory-root` |
+| Secret Master | project `more-i-gory-server`, env `prod` — единственный source of truth для server и DB credentials |
+| Production database | отдельная Timeweb Managed PostgreSQL, регион `ru-1`, достижима с сервера (проверено 2026-09-18) |
 | Staging database | отдельная Timeweb Managed PostgreSQL, без production PII |
 | Manual media | Timeweb S3 через Payload upload adapter |
 | Repository | SourceCraft `integrator-p/more-i-gory-next` |
@@ -36,7 +38,8 @@ Production и staging не используют общую БД, secrets или 
 | Restore proof | не выполнялся; обязательный фактический restore test в EPIC 13 |
 | Monitoring | planned: внешний uptime monitor + TLS alert; provider и alert destination — `TODO` до EPIC 13 |
 | Legal | оператор ПДн и публичные реквизиты утверждены владельцем; privacy/consent опубликованы как `privacy-2026-09-17` и `pdn-consent-2026-09-17`; банковские реквизиты не публикуются |
-| Core version | target мастер-плана — Realty Platform 5.5; локально доступен нормативный Core Standard 3.0, отдельного core package нет |
+| Core version | нормативная база — локальные конституции `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md` и `docs/AMS_UI_CORE_v5.0_FINAL.md` |
+| Server state | проверено 2026-09-18: nginx active (только default site), приложение не развёрнуто, Node/pnpm/docker отсутствуют — EPIC 13 является первичным провижинингом |
 
 Эта таблица фиксирует статусы, а не доказательство готовности. Planned integration
 не включается и не требует secrets до своего эпика.

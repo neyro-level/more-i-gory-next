@@ -3,7 +3,7 @@
 
 ```text
 Plan ID: more-i-gory-remediation-2026-09
-Version: v3
+Version: v4
 Status: REVIEW
 Delivery profile: COMMERCIAL
 Canonical repository: SourceCraft integrator-p/more-i-gory-next
@@ -91,6 +91,27 @@ Default epic delivery_mode: MERGE_AFTER_GATE (подтверждено влад�
 | Секрет фида остаётся снаружи | TASK 26.2: runtime injection, ничего в репозиторий |
 | Две конституции | Раздел «Конституции проекта» + TASK 19.5b по фиксации в канонe; допустимы явно записанные исключения |
 
+## Continuous-run audit — 2026-09-18 (v4)
+
+Проверка на способность пройти всю программу без остановок. Найдено пять точек
+остановки, все устранены.
+
+| Точка остановки | Было | Стало |
+|---|---|---|
+| TASK 24.1 enum migration | стоп в середине цепочки (6-й эпик) | разделена: 24.1a автономно, 24.1b в EPIC 34; no-op применяется сразу |
+| TASK 25.8 jobs owner | ждал выбор из трёх вариантов | исполняется вариант 3 автономно; 1/2 — опция в EPIC 34 |
+| TASK 28.4 `301` vs `410` | ждал решение по каждому URL | детерминированное правило по умолчанию; список `410` — отчёт владельцу |
+| EPIC 13 Timeweb runtime | не хватало сервера/БД/доступа | доступ, sudo и Managed PostgreSQL проверены фактически (§1.7); эпик автономен, включая провижининг |
+| EPIC 31 / proof 14.G / real Telegram send | не хватало `S3_*` и токена | код и fake-adapter автономно, реальные proof'ы — EPIC 34 |
+
+Дополнительно введены: §1.4.1 continuous-run contract, `docs/OWNER_QUEUE.md`
+(TASK 19.0), EPIC 34 как единственная штатная точка ожидания, классификация
+proof'ов EPIC 32 на «сразу» и «ждёт ресурс».
+
+Проверка доступа выполнена не по документации: SSH `moreigory`, sudo, nginx,
+Managed PostgreSQL и Secret Master `more-i-gory-server/prod` подтверждены
+живыми командами. Результат в §1.7.
+
 ## External revision — 2026-09-18 (v2)
 
 Внешняя ревизия принята и встроена. Каждое утверждение проверено против рабочей копии на `27ea4c2`; ниже зафиксирован фактический результат проверки, а не пересказ.
@@ -108,13 +129,13 @@ Default epic delivery_mode: MERGE_AFTER_GATE (подтверждено влад�
 | B2 владелец `nextDueAt` | ACCEPTED | `dispatchDueFeeds` сдвигает `nextDueAt` только при claim; пост-run поведения нет | Добавлен TASK 26.15 |
 | B3 путь ручного retry | ACCEPTED | `retryAbandonedLeadDelivery` + `manualRetryAudit` реализованы, операторский путь нигде не описан | Добавлен TASK 23.12 |
 | B4 PII в логах | ACCEPTED | `test:lead-delivery-secrets` — статический контракт, runtime-захвата stdout нет | Добавлен proof 14.K |
-| B5 один jobs owner | ACCEPTED | Machine-check отсутствует | TASK 25.8 помечен `OWNER_DECISION_REQUIRED` с тремя вариантами |
+| B5 один jobs owner | ACCEPTED | Machine-check отсутствует | TASK 25.8: по умолчанию исполняется runbook-вариант автономно; усиление — в EPIC 34 |
 | B6 scope deviations | ACCEPTED | — | Поле добавлено в §4 |
 | C1 cron раньше | ACCEPTED | Дефект активен при первом включении jobs | TASK 25.1/04.2 продублированы в EPIC 19 как hotfix |
 | C2 транспорт перед доставкой (EPIC 22 перед 23) | ACCEPTED | `deliverLead` пойдёт поверх Safe Outbound Client | Порядок изменён; §2 и §5 обновлены |
 | D1 формулировка access | ACCEPTED | Буквальное `read: () => false` положит Admin | TASK 20.3 усилен до различения anonymous/authenticated |
 | D2 `packages/ui` | ACCEPTED | Удаление в середине remediation бессмысленно рискованно | TASK 21.6 — только `reserved/inactive` |
-| D3 enum migration | ACCEPTED | Пересекается со стоп-фактором §1.4 | TASK 24.1 помечен `OWNER_DECISION_REQUIRED` |
+| D3 enum migration | ACCEPTED | Пересекается со стоп-фактором §1.4 | TASK 24.1 разделён: контракт и отчёт автономно (24.1a), применение к живым данным — EPIC 34 (24.1b) |
 | D4 301 vs 410 | ACCEPTED | — | Пометка продублирована в TASK 28.4 |
 | E формулировки | ACCEPTED | — | §1.1, §1.5, Guard D, EPIC 32 обновлены |
 
@@ -262,7 +283,8 @@ AI должен самостоятельно:
 
 ## 1.4. STOP / OWNER DECISION
 
-Остановить конкретную задачу и пометить `OWNER_DECISION_REQUIRED`, если требуется:
+Стоп-фактор останавливает **подшаг**, а не программу: дальше действует §1.4.1.
+Пометить `OWNER_DECISION_REQUIRED` и отложить подшаг, если требуется:
 
 - новый внешний сервис/provider;
 - новый production secret;
@@ -277,6 +299,128 @@ AI должен самостоятельно:
 - новый платный API/лицензия.
 
 Остальные задачи AI продолжает автономно.
+
+## 1.4.1. Continuous-run contract
+
+Программа обязана исполняться до конца без ожидания владельца. Стоп-фактор
+никогда не останавливает **цепочку** — он останавливает только конкретный
+подшаг, который затем уезжает в отложенную очередь.
+
+Правило для каждой задачи:
+
+```text
+нужен только код/тест/документ
+→ выполнять автономно
+
+нужно решение владельца или внешний ресурс
+→ выделить автономную часть и выполнить её
+→ остаток записать в DEFERRED QUEUE (EPIC 34)
+→ перейти к следующей задаче, не останавливаясь
+```
+
+Автономная часть есть почти всегда: контракт в коде, валидация, fail-fast,
+runbook, тест на fixture, отчёт о влиянии. Недоступен обычно только последний
+шаг — применение к живым данным или к внешнему аккаунту.
+
+### DEFERRED QUEUE
+
+Файл `docs/OWNER_QUEUE.md` (создаётся в EPIC 19). Каждая запись:
+
+```text
+источник (TASK)
+что именно требуется от владельца или какой ресурс отсутствует
+что уже сделано автономно
+что произойдёт после получения решения/ресурса
+блокирует ли production release
+```
+
+Очередь разбирается в EPIC 34, одним проходом, перед release gate.
+
+### Внешние ресурсы: фактическая проверка 2026-09-18
+
+Проверено по `.env.example`, `docs/PROJECT.md` §7, Secret Master и живому серверу:
+
+| Ресурс | Статус | Следствие для плана |
+|---|---|---|
+| Сервер Timeweb + SSH + sudo | **есть, проверен** | EPIC 13 исполняется автономно, включая провижининг runtime |
+| Managed PostgreSQL (production) | **есть, доступна с сервера** | миграции и restore-тест выполняются автономно |
+| Secret Master `more-i-gory-server/prod` | **есть, все имена на месте** | runtime env собирается автономно |
+| `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | отсутствуют | EPIC 23 и proof 14.B идут на fake-канале; реальная отправка — EPIC 34 |
+| `S3_*` | отсутствуют | EPIC 31 делает код и fail-fast; proof 14.G на реальном бакете — EPIC 34 |
+| `FEED_SOURCE_*` | отсутствуют | EPIC 26 и proof 14.D идут на локальных fixture-фидах |
+| Staging domain и вторая БД | не подтверждены | TASK 13.7 в EPIC 34; остальной EPIC 13 не ждёт |
+| Monitoring provider | не выбран | EPIC 34 |
+
+Отсутствие этих ресурсов **не является** причиной остановки: оно заранее учтено
+в разбиении задач.
+
+## 1.7. Инфраструктурный доступ
+
+Контур проекта изолирован от других AMS-серверов. Использовать только его.
+
+```text
+Secret Master project : more-i-gory-server / prod
+SSH deploy            : moreigory   (пользователь deploy, sudo без пароля)
+SSH root              : moreigory-root
+Timeweb server        : Moregory, регион ru-1, Ubuntu 26.04
+Database              : Timeweb Managed PostgreSQL, доступна с сервера
+```
+
+Порядок подключения (skills `ams-server-access` → `ams-secret-master`):
+
+```powershell
+$root = $env:CODEX_HOME; if (-not $root) { $root = Join-Path $HOME ".codex" }
+$helper = Join-Path $root "infisical\Get-InfisicalSecrets.ps1"
+
+# имена без значений
+& $helper -Project more-i-gory-server -Env prod -Path "/"
+
+# значения только внутрь процесса, без вывода в чат/лог
+$secrets = & $helper -Project more-i-gory-server -Env prod -Path "/" -ShowValues
+```
+
+```bash
+ssh -o BatchMode=yes moreigory "hostname; systemctl is-active nginx"
+```
+
+Имена секретов, которые используются для деплоя и БД (значения не печатать
+никогда — ни в чат, ни в коммит, ни в лог):
+
+```text
+MOREIGORY_SERVER_SSH_HOST / _USER / MOREIGORY_DEPLOY_USER
+MOREIGORY_DEPLOY_SSH_ALIAS / _KEY / _KEY_FINGERPRINT
+MOREIGORY_DATABASE_URL / _HOST / _PORT / _NAME / _USER / _PASSWORD
+POSTGRESQL_HOST / _PORT / _DBNAME / _USER / _PASSWORD
+TIMEWEB_API_TOKEN
+```
+
+### Зафиксированное состояние сервера на 2026-09-18
+
+Read-only smoke выполнен фактически, а не по документации:
+
+```text
+SSH deploy         → PASS (hostname moregory1, sudo nopasswd)
+nginx              → active, включён только default site
+локальный postgres → inactive (штатно: база managed, не на хосте)
+managed PostgreSQL → TCP с сервера PASS, БД default_db
+node / pnpm        → отсутствуют
+docker / certbot   → отсутствуют
+git                → присутствует
+приложение         → не развёрнуто (/var/www пуст, unit'ов нет)
+```
+
+Вывод: сервер чистый. EPIC 13 — это первичный провижининг, а не миграция
+существующего деплоя. Установка runtime (Node LTS + corepack/pnpm), systemd-юнита,
+vhost и TLS входит в автономную часть, потому что доступ и sudo уже есть.
+
+### Правила работы с сервером внутри плана
+
+1. Любая запись на сервере разрешена только внутри EPIC 13 и EPIC 33.
+2. До EPIC 13 сервер используется исключительно read-only.
+3. Production deploy — только EPIC 33 по отдельной команде владельца.
+4. Secrets не попадают в репозиторий, в `docs/proofs/` и в вывод команд.
+5. В proof-файлы пишутся только имена переменных и статусы `PASS/FAIL`.
+6. IP, пароли, private key и database URL не печатаются даже в приватные заметки.
 
 ## 1.5. Definition of Done каждой задачи
 
@@ -359,6 +503,7 @@ EPIC 14, 18       продуктовые: analytics posts и оставшиес�
 | 12 | **EPIC 31** | S3 / Media Production Contract |
 | 13 | **EPIC 13** | Timeweb Runtime + Staging — тот же эпик, ветка `codex/epic-13-runtime` |
 | 14 | **EPIC 32** | Integration Proof Matrix |
+| — | **EPIC 34** | Owner Queue и внешние ресурсы (новый, добавлен в v3) |
 | 15 | **EPIC 33** | Production Release Gate |
 
 Ниже по тексту заголовки эпиков сохраняют черновые номера как рабочие метки;
@@ -377,15 +522,20 @@ runbook, operations runbook). Её нужно перебазировать на 
 ## 2.1. Порядок исполнения (v3)
 
 ```text
-19 (+ cron hotfix) → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 13 → 32 → 33
+19 (+ cron hotfix) → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 13 → 32 → 34 → 33
 ```
+
+Эпики 19–32 исполняются подряд без остановок: ни один из них не ждёт владельца
+и ни один не ждёт отсутствующего ресурса (§1.4.1). EPIC 34 — единственная
+штатная точка ожидания, EPIC 33 — финальный owner gate.
 
 Обоснование двух перестановок:
 
 - **22 перед 23** (бывшие 11 и 05). `deliverLead` строится поверх Safe Outbound Client. Если сначала доказать доставку, а потом поменять семантику redirect и DNS-политику транспорта, proof G придётся переделывать. Сначала фиксируем транспорт.
 - **23 перед 24/26** (бывший 05 перед 03/06). Заявки — единственная подсистема, где уже теряется реальный клиентский трафик. Фида нет вообще (`PROJECT.md`: ingest не активирован), поэтому схема и импорт не горят.
 - **cron hotfix в 19.** Однострочное исправление без зависимостей; иначе шторм сработает на первом же включении jobs, в том числе во время проверки миграций EPIC 24.
-- **13 перед 32.** Матрица proof'ов требует работающего runtime и staging.
+- **13 перед 32.** Матрица proof'ов требует работающего runtime; доступ к серверу и база уже есть (§1.7), поэтому эпик не ждёт внешних ресурсов.
+- **34 перед 33.** Отложенные решения и ресурсы разбираются одним проходом до release gate, а не размазываются по цепочке.
 
 ---
 
@@ -462,6 +612,12 @@ CODE EXISTS
 RUNTIME NOT PROVEN
 PRODUCTION NOT PROVEN
 ```
+
+## TASK 19.0 — Создать DEFERRED QUEUE
+
+Создать `docs/OWNER_QUEUE.md` с пустыми разделами `BLOCKS_RELEASE` и
+`IMPROVEMENT` по формату §1.4.1. Файл заполняется по ходу всей программы и
+разбирается в EPIC 34. Без него отложенные пункты теряются.
 
 ## TASK 19.5b — Зафиксировать конституции в канонe проекта
 
@@ -801,11 +957,26 @@ pnpm verify
 **Priority:** P0 before feed activation  
 **Risk:** RISKY / MIGRATION
 
-## TASK 24.1 — Properties enums — `OWNER_DECISION_REQUIRED`
+## TASK 24.1 — Properties enums
 
-Это destructive-adjacent миграция на живой БД и она попадает под стоп-фактор §1.4.
-AI не выполняет её автономно: сначала фиксирует предлагаемый enum-diff, план
-миграции и влияние на существующие записи, затем ждёт решения владельца.
+Применение к живым данным — destructive-adjacent миграция и попадает под §1.4.
+Задача разделена, чтобы не блокировать цепочку.
+
+**24.1a — автономно, выполняется сразу:**
+
+```text
+целевой enum зафиксирован в типах и Payload field options
+валидация на входе (ingest, admin, DTO) отвергает значения вне контракта
+новые записи создаются только в нормализованном виде
+скрипт-отчёт: сколько существующих записей вне контракта и какие именно
+migration draft подготовлен, но НЕ применён
+```
+
+**24.1b — в DEFERRED QUEUE (EPIC 34):** применение миграции к существующим
+записям. Записать в `docs/OWNER_QUEUE.md` вместе с отчётом из 24.1a.
+
+Если отчёт 24.1a показал `0` записей вне контракта, 24.1b выполняется автономно
+как безопасная no-op миграция — ждать решения не нужно.
 
 Нормализовать:
 
@@ -1032,11 +1203,9 @@ janitor должен позже обнаружить orphan.
 
 Получать task по slug или создавать explicit objects.
 
-## TASK 25.8 — One jobs owner — `OWNER_DECISION_REQUIRED`
+## TASK 25.8 — One jobs owner
 
-Цель: machine-checkable runtime contract `exactly one JOBS_AUTORUN=true`.
-
-Варианты, между которыми AI **не выбирает сам**:
+Цель: проверяемый runtime contract `exactly one JOBS_AUTORUN=true`.
 
 | Вариант | Суть | Цена |
 |---|---|---|
@@ -1044,8 +1213,11 @@ janitor должен позже обнаружить orphan.
 | 2 | Служебная запись владения с TTL | RISKY, новая таблица/миграция |
 | 3 | Runbook-проверка в OPERATIONS + deploy-шаг | честный минимум, без новой инфраструктуры |
 
-Варианты 1 и 2 добавляют инфраструктуру, ограниченную §1.6. По умолчанию
-до решения владельца действует вариант 3.
+**Исполняется вариант 3 — автономно, без ожидания.** Он не добавляет
+инфраструктуру, ограниченную §1.6, и закрывает риск на уровне процесса деплоя.
+
+Варианты 1 и 2 записываются в `docs/OWNER_QUEUE.md` как возможное усиление
+после EPIC 32, если proof 14.I покажет, что runbook-контроля недостаточно.
 
 ## Acceptance Criteria
 
@@ -1072,6 +1244,11 @@ pnpm verify
 **Risk:** RISKY / PII / OUTBOUND  
 **Depends on:** EPIC 22 (транспорт зафиксирован до построения доставки)  
 **Цель:** пользовательская заявка реально доходит до Telegram и корректно переживает ошибки.
+
+**Без реального токена.** `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` в проекте
+отсутствуют. Весь эпик строится и доказывается на фейковом канале, который
+подменяет транспорт и подтверждает факт вызова (Guard D). Реальная отправка —
+одна запись в `docs/OWNER_QUEUE.md` и проверка в EPIC 34. Ждать токен не нужно.
 
 ## TASK 23.1 — Channel composition root
 
@@ -1360,6 +1537,12 @@ pnpm verify
 
 **Priority:** P0 before feed activation  
 **Risk:** RISKY / DATA
+
+**Без реального фида.** `FEED_SOURCE_*` не настроены, ingest выключен. Эпик
+исполняется и доказывается на локальных fixture-фидах в репозитории: baseline,
+повторный прогон, `304`, изменённый объект, обрезанный feed, подозрительная
+деактивация, прерванный импорт. Реальный источник подключается в EPIC 34 и
+активируется отдельным решением, не блокируя цепочку.
 
 ## TASK 26.1 — Ingest composition root
 
@@ -1689,10 +1872,27 @@ OG
 structured data only from facts
 ```
 
-## TASK 28.4 — Archived retention — содержит `OWNER_DECISION_REQUIRED`
+## TASK 28.4 — Archived retention
 
-Выбор между `301` и `410` при отсутствии достоверной релевантной цели —
-owner-решение по §1.4. AI фиксирует кандидатов и останавливается, а не выбирает.
+Чтобы не останавливать цепочку, политика выбрана заранее и является
+детерминированным правилом, а не решением по случаю.
+
+**Default policy (действует автономно):**
+
+```text
+релевантная замена определяется машинно
+(тот же тип + тот же комплекс/застройщик/регион)
+→ 301 на неё
+
+иначе
+→ 410
+```
+
+Никаких «умных» догадок и никакого массового `301` на листинг. Если правило не
+дало однозначной цели — это `410`, и это нормальный, безопасный для SEO исход.
+
+Список URL, где правило дало `410`, выгружается отчётом в `docs/OWNER_QUEUE.md`:
+владелец может точечно назначить редиректы позже, уже после EPIC 32, не блокируя план.
 
 Contract:
 
@@ -1974,6 +2174,11 @@ Safe Outbound Client остаётся единственным configurable outb
 **Priority:** P1 before production  
 **Risk:** RISKY / INFRA
 
+**Автономная граница:** `S3_*` в проекте нет. Задачи 31.1–31.3 и 31.6 — код,
+fail-fast и политика, выполняются сразу. Задачи 31.4 и 31.5 требуют реального
+бакета: их proof уезжает в EPIC 34 вместе с proof 14.G. Код при этом пишется
+и покрывается тестом на фейковом storage-адаптере, чтобы не ждать ресурс.
+
 ## TASK 31.1 — Production env fail-fast
 
 В production profile S3 обязателен:
@@ -2042,9 +2247,27 @@ VPS disk не нужен для постоянного хранения user med
 
 **Priority:** BLOCKER before production  
 **Risk:** RISKY / INFRA  
+**Доступ:** есть, см. §1.7 (SSH `moreigory`, sudo, Managed PostgreSQL достижима)  
 **Существующая работа:** ветка `codex/epic-13-runtime` (6 коммитов, восстановлена
 и запушена 2026-09-18). Перебазировать на актуальный `main`, сверить с задачами
 ниже, доделать недостающее и закрыть одним PR. Не начинать эпик с нуля.
+
+## TASK 13.0 — Провижининг чистого хоста
+
+Сервер пуст (см. §1.7): нет Node, pnpm, systemd-юнита и vhost. Выполняется
+автономно, потому что доступ и sudo подтверждены.
+
+```text
+Node LTS + corepack/pnpm, версии из project lockfile
+системный пользователь и каталоги релизов
+systemd unit приложения + restart policy
+nginx vhost вместо default site
+TLS сертификат
+DATABASE_URI из Secret Master, не из файла в репозитории
+health endpoint отвечает 200
+```
+
+Proof: `docs/proofs/13.0-provision.md` — команды и вывод без значений секретов.
 
 ## TASK 13.1 — Удалить active static Nginx contract
 
@@ -2111,7 +2334,14 @@ restart
 smoke
 ```
 
-## TASK 13.7 — Staging
+## TASK 13.7 — Staging — часть в DEFERRED QUEUE
+
+Автономно: конфиги, env-шаблон, `noindex`, restricted access, отдельный
+prefix/схема — всё, что делается в коде и репозитории.
+
+В EPIC 34 уезжает только то, чего физически нет: staging domain и вторая
+Managed PostgreSQL. До их появления rehearsal деплоя выполняется на том же
+сервере в отдельном release-каталоге и на отдельном порту, без публичного домена.
 
 Отдельно:
 
@@ -2174,6 +2404,26 @@ PASS / FAIL
 
 Отчёт без сырого вывода не является proof. Через месяц «мы это проверяли»
 без файла не имеет силы.
+
+## Что выполняется сразу, а что ждёт ресурс
+
+| Proof | Где исполняется | Ждёт ресурс |
+|---|---|---|
+| 14.A access | локально / dev DB | нет |
+| 14.B leads | fake Telegram channel | нет |
+| 14.C crash window | локально | нет |
+| 14.D ingest | локальные fixture-фиды | нет |
+| 14.E cache | локально | нет |
+| 14.F publishing | сервер после EPIC 13 | нет |
+| 14.H retention | инъекция clock/фиксированная дата, без ожидания 300 дней | нет |
+| 14.I jobs | локально + сервер | нет |
+| 14.K PII в логах | локально | нет |
+| 14.J browser | локальный production build | нет |
+| 14.G S3 | — | да: бакет и `S3_*` → EPIC 34 |
+| 14.B real send | — | да: Telegram token → EPIC 34 |
+
+Ни один ожидающий proof не останавливает EPIC 32: он помечается `DEFERRED`
+с причиной и уходит в EPIC 34.
 
 ## 14.A — Access
 
@@ -2316,6 +2566,51 @@ region
 ## Acceptance Criteria
 
 Все proofs имеют фактический evidence. Никакого `CHECKED` по чтению кода.
+
+---
+
+# EPIC 34 — OWNER QUEUE И ВНЕШНИЕ РЕСУРСЫ
+
+**Priority:** перед release  
+**Risk:** зависит от содержимого очереди  
+**Цель:** разобрать одним проходом всё, что было отложено, когда ресурсы и
+решения появились. Это единственное место, где план штатно ждёт владельца.
+
+## TASK 34.1 — Свести очередь
+
+Собрать `docs/OWNER_QUEUE.md` в один список с разделением:
+
+```text
+BLOCKS_RELEASE      → без этого production не включаем
+IMPROVEMENT         → можно после релиза
+```
+
+## TASK 34.2 — Ожидаемое содержимое очереди
+
+Прогнозируемый состав на момент планирования:
+
+| Источник | Что требуется | Блокирует release |
+|---|---|---|
+| TASK 24.1b | применить enum-миграцию к существующим записям | да, если отчёт нашёл расхождения |
+| TASK 13.7 | staging domain + вторая Managed PostgreSQL | нет, если rehearsal на сервере пройден |
+| TASK 31.4 / 31.5 / proof 14.G | S3 бакет и `S3_*` | да |
+| EPIC 23 real send | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | да |
+| EPIC 26 activation | `FEED_SOURCE_*` | нет, ingest активируется отдельно |
+| TASK 25.8 варианты 1/2 | усиление jobs-owner контроля | нет |
+| TASK 28.4 | точечные `301` вместо `410` по списку | нет |
+| Monitoring | provider и alert destination | да |
+| Domain cutover | `moreigori.ru` | да |
+
+## TASK 34.3 — Закрыть каждый отложенный proof
+
+Для каждого `DEFERRED` proof из EPIC 32 выполнить фактический прогон и
+дописать evidence-файл. `DEFERRED` без закрытия или без явного
+owner-решения «принимаем риск» не пропускается в EPIC 33.
+
+## Acceptance Criteria
+
+Очередь пуста либо каждая оставшаяся запись помечена владельцем как
+осознанно принятый риск, зафиксированный в `docs/OWNER_QUEUE.md`.
 
 ---
 
@@ -2558,6 +2853,12 @@ EPIC 13  Timeweb Runtime + Staging (продолжение существующ�
 EPIC 32  Integration Proof Matrix
 ```
 
+## OWNER QUEUE
+
+```text
+EPIC 34  отложенные решения и внешние ресурсы
+```
+
 ## FINAL
 
 ```text
@@ -2593,4 +2894,4 @@ WORKING SYSTEM
 
 Главная цель remediation — убрать разрыв между «код существует и покрыт unit tests» и «подсистема действительно выполняет бизнес-задачу end-to-end».
 
-После завершения EPIC 19–33 и EPIC 13 проект можно считать приведённым к целевому AMS Realty Platform 5.5 контуру и готовым к отдельному owner-approved production release.
+После завершения EPIC 19–32, EPIC 13 и разбора EPIC 34 проект можно считать приведённым к целевому AMS Realty Platform 5.5 контуру и готовым к отдельному owner-approved production release (EPIC 33).
