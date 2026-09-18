@@ -13,6 +13,7 @@ async function readCmsPageByPath(path: string): Promise<Page | null> {
       collection: "pages",
       depth: 0,
       limit: 1,
+      overrideAccess: false,
       pagination: false,
       where: {
         and: [{ path: { equals: path } }, { status: { equals: "published" } }],

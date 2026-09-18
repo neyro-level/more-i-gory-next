@@ -31,6 +31,7 @@ async function readSitemapEntries(): Promise<readonly SitemapSourceEntry[]> {
       collection: "pages",
       depth: 0,
       limit: 1000,
+      overrideAccess: false,
       pagination: false,
       select: {
         path: true,

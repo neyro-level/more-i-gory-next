@@ -60,7 +60,12 @@ export function scanLocalApiCalls(projectRoot) {
       }
     }),
     "payload.config.ts",
-  ].filter((filePath) => codeFilePattern.test(filePath) && !filePath.includes("payload-local-api-inventory"));
+  ].filter(
+    (filePath) =>
+      codeFilePattern.test(filePath) &&
+      !filePath.includes("payload-local-api-inventory") &&
+      !filePath.startsWith("scripts/lib/"),
+  );
 
   const calls = [];
 
