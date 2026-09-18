@@ -121,3 +121,22 @@ test("manual and different-feed owners are not overwritten or duplicated", async
   assert.equal(manual.writes.length, 0);
   assert.equal(other.writes.length, 0);
 });
+
+test("explicit manual field ownership keeps title while identity fields still update", async () => {
+  const { payload, writes } = payloadMock([
+    { id: 101, feedSource: "feed-a", importHash: "old-hash", origin: "feed", title: "Owner title" },
+  ]);
+
+  await upsertParsedFeedOffers({
+    explicitOwners: { title: { kind: "manual" } },
+    feedSourceId: "feed-a",
+    importRunId: "run-4",
+    nowIso: "2026-09-18T15:00:00.000Z",
+    offers: [offer],
+    payload,
+  });
+
+  assert.equal(writes[0].data.title, undefined);
+  assert.equal(writes[0].data.importHash, createImportHash(offer));
+  assert.equal(writes[0].data.origin, "feed");
+});

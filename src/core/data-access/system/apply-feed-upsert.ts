@@ -17,6 +17,7 @@ type PayloadLike = {
       id: true;
       importHash: true;
       origin: true;
+      title: true;
     };
     where: Record<string, unknown>;
   }) => Promise<{
@@ -25,6 +26,7 @@ type PayloadLike = {
       id: number | string;
       importHash?: string | null;
       origin?: "feed" | "manual" | null;
+      title?: string | null;
     }>;
   }>;
   update: (args: {
@@ -57,6 +59,7 @@ export async function findPropertiesByExternalId(
       id: true,
       importHash: true,
       origin: true,
+      title: true,
     },
     where: { externalId: { equals: externalId } },
   });
@@ -68,6 +71,7 @@ export async function findPropertiesByExternalId(
       id: doc.id,
       importHash: doc.importHash,
       origin: doc.origin,
+      title: typeof doc.title === "string" ? doc.title : null,
     }));
 }
 

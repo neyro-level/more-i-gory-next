@@ -38,9 +38,9 @@
 | `src/core/data-access/public/site-chrome.ts:15` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/site-chrome.ts:17` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "site-settings", depth: 0, overrideAccess: false, select: publicSiteSettingsSelect }),` |
 | `src/core/data-access/public/site-chrome.ts:18` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "navigation", depth: 0, overrideAccess: false, select: publicNavigationSelect }),` |
-| `src/core/data-access/system/apply-feed-upsert.ts:49` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/system/apply-feed-upsert.ts:85` | `create` | SYSTEM GATEWAY | `return payload.create({` |
-| `src/core/data-access/system/apply-feed-upsert.ts:97` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/apply-feed-upsert.ts:51` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/system/apply-feed-upsert.ts:89` | `create` | SYSTEM GATEWAY | `return payload.create({` |
+| `src/core/data-access/system/apply-feed-upsert.ts:101` | `update` | SYSTEM GATEWAY | `await payload.update({` |
 | `src/core/data-access/system/bootstrap-owner.ts:14` | `getPayload` | SYSTEM GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/system/bootstrap-owner.ts:16` | `find` | SYSTEM GATEWAY | `const owners = await payload.find({` |
 | `src/core/data-access/system/bootstrap-owner.ts:27` | `create` | SYSTEM GATEWAY | `await payload.create({` |

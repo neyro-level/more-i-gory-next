@@ -5,6 +5,7 @@ import {
   pickExistingPropertyForFeed,
   updateFeedOwnedProperty,
 } from "../data-access/system/apply-feed-upsert.ts";
+import { applyFeedFieldOwnership, type FieldOwner } from "./field-ownership.ts";
 import { planOfferImport, type OfferImportPlan } from "./import-state.ts";
 import type { NormalizedFeedOffer } from "./normalize-feed.ts";
 import type { ParsedFeedOffer } from "./parsers/types.ts";
@@ -26,6 +27,7 @@ export async function upsertParsedFeedOffers(args: {
   offers: readonly ParsedFeedOffer[];
   normalized?: readonly NormalizedFeedOffer[];
   payload: UpsertPayload;
+  explicitOwners?: Partial<Record<"title", FieldOwner>>;
 }): Promise<UpsertFeedSummary> {
   const nowIso = args.nowIso ?? new Date().toISOString();
   const market = await loadFeedSourceMarket(args.payload, args.feedSourceId);
@@ -77,9 +79,19 @@ export async function upsertParsedFeedOffers(args: {
 
     if (plan.kind === "update" && plan.propertyId != null) {
       const normalized = titles.get(offer.externalId);
+      const incomingTitle = normalized?.title ?? offer.title;
+      const owned = incomingTitle
+        ? applyFeedFieldOwnership({
+            current: { title: existing?.title ?? "" },
+            explicitOwners: args.explicitOwners,
+            incoming: { title: incomingTitle },
+            importingFeedSourceId: args.feedSourceId,
+            record: existing ?? { origin: "feed", feedSource: args.feedSourceId },
+          })
+        : { patch: {}, denied: [] };
       await updateFeedOwnedProperty(args.payload, plan.propertyId, {
         ...plan.data,
-        ...(normalized?.title ? { title: normalized.title } : {}),
+        ...owned.patch,
       });
       summary.updatedCount += 1;
     }
