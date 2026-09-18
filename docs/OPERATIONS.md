@@ -111,6 +111,16 @@ CODE EXISTS: intake, transactional outbox, retry/recovery и retention в `main`
 `deliveryId` в тексте, затем `idempotencyKey` / `attemptLog` / `externalRef` в
 Admin. Несколько `Lead ID` — разные заявки.
 
+### Manual retry of abandoned deliveries
+
+Path: Payload Admin as **owner** → collection `lead-deliveries` → open the
+abandoned document → copy its ID → `POST /api/lead-deliveries/<id>/retry`
+with the owner session. Optional JSON `{ "reasonRedacted": "…" }` (no PII).
+
+Success returns `{ ok: true, status: "pending" }` and enqueues `deliverLead`.
+Non-abandoned rows return `409 not_abandoned`. Editors and anonymous callers
+get `403`. Do not flip `status` by hand in Admin; that skips audit and enqueue.
+
 ## S3 and media
 
 CODE EXISTS: Payload upload adapter и бакет `moreigory-media` (EPIC 6 + API
