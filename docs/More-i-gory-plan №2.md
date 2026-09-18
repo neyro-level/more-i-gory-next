@@ -3,7 +3,7 @@
 
 ```text
 Plan ID: more-i-gory-remediation-2026-09
-Version: v1
+Version: v2
 Status: REVIEW
 Delivery profile: COMMERCIAL
 Canonical repository: SourceCraft integrator-p/more-i-gory-next
@@ -16,8 +16,8 @@ Default epic delivery_mode: MERGE_AFTER_GATE (явное намерение §1.
 ```
 
 **Базовый аудит:** `origin/main` @ `27ea4c2393e970797da50c7dc78b614f815820bb`  
-**Нормативная база (заявка плана):** AMS Realty Platform Core 5.5 + AMS UI Core 5.0  
-**Фактически доступный AMS skill на машине:** Realty Platform Core Standard 3.0  
+**Нормативная база:** AMS Realty Platform Core 5.5 + AMS UI Core 5.0 (решение владельца)  
+**Фактически доступный AMS skill на машине:** Realty Platform Core Standard 3.0 — используется как совместимый Hard Contract там, где 5.5 локально отсутствует  
 **Режим:** solo owner / PM + AI  
 **Канонический production-контур:** SourceCraft → Timeweb VPS → Nginx → Next.js standalone + Payload → Timeweb Managed PostgreSQL + Timeweb S3  
 **Статус документа:** REVIEW (не APPROVED)  
@@ -59,12 +59,39 @@ Default epic delivery_mode: MERGE_AFTER_GATE (явное намерение §1.
 | F2 | ACCEPTED | EPIC 01–02, 05–06, 04.1/04.4 — правильный порядок блокеров. |
 | F3 | ACCEPTED | Канонический Git — SourceCraft `integrator-p/more-i-gory-next`, не GitHub slug в шапке. |
 | F4 | ALREADY_COVERED | Часть EPIC 00 (NOW/NEXT, OPERATIONS TODO) уже в PR 45; остаётся разделение IMPLEMENTED/PARTIAL/NOT_PROVEN и ADR superseded. |
-| F5 | NEEDS_OWNER | Норматив 5.5 vs локальный Core 3.0. Исполнять Hard Contract 3.0 + этот план, или ждать отдельный 5.5 canon? |
+| F5 | RESOLVED | Норматив — 5.5 (решение владельца). Где 5.5 локально нет, исполняется совместимый Core 3.0 Hard Contract. |
 | F6 | NEEDS_OWNER | `MERGE_AFTER_GATE` на каждый эпик или `PR_ONLY` до финальных волн? |
 | F7 | NEEDS_OWNER | Подтвердить, что программа EPIC 00–15 **заменяет** старый NOW=EPIC 13 в бэклоге, а не идёт параллельно. |
 | F8 | NEEDS_OWNER | EPIC 06 Secret Master feed URL: runtime injection без нового secret API в репозитории — ок как STOP, или нужен отдельный owner contour сразу? |
 
-Не отклонено по существу. План можно утверждать после ответов F5–F8.
+## External revision — 2026-09-18 (v2)
+
+Внешняя ревизия принята и встроена. Каждое утверждение проверено против рабочей копии на `27ea4c2`; ниже зафиксирован фактический результат проверки, а не пересказ.
+
+| ID | Class | Проверка по коду | Что сделано в плане |
+|---|---|---|---|
+| A1 cron dialect | ACCEPTED | `scheduled-tasks.ts` и `dispatch-due-feeds.ts` используют форму `0/5`; смешение с `*/5` нежелательно | TASK 04.1 → `"0 0/5 * * * *"`; TASK 04.2 проверяет единый диалект шага |
+| A2 retry без `abandoned` | ACCEPTED | `planRetryableLeadDeliveryFailure` возвращает только `"failed" \| "pending"`; backoff зажат `Math.min(attempts, len-1)`; производителя `abandoned` нет | TASK 05.5 переписан на `maxAttempts` + расширение типов; помечен RISKY |
+| A3 attempts не читаются | ACCEPTED | `planRetryableLeadDeliveryFailure` требует `attempts`/`attemptLog`, которых нет в `LeadDeliveryPayload` | TASK 05.3 возвращает `{payload, attempts, attemptLog, channelId}` |
+| A4 путь channel-registry | ACCEPTED с уточнением | `src/project/leads/` не существует. Guard 1 блокирует по allow-list `privilegedSystemFiles` **только файлы с `overrideAccess: true`** | Добавлен TASK 05.1.1: registry сам не использует `overrideAccess`; в allow-list регистрируется System Gateway helper из 05.3 |
+| A5 verification-only | ACCEPTED | `test:leads-privacy` и `test:public-inventory-boundary` существуют | Правило внесено в §1.3; TASK 01.6 переведён в verification-first |
+| A6 дыра в `verify:quick` | ACCEPTED, цифра уточнена | Проверено скриптом: из 57 `test:*` вне `verify:quick` ровно один — `test:lead-delivery-admin` | Добавлен TASK 00.7 с machine-check |
+| A7 revalidate уже есть | ACCEPTED | `src/app/api/internal/revalidate/route.ts` + `test:internal-revalidate` существуют | TASK 07.6 переформулирован на доказательство сквозного пути |
+| B1 нет дедупликации | ACCEPTED | `idempotencyKey` есть в коллекции (unique) и в `LeadDeliveryPayload`, но Telegram его не принимает | Добавлен TASK 05.11 |
+| B2 владелец `nextDueAt` | ACCEPTED | `dispatchDueFeeds` сдвигает `nextDueAt` только при claim; пост-run поведения нет | Добавлен TASK 06.15 |
+| B3 путь ручного retry | ACCEPTED | `retryAbandonedLeadDelivery` + `manualRetryAudit` реализованы, операторский путь нигде не описан | Добавлен TASK 05.12 |
+| B4 PII в логах | ACCEPTED | `test:lead-delivery-secrets` — статический контракт, runtime-захвата stdout нет | Добавлен proof 14.K |
+| B5 один jobs owner | ACCEPTED | Machine-check отсутствует | TASK 04.8 помечен `OWNER_DECISION_REQUIRED` с тремя вариантами |
+| B6 scope deviations | ACCEPTED | — | Поле добавлено в §4 |
+| C1 cron раньше | ACCEPTED | Дефект активен при первом включении jobs | TASK 04.1/04.2 продублированы в EPIC 00 как hotfix |
+| C2 EPIC 11 перед 05 | ACCEPTED | `deliverLead` пойдёт поверх Safe Outbound Client | Порядок изменён; §2 и §5 обновлены |
+| D1 формулировка access | ACCEPTED | Буквальное `read: () => false` положит Admin | TASK 01.3 усилен до различения anonymous/authenticated |
+| D2 `packages/ui` | ACCEPTED | Удаление в середине remediation бессмысленно рискованно | TASK 02.6 — только `reserved/inactive` |
+| D3 enum migration | ACCEPTED | Пересекается со стоп-фактором §1.4 | TASK 03.1 помечен `OWNER_DECISION_REQUIRED` |
+| D4 301 vs 410 | ACCEPTED | — | Пометка продублирована в TASK 08.4 |
+| E формулировки | ACCEPTED | — | §1.1, §1.5, Guard D, EPIC 14 обновлены |
+
+Отклонённых findings нет.
 
 ---
 
@@ -107,8 +134,11 @@ Default epic delivery_mode: MERGE_AFTER_GATE (явное намерение §1.
 6. `docs/OPERATIONS.md`
 7. `docs/DESIGN.md`
 8. `docs/TECHNICAL_CORE.md`
-9. профильные ADR
-10. этот Master Plan
+9. `package.json` и `pnpm-lock.yaml` — фактический стек и набор проверок
+10. `docs/02_PRODUCT_STRUCTURE.md` — для EPIC 08/09 (URL, index policy)
+11. `docs/05_RELEASE_CHECKLIST.md` — для EPIC 13/14/15
+12. профильные ADR
+13. этот Master Plan
 
 Фактический код и lockfile имеют приоритет над памятью модели.
 
@@ -154,6 +184,21 @@ AI должен самостоятельно:
 - устранить найденные regression;
 - подготовить отчёт.
 
+### Verification-only режим (обязательное правило)
+
+Перед реализацией любой задачи AI обязан проверить, не покрыта ли она уже
+существующим `test:*` скриптом или рабочим кодом.
+
+```text
+покрыто и проходит
+→ задача = VERIFICATION_ONLY
+→ запустить существующий proof
+→ дописать только недостающие кейсы
+→ не переписывать рабочий слой
+```
+
+Переписывание работающей подсистемы без доказанного дефекта — нарушение scope.
+
 ## 1.4. STOP / OWNER DECISION
 
 Остановить конкретную задачу и пометить `OWNER_DECISION_REQUIRED`, если требуется:
@@ -187,11 +232,14 @@ IMPLEMENTATION
 Для RISKY-задач дополнительно:
 
 ```text
+pnpm install --frozen-lockfile
 pnpm verify
 pnpm audit --audit-level high
 pnpm verify:schema (если schema/migration)
 exact-head SourceCraft RISKY gate
 ```
+
+`--frozen-lockfile` идёт первым: audit по несинхронизированному дереву не является доказательством.
 
 ## 1.6. Запрещённый scope
 
@@ -218,8 +266,10 @@ exact-head SourceCraft RISKY gate
 
 # 2. Порядок эпиков
 
+Номера эпиков стабильны, меняется только порядок исполнения.
+
 ```text
-EPIC 00  Baseline + Docs Source of Truth
+EPIC 00  Baseline + Docs Source of Truth (+ cron hotfix, verify:quick audit)
 EPIC 01  Payload Access Boundary
 EPIC 02  DTO / Presentation Boundary
 EPIC 03  Schema Hardening + Safe Deactivation 5.5
@@ -236,6 +286,18 @@ EPIC 13  Timeweb Runtime + Staging
 EPIC 14  Integration Proof Matrix
 EPIC 15  Production Release Gate
 ```
+
+## 2.1. Порядок исполнения (v2)
+
+```text
+00 (+ cron hotfix) → 01 → 02 → 11 → 05 → 03 → 04 → 06 → 07 → 08 → 09 → 10 → 12 → 13 → 14 → 15
+```
+
+Обоснование двух перестановок:
+
+- **11 перед 05.** `deliverLead` строится поверх Safe Outbound Client. Если сначала доказать доставку, а потом поменять семантику redirect и DNS-политику транспорта, proof G придётся переделывать. Сначала фиксируем транспорт.
+- **05 перед 03/06.** Заявки — единственная подсистема, где уже теряется реальный клиентский трафик. Фида нет вообще (`PROJECT.md`: ingest не активирован), поэтому 03 и 06 не горят.
+- **cron hotfix в 00.** Однострочное исправление без зависимостей; иначе шторм сработает на первом же включении jobs, в том числе во время проверки миграций EPIC 03.
 
 ---
 
@@ -337,18 +399,48 @@ Server-first
 - не удалять историю;
 - пометить superseded текущим runtime ADR.
 
+## TASK 00.7 — Аудит полноты `verify:quick`
+
+Тест, который существует, но не запускается в общем прогоне, не лучше отсутствующего теста.
+
+Текущий факт (проверено на `27ea4c2`): из 57 скриптов `test:*` вне `verify:quick`
+ровно один — `test:lead-delivery-admin`.
+
+Требование:
+
+```text
+каждый test:* из package.json
+→ либо входит в verify:quick
+→ либо явно исключён с записанной причиной
+```
+
+Добавить machine-check (скрипт или узкий guard), который падает при появлении
+нового `test:*` вне `verify:quick` без зарегистрированного исключения.
+
+## TASK 00.8 — Cron hotfix (перенесено из EPIC 04)
+
+Исполнить здесь TASK 04.1 и TASK 04.2: исправление ошибочного расписания и
+cron guard. Однострочная правка без зависимостей, но она блокирует безопасный
+запуск jobs на staging во время EPIC 03.
+
+Остальной EPIC 04 остаётся на своём месте в порядке исполнения.
+
 ## Acceptance Criteria
 
 - ни один canonical doc не утверждает, что Payload/DB/leads «ещё впереди»;
 - docs описывают текущий код;
 - docs не объявляют proof пройденным без фактического прогона;
-- `docs/04_BACKLOG.md` содержит этот remediation program.
+- `docs/04_BACKLOG.md` содержит этот remediation program;
+- каждый `test:*` либо в `verify:quick`, либо явно исключён;
+- maintenance cron не создаёт per-second schedule.
 
 ## Proof
 
 ```bash
 git diff --check
 pnpm verify:foundation
+pnpm test:jobs-config
+pnpm test:maintenance-jobs
 ```
 
 ---
@@ -419,6 +511,18 @@ Anonymous raw REST не должен быть публичным business API.
 
 Public website читает данные через server-only Public Gateway.
 
+**Обязательное уточнение (D1).** Payload Admin ходит через тот же REST с
+авторизованной сессией. Буквальное `read: () => false` положит админку.
+Правильная формулировка требования:
+
+```text
+access-функции обязаны различать anonymous и authenticated owner/editor
+anonymous → denied
+authenticated по роли → allowed
+```
+
+Регрессия Admin-доступа после этой задачи считается блокером эпика.
+
 ## TASK 01.4 — Отдельно проверить Media
 
 Определить минимальный public media contract.
@@ -439,7 +543,11 @@ Local API call without explicit overrideAccess
 overrideAccess:true outside registered System Gateway
 ```
 
-## TASK 01.6 — Integration tests
+## TASK 01.6 — Integration tests (verification-first)
+
+Сначала запустить существующие `test:leads-privacy` и
+`test:public-inventory-boundary`. Покрытые сценарии не переписывать —
+подтвердить прогоном и дописать только недостающие.
 
 Обязательные сценарии:
 
@@ -552,10 +660,11 @@ FOLDER FORM = canonical
 
 `packages/contracts` оставить активным.
 
-`packages/ui`:
+`packages/ui` на этом этапе только **пометить reserved/inactive**.
 
-- либо удалить как неиспользуемый;
-- либо пометить reserved/inactive.
+Удаление рабочего workspace-пакета в середине remediation ломает
+`pnpm-workspace.yaml`/lockfile ради нулевой выгоды. Вопрос об удалении
+вернуть после EPIC 14.
 
 ## Acceptance Criteria
 
@@ -584,7 +693,11 @@ pnpm verify
 **Priority:** P0 before feed activation  
 **Risk:** RISKY / MIGRATION
 
-## TASK 03.1 — Properties enums
+## TASK 03.1 — Properties enums — `OWNER_DECISION_REQUIRED`
+
+Это destructive-adjacent миграция на живой БД и она попадает под стоп-фактор §1.4.
+AI не выполняет её автономно: сначала фиксирует предлагаемый enum-diff, план
+миграции и влияние на существующие записи, затем ждёт решения владельца.
 
 Нормализовать:
 
@@ -729,31 +842,37 @@ pnpm verify
 
 ## TASK 04.1 — Исправить cron
 
-Исправить `jobsJanitor`.
+Исполняется в EPIC 00 как hotfix (TASK 00.8); здесь остаётся нормативное описание.
 
-Сейчас ошибочная семантика:
-
-```text
-* 0/5 * * * *
-```
-
-Должно быть явное выполнение раз в 5 минут.
-
-Предпочтительно шестипольный contract:
+Ошибочная семантика в `src/project/jobs/maintenance/scheduled-tasks.ts`:
 
 ```text
-0 */5 * * * *
+{ slug: "jobsJanitor", cron: "* 0/5 * * * *" }
 ```
 
-или подтверждённый pinned Payload equivalent.
+Секундное поле `*` означает срабатывание каждую секунду в подходящие минуты.
+
+Целевое значение — минимальная дельта в один символ, единый стиль с соседними
+строками (`"30 0/5 * * * *"`, `"0 0 * * * *"`):
+
+```text
+0 0/5 * * * *
+```
+
+Форму `*/5` не вводить: в репозитории повсеместно используется диалект `0/5`.
+Payload 3.x понимает обе, но смешивать стили внутри одного файла не нужно.
+
+Проверить заодно `src/project/jobs/imports/dispatch-due-feeds.ts`, где то же
+выражение `"* 0/5 * * * *"`.
 
 ## TASK 04.2 — Cron guard
 
 Добавить tests:
 
-- seconds field не `*` для maintenance jobs;
+- seconds field не `*` для maintenance и dispatcher jobs;
 - expected fire frequency;
-- no accidental per-second schedule.
+- no accidental per-second schedule;
+- **все cron-выражения проекта используют один диалект шага** (`0/N`, не `*/N`).
 
 ## TASK 04.3 — autoRun contract
 
@@ -805,13 +924,20 @@ janitor должен позже обнаружить orphan.
 
 Получать task по slug или создавать explicit objects.
 
-## TASK 04.8 — One jobs owner
+## TASK 04.8 — One jobs owner — `OWNER_DECISION_REQUIRED`
 
-Подготовить machine-checkable runtime contract:
+Цель: machine-checkable runtime contract `exactly one JOBS_AUTORUN=true`.
 
-```text
-exactly one JOBS_AUTORUN=true
-```
+Варианты, между которыми AI **не выбирает сам**:
+
+| Вариант | Суть | Цена |
+|---|---|---|
+| 1 | Postgres advisory lock при старте jobs-owner | RISKY, меняет runtime-архитектуру |
+| 2 | Служебная запись владения с TTL | RISKY, новая таблица/миграция |
+| 3 | Runbook-проверка в OPERATIONS + deploy-шаг | честный минимум, без новой инфраструктуры |
+
+Варианты 1 и 2 добавляют инфраструктуру, ограниченную §1.6. По умолчанию
+до решения владельца действует вариант 3.
 
 ## Acceptance Criteria
 
@@ -836,15 +962,20 @@ pnpm verify
 
 **Priority:** P0 / BLOCKER  
 **Risk:** RISKY / PII / OUTBOUND  
+**Depends on:** EPIC 11 (транспорт зафиксирован до построения доставки)  
 **Цель:** пользовательская заявка реально доходит до Telegram и корректно переживает ошибки.
 
 ## TASK 05.1 — Channel composition root
 
-Создать:
+Создать новую директорию и файл:
 
 ```text
 src/project/leads/channel-registry.ts
 ```
+
+Директории `src/project/leads/` сейчас нет; существующие job-файлы лежат в
+`src/project/jobs/leads/`. Создание новой директории допустимо и предпочтительно:
+composition root не является job-обработчиком.
 
 Он должен:
 
@@ -854,6 +985,21 @@ src/project/leads/channel-registry.ts
 4. создавать Telegram channel;
 5. возвращать registry `channelId → LeadDeliveryChannel`;
 6. fail closed при неизвестном/неполном active channel.
+
+### TASK 05.1.1 — Guard allow-list
+
+Guard 1 (`scripts/lib/architecture-guards.mjs`) блокирует `overrideAccess: true`
+вне пофайлового списка `privilegedSystemFiles`.
+
+Правила:
+
+```text
+channel-registry.ts     → НЕ использует overrideAccess; в allow-list не вносить
+System Gateway helper из TASK 05.3 → обязан быть внесён в privilegedSystemFiles
+```
+
+Без этой подзадачи `pnpm verify:guards` упадёт на новом привилегированном файле,
+и AI начнёт чинить не тот слой.
 
 ## TASK 05.2 — Telegram URL
 
@@ -865,13 +1011,25 @@ src/project/leads/channel-registry.ts
 
 ## TASK 05.3 — System Gateway read
 
-Создать privileged helper:
+Создать privileged helper в `src/core/data-access/system/` и внести его в
+`privilegedSystemFiles` (см. 05.1.1).
+
+Возвращаемый контракт **должен включать retry-состояние**, иначе на шаге 05.4
+придётся делать второй запрос к БД или счётчик попыток обнулится:
 
 ```text
 leadDeliveryId
 → delivery + lead
-→ minimal LeadDeliveryPayload
+→ {
+    payload: LeadDeliveryPayload,
+    attempts: number,
+    attemptLog: readonly LeadDeliveryAttemptLogEntry[],
+    channelId: string
+  }
 ```
+
+`planRetryableLeadDeliveryFailure` принимает `attempts` и `attemptLog` на вход,
+а в `LeadDeliveryPayload` этих полей нет — поэтому они возвращаются отдельно.
 
 Не передавать raw Payload docs в handler.
 
@@ -881,10 +1039,12 @@ leadDeliveryId
 
 ```text
 claim pending → sending
-→ load delivery + lead
-→ resolve channel
+→ load delivery + lead + attempts + attemptLog   (TASK 05.3)
+→ resolve channel                                 (TASK 05.1)
 → deliver()
 ```
+
+Шаг чтения `attempts`/`attemptLog` обязателен и идёт до планирования retry.
 
 ### success
 
@@ -916,21 +1076,46 @@ claim pending → sending
 → abandoned
 ```
 
-## TASK 05.5 — Maximum attempts
+## TASK 05.5 — Ввести `maxAttempts` в retry-plan — RISKY
 
-Backoff:
+**Фактическое состояние кода** (`src/core/leads/delivery-state.ts`):
 
 ```text
-immediate
-+1m
-+5m
-+15m
-+60m
-+240m
-→ abandoned
+planRetryableLeadDeliveryFailure:
+  backoff = backoffMs[Math.min(attempts, backoffMs.length - 1)]
+  → всегда status: "pending"
+  → перехода в "abandoned" нет вообще
 ```
 
-Не повторять +240m бесконечно.
+То есть после исчерпания лестницы задача вечно повторяется с шагом 240m.
+Статус `abandoned` существует в `LeadDeliveryStatus` и обрабатывается в
+`retryAbandonedLeadDelivery`, но **производителя у него нет**.
+
+Требование:
+
+```text
+attempts >= maxAttempts
+→ status: "abandoned"
+→ enqueueNextAttempt: false
+→ nextAttemptAt не выставляется
+```
+
+Backoff-лестница остаётся:
+
+```text
+immediate → +1m → +5m → +15m → +60m → +240m → abandoned
+```
+
+### Затронутая сигнатура (почему RISKY)
+
+| Файл | Что меняется |
+|---|---|
+| `src/core/leads/delivery-state.ts` | `LeadDeliveryRetryPlan.status` расширяется до `"failed" \| "pending" \| "abandoned"`; вход получает `maxAttempts` |
+| `src/core/data-access/system/lead-delivery.ts` | `LeadDeliveryFailurePlan.status` расширяется; `recordLeadDeliveryFailureAndMaybeRetry` сейчас фильтрует `where: status equals "sending"` и возвращает `"failed" \| "retry_scheduled"` — добавить терминал `abandoned` |
+| `src/project/jobs/leads/deliver-lead.ts` | обработка нового терминального исхода |
+
+Это изменение типов в трёх файлах, а не косметика. Обязательны обновлённые
+`test:lead-delivery-state` и `test:lead-delivery-task`.
 
 ## TASK 05.6 — Unknown outcome policy
 
@@ -1013,6 +1198,36 @@ POST /api/public/leads
 → sent + externalRef
 ```
 
+## TASK 05.11 — Честная политика дублей (ADR)
+
+`lead-deliveries.idempotencyKey` существует, уникален и формируется как
+`lead:<id>:channel:<channelId>`. Но **Telegram Bot API не принимает
+idempotency key**: защиты от дубля на стороне получателя нет.
+
+В связке с политикой 05.6 (`unknown → retryable`) таймауты гарантированно
+дадут повторные сообщения.
+
+Требования:
+
+1. зафиксировать в ADR, что дедупликация на стороне Telegram невозможна;
+2. включить `deliveryId` в текст сообщения как визуальный маркер для оператора;
+3. описать в OPERATIONS, как оператор распознаёт дубль.
+
+Без этой задачи 05.6 создаёт операционную проблему вместо её решения.
+
+## TASK 05.12 — Операторский путь ручного retry
+
+`retryAbandonedLeadDelivery` и `manualRetryAudit` реализованы, есть
+`test:lead-delivery-admin`. Не описано, **через что оператор это вызывает**.
+
+Требования:
+
+- зафиксировать конкретный путь (Payload admin action либо документированная процедура);
+- описать его в `docs/OPERATIONS.md`;
+- проверить вручную и записать evidence.
+
+Иначе `abandoned` — тупик без выхода.
+
 ## Acceptance Criteria
 
 Форма может быть включена только после полного proof.
@@ -1024,6 +1239,7 @@ pnpm test:leads-transaction
 pnpm test:lead-delivery-channel
 pnpm test:lead-delivery-state
 pnpm test:lead-delivery-task
+pnpm test:lead-delivery-admin
 pnpm test:lead-delivery-recovery
 pnpm test:lead-delivery-secrets
 pnpm test:leads-intake
@@ -1173,6 +1389,23 @@ catalog
 → one batch invalidation
 ```
 
+## TASK 06.15 — Scheduling contract для `nextDueAt`
+
+**Факт:** `dispatchDueFeeds` сдвигает `nextDueAt` один раз — в момент claim.
+Поведение после завершения run нигде не определено.
+
+Последствие: при падении импорта фид либо застревает, либо молотит непрерывно.
+
+Зафиксировать и реализовать:
+
+```text
+кто владеет nextDueAt после run
+что происходит при failed
+что происходит при interrupted
+что происходит при suspicious
+есть ли backoff у постоянно падающего фида
+```
+
 ## TASK 06.14 — Proof A/C/D
 
 Минимум:
@@ -1278,10 +1511,16 @@ empty business result
 infrastructure failure
 ```
 
-## TASK 07.6 — B2 proof
+## TASK 07.6 — B2 proof (endpoint уже существует)
+
+`src/app/api/internal/revalidate/route.ts` и `test:internal-revalidate` уже есть.
+Писать endpoint не нужно.
+
+Задача — доказать сквозной путь:
 
 ```text
 mutation
+→ collection hook
 → HTTP revalidate
 → next public request sees fresh data
 ```
@@ -1337,7 +1576,10 @@ OG
 structured data only from facts
 ```
 
-## TASK 08.4 — Archived retention
+## TASK 08.4 — Archived retention — содержит `OWNER_DECISION_REQUIRED`
+
+Выбор между `301` и `410` при отсутствии достоверной релевантной цели —
+owner-решение по §1.4. AI фиксирует кандидатов и останавливается, а не выбирает.
 
 Contract:
 
@@ -1560,8 +1802,11 @@ UI соответствует v5.0 без визуального redesign.
 
 # EPIC 11 — OUTBOUND SECURITY HARDENING
 
-**Priority:** P1  
-**Risk:** SECURITY
+**Priority:** P0 / BLOCKER (перемещён перед EPIC 05)  
+**Risk:** SECURITY  
+**Почему раньше:** EPIC 05 строит доставку поверх Safe Outbound Client. Менять
+семантику redirect и DNS-политику после доказанной доставки означает
+переделывать proof G. Транспорт фиксируется первым.
 
 ## TASK 11.1 — Redirect method semantics
 
@@ -1799,6 +2044,21 @@ Production topology повторяем, откатываем и не завис�
 **Risk:** RISKY  
 **Цель:** доказать систему как целое, а не только отдельные pure functions.
 
+## Evidence contract
+
+Каждый proof фиксируется файлом в `docs/proofs/`:
+
+```text
+exact SHA
+дата и время
+точная команда
+сырой вывод
+PASS / FAIL
+```
+
+Отчёт без сырого вывода не является proof. Через месяц «мы это проверяли»
+без файла не имеет силы.
+
 ## 14.A — Access
 
 ```text
@@ -1892,6 +2152,19 @@ no cron storm
 orphan recovery
 stale running recovery
 no catch-up storm
+```
+
+## 14.K — PII не попадает в логи (негативный runtime-тест)
+
+`test:lead-delivery-secrets` — статический контракт, он не смотрит на runtime-вывод.
+
+Требуется отдельный прогон:
+
+```text
+полный цикл заявки с тестовыми PII-маркерами
+→ захват stdout / лог-файла
+→ grep по маркерам: phone, email, name, message, token, chat id
+→ 0 совпадений
 ```
 
 ## 14.J — Browser
@@ -2057,12 +2330,16 @@ src/ui/**
 
 ## Guard D — Job handler completeness
 
-Не пытаться определять бизнес-готовность regex-ом, но добавить targeted contract tests:
+Не пытаться определять бизнес-готовность regex-ом. Контракт-тест обязан
+подменять канал/парсер фейком и утверждать, что фейк **был фактически вызван**:
 
 ```text
-deliverLead handler reaches channel delivery
-importFeed handler reaches parser/ingest/finalization
+deliverLead  → fake channel.deliver() вызван ровно один раз
+importFeed   → fake parser/ingest/finalization вызваны
 ```
+
+Проверка «функция существует» или «модуль импортируется» не засчитывается.
+Это единственная машинная защита от повторения текущего дефекта-заглушки.
 
 ## Guard E — Cron
 
@@ -2112,6 +2389,9 @@ GUARDS:
 DOCS UPDATED:
 - ...
 
+SCOPE DEVIATIONS:
+- что сделано сверх задачи и почему (пусто = ничего)
+
 OPEN RISKS:
 - ...
 
@@ -2135,13 +2415,16 @@ YES — owner-approved release <SHA>
 
 ## BLOCKER
 
+В порядке исполнения v2:
+
 ```text
-EPIC 00
+EPIC 00  (+ cron hotfix, verify:quick audit)
 EPIC 01
 EPIC 02
+EPIC 11  (транспорт до доставки)
+EPIC 05  (горит: теряется реальный трафик заявок)
 EPIC 03
 EPIC 04
-EPIC 05
 EPIC 06
 ```
 
@@ -2154,7 +2437,6 @@ EPIC 07
 EPIC 08
 EPIC 09
 EPIC 10
-EPIC 11
 EPIC 12
 EPIC 13
 EPIC 14
