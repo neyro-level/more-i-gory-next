@@ -97,7 +97,7 @@
 | `src/project/collections/redirects.ts:15` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/collections/redirects.ts:23` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/jobs/imports/dispatch-due-feeds.ts:25` | `req.payload` | SYSTEM GATEWAY | `const result = await dispatchDueFeeds(req.payload as unknown as Parameters<typeof dispatchDueFeeds>[0]);` |
-| `src/project/jobs/imports/import-feed.ts:241` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as ImportFeedPayload,` |
+| `src/project/jobs/imports/import-feed.ts:236` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as ImportFeedPayload,` |
 | `src/project/jobs/leads/deliver-lead.ts:189` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as PayloadLike,` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:94` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof jobsJanitor>[0],` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:121` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof recoverLeadDeliveries>[0],` |
