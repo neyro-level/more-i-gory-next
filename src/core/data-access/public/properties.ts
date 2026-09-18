@@ -21,7 +21,9 @@ import {
   publicPropertySelect,
   type PublicPropertyDTO,
 } from "./properties-contract.ts";
-import { publicReadWithFallback } from "./read-fallback.ts";(slug?: string): Promise<readonly PublicPropertyDTO[]> {
+import { publicReadWithFallback } from "./read-fallback.ts";
+
+async function readPublishedManualProperties(slug?: string): Promise<readonly PublicPropertyDTO[]> {
   return publicReadWithFallback({
     fallback: [],
     reader: "published-manual-properties",

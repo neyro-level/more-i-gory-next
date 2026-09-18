@@ -1,4 +1,4 @@
-import type { StructuredLogger } from "../observability/index.ts";
+import type { LogContext, StructuredLogger } from "../../observability/index.ts";
 
 export const PUBLIC_READ_FAILED = "public_read_failed";
 
@@ -8,7 +8,7 @@ export type PublicReadFallbackIssue = Readonly<{
 }>;
 
 const defaultLogger: Pick<StructuredLogger, "error"> = {
-  error(message, context) {
+  error(message: string, context?: LogContext) {
     console.error(message, context);
   },
 };
