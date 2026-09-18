@@ -5,8 +5,15 @@
 **Production:** technical preview domain `more-previu.tw1.ru`; final domain `moreigori.ru`
 is reserved for a later cutover and is not changed by this runbook.
 
-Документ станет единственным проектным runbook для эксплуатации. Пока runtime,
-окружения и доступы не реализованы, команды и реквизиты не выдумываются.
+Документ — runbook эксплуатации. Статусы честные:
+
+```text
+CODE EXISTS            код в main
+RUNTIME NOT PROVEN     нет живого прогона на preview/staging
+PRODUCTION NOT PROVEN  нет owner-approved production
+```
+
+Команды и реквизиты не выдумываются.
 
 ## Deploy
 
@@ -43,12 +50,14 @@ decision.
 Payload является единственным schema owner; `push:false`, schema меняется только
 committed migrations. `pnpm verify:schema` генерирует types и проверяет drift во
 временной директории, не загрязняя checkout. Clean local PostgreSQL 18 proof
-выполнен в EPIC 2. Staging/production migration и restore остаются EPIC 13 gate.
+выполнен в EPIC 2. Staging/production migration: CODE EXISTS (процедура в
+EPIC 13), RUNTIME NOT PROVEN, PRODUCTION NOT PROVEN.
 
 ## Backup and restore
 
-'TODO EPIC 13': automatic Managed PostgreSQL backup, S3 versioning, retention,
-provider-independent copy по ценности данных и фактический restore test.
+CODE EXISTS на стороне Timeweb Managed PostgreSQL (провайдер умеет backup).
+RUNTIME NOT PROVEN: фактический restore test ещё не выполнялся (EPIC 13).
+PRODUCTION NOT PROVEN.
 
 Backup не считается доказанным без успешного restore evidence.
 
@@ -83,33 +92,30 @@ Owner-only read diagnostics включается через `jobsCollectionOverr
 
 ## Imports
 
-Коллекции и jobs ingest в `main` (EPIC 16). Autorun запрещён без configured
-source и owner-approved feed. Runbook обязан покрывать suspicious run, source
+CODE EXISTS: коллекции и jobs ingest в `main`. RUNTIME NOT PROVEN на живом фиде.
+Autorun DISABLED (freeze): без configured source и без отдельной команды
+владельца ingest не включается. Runbook обязан покрывать suspicious run, source
 isolation, deactivation approval, recovery и запрет массовой деактивации после
 неполного feed.
 
 ## Leads
 
-Intake, transactional outbox, Telegram delivery, retry/recovery и retention
-реализованы в EPIC 10–12. Production destination и outbound secrets остаются
-human gate. PII и secrets в логи не попадают.
+CODE EXISTS: intake, transactional outbox, retry/recovery и retention в `main`
+(EPIC 10–12). RUNTIME NOT PROVEN E2E. Внешний канал оповещений DISABLED:
+оператор смотрит заявки в Payload Admin. PRODUCTION NOT PROVEN. PII и secrets
+в логи не попадают.
 
 ## S3 and media
 
-Payload upload adapter и media pipeline в `main` (EPIC 6). Production
-versioning, restore/rollback procedure и VPS-disk policy закрываются в EPIC 13.
+CODE EXISTS: Payload upload adapter и бакет `moreigory-media` (EPIC 6 + API
+smoke 2026-09-18). RUNTIME NOT PROVEN на VPS. PRODUCTION NOT PROVEN.
 VPS disk не является source of truth.
 
 ## Staging
 
-'TODO EPIC 13': отдельные domain, database и non-production secrets; Basic
-Auth, 'X-Robots-Tag: noindex, nofollow', без production PII dump.
-
-## Monitoring and alerts
-
-'TODO EPIC 13': внешний uptime/TLS monitor и агрегированные actionable alerts:
-site down, jobs stalled, lead delivery outage, suspicious/overdue import и
-backup failure. Provider и destination пока не утверждены.
+CODE EXISTS как контракт: `more-previu.tw1.ru`, отдельная database name, S3
+prefix, noindex, без production PII. RUNTIME NOT PROVEN до EPIC 13.
+PRODUCTION NOT PROVEN.
 
 ## Incident checklist
 
