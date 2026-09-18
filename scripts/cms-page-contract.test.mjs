@@ -33,6 +33,26 @@ test("CmsPageBlockDTO covers every approved page block type", () => {
   );
 });
 
+test("mapCmsPage validates Payload documents into CmsPageDTO", async () => {
+  const { mapCmsPage } = await import("../src/core/data-access/public/cms-page-contract.ts");
+  const dto = mapCmsPage({
+    blocks: [{ blockType: "lead", id: "blk", text: "Короткий инвестиционный тезис страницы.", title: "Лид" }],
+    createdAt: "2026-09-18T00:00:00.000Z",
+    id: 12,
+    path: "/usloviya/",
+    seo: { description: "Описание страницы для поисковой выдачи инвестора.", priority: "P1", robots: "index-follow", title: "Условия" },
+    slug: "usloviya",
+    status: "published",
+    title: "Условия",
+    updatedAt: "2026-09-18T00:00:00.000Z",
+  });
+
+  assert.equal(dto.title, "Условия");
+  assert.equal("id" in dto, false);
+  assert.equal("createdAt" in dto, false);
+  assert.equal("id" in dto.blocks[0], false);
+});
+
 test("CmsPageDTO accepts a published page and rejects raw Payload identity fields", () => {
   const page = cmsPageSchema.parse({
     blocks: [

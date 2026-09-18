@@ -24,4 +24,7 @@ test("CMS page reader is scoped to published pages by path", () => {
 
   assert.match(source, /path:\s*\{\s*equals:\s*path\s*\}/);
   assert.match(source, /status:\s*\{\s*equals:\s*"published"\s*\}/);
+  assert.match(source, /select:\s*publicCmsPageSelect/);
+  assert.match(source, /mapCmsPage/);
+  assert.match(source, /overrideAccess:\s*false/);
 });
