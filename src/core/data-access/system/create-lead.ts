@@ -3,6 +3,8 @@ import "server-only";
 import config from "@payload-config";
 import { commitTransaction, createLocalReq, getPayload, initTransaction, killTransaction } from "payload";
 
+import type { StructuredLogger } from "../../observability/index.ts";
+
 export type CreateLeadInput = Readonly<{
   activeChannelIds: readonly string[];
   consent: {
@@ -26,9 +28,12 @@ export type CreateLeadResult = Readonly<{
   queuedDeliveryIds: (number | string)[];
 }>;
 
+export type CreateLeadLogger = Pick<StructuredLogger, "error" | "warn">;
+
 async function enqueueLeadDelivery(
   payload: Awaited<ReturnType<typeof getPayload>>,
   leadDeliveryId: number | string,
+  logger: CreateLeadLogger,
 ): Promise<boolean> {
   try {
     await payload.jobs.queue({
@@ -39,11 +44,20 @@ async function enqueueLeadDelivery(
     } as never);
     return true;
   } catch {
+    logger.error("lead_enqueue_failed", {
+      leadDeliveryId: String(leadDeliveryId),
+      queue: "lead-deliveries",
+      safeCode: "lead_enqueue_failed",
+      state: "queue_unavailable",
+    });
     return false;
   }
 }
 
-export async function createLead(input: CreateLeadInput): Promise<CreateLeadResult> {
+export async function createLead(
+  input: CreateLeadInput,
+  logger: CreateLeadLogger = { error() {}, warn() {} },
+): Promise<CreateLeadResult> {
   const payload = await getPayload({ config });
   const req = await createLocalReq({}, payload);
   const deliveryIds: (number | string)[] = [];
@@ -95,7 +109,7 @@ export async function createLead(input: CreateLeadInput): Promise<CreateLeadResu
 
   const queuedDeliveryIds: (number | string)[] = [];
   for (const deliveryId of deliveryIds) {
-    if (await enqueueLeadDelivery(payload, deliveryId)) {
+    if (await enqueueLeadDelivery(payload, deliveryId, logger)) {
       queuedDeliveryIds.push(deliveryId);
     }
   }

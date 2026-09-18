@@ -9,6 +9,7 @@
 
 | Location | Operation | Class | Snippet |
 |---|---|---|---|
+| `scripts/lead-delivery-proof-g.test.mjs:109` | `jobs.queue` | TEST | `await memory.payload.jobs.queue({` |
 | `scripts/seed-media-assets.mjs:63` | `getPayload` | SYSTEM GATEWAY | `const payload = await getPayload({ config });` |
 | `scripts/seed-media-assets.mjs:66` | `find` | SYSTEM GATEWAY | `const existing = await payload.find({` |
 | `scripts/seed-media-assets.mjs:78` | `update` | SYSTEM GATEWAY | `await payload.update({` |
@@ -41,10 +42,10 @@
 | `src/core/data-access/system/bootstrap-owner.ts:16` | `find` | SYSTEM GATEWAY | `const owners = await payload.find({` |
 | `src/core/data-access/system/bootstrap-owner.ts:27` | `create` | SYSTEM GATEWAY | `await payload.create({` |
 | `src/core/data-access/system/catalog-lifecycle.ts:31` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
-| `src/core/data-access/system/create-lead.ts:34` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs.queue({` |
-| `src/core/data-access/system/create-lead.ts:47` | `getPayload` | SYSTEM GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/system/create-lead.ts:54` | `create` | SYSTEM GATEWAY | `const lead = await payload.create({` |
-| `src/core/data-access/system/create-lead.ts:75` | `create` | SYSTEM GATEWAY | `const delivery = await payload.create({` |
+| `src/core/data-access/system/create-lead.ts:39` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs.queue({` |
+| `src/core/data-access/system/create-lead.ts:61` | `getPayload` | SYSTEM GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/system/create-lead.ts:68` | `create` | SYSTEM GATEWAY | `const lead = await payload.create({` |
+| `src/core/data-access/system/create-lead.ts:89` | `create` | SYSTEM GATEWAY | `const delivery = await payload.create({` |
 | `src/core/data-access/system/dispatch-due-feeds.ts:69` | `find` | SYSTEM GATEWAY | `const dueFeeds = await payload.find({` |
 | `src/core/data-access/system/dispatch-due-feeds.ts:92` | `update` | SYSTEM GATEWAY | `const claim = await payload.update({` |
 | `src/core/data-access/system/dispatch-due-feeds.ts:118` | `create` | SYSTEM GATEWAY | `const importRun = await payload.create({` |
@@ -57,22 +58,26 @@
 | `src/core/data-access/system/lead-delivery.ts:140` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
 | `src/core/data-access/system/lead-delivery.ts:162` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
 | `src/core/data-access/system/lead-delivery.ts:179` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:203` | `update` | SYSTEM GATEWAY | `await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:224` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
-| `src/core/data-access/system/lead-delivery.ts:246` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
-| `src/core/data-access/system/lead-delivery.ts:279` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:292` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
+| `src/core/data-access/system/lead-delivery.ts:201` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:225` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:246` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
+| `src/core/data-access/system/lead-delivery.ts:268` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
+| `src/core/data-access/system/lead-delivery.ts:301` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:314` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
 | `src/core/data-access/system/lead-retention.ts:47` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
 | `src/core/data-access/system/lead-retention.ts:75` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
 | `src/core/data-access/system/lead-retention.ts:98` | `delete` | SYSTEM GATEWAY | `await payload.delete({` |
 | `src/core/data-access/system/lead-retention.ts:103` | `delete` | SYSTEM GATEWAY | `await payload.delete({` |
+| `src/core/data-access/system/load-lead-delivery.ts:100` | `findByID` | SYSTEM GATEWAY | `const delivery = (await payload.findByID({` |
+| `src/core/data-access/system/load-lead-delivery.ts:117` | `findByID` | SYSTEM GATEWAY | `const lead = (await payload.findByID({` |
 | `src/project/collections/redirects.ts:15` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/collections/redirects.ts:23` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/jobs/imports/dispatch-due-feeds.ts:23` | `req.payload` | SYSTEM GATEWAY | `const result = await dispatchDueFeeds(req.payload as unknown as Parameters<typeof dispatchDueFeeds>[0]);` |
 | `src/project/jobs/imports/import-feed.ts:29` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof transitionImportRunToRunning>[0],` |
-| `src/project/jobs/leads/deliver-lead.ts:35` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof transitionLeadDeliveryToSending>[0],` |
+| `src/project/jobs/leads/deliver-lead.ts:189` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as PayloadLike,` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:105` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof recoverLeadDeliveries>[0],` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:132` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof catalogLifecycle>[0],` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:159` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof leadRetentionCleanup>[0],` |
+| `src/project/leads/owner-retry.ts:39` | `req.payload` | SYSTEM GATEWAY | `req.payload as Parameters<typeof retryAbandonedLeadDelivery>[0],` |
 | `src/seo/sitemap-source.ts:29` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/seo/sitemap-source.ts:30` | `find` | PUBLIC GATEWAY | `const pages = await payload.find({` |

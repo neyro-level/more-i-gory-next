@@ -18,7 +18,7 @@ type LeadDeliveryFailurePlan = {
   enqueueNextAttempt: boolean;
   lastErrorRedacted: string;
   nextAttemptAt?: string;
-  status: "failed" | "pending";
+  status: "abandoned" | "failed" | "pending";
 };
 
 type LeadDeliveryRecord = {
@@ -171,6 +171,28 @@ export async function retryAbandonedLeadDelivery(
   return retried;
 }
 
+export async function touchLeadDeliveryHeartbeat(
+  payload: PayloadLike,
+  input: LeadDeliveryTransitionInput,
+  now = new Date(),
+): Promise<boolean> {
+  const update = await payload.update({
+    collection: "lead-deliveries",
+    data: {
+      heartbeatAt: now.toISOString(),
+    },
+    overrideAccess: true,
+    where: {
+      and: [
+        { id: { equals: input.leadDeliveryId } },
+        { status: { equals: "sending" } },
+      ],
+    },
+  });
+  const result = update as { docs?: LeadDeliveryRecord[] };
+  return Array.isArray(result.docs) && result.docs.length > 0;
+}
+
 export async function markLeadDeliverySent(
   payload: PayloadLike,
   input: LeadDeliverySentInput,
@@ -199,7 +221,7 @@ export async function markLeadDeliverySent(
 export async function recordLeadDeliveryFailureAndMaybeRetry(
   payload: PayloadLike,
   input: LeadDeliveryTransitionInput & { plan: LeadDeliveryFailurePlan },
-): Promise<"failed" | "retry_scheduled"> {
+): Promise<"abandoned" | "failed" | "retry_scheduled"> {
   await payload.update({
     collection: "lead-deliveries",
     data: {
@@ -231,7 +253,7 @@ export async function recordLeadDeliveryFailureAndMaybeRetry(
     return "retry_scheduled";
   }
 
-  return "failed";
+  return input.plan.status === "abandoned" ? "abandoned" : "failed";
 }
 
 export async function recoverLeadDeliveries(

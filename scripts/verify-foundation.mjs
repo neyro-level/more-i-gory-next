@@ -25,6 +25,7 @@ const requiredFiles = [
   "src/core/data-access/system/catalog-lifecycle.ts",
   "src/core/data-access/system/create-lead.ts",
   "src/core/data-access/system/lead-delivery.ts",
+  "src/core/data-access/system/load-lead-delivery.ts",
   "src/core/data-access/system/jobs.ts",
   "src/core/data-access/system/lead-retention.ts",
   "src/core/data-access/system/dispatch-due-feeds.ts",
@@ -331,6 +332,7 @@ const overrideAccessConsumers = sourceFiles.filter((file) => {
     !normalized.endsWith("/src/core/data-access/system/catalog-lifecycle.ts") &&
     !normalized.endsWith("/src/core/data-access/system/create-lead.ts") &&
     !normalized.endsWith("/src/core/data-access/system/lead-delivery.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/load-lead-delivery.ts") &&
     !normalized.endsWith("/src/core/data-access/system/jobs.ts") &&
     !normalized.endsWith("/src/core/data-access/system/lead-retention.ts") &&
     !normalized.endsWith("/src/core/data-access/system/dispatch-due-feeds.ts") &&

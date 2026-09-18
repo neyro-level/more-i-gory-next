@@ -15,5 +15,6 @@
 | [ADR-008](ADR-008-image-pipeline.md) | next/image, sharp, S3 | Accepted | Действует |
 | [ADR-009](ADR-009-deferred-ingest.md) | Deferred XML ingest | Accepted | EPIC 27 сужает до fixture+freeze; ADR не удалять |
 | [ADR-010](ADR-010-analytics-journal-module.md) | Analytics URL as journal namespace | Accepted | Действует |
+| [ADR-011](ADR-011-lead-delivery-duplicates.md) | Lead delivery duplicates | Accepted | Recipient dedup is not guaranteed; operator uses deliveryId |
 
 Static-export contract задавал только ADR-001 (и частично формулировки ADR-002). Оба помечены superseded ADR-004. Файлы на месте.

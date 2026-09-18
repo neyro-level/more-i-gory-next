@@ -18,6 +18,7 @@ test("path classifier covers the five allowed Local API layers", () => {
   assert.equal(classifyLocalApiPath("src/seo/sitemap-source.ts"), "PUBLIC GATEWAY");
   assert.equal(classifyLocalApiPath("src/core/data-access/system/create-lead.ts"), "SYSTEM GATEWAY");
   assert.equal(classifyLocalApiPath("src/project/jobs/imports/dispatch-due-feeds.ts"), "SYSTEM GATEWAY");
+  assert.equal(classifyLocalApiPath("src/project/leads/owner-retry.ts"), "SYSTEM GATEWAY");
   assert.equal(classifyLocalApiPath("src/project/collections/redirects.ts"), "CMS ADMIN");
   assert.equal(classifyLocalApiPath("migrations/20260917.ts"), "MIGRATION");
   assert.equal(classifyLocalApiPath("scripts/jobs-config.test.mjs"), "TEST");

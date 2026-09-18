@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { markLeadDeliverySent, transitionLeadDeliveryToSending } from "../src/core/data-access/system/lead-delivery.ts";
-import { deliverLeadTask, leadDeliveryBackoffMs } from "../src/project/jobs/leads/deliver-lead.ts";
+import { markLeadDeliverySent, touchLeadDeliveryHeartbeat, transitionLeadDeliveryToSending } from "../src/core/data-access/system/lead-delivery.ts";
+import { calculateLeadDeliveryRecoveryThresholdMs } from "../src/core/leads/delivery-recovery.ts";
+import { LeadDeliveryFailure } from "../src/core/leads/delivery.ts";
+import { deliverLead, deliverLeadTask, leadDeliveryBackoffMs, leadDeliveryHeartbeatIntervalMs } from "../src/project/jobs/leads/deliver-lead.ts";
 import { createJobsConfig } from "../src/project/jobs/config.ts";
 
 const taskSource = readFileSync(new URL("../src/project/jobs/leads/deliver-lead.ts", import.meta.url), "utf8");
@@ -50,6 +52,9 @@ test("jobs config registers deliverLead without enabling scheduled autorun", () 
 test("deliverLead task does not perform outbound delivery before state-machine tasks", () => {
   assert.equal(taskSource.includes("fetch("), false);
   assert.equal(taskSource.includes("process.env"), false);
+  assert.match(taskSource, /loadLeadDeliveryForSend/);
+  assert.match(taskSource, /planRetryableLeadDeliveryFailure/);
+  assert.match(taskSource, /createLeadChannelRegistry/);
 });
 
 test("lead delivery transition conditionally claims only pending due rows", async () => {
@@ -134,4 +139,191 @@ test("confirmed remote delivery stores externalRef while row is sending", async 
       ],
     },
   });
+});
+
+const loadedDelivery = {
+  attempts: 1,
+  attemptLog: [
+    {
+      attemptedAt: "2026-09-17T11:00:00.000Z",
+      deliveryCertainty: "not_delivered",
+      outcome: "failed",
+      redactedMessage: "previous",
+      safeCode: "previous",
+    },
+  ],
+  channelId: "probe",
+  id: 501,
+  idempotencyKey: "lead:9:channel:probe",
+  lead: 9,
+};
+
+const loadedLead = {
+  consent: { acceptedAt: "2026-09-17T10:00:00.000Z", version: "v1" },
+  id: 9,
+  message: "Need a property.",
+  name: "Ольга",
+  phone: "+7 900 000-00-00",
+  sourcePath: "/podbor/",
+};
+
+function deliveryPayload() {
+  const updates = [];
+  const queued = [];
+  return {
+    payload: {
+      async findByID(args) {
+        if (args.collection === "lead-deliveries") return loadedDelivery;
+        return loadedLead;
+      },
+      async update(args) {
+        updates.push(args);
+        return { docs: [{ id: "501" }] };
+      },
+      jobs: {
+        async queue(args) {
+          queued.push(args);
+          return {};
+        },
+      },
+    },
+    queued,
+    updates,
+  };
+}
+
+test("deliverLead loads retry state, resolves the channel, then stores sent", async () => {
+  const runtime = deliveryPayload();
+  const logs = [];
+  const status = await deliverLead({
+    leadDeliveryId: "501",
+    logger: {
+      error() {},
+      info(message, context) {
+        logs.push({ message, context });
+      },
+      warn() {},
+    },
+    now: new Date("2026-09-17T12:00:00.000Z"),
+    payload: runtime.payload,
+    resolveChannel: (channelId) => ({
+      id: channelId,
+      async deliver(payload) {
+        assert.equal(payload.idempotencyKey, "lead:9:channel:probe");
+        assert.equal(payload.lead.phone, "+7 900 000-00-00");
+        return { classification: "sent", deliveryCertainty: "confirmed", externalRef: "probe:7" };
+      },
+    }),
+  });
+
+  assert.equal(status, "sent");
+  assert.deepEqual(runtime.updates[1].data, { heartbeatAt: "2026-09-17T12:00:00.000Z" });
+  assert.equal(runtime.updates[2].data.status, "sent");
+  assert.equal(runtime.updates[2].data.externalRef, "probe:7");
+  assert.equal(runtime.queued.length, 0);
+});
+
+test("retryable channel failure plans the next attempt before returning", async () => {
+  const runtime = deliveryPayload();
+  const status = await deliverLead({
+    leadDeliveryId: "501",
+    now: new Date("2026-09-17T12:00:00.000Z"),
+    payload: runtime.payload,
+    resolveChannel: () => ({
+      id: "probe",
+      async deliver() {
+        throw new LeadDeliveryFailure({
+          deliveryCertainty: "unknown",
+          redactedMessage: "probe_timeout",
+          retryable: true,
+          safeCode: "probe_timeout",
+        });
+      },
+    }),
+  });
+
+  assert.equal(status, "retry_scheduled");
+  assert.equal(runtime.updates[2].data.status, "pending");
+  assert.equal(runtime.updates[2].data.attempts, 2);
+  assert.ok(Array.isArray(runtime.updates[2].data.attemptLog));
+  assert.equal(runtime.queued.length, 1);
+});
+
+test("exhausted retryable attempts abandon the delivery", async () => {
+  const runtime = deliveryPayload();
+  runtime.payload.findByID = async (args) => {
+    if (args.collection === "lead-deliveries") return { ...loadedDelivery, attempts: 5 };
+    return loadedLead;
+  };
+  const status = await deliverLead({
+    leadDeliveryId: "501",
+    now: new Date("2026-09-17T12:00:00.000Z"),
+    payload: runtime.payload,
+    resolveChannel: () => ({
+      id: "probe",
+      async deliver() {
+        throw new LeadDeliveryFailure({
+          deliveryCertainty: "unknown",
+          redactedMessage: "probe_timeout",
+          retryable: true,
+          safeCode: "probe_timeout",
+        });
+      },
+    }),
+  });
+
+  assert.equal(status, "abandoned");
+  assert.equal(runtime.updates[2].data.status, "abandoned");
+  assert.equal(runtime.queued.length, 0);
+});
+
+test("missing channel fails closed without outbound work", async () => {
+  const runtime = deliveryPayload();
+  const status = await deliverLead({
+    env: { LEAD_CHANNELS: undefined },
+    leadDeliveryId: "501",
+    now: new Date("2026-09-17T12:00:00.000Z"),
+    payload: runtime.payload,
+  });
+
+  assert.equal(status, "failed");
+  assert.equal(runtime.updates[1].data.status, "failed");
+  assert.equal(runtime.queued.length, 0);
+});
+
+test("heartbeat interval stays below the stale-sending recovery threshold and carries no PII", async () => {
+  assert.ok(leadDeliveryHeartbeatIntervalMs < calculateLeadDeliveryRecoveryThresholdMs(5));
+  const calls = [];
+  await touchLeadDeliveryHeartbeat(
+    {
+      async update(args) {
+        calls.push(args);
+        return { docs: [{ id: "501" }] };
+      },
+    },
+    { leadDeliveryId: "501" },
+    new Date("2026-09-17T12:00:00.000Z"),
+  );
+  assert.deepEqual(calls[0].data, { heartbeatAt: "2026-09-17T12:00:00.000Z" });
+  assert.equal(JSON.stringify(calls[0].data).includes("Ольга"), false);
+
+  const runtime = deliveryPayload();
+  let tick;
+  await deliverLead({
+    leadDeliveryId: "501",
+    now: new Date("2026-09-17T12:00:00.000Z"),
+    payload: runtime.payload,
+    resolveChannel: () => ({
+      id: "probe",
+      async deliver() {
+        tick?.();
+        return { classification: "sent", deliveryCertainty: "confirmed", externalRef: "probe:1" };
+      },
+    }),
+    setHeartbeatInterval: (callback) => {
+      tick = callback;
+      return 1;
+    },
+  });
+  assert.ok(runtime.updates.some((entry) => Object.keys(entry.data).join() === "heartbeatAt"));
 });

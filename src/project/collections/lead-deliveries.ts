@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 
 import { isOwnerAccess } from "../globals/access.ts";
+import { ownerRetryAbandonedLeadDeliveryEndpoint } from "../leads/owner-retry.ts";
 
 const validateInteger = (value: unknown) =>
   value == null || (typeof value === "number" && Number.isInteger(value) && value >= 0)
@@ -41,9 +42,12 @@ export const LeadDeliveries: CollectionConfig = {
   },
   admin: {
     defaultColumns: ["lead", "channelId", "status", "attempts", "nextAttemptAt", "updatedAt"],
+    description:
+      "Owner-only manual retry for abandoned rows: POST /api/lead-deliveries/:id/retry. See docs/OPERATIONS.md.",
     group: "Leads",
     useAsTitle: "idempotencyKey",
   },
+  endpoints: [ownerRetryAbandonedLeadDeliveryEndpoint],
   fields: [
     {
       name: "lead",

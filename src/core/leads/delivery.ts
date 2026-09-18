@@ -1,6 +1,7 @@
 import type { SafeOutboundClient } from "@/core/security/outbound-http";
 
 export type DeliveryCertainty = "confirmed" | "not_delivered" | "unknown";
+export type LeadDeliveryClassification = "sent" | "retryable" | "permanent";
 
 export type LeadDeliveryPayload = Readonly<{
   consent: {
@@ -20,12 +21,14 @@ export type LeadDeliveryPayload = Readonly<{
 }>;
 
 export type LeadDeliveryResult = Readonly<{
+  classification: "sent";
   deliveryCertainty: "confirmed";
   externalRef?: string;
 }>;
 
 export type LeadDeliveryFailureInput = Readonly<{
   deliveryCertainty: Exclude<DeliveryCertainty, "confirmed">;
+  possibleDuplicate?: boolean;
   redactedMessage: string;
   retryable: boolean;
   safeCode: string;
@@ -33,6 +36,7 @@ export type LeadDeliveryFailureInput = Readonly<{
 
 export class LeadDeliveryFailure extends Error {
   readonly deliveryCertainty: Exclude<DeliveryCertainty, "confirmed">;
+  readonly possibleDuplicate: boolean;
   readonly redactedMessage: string;
   readonly retryable: boolean;
   readonly safeCode: string;
@@ -41,15 +45,30 @@ export class LeadDeliveryFailure extends Error {
     super(input.redactedMessage);
     this.name = "LeadDeliveryFailure";
     this.deliveryCertainty = input.deliveryCertainty;
+    this.possibleDuplicate = input.possibleDuplicate ?? false;
     this.redactedMessage = input.redactedMessage;
     this.retryable = input.retryable;
     this.safeCode = input.safeCode;
+  }
+
+  get classification(): Exclude<LeadDeliveryClassification, "sent"> {
+    return this.retryable ? "retryable" : "permanent";
   }
 }
 
 export interface LeadDeliveryChannel {
   readonly id: string;
   deliver(payload: LeadDeliveryPayload): Promise<LeadDeliveryResult>;
+}
+
+export function redactLeadOutboundUrl(url: URL): string {
+  const redacted = new URL(url.href);
+  redacted.username = "";
+  redacted.password = "";
+  redacted.hash = "";
+  redacted.search = "";
+  redacted.pathname = redacted.pathname.replace(/\/bot[^/]+/i, "/bot[redacted]");
+  return `${redacted.protocol}//${redacted.host}${redacted.pathname}`;
 }
 
 type TelegramLeadDeliveryConfig = Readonly<{
@@ -88,10 +107,11 @@ function telegramSendMessageUrl(botToken: string): URL {
   return url;
 }
 
-function formatTelegramLeadMessage(payload: LeadDeliveryPayload): string {
+export function formatLeadDeliveryOperatorMessage(payload: LeadDeliveryPayload): string {
   return [
     "Новая заявка с сайта Море и Горы",
     `Lead ID: ${payload.leadId}`,
+    `Delivery ID: ${payload.deliveryId}`,
     `Источник: ${payload.lead.sourcePath}`,
     `Имя: ${payload.lead.name}`,
     `Телефон: ${payload.lead.phone}`,
@@ -101,14 +121,13 @@ function formatTelegramLeadMessage(payload: LeadDeliveryPayload): string {
   ].join("\n");
 }
 
-function telegramFailure(input: {
-  deliveryCertainty: Exclude<DeliveryCertainty, "confirmed">;
-  retryable: boolean;
-  safeCode: string;
-}) {
+export function unknownLeadDeliveryFailure(safeCode: string, redactedMessage: string): LeadDeliveryFailure {
   return new LeadDeliveryFailure({
-    ...input,
-    redactedMessage: "Telegram lead delivery failed.",
+    deliveryCertainty: "unknown",
+    possibleDuplicate: true,
+    redactedMessage,
+    retryable: true,
+    safeCode,
   });
 }
 
@@ -123,7 +142,7 @@ export function createTelegramLeadDeliveryChannel(config: TelegramLeadDeliveryCo
           body: encoder.encode(JSON.stringify({
             chat_id: config.chatId,
             disable_web_page_preview: true,
-            text: formatTelegramLeadMessage(payload),
+            text: formatLeadDeliveryOperatorMessage(payload),
           })),
           headers: { "content-type": "application/json" },
           maxResponseBytes: config.maxResponseBytes ?? 16_384,
@@ -136,34 +155,32 @@ export function createTelegramLeadDeliveryChannel(config: TelegramLeadDeliveryCo
         try {
           parsed = JSON.parse(decoder.decode(response.body)) as TelegramApiResponse;
         } catch {
-          throw telegramFailure({
-            deliveryCertainty: "unknown",
-            retryable: true,
-            safeCode: "telegram_invalid_response",
-          });
+          throw unknownLeadDeliveryFailure("telegram_invalid_response", "Telegram lead delivery failed.");
         }
 
         if (response.status >= 200 && response.status < 300 && parsed.ok === true) {
           const messageId = parsed.result?.message_id;
           return {
+            classification: "sent",
             deliveryCertainty: "confirmed",
             externalRef: messageId == null ? undefined : `telegram:${messageId}`,
           };
         }
 
-        throw telegramFailure({
-          deliveryCertainty: response.status >= 500 || response.status === 429 ? "unknown" : "not_delivered",
-          retryable: response.status >= 500 || response.status === 429,
+        if (response.status >= 500 || response.status === 429) {
+          throw unknownLeadDeliveryFailure("telegram_rejected", "Telegram lead delivery failed.");
+        }
+
+        throw new LeadDeliveryFailure({
+          deliveryCertainty: "not_delivered",
+          redactedMessage: "Telegram lead delivery failed.",
+          retryable: false,
           safeCode: "telegram_rejected",
         });
       } catch (error) {
         if (error instanceof LeadDeliveryFailure) throw error;
 
-        throw telegramFailure({
-          deliveryCertainty: "unknown",
-          retryable: true,
-          safeCode: "telegram_unavailable",
-        });
+        throw unknownLeadDeliveryFailure("telegram_unavailable", "Telegram lead delivery failed.");
       }
     },
   };

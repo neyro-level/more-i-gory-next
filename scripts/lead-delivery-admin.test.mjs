@@ -121,3 +121,44 @@ test("admin delivery summary emits aggregate alerts only", () => {
   ]);
   assert.equal(JSON.stringify(summary).includes("leadId"), false);
 });
+
+test("owner retry endpoint is registered and owner-only", async () => {
+  const { LeadDeliveries } = await import("../src/project/collections/lead-deliveries.ts");
+  const { handleOwnerRetryAbandonedLeadDelivery } = await import("../src/project/leads/owner-retry.ts");
+  assert.equal(LeadDeliveries.endpoints?.[0]?.path, "/:id/retry");
+  assert.equal(LeadDeliveries.endpoints?.[0]?.method, "post");
+  assert.match(LeadDeliveries.admin.description ?? "", /\/api\/lead-deliveries\/:id\/retry/);
+
+  const forbidden = await handleOwnerRetryAbandonedLeadDelivery({
+    payload: {},
+    routeParams: { id: "501" },
+    user: { collection: "users", role: "editor" },
+  });
+  assert.equal(forbidden.status, 403);
+
+  let retried = false;
+  const payload = {
+    async findByID() {
+      return { id: "501", status: "abandoned", manualRetryAudit: [] };
+    },
+    jobs: {
+      async queue() {
+        retried = true;
+      },
+    },
+    async update() {
+      return { docs: [{ id: "501" }] };
+    },
+  };
+  const ok = await handleOwnerRetryAbandonedLeadDelivery({
+    payload,
+    routeParams: { id: "501" },
+    user: { collection: "users", id: 3, role: "owner" },
+    async json() {
+      return { reasonRedacted: "Recovered after outage." };
+    },
+  });
+  assert.equal(ok.status, 200);
+  assert.deepEqual(await ok.json(), { ok: true, status: "pending" });
+  assert.equal(retried, true);
+});

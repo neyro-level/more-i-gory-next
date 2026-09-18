@@ -739,6 +739,8 @@ export interface Lead {
   createdAt: string;
 }
 /**
+ * Owner-only manual retry for abandoned rows: POST /api/lead-deliveries/:id/retry. See docs/OPERATIONS.md.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "lead-deliveries".
  */
