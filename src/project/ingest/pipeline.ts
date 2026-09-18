@@ -1,4 +1,5 @@
 import type { FeedParserResult } from "../../core/ingest/parsers/types.ts";
+import type { NormalizeFeedResult } from "../../core/ingest/normalize-feed.ts";
 
 export const ingestStageOrder = [
   "claim-running",
@@ -35,6 +36,7 @@ export type IngestPipelineState = {
     kind: "not-modified" | "read-body";
   };
   parse?: FeedParserResult;
+  normalize?: NormalizeFeedResult;
 };
 
 export type IngestStageContext = {

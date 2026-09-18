@@ -5,6 +5,7 @@ import { loadFeedSourceParser } from "../../../core/data-access/system/load-feed
 import { loadFeedSourceUrlRef } from "../../../core/data-access/system/load-feed-source-url-ref.ts";
 import { createClassifyConditionalHandler } from "../../../core/ingest/classify-conditional.ts";
 import { createFetchFeedHandler, parseOutboundAllowedHosts } from "../../../core/ingest/fetch-feed.ts";
+import { createNormalizeFeedHandler } from "../../../core/ingest/normalize-feed.ts";
 import { createParseFeedHandler } from "../../../core/ingest/parse-feed.ts";
 import { createResolveFeedUrlHandler } from "../../../core/ingest/resolve-feed-url.ts";
 import {
@@ -38,7 +39,10 @@ export function createImportFeedPipelineHandlers(
   lookupEnv: (name: string) => string | undefined | Promise<string | undefined>,
   outbound: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>),
 ): Partial<
-  Record<"claim-running" | "resolve-feed-url" | "fetch" | "classify-conditional" | "parse", IngestStageHandler>
+  Record<
+    "claim-running" | "resolve-feed-url" | "fetch" | "classify-conditional" | "parse" | "normalize",
+    IngestStageHandler
+  >
 > {
   return {
     "claim-running": createImportFeedClaimHandler((claimInput) =>
@@ -58,6 +62,7 @@ export function createImportFeedPipelineHandlers(
     parse: createParseFeedHandler({
       loadParser: (feedSourceId) => loadFeedSourceParser(payload, feedSourceId),
     }),
+    normalize: createNormalizeFeedHandler(),
   };
 }
 

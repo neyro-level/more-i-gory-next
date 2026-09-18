@@ -157,7 +157,7 @@ test("importFeed composition fetches after resolving the env-named URL", async (
 
   assert.equal(requests[0].headers["If-None-Match"], '"abc"');
   assert.equal(result.state.fetch?.status, 200);
-  assert.equal(result.pendingStage, "normalize");
+  assert.equal(result.pendingStage, "upsert");
   assert.equal(result.state.conditional?.kind, "read-body");
   assert.equal(result.state.parse?.suspicious, false);
   assert.equal(JSON.stringify(requests[0].headers).includes("https://"), false);
