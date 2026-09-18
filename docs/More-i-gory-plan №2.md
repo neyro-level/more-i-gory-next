@@ -3,7 +3,7 @@
 
 ```text
 Plan ID: more-i-gory-remediation-2026-09
-Version: v4
+Version: v5
 Status: REVIEW
 Delivery profile: COMMERCIAL
 Canonical repository: SourceCraft integrator-p/more-i-gory-next
