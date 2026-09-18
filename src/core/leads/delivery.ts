@@ -107,10 +107,11 @@ function telegramSendMessageUrl(botToken: string): URL {
   return url;
 }
 
-function formatTelegramLeadMessage(payload: LeadDeliveryPayload): string {
+export function formatLeadDeliveryOperatorMessage(payload: LeadDeliveryPayload): string {
   return [
     "Новая заявка с сайта Море и Горы",
     `Lead ID: ${payload.leadId}`,
+    `Delivery ID: ${payload.deliveryId}`,
     `Источник: ${payload.lead.sourcePath}`,
     `Имя: ${payload.lead.name}`,
     `Телефон: ${payload.lead.phone}`,
@@ -141,7 +142,7 @@ export function createTelegramLeadDeliveryChannel(config: TelegramLeadDeliveryCo
           body: encoder.encode(JSON.stringify({
             chat_id: config.chatId,
             disable_web_page_preview: true,
-            text: formatTelegramLeadMessage(payload),
+            text: formatLeadDeliveryOperatorMessage(payload),
           })),
           headers: { "content-type": "application/json" },
           maxResponseBytes: config.maxResponseBytes ?? 16_384,

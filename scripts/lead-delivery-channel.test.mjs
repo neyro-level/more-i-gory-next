@@ -76,6 +76,8 @@ test("telegram delivery channel sends through Safe Outbound Client", async () =>
   assert.equal(body.disable_web_page_preview, true);
   assert.match(body.text, /Ольга/);
   assert.match(body.text, /\+7 900 000-00-00/);
+  assert.match(body.text, /Delivery ID: 10/);
+  assert.match(body.text, /Lead ID: 1/);
 });
 
 test("telegram delivery failures expose only redacted operational details", async () => {
