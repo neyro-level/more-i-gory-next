@@ -1,11 +1,55 @@
-import type { CollectionConfig, FieldAccess } from "payload";
+import type { CollectionBeforeValidateHook, CollectionConfig, FieldAccess } from "payload";
 
+import {
+  embeddedFeedSourceMarket,
+  feedMarketMismatchError,
+  feedOriginIdentityError,
+  mergeFeedPropertyIdentity,
+  resolveFeedSourceId,
+} from "../../core/catalog/feed-property-invariants.ts";
+import {
+  manualPublicationGateError,
+  mergeManualPublicationRecord,
+} from "../../core/catalog/manual-publication-invariants.ts";
+import {
+  propertyCategoryOptions,
+  propertyDealTypeOptions,
+  validatePropertyCategoryField,
+  validatePropertyDealTypeField,
+} from "../../core/catalog/property-enums.ts";
+import { loadFeedSourceMarket } from "../../core/data-access/system/load-feed-source-market.ts";
 import { isOwnerAccess, publicReadAccess } from "../globals/access.ts";
 
 const isOwnerFieldAccess: FieldAccess = ({ req }) => req.user?.collection === "users" && req.user.role === "owner";
 
 const privateFieldAccess = {
   read: isOwnerFieldAccess,
+};
+
+const assertFeedPropertyInvariants: CollectionBeforeValidateHook = async ({ data, originalDoc, req }) => {
+  if (!data) return data;
+
+  const record = mergeFeedPropertyIdentity(originalDoc, data);
+  const identityError = feedOriginIdentityError(record);
+  if (identityError) throw new Error(identityError);
+  if (record.origin !== "feed") return data;
+
+  const embeddedMarket = embeddedFeedSourceMarket(record.feedSource);
+  const feedSourceId = resolveFeedSourceId(record.feedSource);
+  const loaded =
+    embeddedMarket ??
+    (feedSourceId == null ? null : await loadFeedSourceMarket(req.payload, feedSourceId));
+  const mismatch = feedMarketMismatchError(record.market, loaded);
+  if (mismatch) throw new Error(mismatch);
+  return data;
+};
+
+const assertManualPublicationInvariants: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
+  if (!data) return data;
+  const record = mergeManualPublicationRecord(originalDoc, data);
+  const error = manualPublicationGateError(record);
+  if (error) throw new Error(error);
+  return data;
 };
 
 const validateInteger = (value: unknown) =>
@@ -134,8 +178,20 @@ export const Properties: CollectionConfig = {
       ],
       required: true,
     },
-    { name: "category", type: "text" },
-    { name: "dealType", type: "text" },
+    {
+      name: "category",
+      type: "select",
+      index: true,
+      options: propertyCategoryOptions,
+      validate: validatePropertyCategoryField,
+    },
+    {
+      name: "dealType",
+      type: "select",
+      index: true,
+      options: propertyDealTypeOptions,
+      validate: validatePropertyDealTypeField,
+    },
     { name: "priceMinor", type: "number", validate: validateInteger },
     { name: "currency", type: "text", defaultValue: "RUB" },
     { name: "pricePerMeterMinor", type: "number", validate: validateInteger },
@@ -192,6 +248,9 @@ export const Properties: CollectionConfig = {
     { fields: ["market", "region"] },
     { fields: ["complex", "building", "layout"] },
   ],
+  hooks: {
+    beforeValidate: [assertFeedPropertyInvariants, assertManualPublicationInvariants],
+  },
   lockDocuments: false,
   timestamps: true,
   versions: false,

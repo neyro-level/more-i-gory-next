@@ -45,7 +45,6 @@ test("feed-sources exposes the approved scheduling, safety and secret-reference 
     "lastModified",
     "lastFeedHash",
     "deactivationApproval",
-    "deactivationApprovalConsumedAt",
   ]);
   assert.equal(field(FeedSources, "code").unique, true);
   assert.equal(field(FeedSources, "parser").index, true);
@@ -55,8 +54,16 @@ test("feed-sources exposes the approved scheduling, safety and secret-reference 
   assert.equal(field(FeedSources, "safetyThresholdPercent").defaultValue, 20);
   assert.match(field(FeedSources, "safetyThresholdPercent").validate(101), /percent/);
   assert.equal(field(FeedSources, "maxDeactivationsPerRun").defaultValue, 0);
-  assert.deepEqual(optionValues(FeedSources, "deactivationApproval"), ["required", "approved", "rejected"]);
-  assert.equal(field(FeedSources, "deactivationApprovalConsumedAt").type, "date");
+  const approval = field(FeedSources, "deactivationApproval");
+  assert.equal(approval.type, "group");
+  assert.deepEqual(
+    approval.fields.map((item) => item.name),
+    ["runId", "approvedBy", "approvedAt", "expiresAt", "consumedAt", "decision"],
+  );
+  assert.deepEqual(
+    approval.fields.find((item) => item.name === "decision").options.map((option) => option.value),
+    ["approved", "rejected"],
+  );
 });
 
 test("import-runs tracks queue, job and counter state per feed source", () => {

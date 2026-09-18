@@ -1,15 +1,27 @@
-export type DeactivationApprovalState = "approved" | "rejected" | "required";
+import { isFirstFullRun } from "./import-state.ts";
+
+export type DeactivationApprovalDecision = "approved" | "rejected";
+
+export type DeactivationApproval = {
+  approvedAt?: string | Date | null;
+  approvedBy?: string | null;
+  consumedAt?: string | Date | null;
+  decision?: DeactivationApprovalDecision | null;
+  expiresAt?: string | Date | null;
+  runId?: string | null;
+};
 
 export type SafeDeactivationInput = {
   activeInScopeCount: number;
-  deactivationApproval: DeactivationApprovalState;
-  deactivationApprovalConsumedAt?: string | null;
+  deactivationApproval?: DeactivationApproval | null;
   feedSourceId: string;
   importRunId: string;
-  isBaseline: boolean;
+  isBaseline?: boolean;
+  lastFullRunAt?: string | Date | null;
   market: "newbuild" | "secondary";
   maxDeactivationsPerRun: number;
   missingFromFeedCount: number;
+  mode?: "full" | "incremental" | null;
   nowIso: string;
   safetyThresholdPercent: number;
 };
@@ -22,7 +34,12 @@ export type SafeDeactivationPlan =
     }
   | {
       action: "suspicious";
-      issueCode: "deactivation-approval-consumed" | "deactivation-approval-required" | "deactivation-approval-rejected";
+      issueCode:
+        | "deactivation-approval-consumed"
+        | "deactivation-approval-expired"
+        | "deactivation-approval-required"
+        | "deactivation-approval-rejected"
+        | "deactivation-approval-run-mismatch";
       missingFromFeedCount: number;
       scope: SafeDeactivationScope;
     }
@@ -69,10 +86,42 @@ function exceedsSafetyGate(input: SafeDeactivationInput): boolean {
   return missingPercent > input.safetyThresholdPercent;
 }
 
+function hasPresentValue(value: unknown): boolean {
+  if (value == null || value === "") return false;
+  if (value instanceof Date) return Number.isFinite(value.getTime());
+  return true;
+}
+
+function timestampMs(value: unknown): number | null {
+  if (value instanceof Date) {
+    const time = value.getTime();
+    return Number.isFinite(time) ? time : null;
+  }
+  if (typeof value !== "string" || value.trim() === "") return null;
+  const time = Date.parse(value);
+  return Number.isFinite(time) ? time : null;
+}
+
+export function massDeactivationApprovalIssue(
+  approval: DeactivationApproval | null | undefined,
+  currentRunId: string,
+  nowIso: string,
+): Extract<SafeDeactivationPlan, { action: "suspicious" }>["issueCode"] | null {
+  if (approval?.decision === "rejected") return "deactivation-approval-rejected";
+  if (hasPresentValue(approval?.consumedAt)) return "deactivation-approval-consumed";
+  if (approval?.decision !== "approved") return "deactivation-approval-required";
+  if (approval.runId !== currentRunId) return "deactivation-approval-run-mismatch";
+  if (!hasPresentValue(approval.approvedAt)) return "deactivation-approval-required";
+  const expiresAt = timestampMs(approval.expiresAt);
+  const now = timestampMs(nowIso);
+  if (expiresAt == null || now == null || expiresAt <= now) return "deactivation-approval-expired";
+  return null;
+}
+
 export function planSafeDeactivation(input: SafeDeactivationInput): SafeDeactivationPlan {
   const scope = createSafeDeactivationScope(input);
 
-  if (input.isBaseline) {
+  if (input.isBaseline || isFirstFullRun({ lastFullRunAt: input.lastFullRunAt, mode: input.mode })) {
     return { action: "skip", reason: "baseline", scope };
   }
 
@@ -81,28 +130,15 @@ export function planSafeDeactivation(input: SafeDeactivationInput): SafeDeactiva
   }
 
   if (exceedsSafetyGate(input)) {
-    if (input.deactivationApproval === "rejected") {
+    const issueCode = massDeactivationApprovalIssue(
+      input.deactivationApproval,
+      input.importRunId,
+      input.nowIso,
+    );
+    if (issueCode) {
       return {
         action: "suspicious",
-        issueCode: "deactivation-approval-rejected",
-        missingFromFeedCount: input.missingFromFeedCount,
-        scope,
-      };
-    }
-
-    if (input.deactivationApprovalConsumedAt) {
-      return {
-        action: "suspicious",
-        issueCode: "deactivation-approval-consumed",
-        missingFromFeedCount: input.missingFromFeedCount,
-        scope,
-      };
-    }
-
-    if (input.deactivationApproval !== "approved") {
-      return {
-        action: "suspicious",
-        issueCode: "deactivation-approval-required",
+        issueCode,
         missingFromFeedCount: input.missingFromFeedCount,
         scope,
       };

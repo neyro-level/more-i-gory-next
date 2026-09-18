@@ -26,12 +26,14 @@ test("§18.5 import block: local feed parses, hashes and plans writes per feed s
   assert.equal(parsedB.offeredCount, 1);
 
   const createA = planOfferImport({
+    feedMarket: "newbuild",
     feedSourceId: "feed-a",
     importRunId: "run-a",
     nowIso: "2026-09-17T04:00:00.000Z",
     offer: parsedA.offers[0],
   });
   const createB = planOfferImport({
+    feedMarket: "newbuild",
     feedSourceId: "feed-b",
     importRunId: "run-b",
     nowIso: "2026-09-17T04:00:00.000Z",
@@ -50,7 +52,7 @@ test("§18.5 import block: local feed parses, hashes and plans writes per feed s
 test("§18.5 import-run cannot deactivate manual origin even during mass-missing feed", () => {
   const deactivation = planSafeDeactivation({
     activeInScopeCount: 10,
-    deactivationApproval: "approved",
+    deactivationApproval: { decision: "approved" },
     feedSourceId: "feed-a",
     importRunId: "run-a",
     isBaseline: false,
@@ -76,6 +78,7 @@ test("§18.5 import-run cannot deactivate manual origin even during mass-missing
 
   const manualWrite = planOfferImport({
     existing: { feedSource: null, id: "manual-1", origin: "manual" },
+    feedMarket: "newbuild",
     feedSourceId: "feed-a",
     importRunId: "run-a",
     nowIso: "2026-09-17T04:00:00.000Z",
@@ -95,7 +98,8 @@ test("§18.5 multi-feed independence: Feed A cannot touch Feed B rows or fields"
   assert.deepEqual(
     planOfferImport({
       existing: { feedSource: "feed-b", id: "b-1", importHash: "old", origin: "feed" },
-      feedSourceId: "feed-a",
+      feedMarket: "newbuild",
+    feedSourceId: "feed-a",
       importRunId: "run-a",
       nowIso: "2026-09-17T04:00:00.000Z",
       offer: parsedA.offers[0],
@@ -121,7 +125,7 @@ test("§18.5 multi-feed independence: Feed A cannot touch Feed B rows or fields"
 
   const deactivation = planSafeDeactivation({
     activeInScopeCount: 2,
-    deactivationApproval: "approved",
+    deactivationApproval: { decision: "approved" },
     feedSourceId: "feed-a",
     importRunId: "run-a",
     isBaseline: false,
@@ -160,7 +164,7 @@ test("§18.5 import maintenance proof: interrupted import cannot mutate baseline
 test("§18.5 baseline import does not deactivate even when feed appears empty", () => {
   assert.deepEqual(planSafeDeactivation({
     activeInScopeCount: 25,
-    deactivationApproval: "approved",
+    deactivationApproval: { decision: "approved" },
     feedSourceId: "feed-a",
     importRunId: "baseline-run",
     isBaseline: true,

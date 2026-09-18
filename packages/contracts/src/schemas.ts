@@ -4,6 +4,19 @@ export const contentStatuses = ["draft", "review", "published", "archived"] as c
 
 export const contentStatusSchema = z.enum(contentStatuses);
 
+export const propertyCategories = ["apartment", "house", "land", "commercial"] as const;
+
+export const propertyDealTypes = ["sale", "rent"] as const;
+
+export const propertyCategorySchema = z.enum(propertyCategories);
+
+export const propertyDealTypeSchema = z.enum(propertyDealTypes);
+
+export const propertyEnumWriteSchema = z.object({
+  category: propertyCategorySchema.optional().nullable(),
+  dealType: propertyDealTypeSchema.optional().nullable(),
+});
+
 export const mediaAssetSchema = z
   .object({
     alt: z.string(),

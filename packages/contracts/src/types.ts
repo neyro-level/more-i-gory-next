@@ -8,6 +8,9 @@ import {
   pageContentSchema,
   personSchema,
   projectSchema,
+  propertyCategorySchema,
+  propertyDealTypeSchema,
+  propertyEnumWriteSchema,
   regionSchema,
   seoEntrySchema,
   sourceSchema,
@@ -23,4 +26,7 @@ export type ArticleDTO = z.infer<typeof articleSchema>;
 export type PageContent = z.infer<typeof pageContentSchema>;
 export type LandingPageDTO = z.infer<typeof landingPageSchema>;
 export type PersonDTO = z.infer<typeof personSchema>;
+export type PropertyCategory = z.infer<typeof propertyCategorySchema>;
+export type PropertyDealType = z.infer<typeof propertyDealTypeSchema>;
+export type PropertyEnumWriteDTO = z.infer<typeof propertyEnumWriteSchema>;
 export type SeoEntry = z.infer<typeof seoEntrySchema>;

@@ -36,7 +36,7 @@ const publicPropertySchema = z.object({
   budgetNote: z.string().optional(),
   deactivatedAt: z.string().optional(),
   description: z.string().optional(),
-  facts: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).default([]),
+  facts: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).min(1),
   id: z.string().min(1),
   image: publicMediaSchema,
   path: z.string().startsWith("/").endsWith("/"),
@@ -44,11 +44,11 @@ const publicPropertySchema = z.object({
   regionLabel: z.string().min(1),
   riskSummary: z.string().min(1),
   slug: z.string().min(1),
-  sources: z.array(z.object({ label: z.string().min(1), url: z.string().optional() })).default([]),
+  sources: z.array(z.object({ label: z.string().min(1), url: z.string().optional() })).min(1),
   status: z.enum(["active", "archived"]),
   title: z.string().min(1),
   verdict: z.string().min(1),
-  verifiedAt: z.string().optional(),
+  verifiedAt: z.string().min(1),
 });
 
 export type PublicPropertyDTO = z.infer<typeof publicPropertySchema>;
@@ -80,11 +80,21 @@ export const publicPropertySelect = {
   verdict: true,
 } satisfies SelectType;
 
+const manualPassportPublicationExists: Where[] = [
+  { publishedAt: { exists: true } },
+  { slug: { exists: true } },
+  { verifiedAt: { exists: true } },
+  { verdict: { exists: true } },
+  { riskSummary: { exists: true } },
+  { sources: { exists: true } },
+  { facts: { exists: true } },
+];
+
 export function propertyPublicationWhere(slug?: string): Where {
   const and: Where[] = [
     { origin: { equals: "manual" } },
     { status: { equals: "active" } },
-    { publishedAt: { exists: true } },
+    ...manualPassportPublicationExists,
   ];
 
   if (slug) {
@@ -95,10 +105,7 @@ export function propertyPublicationWhere(slug?: string): Where {
 }
 
 export function propertyRouteWhere(slug?: string): Where {
-  const and: Where[] = [
-    { origin: { equals: "manual" } },
-    { publishedAt: { exists: true } },
-  ];
+  const and: Where[] = [{ origin: { equals: "manual" } }, ...manualPassportPublicationExists];
 
   if (slug) {
     and.push({ slug: { equals: slug } });
@@ -146,13 +153,13 @@ export function mapPublicProperty(property: PublicPropertyRecord): PublicPropert
     path: `/obekty/${property.slug}/`,
     publishedAt: property.publishedAt,
     regionLabel: getRegionLabel(property),
-    riskSummary: property.riskSummary ?? "Риски фиксируются в паспорте перед публикацией.",
+    riskSummary: property.riskSummary,
     slug: property.slug,
     sources: property.sources?.map((source) => ({ label: source.label, url: source.url ?? undefined })) ?? [],
     status: property.status,
     title: property.title,
-    verdict: property.verdict ?? property.description ?? "Инвестиционный вывод готовится к публикации.",
-    verifiedAt: property.verifiedAt ?? undefined,
+    verdict: property.verdict,
+    verifiedAt: property.verifiedAt,
   });
 }
 

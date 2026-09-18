@@ -30,3 +30,4 @@
 | Источник | Что требуется | Что уже сделано автономно | После решения | Блокирует release |
 |---|---|---|---|---|
 | TASK 21.6 | Решить, удалять ли workspace-пакет `packages/ui` после EPIC 32 | Пакет помечен reserved/inactive; FOLDER FORM каноничен; UI не переносился | При необходимости отдельный cleanup lockfile/workspace | нет |
+| TASK 24.1b | Применить Postgres enum conversion к существующим `properties.category` / `deal_type`, если отчёт 24.1a покажет строки вне контракта | Контракт, select-options, ingest/DTO reject и draft SQL зафиксированы в 24.1a; отчёт в `docs/research/property-enum-drift-report.md` | После 0 внеконтрактных строк миграция идёт автономно; иначе owner unlock EPIC 34 | нет |

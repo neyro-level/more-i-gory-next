@@ -18,6 +18,9 @@ import * as migration_20260917_031908_leads_outbox_schema from './20260917_03190
 import * as migration_20260917_103447_schema_drift from './20260917_103447_schema_drift';
 import * as migration_20260917_112944_maintenance_jobs from './20260917_112944_maintenance_jobs';
 import * as migration_20260917_125114 from './20260917_125114';
+import * as migration_20260918_183258_property_enums from './20260918_183258_property_enums';
+import * as migration_20260918_184114_property_numeric from './20260918_184114_property_numeric';
+import * as migration_20260918_190215_deactivation_approval from './20260918_190215_deactivation_approval';
 
 export const migrations = [
   {
@@ -118,6 +121,21 @@ export const migrations = [
   {
     up: migration_20260917_125114.up,
     down: migration_20260917_125114.down,
-    name: '20260917_125114'
+    name: '20260917_125114',
+  },
+  {
+    up: migration_20260918_183258_property_enums.up,
+    down: migration_20260918_183258_property_enums.down,
+    name: '20260918_183258_property_enums',
+  },
+  {
+    up: migration_20260918_184114_property_numeric.up,
+    down: migration_20260918_184114_property_numeric.down,
+    name: '20260918_184114_property_numeric'
+  },
+  {
+    up: migration_20260918_190215_deactivation_approval.up,
+    down: migration_20260918_190215_deactivation_approval.down,
+    name: '20260918_190215_deactivation_approval'
   },
 ];

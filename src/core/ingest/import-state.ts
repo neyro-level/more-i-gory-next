@@ -1,6 +1,9 @@
 import { createHash } from "node:crypto";
 
+import type { PropertyCategory, PropertyDealType } from "@more-i-gory/contracts";
+
 import type { ParsedFeedOffer } from "./parsers/types.ts";
+import { resolveFeedPropertyEnums } from "../catalog/property-enums.ts";
 
 export type ConditionalFeedState = {
   lastEtag?: string | null;
@@ -36,12 +39,15 @@ export type OfferImportPlan =
   | {
       businessWrite: true;
       data: {
+        category?: PropertyCategory;
+        dealType?: PropertyDealType;
         externalId: string;
         feedSource: string;
         firstSeenAt?: string;
         importHash: string;
         lastImportRun: string;
         lastSeenAt: string;
+        market: "newbuild" | "secondary";
         origin: "feed";
       };
       kind: "create" | "update";
@@ -79,12 +85,21 @@ export function isBaselineImport(state: ConditionalFeedState): boolean {
   return !state.lastFullRunAt && !state.lastFeedHash && state.lastOfferCount == null;
 }
 
+export function isFirstFullRun(args: {
+  lastFullRunAt?: string | Date | null;
+  mode?: "full" | "incremental" | null;
+}): boolean {
+  if (args.mode !== "full") return false;
+  return args.lastFullRunAt == null || args.lastFullRunAt === "";
+}
+
 export function createImportHash(offer: ParsedFeedOffer): string {
   return createHash("sha256").update(stableStringify(offer.source)).digest("hex");
 }
 
 export function planOfferImport(args: {
   existing?: ExistingImportedProperty | null;
+  feedMarket: "newbuild" | "secondary";
   feedSourceId: string;
   importRunId: string;
   nowIso: string;
@@ -92,17 +107,20 @@ export function planOfferImport(args: {
 }): OfferImportPlan {
   const importHash = createImportHash(args.offer);
   const existing = args.existing;
+  const enums = resolveFeedPropertyEnums(args.offer.source);
 
   if (!existing) {
     return {
       businessWrite: true,
       data: {
+        ...enums.values,
         externalId: args.offer.externalId,
         feedSource: args.feedSourceId,
         firstSeenAt: args.nowIso,
         importHash,
         lastImportRun: args.importRunId,
         lastSeenAt: args.nowIso,
+        market: args.feedMarket,
         origin: "feed",
       },
       kind: "create",
@@ -132,11 +150,13 @@ export function planOfferImport(args: {
   return {
     businessWrite: true,
     data: {
+      ...enums.values,
       externalId: args.offer.externalId,
       feedSource: args.feedSourceId,
       importHash,
       lastImportRun: args.importRunId,
       lastSeenAt: args.nowIso,
+      market: args.feedMarket,
       origin: "feed",
     },
     kind: "update",

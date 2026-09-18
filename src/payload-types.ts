@@ -640,8 +640,14 @@ export interface FeedSource {
   lastEtag?: string | null;
   lastModified?: string | null;
   lastFeedHash?: string | null;
-  deactivationApproval: 'required' | 'approved' | 'rejected';
-  deactivationApprovalConsumedAt?: string | null;
+  deactivationApproval?: {
+    runId?: string | null;
+    approvedBy?: string | null;
+    approvedAt?: string | null;
+    expiresAt?: string | null;
+    consumedAt?: string | null;
+    decision?: ('approved' | 'rejected') | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -803,8 +809,8 @@ export interface Property {
   publishedAt?: string | null;
   slug?: string | null;
   market: 'secondary' | 'newbuild';
-  category?: string | null;
-  dealType?: string | null;
+  category?: ('apartment' | 'house' | 'land' | 'commercial') | null;
+  dealType?: ('sale' | 'rent') | null;
   priceMinor?: number | null;
   currency?: string | null;
   pricePerMeterMinor?: number | null;
@@ -1823,8 +1829,16 @@ export interface FeedSourcesSelect<T extends boolean = true> {
   lastEtag?: T;
   lastModified?: T;
   lastFeedHash?: T;
-  deactivationApproval?: T;
-  deactivationApprovalConsumedAt?: T;
+  deactivationApproval?:
+    | T
+    | {
+        runId?: T;
+        approvedBy?: T;
+        approvedAt?: T;
+        expiresAt?: T;
+        consumedAt?: T;
+        decision?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

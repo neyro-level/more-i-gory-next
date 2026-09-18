@@ -58,17 +58,23 @@ export const FeedSources: CollectionConfig = {
     { name: "lastFeedHash", type: "text" },
     {
       name: "deactivationApproval",
-      type: "select",
-      defaultValue: "required",
-      index: true,
-      options: [
-        { label: "Required", value: "required" },
-        { label: "Approved", value: "approved" },
-        { label: "Rejected", value: "rejected" },
+      type: "group",
+      fields: [
+        { name: "runId", type: "text", index: true },
+        { name: "approvedBy", type: "text" },
+        { name: "approvedAt", type: "date" },
+        { name: "expiresAt", type: "date" },
+        { name: "consumedAt", type: "date" },
+        {
+          name: "decision",
+          type: "select",
+          options: [
+            { label: "Approved", value: "approved" },
+            { label: "Rejected", value: "rejected" },
+          ],
+        },
       ],
-      required: true,
     },
-    { name: "deactivationApprovalConsumedAt", type: "date" },
   ],
   indexes: [
     { fields: ["enabled", "nextDueAt"] },

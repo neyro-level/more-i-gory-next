@@ -336,7 +336,8 @@ const overrideAccessConsumers = sourceFiles.filter((file) => {
     !normalized.endsWith("/src/core/data-access/system/jobs.ts") &&
     !normalized.endsWith("/src/core/data-access/system/lead-retention.ts") &&
     !normalized.endsWith("/src/core/data-access/system/dispatch-due-feeds.ts") &&
-    !normalized.endsWith("/src/core/data-access/system/import-feed-run.ts")
+    !normalized.endsWith("/src/core/data-access/system/import-feed-run.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/load-feed-source-market.ts")
   );
 });
 if (overrideAccessConsumers.length > 0) {

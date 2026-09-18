@@ -22,20 +22,26 @@ function matchesWhere(where, record) {
   });
 }
 
+const publicationExists = [
+  { publishedAt: { exists: true } },
+  { slug: { exists: true } },
+  { verifiedAt: { exists: true } },
+  { verdict: { exists: true } },
+  { riskSummary: { exists: true } },
+  { sources: { exists: true } },
+  { facts: { exists: true } },
+];
+
 test("public properties predicate exposes only manual active published passports", () => {
   assert.deepEqual(propertyPublicationWhere(), {
-    and: [
-      { origin: { equals: "manual" } },
-      { status: { equals: "active" } },
-      { publishedAt: { exists: true } },
-    ],
+    and: [{ origin: { equals: "manual" } }, { status: { equals: "active" } }, ...publicationExists],
   });
 
   assert.deepEqual(propertyPublicationWhere("yalta-passport"), {
     and: [
       { origin: { equals: "manual" } },
       { status: { equals: "active" } },
-      { publishedAt: { exists: true } },
+      ...publicationExists,
       { slug: { equals: "yalta-passport" } },
     ],
   });
@@ -43,11 +49,7 @@ test("public properties predicate exposes only manual active published passports
 
 test("property detail route predicate includes archived manual passports but still requires publication", () => {
   assert.deepEqual(propertyRouteWhere("archived-passport"), {
-    and: [
-      { origin: { equals: "manual" } },
-      { publishedAt: { exists: true } },
-      { slug: { equals: "archived-passport" } },
-    ],
+    and: [{ origin: { equals: "manual" } }, ...publicationExists, { slug: { equals: "archived-passport" } }],
   });
 });
 
@@ -55,7 +57,17 @@ test("published active passports are listed; unpublished and archived stay hidde
   const listWhere = propertyPublicationWhere();
 
   assert.equal(
-    matchesWhere(listWhere, { origin: "manual", status: "active", publishedAt: "2026-09-17T00:00:00.000Z" }),
+    matchesWhere(listWhere, {
+      origin: "manual",
+      status: "active",
+      publishedAt: "2026-09-17T00:00:00.000Z",
+      slug: "yalta-passport",
+      verifiedAt: "2026-09-17T00:00:00.000Z",
+      verdict: "Подходит для ручного инвестиционного разбора.",
+      riskSummary: "Риск проверяется в паспорте.",
+      sources: [{ label: "Открытые данные объекта" }],
+      facts: [{ label: "Документы", value: "Проверяются перед публикацией." }],
+    }),
     true,
   );
   assert.equal(
@@ -92,11 +104,13 @@ test("public property DTO mapper does not leak private inventory data", () => {
     region: { id: 7, title: "Ялта" },
     riskSummary: "Риск проверяется в паспорте.",
     slug: "yalta-passport",
+    sources: [{ label: "Открытые данные объекта" }],
     status: "active",
     title: "Квартира в Ялте",
     unitNumber: "154",
     updatedAt: "2026-09-17T00:00:00.000Z",
     verdict: "Подходит для ручного инвестиционного разбора.",
+    verifiedAt: "2026-09-17T00:00:00.000Z",
   });
 
   assert.equal(dto.path, "/obekty/yalta-passport/");

@@ -82,6 +82,13 @@ test("properties collection keeps inventory defaults and relationships explicit"
   assert.equal(field("status").defaultValue, "active");
   assert.equal(field("market").defaultValue, "secondary");
   assert.equal(field("market").required, true);
+  assert.equal(field("category").type, "select");
+  assert.deepEqual(
+    field("category").options.map((option) => option.value),
+    ["apartment", "house", "land", "commercial"],
+  );
+  assert.equal(field("dealType").type, "select");
+  assert.deepEqual(field("dealType").options.map((option) => option.value), ["sale", "rent"]);
   assert.equal(field("market").index, true);
   assert.equal(field("region").relationTo, "regions");
   assert.equal(field("complex").relationTo, "residential-complexes");

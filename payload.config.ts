@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildConfig } from "payload";
 import sharp from "sharp";
+import { applyPropertyNumericDbContract } from "./src/core/data-access/ingest/property-numeric-schema.ts";
 import { Buildings } from "./src/project/collections/buildings.ts";
 import { Developers } from "./src/project/collections/developers.ts";
 import { FeedSources } from "./src/project/collections/feed-sources.ts";
@@ -54,6 +55,7 @@ export default buildConfig({
     Layouts,
   ],
   db: postgresAdapter({
+    afterSchemaInit: [applyPropertyNumericDbContract],
     migrationDir: schemaVerifyDir ? path.resolve(schemaVerifyDir, "migrations") : path.resolve(dirname, "migrations"),
     pool: { connectionString: env.DATABASE_URI },
     push: false,

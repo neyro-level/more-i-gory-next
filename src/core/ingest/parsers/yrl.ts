@@ -11,7 +11,17 @@ type MutableOffer = {
   currentField: string | null;
 };
 
-const offerFieldNames = new Set(["name", "title", "price", "address", "url"]);
+const offerFieldNames = new Set([
+  "name",
+  "title",
+  "price",
+  "address",
+  "url",
+  "type",
+  "category",
+  "property-type",
+  "deal-type",
+]);
 const forbiddenXmlDeclarationPattern = /<!\s*(?:DOCTYPE|ENTITY)\b/i;
 
 function createCriticalResult(code: string, message: string, details?: Record<string, unknown>): FeedParserResult {

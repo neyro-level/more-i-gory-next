@@ -6,6 +6,7 @@ import {
   classifyConditionalFeedResponse,
   createImportHash,
   isBaselineImport,
+  isFirstFullRun,
   planOfferImport,
   planSeenTouchBatch,
 } from "../src/core/ingest/import-state.ts";
@@ -40,6 +41,12 @@ test("baseline import is detected before first full feed state exists", () => {
   assert.equal(isBaselineImport({ lastOfferCount: 0 }), false);
 });
 
+test("first full run is a baseline even if incremental hashes already exist", () => {
+  assert.equal(isFirstFullRun({ mode: "full" }), true);
+  assert.equal(isFirstFullRun({ lastFullRunAt: "2026-09-17T00:00:00.000Z", mode: "full" }), false);
+  assert.equal(isFirstFullRun({ lastFeedHash: "hash", mode: "incremental" }), false);
+});
+
 test("importHash is stable for reordered offer source fields", () => {
   const sameOfferDifferentOrder = {
     externalId: "flat-1",
@@ -57,6 +64,7 @@ test("unchanged feed offer plans only bulk lastSeenAt touch, not business write"
   const importHash = createImportHash(offer);
   const plan = planOfferImport({
     existing: { feedSource: "feed-a", id: 101, importHash, origin: "feed" },
+    feedMarket: "newbuild",
     feedSourceId: "feed-a",
     importRunId: "run-1",
     nowIso: "2026-09-17T01:00:00.000Z",
@@ -76,6 +84,7 @@ test("unchanged feed offer plans only bulk lastSeenAt touch, not business write"
 
 test("new or changed feed offer plans a business write with import hash", () => {
   const created = planOfferImport({
+    feedMarket: "newbuild",
     feedSourceId: "feed-a",
     importRunId: "run-1",
     nowIso: "2026-09-17T01:00:00.000Z",
@@ -86,9 +95,11 @@ test("new or changed feed offer plans a business write with import hash", () => 
   assert.equal(created.data.origin, "feed");
   assert.equal(created.data.externalId, "flat-1");
   assert.equal(typeof created.data.importHash, "string");
+  assert.equal(created.data.market, "newbuild");
 
   const updated = planOfferImport({
     existing: { feedSource: "feed-a", id: 101, importHash: "old-hash", origin: "feed" },
+    feedMarket: "newbuild",
     feedSourceId: "feed-a",
     importRunId: "run-2",
     nowIso: "2026-09-17T01:05:00.000Z",
@@ -102,7 +113,8 @@ test("manual and another feed owned properties are never updated by this import"
   assert.deepEqual(
     planOfferImport({
       existing: { feedSource: null, id: 10, origin: "manual" },
-      feedSourceId: "feed-a",
+      feedMarket: "newbuild",
+    feedSourceId: "feed-a",
       importRunId: "run-1",
       nowIso: "2026-09-17T01:00:00.000Z",
       offer,
@@ -113,7 +125,8 @@ test("manual and another feed owned properties are never updated by this import"
   assert.deepEqual(
     planOfferImport({
       existing: { feedSource: "feed-b", id: 11, origin: "feed" },
-      feedSourceId: "feed-a",
+      feedMarket: "newbuild",
+    feedSourceId: "feed-a",
       importRunId: "run-1",
       nowIso: "2026-09-17T01:00:00.000Z",
       offer,
