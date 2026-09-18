@@ -139,7 +139,7 @@ test("importFeed composition fetches after resolving the env-named URL", async (
     },
     async create(args) {
       writes.push(args);
-      return { id: 900 };
+      return { id: args.collection === "import-issues" ? 800 : 900 };
     },
   };
 
@@ -165,7 +165,7 @@ test("importFeed composition fetches after resolving the env-named URL", async (
 
   assert.equal(requests[0].headers["If-None-Match"], '"abc"');
   assert.equal(result.state.fetch?.status, 200);
-  assert.equal(result.pendingStage, "record-issues");
+  assert.equal(result.pendingStage, "safe-deactivation");
   assert.equal(result.state.conditional?.kind, "read-body");
   assert.equal(result.state.parse?.suspicious, false);
   assert.equal(result.state.upsert?.createdCount, 1);
