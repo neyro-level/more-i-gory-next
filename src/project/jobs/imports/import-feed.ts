@@ -168,23 +168,52 @@ export async function runImportFeedWithHeartbeat(args: {
   }
 }
 
-async function createImportFeedHttpInvalidator(): Promise<CacheInvalidator> {
+type ImportFeedHttpEnv = {
+  INTERNAL_REVALIDATE_BASE_URL?: string;
+  OUTBOUND_ALLOWED_HOSTS?: string;
+  REVALIDATE_SECRET?: string;
+};
+
+function createRevalidateOutboundClient(envSlice: ImportFeedHttpEnv): SafeOutboundClient {
+  const hosts = new Set(parseOutboundAllowedHosts(envSlice.OUTBOUND_ALLOWED_HOSTS));
+  if (envSlice.INTERNAL_REVALIDATE_BASE_URL) {
+    hosts.add(new URL(envSlice.INTERNAL_REVALIDATE_BASE_URL).hostname.toLowerCase());
+  }
+  return createSafeOutboundClient({ allowedHosts: [...hosts] });
+}
+
+async function resolveImportFeedOutbound(
+  outbound: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>) | undefined,
+  envSlice: ImportFeedHttpEnv,
+): Promise<SafeOutboundClient> {
+  if (!outbound) return createRevalidateOutboundClient(envSlice);
+  return typeof outbound === "function" ? await outbound() : outbound;
+}
+
+export async function createImportFeedHttpInvalidator(deps?: {
+  loadEnv?: () => ImportFeedHttpEnv | Promise<ImportFeedHttpEnv>;
+  outbound?: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>);
+}): Promise<CacheInvalidator> {
   return createCacheInvalidator({
     branch: "http",
     async invalidateBatch(targets) {
-      const { env } = await import("../../env.ts");
-      if (!env.REVALIDATE_SECRET || !env.INTERNAL_REVALIDATE_BASE_URL) {
+      const envSlice = deps?.loadEnv ? await deps.loadEnv() : (await import("../../env.ts")).env;
+      if (!envSlice.REVALIDATE_SECRET || !envSlice.INTERNAL_REVALIDATE_BASE_URL) {
         throw new Error("HTTP cache invalidation is not configured.");
       }
-      const response = await fetch(new URL("/api/internal/revalidate", env.INTERNAL_REVALIDATE_BASE_URL), {
-        body: JSON.stringify({ targets }),
+      const outbound = await resolveImportFeedOutbound(deps?.outbound, envSlice);
+      const response = await outbound.request({
+        body: new TextEncoder().encode(JSON.stringify({ targets })),
         headers: {
-          authorization: `Bearer ${env.REVALIDATE_SECRET}`,
+          authorization: `Bearer ${envSlice.REVALIDATE_SECRET}`,
           "content-type": "application/json",
         },
+        maxResponseBytes: 64 * 1024,
         method: "POST",
+        timeoutMs: 15_000,
+        url: new URL("/api/internal/revalidate", envSlice.INTERNAL_REVALIDATE_BASE_URL),
       });
-      if (!response.ok) {
+      if (response.status < 200 || response.status >= 300) {
         throw new Error("internal revalidate failed");
       }
     },
