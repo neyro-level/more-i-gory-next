@@ -12,8 +12,8 @@ Platform.
 
 - public site сохраняет проектную систему «premium / calm / evidence-led»;
 - Payload Admin остаётся native CMS-интерфейсом и не копирует публичный бренд;
-- reusable primitives живут в `src/components/**`; `packages/ui` зарезервирован
-  и не является текущим owner;
+- reusable primitives живут в `src/components/**` (`FOLDER FORM = canonical`);
+  `packages/ui` помечен reserved/inactive и не является текущим owner;
 - страницы получают только DTO/contracts и не импортируют Payload persistence;
 - решение компонентов: 'REUSE → VARIANT → CREATE'.
 

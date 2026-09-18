@@ -4,7 +4,7 @@ import { unstable_cache } from "next/cache";
 import { getPayload } from "payload";
 
 import config from "../../../../payload.config.ts";
-import { fallbackSiteChrome, mapSiteChrome } from "./site-chrome-contract.ts";
+import { fallbackSiteChrome, mapSiteChrome, publicNavigationSelect, publicSiteSettingsSelect } from "./site-chrome-contract.ts";
 import type { SiteChrome } from "./site-chrome-contract.ts";
 
 export { fallbackSiteChrome, mapSiteChrome };
@@ -14,8 +14,8 @@ async function readSiteChrome(): Promise<SiteChrome> {
   try {
     const payload = await getPayload({ config });
     const [settings, navigation] = await Promise.all([
-      payload.findGlobal({ slug: "site-settings", depth: 0, overrideAccess: false }),
-      payload.findGlobal({ slug: "navigation", depth: 0, overrideAccess: false }),
+      payload.findGlobal({ slug: "site-settings", depth: 0, overrideAccess: false, select: publicSiteSettingsSelect }),
+      payload.findGlobal({ slug: "navigation", depth: 0, overrideAccess: false, select: publicNavigationSelect }),
     ]);
 
     return mapSiteChrome(settings, navigation);

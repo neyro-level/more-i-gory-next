@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { SiteChrome, SiteNavigationLink } from "@/core/data-access/public";
+import type { SiteChrome, SiteNavigationLink } from "@/core/dto";
 import { Container } from "./container";
 
 type SiteFooterProps = Readonly<{

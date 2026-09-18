@@ -3,7 +3,7 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { RiskBlock } from "@/components/marketing/risk-block";
 import { SourceList } from "@/components/marketing/source-list";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
-import type { PublicPropertyDTO } from "@/core/data-access/public";
+import type { PublicPropertyDTO } from "@/core/dto";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ObjectCard } from "@/components/marketing/object-card";
 

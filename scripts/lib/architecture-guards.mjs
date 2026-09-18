@@ -128,6 +128,24 @@ function isForbiddenUiSpecifier(specifier) {
   );
 }
 
+const registeredPresentationAdapters = new Set();
+
+function isPresentationLayer(filePath) {
+  return filePath.startsWith("src/components/") || filePath.startsWith("src/ui/");
+}
+
+function isForbiddenPresentationSpecifier(specifier) {
+  return (
+    specifier === "@/payload-types" ||
+    specifier.startsWith("@/payload-types/") ||
+    specifier === "payload" ||
+    specifier.startsWith("payload/") ||
+    specifier.startsWith("@payloadcms/") ||
+    specifier.startsWith("@/project/") ||
+    specifier.startsWith("@/core/data-access/")
+  );
+}
+
 function isForbiddenUiDependency(name) {
   return (
     name === "payload" ||
@@ -253,6 +271,19 @@ export function findArchitectureGuardViolations({ files, manifests }) {
       for (const specifier of moduleSpecifiers(content)) {
         if (isForbiddenUiSpecifier(specifier)) {
           addViolation(violations, 9, filePath, `packages/ui must not depend on persistence or project data layers, got ${specifier}`);
+        }
+      }
+    }
+
+    if (isPresentationLayer(filePath) && !registeredPresentationAdapters.has(filePath)) {
+      for (const specifier of moduleSpecifiers(content)) {
+        if (isForbiddenPresentationSpecifier(specifier)) {
+          addViolation(
+            violations,
+            9,
+            filePath,
+            `presentation layer must not import Payload, project env or Public Gateway, got ${specifier}`,
+          );
         }
       }
     }

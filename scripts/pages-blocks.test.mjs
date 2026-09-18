@@ -51,4 +51,6 @@ test("page block registry covers every approved block and fails unknown blocks",
   }
 
   assert.match(registrySource, /Unknown page block/);
+  assert.match(registrySource, /CmsPageBlockDTO/);
+  assert.doesNotMatch(registrySource, /payload-types/);
 });

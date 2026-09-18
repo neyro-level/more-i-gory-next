@@ -90,6 +90,24 @@ Exact toolchain первого релиза:
 Также используется `concurrently` для совместного локального запуска Next.js и Velite.
 Exact versions фиксируются в `package.json` и lockfile без ranges.
 
+## 2.1. Package strategy
+
+```text
+FOLDER FORM = canonical
+```
+
+Публичный UI живёт в `src/components/**` и `src/ui/**`. Массовый перенос в
+`packages/ui` запрещён.
+
+| Package | Статус |
+|---|---|
+| `packages/contracts` (`@more-i-gory/contracts`) | active — shared DTO/schemas |
+| `packages/ui` (`@more-i-gory/ui`) | reserved / inactive — workspace package сохранён |
+
+`packages/ui` остаётся в `pnpm-workspace.yaml`, чтобы не ломать lockfile в середине
+remediation. Вопрос об удалении пакета возвращается после EPIC 32
+(`docs/OWNER_QUEUE.md`).
+
 shadcn contract:
 - официальный встроенный registry `@shadcn`; он доступен CLI даже при
   `"registries": {}` в `components.json`;

@@ -1,6 +1,12 @@
-import type { Page } from "@/payload-types";
+import type { CmsPageDTO } from "@/core/dto";
 import { renderPageBlock } from "./page-block-registry";
 
-export function CmsPage({ page }: { page: Page }) {
-  return <main>{page.blocks.map((block) => <section key={block.id ?? block.blockType}>{renderPageBlock(block)}</section>)}</main>;
+export function CmsPage({ page }: { page: CmsPageDTO }) {
+  return (
+    <main>
+      {page.blocks.map((block, index) => (
+        <section key={`${block.blockType}-${index}`}>{renderPageBlock(block)}</section>
+      ))}
+    </main>
+  );
 }

@@ -53,3 +53,18 @@ test("site chrome maps CMS globals and falls back only for empty slots", async (
   assert.deepEqual(chrome.navigation.footer, fallbackSiteChrome.navigation.footer);
   assert.deepEqual(chrome.navigation.legal, [{ href: "/legal/", label: "Legal", nofollow: false, openInNewTab: false }]);
 });
+
+test("site chrome gateway uses explicit select, access mode and Zod DTO", () => {
+  const gateway = readFileSync("src/core/data-access/public/site-chrome.ts", "utf8");
+  const contract = readFileSync("src/core/data-access/public/site-chrome-contract.ts", "utf8");
+  const headerSource = readFileSync("src/components/layout/site-header.tsx", "utf8");
+  const footerSource = readFileSync("src/components/layout/site-footer.tsx", "utf8");
+
+  assert.match(gateway, /select:\s*publicSiteSettingsSelect/);
+  assert.match(gateway, /select:\s*publicNavigationSelect/);
+  assert.match(gateway, /overrideAccess:\s*false/);
+  assert.match(contract, /siteChromeSchema\.parse/);
+  assert.equal(contract.includes("payload-types"), false);
+  assert.equal(headerSource.includes("payload-types"), false);
+  assert.equal(footerSource.includes("payload-types"), false);
+});
