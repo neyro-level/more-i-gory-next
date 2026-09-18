@@ -247,6 +247,34 @@ test("retryable channel failure plans the next attempt before returning", async 
   assert.equal(runtime.queued.length, 1);
 });
 
+test("exhausted retryable attempts abandon the delivery", async () => {
+  const runtime = deliveryPayload();
+  runtime.payload.findByID = async (args) => {
+    if (args.collection === "lead-deliveries") return { ...loadedDelivery, attempts: 5 };
+    return loadedLead;
+  };
+  const status = await deliverLead({
+    leadDeliveryId: "501",
+    now: new Date("2026-09-17T12:00:00.000Z"),
+    payload: runtime.payload,
+    resolveChannel: () => ({
+      id: "probe",
+      async deliver() {
+        throw new LeadDeliveryFailure({
+          deliveryCertainty: "unknown",
+          redactedMessage: "probe_timeout",
+          retryable: true,
+          safeCode: "probe_timeout",
+        });
+      },
+    }),
+  });
+
+  assert.equal(status, "abandoned");
+  assert.equal(runtime.updates[1].data.status, "abandoned");
+  assert.equal(runtime.queued.length, 0);
+});
+
 test("missing channel fails closed without outbound work", async () => {
   const runtime = deliveryPayload();
   const status = await deliverLead({

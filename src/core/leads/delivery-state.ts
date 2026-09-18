@@ -16,6 +16,7 @@ export type LeadDeliveryRetryPlanInput = Readonly<{
   backoffMs: readonly number[];
   failure: Pick<LeadDeliveryFailure, "deliveryCertainty" | "redactedMessage" | "retryable" | "safeCode">;
   maxAttemptLogRows?: number;
+  maxAttempts?: number;
   now: Date;
 }>;
 
@@ -25,7 +26,7 @@ export type LeadDeliveryRetryPlan = Readonly<{
   enqueueNextAttempt: boolean;
   lastErrorRedacted: string;
   nextAttemptAt?: string;
-  status: "failed" | "pending";
+  status: "abandoned" | "failed" | "pending";
 }>;
 
 const defaultMaxAttemptLogRows = 20;
@@ -54,6 +55,7 @@ export function planRetryableLeadDeliveryFailure(input: LeadDeliveryRetryPlanInp
     ],
     input.maxAttemptLogRows ?? defaultMaxAttemptLogRows,
   );
+  const maxAttempts = input.maxAttempts ?? input.backoffMs.length;
 
   if (!input.failure.retryable) {
     return {
@@ -62,6 +64,22 @@ export function planRetryableLeadDeliveryFailure(input: LeadDeliveryRetryPlanInp
       enqueueNextAttempt: false,
       lastErrorRedacted: input.failure.redactedMessage,
       status: "failed",
+    };
+  }
+
+  if (attempts >= maxAttempts) {
+    return {
+      attempts,
+      attemptLog: compactAttemptLog(
+        [
+          ...attemptLog.slice(0, -1),
+          { ...attemptLog[attemptLog.length - 1], outcome: "abandoned" },
+        ],
+        input.maxAttemptLogRows ?? defaultMaxAttemptLogRows,
+      ),
+      enqueueNextAttempt: false,
+      lastErrorRedacted: input.failure.redactedMessage,
+      status: "abandoned",
     };
   }
 

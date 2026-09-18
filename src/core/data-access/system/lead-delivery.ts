@@ -18,7 +18,7 @@ type LeadDeliveryFailurePlan = {
   enqueueNextAttempt: boolean;
   lastErrorRedacted: string;
   nextAttemptAt?: string;
-  status: "failed" | "pending";
+  status: "abandoned" | "failed" | "pending";
 };
 
 type LeadDeliveryRecord = {
@@ -199,7 +199,7 @@ export async function markLeadDeliverySent(
 export async function recordLeadDeliveryFailureAndMaybeRetry(
   payload: PayloadLike,
   input: LeadDeliveryTransitionInput & { plan: LeadDeliveryFailurePlan },
-): Promise<"failed" | "retry_scheduled"> {
+): Promise<"abandoned" | "failed" | "retry_scheduled"> {
   await payload.update({
     collection: "lead-deliveries",
     data: {
@@ -231,7 +231,7 @@ export async function recordLeadDeliveryFailureAndMaybeRetry(
     return "retry_scheduled";
   }
 
-  return "failed";
+  return input.plan.status === "abandoned" ? "abandoned" : "failed";
 }
 
 export async function recoverLeadDeliveries(

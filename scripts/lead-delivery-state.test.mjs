@@ -37,6 +37,27 @@ test("retryable delivery failure plans a pending retry without throwing", () => 
   ]);
 });
 
+test("retryable failure is abandoned after the backoff ladder is exhausted", () => {
+  const plan = planRetryableLeadDeliveryFailure({
+    attempts: 5,
+    backoffMs: leadDeliveryBackoffMs,
+    failure: new LeadDeliveryFailure({
+      deliveryCertainty: "unknown",
+      redactedMessage: "Telegram lead delivery failed.",
+      retryable: true,
+      safeCode: "telegram_unavailable",
+    }),
+    maxAttempts: leadDeliveryBackoffMs.length,
+    now,
+  });
+
+  assert.equal(plan.status, "abandoned");
+  assert.equal(plan.attempts, 6);
+  assert.equal(plan.enqueueNextAttempt, false);
+  assert.equal(plan.nextAttemptAt, undefined);
+  assert.equal(plan.attemptLog.at(-1)?.outcome, "abandoned");
+});
+
 test("non-retryable delivery failure plans failed status without enqueue", () => {
   const plan = planRetryableLeadDeliveryFailure({
     attempts: 1,
@@ -131,6 +152,40 @@ test("retryable failure updates delivery state and enqueues the next attempt wit
     task: "deliverLead",
     waitUntil: new Date("2026-09-17T12:01:00.000Z"),
   });
+});
+
+test("exhausted retry plan records abandoned without enqueueing another job", async () => {
+  const queued = [];
+  const plan = planRetryableLeadDeliveryFailure({
+    attempts: 5,
+    backoffMs: leadDeliveryBackoffMs,
+    failure: new LeadDeliveryFailure({
+      deliveryCertainty: "unknown",
+      redactedMessage: "Telegram lead delivery failed.",
+      retryable: true,
+      safeCode: "telegram_unavailable",
+    }),
+    now,
+  });
+  const payload = {
+    jobs: {
+      async queue(args) {
+        queued.push(args);
+      },
+    },
+    async update(args) {
+      return { docs: [{ id: "501" }], data: args.data };
+    },
+  };
+
+  const result = await recordLeadDeliveryFailureAndMaybeRetry(payload, {
+    leadDeliveryId: "501",
+    plan,
+  });
+
+  assert.equal(result, "abandoned");
+  assert.equal(plan.status, "abandoned");
+  assert.deepEqual(queued, []);
 });
 
 test("non-retryable failure updates delivery state without enqueueing another job", async () => {

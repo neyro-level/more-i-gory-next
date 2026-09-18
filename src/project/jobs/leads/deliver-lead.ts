@@ -19,7 +19,7 @@ type DeliverLeadTask = {
     leadDeliveryId: string;
   };
   output: {
-    status: "failed" | "missing" | "retry_scheduled" | "sent" | "skipped";
+    status: "abandoned" | "failed" | "missing" | "retry_scheduled" | "sent" | "skipped";
   };
 };
 
@@ -81,13 +81,14 @@ async function recordFailure(
     channelId?: string;
     failure: LeadDeliveryFailure;
   },
-): Promise<"failed" | "retry_scheduled"> {
+): Promise<"abandoned" | "failed" | "retry_scheduled"> {
   const now = runtime.now ?? new Date();
   const plan = planRetryableLeadDeliveryFailure({
     attemptLog: input.attemptLog,
     attempts: input.attempts,
     backoffMs: leadDeliveryBackoffMs,
     failure: input.failure,
+    maxAttempts: leadDeliveryBackoffMs.length,
     now,
   });
   const logger = runtime.logger ?? silentLogger();
