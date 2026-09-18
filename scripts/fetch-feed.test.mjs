@@ -131,7 +131,15 @@ test("importFeed composition fetches after resolving the env-named URL", async (
     async findByID(args) {
       if (args.select?.feedUrlRef) return { feedUrlRef: "FEED_URL_PRIMARY" };
       if (args.select?.parser) return { parser: "yrl" };
+      if (args.select?.market) return { market: "newbuild" };
       return { lastEtag: '"abc"', lastModified: null };
+    },
+    async find() {
+      return { docs: [] };
+    },
+    async create(args) {
+      writes.push(args);
+      return { id: 900 };
     },
   };
 
@@ -157,9 +165,13 @@ test("importFeed composition fetches after resolving the env-named URL", async (
 
   assert.equal(requests[0].headers["If-None-Match"], '"abc"');
   assert.equal(result.state.fetch?.status, 200);
-  assert.equal(result.pendingStage, "upsert");
+  assert.equal(result.pendingStage, "record-issues");
   assert.equal(result.state.conditional?.kind, "read-body");
   assert.equal(result.state.parse?.suspicious, false);
+  assert.equal(result.state.upsert?.createdCount, 1);
   assert.equal(JSON.stringify(requests[0].headers).includes("https://"), false);
-  assert.equal(writes.some((write) => write.collection === "properties"), false);
+  const created = writes.find((write) => write.collection === "properties");
+  assert.equal(created.data.origin, "feed");
+  assert.equal(created.data.externalId, "flat-1");
+  assert.equal("source" in created.data, false);
 });

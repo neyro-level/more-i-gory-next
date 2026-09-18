@@ -38,6 +38,9 @@
 | `src/core/data-access/public/site-chrome.ts:15` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/site-chrome.ts:17` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "site-settings", depth: 0, overrideAccess: false, select: publicSiteSettingsSelect }),` |
 | `src/core/data-access/public/site-chrome.ts:18` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "navigation", depth: 0, overrideAccess: false, select: publicNavigationSelect }),` |
+| `src/core/data-access/system/apply-feed-upsert.ts:49` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/system/apply-feed-upsert.ts:85` | `create` | SYSTEM GATEWAY | `return payload.create({` |
+| `src/core/data-access/system/apply-feed-upsert.ts:97` | `update` | SYSTEM GATEWAY | `await payload.update({` |
 | `src/core/data-access/system/bootstrap-owner.ts:14` | `getPayload` | SYSTEM GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/system/bootstrap-owner.ts:16` | `find` | SYSTEM GATEWAY | `const owners = await payload.find({` |
 | `src/core/data-access/system/bootstrap-owner.ts:27` | `create` | SYSTEM GATEWAY | `await payload.create({` |
@@ -81,7 +84,7 @@
 | `src/project/collections/redirects.ts:15` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/collections/redirects.ts:23` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/jobs/imports/dispatch-due-feeds.ts:24` | `req.payload` | SYSTEM GATEWAY | `const result = await dispatchDueFeeds(req.payload as unknown as Parameters<typeof dispatchDueFeeds>[0]);` |
-| `src/project/jobs/imports/import-feed.ts:91` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as ImportFeedPayload,` |
+| `src/project/jobs/imports/import-feed.ts:108` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as ImportFeedPayload,` |
 | `src/project/jobs/leads/deliver-lead.ts:189` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as PayloadLike,` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:94` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof jobsJanitor>[0],` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:121` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof recoverLeadDeliveries>[0],` |

@@ -3,8 +3,11 @@ import type { TaskConfig } from "payload";
 import { loadFeedSourceConditionalState } from "../../../core/data-access/system/load-feed-source-conditional.ts";
 import { loadFeedSourceParser } from "../../../core/data-access/system/load-feed-source-parser.ts";
 import { loadFeedSourceUrlRef } from "../../../core/data-access/system/load-feed-source-url-ref.ts";
+import { loadFeedSourceMarket } from "../../../core/data-access/system/load-feed-source-market.ts";
+import { findPropertiesByExternalId } from "../../../core/data-access/system/apply-feed-upsert.ts";
 import { createClassifyConditionalHandler } from "../../../core/ingest/classify-conditional.ts";
 import { createFetchFeedHandler, parseOutboundAllowedHosts } from "../../../core/ingest/fetch-feed.ts";
+import { createUpsertFeedHandler } from "../../../core/ingest/upsert-feed.ts";
 import { createNormalizeFeedHandler } from "../../../core/ingest/normalize-feed.ts";
 import { createParseFeedHandler } from "../../../core/ingest/parse-feed.ts";
 import { createResolveFeedUrlHandler } from "../../../core/ingest/resolve-feed-url.ts";
@@ -32,7 +35,9 @@ type ImportFeedTask = {
 type ImportFeedPayload = Parameters<typeof transitionImportRunToRunning>[0] &
   Parameters<typeof loadFeedSourceUrlRef>[0] &
   Parameters<typeof loadFeedSourceConditionalState>[0] &
-  Parameters<typeof loadFeedSourceParser>[0];
+  Parameters<typeof loadFeedSourceParser>[0] &
+  Parameters<typeof loadFeedSourceMarket>[0] &
+  Parameters<typeof findPropertiesByExternalId>[0];
 
 export function createImportFeedPipelineHandlers(
   payload: ImportFeedPayload,
@@ -40,7 +45,13 @@ export function createImportFeedPipelineHandlers(
   outbound: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>),
 ): Partial<
   Record<
-    "claim-running" | "resolve-feed-url" | "fetch" | "classify-conditional" | "parse" | "normalize",
+    | "claim-running"
+    | "resolve-feed-url"
+    | "fetch"
+    | "classify-conditional"
+    | "parse"
+    | "normalize"
+    | "upsert",
     IngestStageHandler
   >
 > {
@@ -63,6 +74,7 @@ export function createImportFeedPipelineHandlers(
       loadParser: (feedSourceId) => loadFeedSourceParser(payload, feedSourceId),
     }),
     normalize: createNormalizeFeedHandler(),
+    upsert: createUpsertFeedHandler({ payload }),
   };
 }
 
