@@ -185,7 +185,7 @@ CACHE_INVALIDATION_MODE=http
 | Lead outbound policy | `LEAD_OUTBOUND_HOSTS` | exact allowlist |
 | Lead channel | не настроен; канал оповещений исключён из текущей программы |
 | Alerts | `ALERT_WEBHOOK_URL` | optional secret integration |
-| Feed sources | `FEED_SOURCE_*` | только при configured ingest source |
+| Feed sources | `FEED_SOURCE_*` | optional; freeze — не обязательны и не включают ingest после деплоя |
 
 `src/project/env.ts` обязан fail closed и валидировать только env включённых
 модулей. Полный env dump запрещён.

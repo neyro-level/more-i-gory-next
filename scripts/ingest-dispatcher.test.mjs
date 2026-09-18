@@ -117,7 +117,7 @@ test("jobs config registers dispatchDueFeeds schedule and importFeed target", ()
   assert.ok(taskSlugs.includes("systemHealth"));
   assert.ok(taskSlugs.includes("dispatchDueFeeds"));
   assert.ok(taskSlugs.includes("importFeed"));
-  assert.deepEqual(dispatchTask?.schedule, [{ cron: "0 0/5 * * * *", queue: "system" }]);
+  assert.deepEqual(dispatchTask?.schedule, []);
   assert.deepEqual(importTask?.concurrency, {
     exclusive: true,
     key: importTask.concurrency.key,
