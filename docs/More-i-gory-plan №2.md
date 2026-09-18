@@ -3,7 +3,7 @@
 
 ```text
 Plan ID: more-i-gory-remediation-2026-09
-Version: v2
+Version: v3
 Status: REVIEW
 Delivery profile: COMMERCIAL
 Canonical repository: SourceCraft integrator-p/more-i-gory-next
@@ -11,9 +11,27 @@ GitHub mirror: neyro-level/more-i-gory-next (не primary)
 Base SHA: 27ea4c2393e970797da50c7dc78b614f815820bb
 Platform: Realty Platform / REALTY_BASE / BUILD
 UX: PUBLIC_COMMERCIAL
+Epic numbering: continues project history (0–18 заняты); remediation = EPIC 19–33 + существующий EPIC 13
 Task Manager import: not allowed until «План утверждён»
-Default epic delivery_mode: MERGE_AFTER_GATE (явное намерение §1.2; ждёт подтверждения владельца)
+Default epic delivery_mode: MERGE_AFTER_GATE (подтверждено владельцем 2026-09-18)
 ```
+
+## Конституции проекта
+
+Проект сверяется с двумя каноническими документами в этом репозитории:
+
+| Документ | Область |
+|---|---|
+| [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) | технический стек, data/security boundaries, gateways, feeds, leads, jobs, deployment |
+| [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) | как собирается UI: primitives, Design System, tokens, composition, REUSE → VARIANT → CREATE |
+
+Правила применения:
+
+1. Обе конституции — нормативные. Расхождение кода с ними является дефектом, а не стилем.
+2. Приоритет при конфликте: фактический код и lockfile определяют **текущее** состояние; конституция определяет **целевое**. Разрыв фиксируется как задача, а не замалчивается.
+3. Допускаются осознанные исключения — ориентировочно до 5% решений — но каждое записывается явно: что отклонено, почему, где зафиксировано. Молчаливое отклонение запрещено.
+4. UI-задачи дополнительно проходят разделы 3–4 UI Core (Project Technical Core и Design System); при отсутствии Design System — раздел 6 Design Intake.
+5. Конституции не копируются в другие документы и не переписываются задачами плана.
 
 **Базовый аудит:** `origin/main` @ `27ea4c2393e970797da50c7dc78b614f815820bb`  
 **Нормативная база:** AMS Realty Platform Core 5.5 + AMS UI Core 5.0 (решение владельца)  
@@ -32,7 +50,7 @@ Default epic delivery_mode: MERGE_AFTER_GATE (явное намерение §1.
 
 План закрывает цепочку: access → DTO → schema/deactivation → jobs → leads E2E → ingest E2E → cache/publish → SEO → regions → UI → outbound → S3 → Timeweb → proofs → release. Human gates (secrets, domain cutover, production) вынесены. Definition of Done и STOP-условия есть.
 
-Пробелы: нет явного `Plan ID`/inventory schema v2 до approval; в списке чтения нет `docs/05_RELEASE_CHECKLIST.md` и `docs/02_PRODUCT_STRUCTURE.md` (нужны EPIC 08/09/15); нумерация EPIC 00–15 — **новая программа**, не продолжение старых EPIC 0–18 бэклога.
+Пробелы: нет явного `Plan ID`/inventory schema v2 до approval; в списке чтения нет `docs/05_RELEASE_CHECKLIST.md` и `docs/02_PRODUCT_STRUCTURE.md` (нужны EPIC 28/29/33); нумерация — требуется решение владельца: продолжать историю или начинать вторую шкалу.
 
 ### Pass 2 — architecture / data / security
 
@@ -47,22 +65,31 @@ Default epic delivery_mode: MERGE_AFTER_GATE (явное намерение §1.
 
 ### Pass 3 — execution / delivery / rollback
 
-Задачи достаточно атомарны для Beads. Proof-скрипты, которых ещё нет в `package.json`, создавать внутри эпика — это нормально. EPIC 15 правильно отделён от разработки. Rollback артефакта есть в EPIC 13/15.
+Задачи достаточно атомарны для Beads. Proof-скрипты, которых ещё нет в `package.json`, создавать внутри эпика — это нормально. EPIC 33 правильно отделён от разработки. Rollback артефакта есть в EPIC 13/33.
 
-Риск исполнения: §1.2 требует gate+merge каждого эпика (`MERGE_AFTER_GATE`). Default AMS — `PR_ONLY`. Нужно явное слово владельца.
+Риск исполнения: §1.2 требует gate+merge каждого эпика (`MERGE_AFTER_GATE`) вместо AMS default `PR_ONLY`. Владелец подтвердил `MERGE_AFTER_GATE` 2026-09-18.
 
 ### Findings
 
 | ID | Class | Finding |
 |---|---|---|
 | F1 | ACCEPTED | Главный дефект «код есть, E2E нет» подтверждён на leads/ingest/janitor. |
-| F2 | ACCEPTED | EPIC 01–02, 05–06, 04.1/04.4 — правильный порядок блокеров. |
+| F2 | ACCEPTED | EPIC 20–21, 23, 25.1/25.4, 26 — правильный порядок блокеров. |
 | F3 | ACCEPTED | Канонический Git — SourceCraft `integrator-p/more-i-gory-next`, не GitHub slug в шапке. |
-| F4 | ALREADY_COVERED | Часть EPIC 00 (NOW/NEXT, OPERATIONS TODO) уже в PR 45; остаётся разделение IMPLEMENTED/PARTIAL/NOT_PROVEN и ADR superseded. |
-| F5 | RESOLVED | Норматив — 5.5 (решение владельца). Где 5.5 локально нет, исполняется совместимый Core 3.0 Hard Contract. |
-| F6 | NEEDS_OWNER | `MERGE_AFTER_GATE` на каждый эпик или `PR_ONLY` до финальных волн? |
-| F7 | NEEDS_OWNER | Подтвердить, что программа EPIC 00–15 **заменяет** старый NOW=EPIC 13 в бэклоге, а не идёт параллельно. |
-| F8 | NEEDS_OWNER | EPIC 06 Secret Master feed URL: runtime injection без нового secret API в репозитории — ок как STOP, или нужен отдельный owner contour сразу? |
+| F4 | ALREADY_COVERED | Часть EPIC 19 (NOW/NEXT, OPERATIONS TODO) уже в PR 45; остаётся разделение IMPLEMENTED/PARTIAL/NOT_PROVEN и ADR superseded. |
+| F5 | RESOLVED | Норматив — 5.5. Обе конституции положены в `docs/` и объявлены нормативными (см. раздел «Конституции проекта»). |
+| F6 | RESOLVED | `MERGE_AFTER_GATE` после каждого эпика. Параллельность — только между независимыми эпиками (§1.2.1). |
+| F7 | RESOLVED | Сквозная нумерация проекта сохраняется: remediation занимает EPIC 19–33, существующий EPIC 13 остаётся собой. |
+| F8 | RESOLVED | Секрет фида остаётся снаружи: runtime injection, в репозиторий не кладётся. Новый secret-API не вводится. |
+
+## Owner decisions — 2026-09-18 (v3)
+
+| Решение | Что зафиксировано в плане |
+|---|---|
+| Merge после каждого эпика | `delivery_mode = MERGE_AFTER_GATE` по умолчанию; §1.2.1 объясняет, почему «фоновый merge» по зависимой цепочке не применяется, и где допустима параллельная работа |
+| Нумерация продолжает историю проекта | §2.0: remediation = EPIC 19–33, существующий EPIC 13 сохранён; таблица соответствия черновым номерам |
+| Секрет фида остаётся снаружи | TASK 26.2: runtime injection, ничего в репозиторий |
+| Две конституции | Раздел «Конституции проекта» + TASK 19.5b по фиксации в канонe; допустимы явно записанные исключения |
 
 ## External revision — 2026-09-18 (v2)
 
@@ -70,26 +97,26 @@ Default epic delivery_mode: MERGE_AFTER_GATE (явное намерение §1.
 
 | ID | Class | Проверка по коду | Что сделано в плане |
 |---|---|---|---|
-| A1 cron dialect | ACCEPTED | `scheduled-tasks.ts` и `dispatch-due-feeds.ts` используют форму `0/5`; смешение с `*/5` нежелательно | TASK 04.1 → `"0 0/5 * * * *"`; TASK 04.2 проверяет единый диалект шага |
-| A2 retry без `abandoned` | ACCEPTED | `planRetryableLeadDeliveryFailure` возвращает только `"failed" \| "pending"`; backoff зажат `Math.min(attempts, len-1)`; производителя `abandoned` нет | TASK 05.5 переписан на `maxAttempts` + расширение типов; помечен RISKY |
-| A3 attempts не читаются | ACCEPTED | `planRetryableLeadDeliveryFailure` требует `attempts`/`attemptLog`, которых нет в `LeadDeliveryPayload` | TASK 05.3 возвращает `{payload, attempts, attemptLog, channelId}` |
-| A4 путь channel-registry | ACCEPTED с уточнением | `src/project/leads/` не существует. Guard 1 блокирует по allow-list `privilegedSystemFiles` **только файлы с `overrideAccess: true`** | Добавлен TASK 05.1.1: registry сам не использует `overrideAccess`; в allow-list регистрируется System Gateway helper из 05.3 |
-| A5 verification-only | ACCEPTED | `test:leads-privacy` и `test:public-inventory-boundary` существуют | Правило внесено в §1.3; TASK 01.6 переведён в verification-first |
-| A6 дыра в `verify:quick` | ACCEPTED, цифра уточнена | Проверено скриптом: из 57 `test:*` вне `verify:quick` ровно один — `test:lead-delivery-admin` | Добавлен TASK 00.7 с machine-check |
-| A7 revalidate уже есть | ACCEPTED | `src/app/api/internal/revalidate/route.ts` + `test:internal-revalidate` существуют | TASK 07.6 переформулирован на доказательство сквозного пути |
-| B1 нет дедупликации | ACCEPTED | `idempotencyKey` есть в коллекции (unique) и в `LeadDeliveryPayload`, но Telegram его не принимает | Добавлен TASK 05.11 |
-| B2 владелец `nextDueAt` | ACCEPTED | `dispatchDueFeeds` сдвигает `nextDueAt` только при claim; пост-run поведения нет | Добавлен TASK 06.15 |
-| B3 путь ручного retry | ACCEPTED | `retryAbandonedLeadDelivery` + `manualRetryAudit` реализованы, операторский путь нигде не описан | Добавлен TASK 05.12 |
+| A1 cron dialect | ACCEPTED | `scheduled-tasks.ts` и `dispatch-due-feeds.ts` используют форму `0/5`; смешение с `*/5` нежелательно | TASK 25.1 → `"0 0/5 * * * *"`; TASK 25.2 проверяет единый диалект шага |
+| A2 retry без `abandoned` | ACCEPTED | `planRetryableLeadDeliveryFailure` возвращает только `"failed" \| "pending"`; backoff зажат `Math.min(attempts, len-1)`; производителя `abandoned` нет | TASK 23.5 переписан на `maxAttempts` + расширение типов; помечен RISKY |
+| A3 attempts не читаются | ACCEPTED | `planRetryableLeadDeliveryFailure` требует `attempts`/`attemptLog`, которых нет в `LeadDeliveryPayload` | TASK 23.3 возвращает `{payload, attempts, attemptLog, channelId}` |
+| A4 путь channel-registry | ACCEPTED с уточнением | `src/project/leads/` не существует. Guard 1 блокирует по allow-list `privilegedSystemFiles` **только файлы с `overrideAccess: true`** | Добавлен TASK 23.1.1: registry сам не использует `overrideAccess`; в allow-list регистрируется System Gateway helper из TASK 23.3 |
+| A5 verification-only | ACCEPTED | `test:leads-privacy` и `test:public-inventory-boundary` существуют | Правило внесено в §1.3; TASK 20.6 переведён в verification-first |
+| A6 дыра в `verify:quick` | ACCEPTED, цифра уточнена | Проверено скриптом: из 57 `test:*` вне `verify:quick` ровно один — `test:lead-delivery-admin` | Добавлен TASK 19.7 с machine-check |
+| A7 revalidate уже есть | ACCEPTED | `src/app/api/internal/revalidate/route.ts` + `test:internal-revalidate` существуют | TASK 27.6 переформулирован на доказательство сквозного пути |
+| B1 нет дедупликации | ACCEPTED | `idempotencyKey` есть в коллекции (unique) и в `LeadDeliveryPayload`, но Telegram его не принимает | Добавлен TASK 23.11 |
+| B2 владелец `nextDueAt` | ACCEPTED | `dispatchDueFeeds` сдвигает `nextDueAt` только при claim; пост-run поведения нет | Добавлен TASK 26.15 |
+| B3 путь ручного retry | ACCEPTED | `retryAbandonedLeadDelivery` + `manualRetryAudit` реализованы, операторский путь нигде не описан | Добавлен TASK 23.12 |
 | B4 PII в логах | ACCEPTED | `test:lead-delivery-secrets` — статический контракт, runtime-захвата stdout нет | Добавлен proof 14.K |
-| B5 один jobs owner | ACCEPTED | Machine-check отсутствует | TASK 04.8 помечен `OWNER_DECISION_REQUIRED` с тремя вариантами |
+| B5 один jobs owner | ACCEPTED | Machine-check отсутствует | TASK 25.8 помечен `OWNER_DECISION_REQUIRED` с тремя вариантами |
 | B6 scope deviations | ACCEPTED | — | Поле добавлено в §4 |
-| C1 cron раньше | ACCEPTED | Дефект активен при первом включении jobs | TASK 04.1/04.2 продублированы в EPIC 00 как hotfix |
-| C2 EPIC 11 перед 05 | ACCEPTED | `deliverLead` пойдёт поверх Safe Outbound Client | Порядок изменён; §2 и §5 обновлены |
-| D1 формулировка access | ACCEPTED | Буквальное `read: () => false` положит Admin | TASK 01.3 усилен до различения anonymous/authenticated |
-| D2 `packages/ui` | ACCEPTED | Удаление в середине remediation бессмысленно рискованно | TASK 02.6 — только `reserved/inactive` |
-| D3 enum migration | ACCEPTED | Пересекается со стоп-фактором §1.4 | TASK 03.1 помечен `OWNER_DECISION_REQUIRED` |
-| D4 301 vs 410 | ACCEPTED | — | Пометка продублирована в TASK 08.4 |
-| E формулировки | ACCEPTED | — | §1.1, §1.5, Guard D, EPIC 14 обновлены |
+| C1 cron раньше | ACCEPTED | Дефект активен при первом включении jobs | TASK 25.1/04.2 продублированы в EPIC 19 как hotfix |
+| C2 транспорт перед доставкой (EPIC 22 перед 23) | ACCEPTED | `deliverLead` пойдёт поверх Safe Outbound Client | Порядок изменён; §2 и §5 обновлены |
+| D1 формулировка access | ACCEPTED | Буквальное `read: () => false` положит Admin | TASK 20.3 усилен до различения anonymous/authenticated |
+| D2 `packages/ui` | ACCEPTED | Удаление в середине remediation бессмысленно рискованно | TASK 21.6 — только `reserved/inactive` |
+| D3 enum migration | ACCEPTED | Пересекается со стоп-фактором §1.4 | TASK 24.1 помечен `OWNER_DECISION_REQUIRED` |
+| D4 301 vs 410 | ACCEPTED | — | Пометка продублирована в TASK 28.4 |
+| E формулировки | ACCEPTED | — | §1.1, §1.5, Guard D, EPIC 32 обновлены |
 
 Отклонённых findings нет.
 
@@ -127,6 +154,8 @@ Default epic delivery_mode: MERGE_AFTER_GATE (явное намерение §1.
 Перед каждым эпиком AI читает только:
 
 1. `AGENTS.md`
+1a. `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md` — техническая конституция
+1b. `docs/AMS_UI_CORE_v5.0_FINAL.md` — UI-конституция (для UI-задач обязательно)
 2. `docs/README.md`
 3. `docs/PROJECT.md`
 4. `docs/03_ARCHITECTURE.md`
@@ -135,8 +164,8 @@ Default epic delivery_mode: MERGE_AFTER_GATE (явное намерение §1.
 7. `docs/DESIGN.md`
 8. `docs/TECHNICAL_CORE.md`
 9. `package.json` и `pnpm-lock.yaml` — фактический стек и набор проверок
-10. `docs/02_PRODUCT_STRUCTURE.md` — для EPIC 08/09 (URL, index policy)
-11. `docs/05_RELEASE_CHECKLIST.md` — для EPIC 13/14/15
+10. `docs/02_PRODUCT_STRUCTURE.md` — для EPIC 28/09 (URL, index policy)
+11. `docs/05_RELEASE_CHECKLIST.md` — для EPIC 13/32/33
 12. профильные ADR
 13. этот Master Plan
 
@@ -161,13 +190,45 @@ main
 
 **Один эпик = одна ветка = один PR.** Direct push в `main` запрещён.
 
+`delivery_mode = MERGE_AFTER_GATE` для всех эпиков: после завершения эпика AI
+проводит review полного diff, запускает один exact-head gate и выполняет merge
+без повторного вопроса владельцу.
+
+## 1.2.1. Параллельность и «фоновый» merge
+
+Gate запускается headless и занимает минуты, поэтому отдельный «фоновый агент
+для merge» смысла не имеет и создаёт риск. Работает другое правило:
+
+```text
+зависимые эпики  → строго последовательно: gate → merge → следующий эпик
+независимые эпики → отдельный worktree + отдельная ветка, параллельно
+```
+
+Почему нельзя «мержить в фоне и сразу идти дальше» по зависимой цепочке:
+
+1. exact-head gate привязан к точному SHA; новый commit его инвалидирует;
+2. следующий эпик, начатый до merge, получает устаревшую базу и потребует rebase;
+3. цепочка 19 → 20 → 21 → 22 → 23 меняет одни и те же границы (access, DTO, транспорт, доставка) — параллельный merge даст конфликты в тех же файлах.
+
+Фактически независимы и могут идти параллельно:
+
+```text
+EPIC 30 (UI Core 5.0)
+EPIC 31 (S3 / media)
+EPIC 28 (SEO lifecycle) — после EPIC 27
+```
+
+Остальные эпики программы связаны по данным или границам и параллелятся только
+по отдельному решению владельца. Shared schema, security и release tooling
+не распараллеливаются никогда.
+
 Не коммитить напрямую в `main`.
 
 ## 1.3. Autonomous mode
 
 AI не запрашивает подтверждение на обычные технические решения, если:
 
-- решение прямо следует Core 5.5 / UI Core 5.0;
+- решение прямо следует локальным конституциям Core 5.5 / UI Core 5.0;
 - не меняется продуктовый смысл;
 - не добавляется новая инфраструктура;
 - не создаётся новый внешний provider;
@@ -266,48 +327,75 @@ exact-head SourceCraft RISKY gate
 
 # 2. Порядок эпиков
 
-Номера эпиков стабильны, меняется только порядок исполнения.
+## 2.0. Нумерация (v3)
+
+Проект уже израсходовал номера EPIC 0–18. Программа ремедиации **продолжает**
+сквозную нумерацию, а не начинает вторую шкалу с нуля.
+
+Существующие эпики сохраняются как есть:
 
 ```text
-EPIC 00  Baseline + Docs Source of Truth (+ cron hotfix, verify:quick audit)
-EPIC 01  Payload Access Boundary
-EPIC 02  DTO / Presentation Boundary
-EPIC 03  Schema Hardening + Safe Deactivation 5.5
-EPIC 04  Jobs Scheduler + Janitor + Recovery
-EPIC 05  Lead Delivery End-to-End
-EPIC 06  Ingest End-to-End
-EPIC 07  Runtime Publishing + Cache Invalidation
-EPIC 08  SEO / Sitemap / Archived Lifecycle
-EPIC 09  Regions Single Source of Truth
-EPIC 10  UI Core 5.0 Conformance
-EPIC 11  Outbound Security Hardening
-EPIC 12  S3 / Media Production Contract
-EPIC 13  Timeweb Runtime + Staging
-EPIC 14  Integration Proof Matrix
-EPIC 15  Production Release Gate
+EPIC 0–12, 15–17  DONE в main
+EPIC 13           Timeweb Runtime + Staging — существует, не переименовывается
+EPIC 14, 18       продуктовые: analytics posts и оставшиеся gates
 ```
 
-## 2.1. Порядок исполнения (v2)
+Таблица соответствия черновику v2 (старый рабочий номер → канонический):
+
+| Черновик v2 | Канонический номер | Название |
+|---|---|---|
+| 00 | **EPIC 19** | Baseline + Docs Source of Truth (+ cron hotfix, verify:quick audit) |
+| 01 | **EPIC 20** | Payload Access Boundary |
+| 02 | **EPIC 21** | DTO / Presentation Boundary |
+| 11 | **EPIC 22** | Outbound Security Hardening |
+| 05 | **EPIC 23** | Lead Delivery End-to-End |
+| 03 | **EPIC 24** | Schema Hardening + Safe Deactivation 5.5 |
+| 04 | **EPIC 25** | Jobs Scheduler + Janitor + Recovery |
+| 06 | **EPIC 26** | Ingest End-to-End |
+| 07 | **EPIC 27** | Runtime Publishing + Cache Invalidation |
+| 08 | **EPIC 28** | SEO / Sitemap / Archived Lifecycle |
+| 09 | **EPIC 29** | Regions Single Source of Truth |
+| 10 | **EPIC 30** | UI Core 5.0 Conformance |
+| 12 | **EPIC 31** | S3 / Media Production Contract |
+| 13 | **EPIC 13** | Timeweb Runtime + Staging — тот же эпик, ветка `codex/epic-13-runtime` |
+| 14 | **EPIC 32** | Integration Proof Matrix |
+| 15 | **EPIC 33** | Production Release Gate |
+
+Ниже по тексту заголовки эпиков сохраняют черновые номера как рабочие метки;
+канонический номер указан в таблице и используется в Task Manager, ветках и PR.
+
+Номера задач внутри эпика наследуют канонический номер: `TASK 19.1`, `TASK 23.5`
+и так далее.
+
+### EPIC 13 — не создавать заново
+
+Работа по EPIC 13 уже начата: ветка `codex/epic-13-runtime`, 6 коммитов
+(nginx security baseline, CSP, trailing slash, cache policy, atomic release
+runbook, operations runbook). Её нужно перебазировать на актуальный `main`,
+дополнить задачами из раздела EPIC 13 этого плана и довести до PR, а не писать с нуля.
+
+## 2.1. Порядок исполнения (v3)
 
 ```text
-00 (+ cron hotfix) → 01 → 02 → 11 → 05 → 03 → 04 → 06 → 07 → 08 → 09 → 10 → 12 → 13 → 14 → 15
+19 (+ cron hotfix) → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 13 → 32 → 33
 ```
 
 Обоснование двух перестановок:
 
-- **11 перед 05.** `deliverLead` строится поверх Safe Outbound Client. Если сначала доказать доставку, а потом поменять семантику redirect и DNS-политику транспорта, proof G придётся переделывать. Сначала фиксируем транспорт.
-- **05 перед 03/06.** Заявки — единственная подсистема, где уже теряется реальный клиентский трафик. Фида нет вообще (`PROJECT.md`: ingest не активирован), поэтому 03 и 06 не горят.
-- **cron hotfix в 00.** Однострочное исправление без зависимостей; иначе шторм сработает на первом же включении jobs, в том числе во время проверки миграций EPIC 03.
+- **22 перед 23** (бывшие 11 и 05). `deliverLead` строится поверх Safe Outbound Client. Если сначала доказать доставку, а потом поменять семантику redirect и DNS-политику транспорта, proof G придётся переделывать. Сначала фиксируем транспорт.
+- **23 перед 24/26** (бывший 05 перед 03/06). Заявки — единственная подсистема, где уже теряется реальный клиентский трафик. Фида нет вообще (`PROJECT.md`: ingest не активирован), поэтому схема и импорт не горят.
+- **cron hotfix в 19.** Однострочное исправление без зависимостей; иначе шторм сработает на первом же включении jobs, в том числе во время проверки миграций EPIC 24.
+- **13 перед 32.** Матрица proof'ов требует работающего runtime и staging.
 
 ---
 
-# EPIC 00 — BASELINE И НОРМАЛИЗАЦИЯ SOURCE OF TRUTH
+# EPIC 19 — BASELINE И НОРМАЛИЗАЦИЯ SOURCE OF TRUTH
 
 **Priority:** BLOCKER  
 **Risk:** STANDARD  
 **Цель:** документы снова описывают фактический проект, а не старые этапы миграции.
 
-## TASK 00.1 — Зафиксировать baseline
+## TASK 19.1 — Зафиксировать baseline
 
 Создать audit/remediation section:
 
@@ -320,7 +408,7 @@ UI_CORE=AMS UI Core 5.0
 
 Зафиксировать, что все дальнейшие изменения идут поверх этого SHA.
 
-## TASK 00.2 — Переписать текущий статус Backlog
+## TASK 19.2 — Переписать текущий статус Backlog
 
 Обновить `docs/04_BACKLOG.md`.
 
@@ -332,9 +420,9 @@ UI_CORE=AMS UI Core 5.0
 - ingest как несуществующий foundation;
 - EPIC 10–12 как полностью завершённые, если end-to-end proof отсутствует.
 
-Добавить remediation stream EPIC 00–15.
+Добавить remediation stream EPIC 19–33 + EPIC 13.
 
-## TASK 00.3 — Нормализовать PROJECT
+## TASK 19.3 — Нормализовать PROJECT
 
 Обновить `docs/PROJECT.md`.
 
@@ -363,7 +451,7 @@ OWNER_GATE
 - staging;
 - production.
 
-## TASK 00.4 — Нормализовать OPERATIONS
+## TASK 19.4 — Нормализовать OPERATIONS
 
 Удалить старые `TODO EPIC 6/10/11/12/16`, если код уже существует.
 
@@ -375,7 +463,27 @@ RUNTIME NOT PROVEN
 PRODUCTION NOT PROVEN
 ```
 
-## TASK 00.5 — Нормализовать TECHNICAL_CORE / DESIGN
+## TASK 19.5b — Зафиксировать конституции в канонe проекта
+
+Две конституции лежат в `docs/` и должны быть объявлены нормативными:
+
+```text
+docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md
+docs/AMS_UI_CORE_v5.0_FINAL.md
+```
+
+Требования:
+
+- добавить обе в таблицу Source of Truth в `docs/README.md`;
+- сослаться на них из `AGENTS.md` как на нормативную базу;
+- в `docs/03_ARCHITECTURE.md` зафиксировать, что стек сверяется с Core 5.5;
+- в `docs/06_DESIGN_SYSTEM.md` — что UI сверяется с UI Core 5.0;
+- завести раздел approved exceptions: каждое сознательное отклонение
+  записывается с причиной, без молчаливых расхождений.
+
+Сами файлы конституций не редактировать.
+
+## TASK 19.5 — Нормализовать TECHNICAL_CORE / DESIGN
 
 Убрать остатки static-export contract.
 
@@ -390,7 +498,7 @@ Node runtime
 Server-first
 ```
 
-## TASK 00.6 — ADR status
+## TASK 19.6 — ADR status
 
 Проверить ADR-001..010.
 
@@ -399,7 +507,7 @@ Server-first
 - не удалять историю;
 - пометить superseded текущим runtime ADR.
 
-## TASK 00.7 — Аудит полноты `verify:quick`
+## TASK 19.7 — Аудит полноты `verify:quick`
 
 Тест, который существует, но не запускается в общем прогоне, не лучше отсутствующего теста.
 
@@ -417,13 +525,13 @@ Server-first
 Добавить machine-check (скрипт или узкий guard), который падает при появлении
 нового `test:*` вне `verify:quick` без зарегистрированного исключения.
 
-## TASK 00.8 — Cron hotfix (перенесено из EPIC 04)
+## TASK 19.8 — Cron hotfix (перенесено из EPIC 25)
 
-Исполнить здесь TASK 04.1 и TASK 04.2: исправление ошибочного расписания и
+Исполнить здесь TASK 25.1 и TASK 25.2: исправление ошибочного расписания и
 cron guard. Однострочная правка без зависимостей, но она блокирует безопасный
-запуск jobs на staging во время EPIC 03.
+запуск jobs на staging во время EPIC 24.
 
-Остальной EPIC 04 остаётся на своём месте в порядке исполнения.
+Остальной EPIC 25 остаётся на своём месте в порядке исполнения.
 
 ## Acceptance Criteria
 
@@ -445,13 +553,13 @@ pnpm test:maintenance-jobs
 
 ---
 
-# EPIC 01 — PAYLOAD ACCESS BOUNDARY
+# EPIC 20 — PAYLOAD ACCESS BOUNDARY
 
 **Priority:** P0 / BLOCKER  
 **Risk:** RISKY / SECURITY  
 **Цель:** anonymous raw Payload business data недоступны, каждый Local API call имеет явный access mode.
 
-## TASK 01.1 — Инвентаризация Payload Local API
+## TASK 20.1 — Инвентаризация Payload Local API
 
 Найти все:
 
@@ -476,7 +584,7 @@ MIGRATION
 TEST
 ```
 
-## TASK 01.2 — Explicit access mode
+## TASK 20.2 — Explicit access mode
 
 Каждый application Local API call обязан иметь:
 
@@ -492,7 +600,7 @@ overrideAccess: true
 
 Запрещены implicit defaults.
 
-## TASK 01.3 — Закрыть anonymous raw business REST
+## TASK 20.3 — Закрыть anonymous raw business REST
 
 Пересмотреть access:
 
@@ -523,13 +631,13 @@ authenticated по роли → allowed
 
 Регрессия Admin-доступа после этой задачи считается блокером эпика.
 
-## TASK 01.4 — Отдельно проверить Media
+## TASK 20.4 — Отдельно проверить Media
 
 Определить минимальный public media contract.
 
 Не отдавать через raw API лишние CMS/runtime поля.
 
-## TASK 01.5 — Усилить Guard 1
+## TASK 20.5 — Усилить Guard 1
 
 Architecture guard должен падать на:
 
@@ -543,7 +651,7 @@ Local API call without explicit overrideAccess
 overrideAccess:true outside registered System Gateway
 ```
 
-## TASK 01.6 — Integration tests (verification-first)
+## TASK 20.6 — Integration tests (verification-first)
 
 Сначала запустить существующие `test:leads-privacy` и
 `test:public-inventory-boundary`. Покрытые сценарии не переписывать —
@@ -584,13 +692,13 @@ pnpm verify
 
 ---
 
-# EPIC 02 — DTO / PRESENTATION BOUNDARY
+# EPIC 21 — DTO / PRESENTATION BOUNDARY
 
 **Priority:** P0/P1  
 **Risk:** RISKY  
 **Цель:** raw Payload types/documents не доходят до reusable UI.
 
-## TASK 02.1 — CmsPage DTO
+## TASK 21.1 — CmsPage DTO
 
 Создать explicit contracts:
 
@@ -602,7 +710,7 @@ CmsSeoDTO
 
 Не использовать `Page` из `payload-types` в presentation.
 
-## TASK 02.2 — Gateway mapping
+## TASK 21.2 — Gateway mapping
 
 `src/core/data-access/public/pages.ts`:
 
@@ -614,11 +722,11 @@ Payload
 → DTO
 ```
 
-## TASK 02.3 — Page Block DTO
+## TASK 21.3 — Page Block DTO
 
 `page-block-registry.tsx` принимает project DTO, а не Payload block union.
 
-## TASK 02.4 — Site Chrome DTO
+## TASK 21.4 — Site Chrome DTO
 
 Проверить `site-chrome` и globals:
 
@@ -627,7 +735,7 @@ Payload
 - output DTO validation;
 - no raw Payload types in UI.
 
-## TASK 02.5 — Mechanical boundary
+## TASK 21.5 — Mechanical boundary
 
 Запретить imports в:
 
@@ -648,7 +756,7 @@ payload
 
 Исключения только в специально зарегистрированных composition/server adapter files.
 
-## TASK 02.6 — Package strategy
+## TASK 21.6 — Package strategy
 
 Зафиксировать:
 
@@ -664,7 +772,7 @@ FOLDER FORM = canonical
 
 Удаление рабочего workspace-пакета в середине remediation ломает
 `pnpm-workspace.yaml`/lockfile ради нулевой выгоды. Вопрос об удалении
-вернуть после EPIC 14.
+вернуть после EPIC 32.
 
 ## Acceptance Criteria
 
@@ -688,12 +796,12 @@ pnpm verify
 
 ---
 
-# EPIC 03 — SCHEMA HARDENING + SAFE DEACTIVATION 5.5
+# EPIC 24 — SCHEMA HARDENING + SAFE DEACTIVATION 5.5
 
 **Priority:** P0 before feed activation  
 **Risk:** RISKY / MIGRATION
 
-## TASK 03.1 — Properties enums — `OWNER_DECISION_REQUIRED`
+## TASK 24.1 — Properties enums — `OWNER_DECISION_REQUIRED`
 
 Это destructive-adjacent миграция на живой БД и она попадает под стоп-фактор §1.4.
 AI не выполняет её автономно: сначала фиксирует предлагаемый enum-diff, план
@@ -711,7 +819,7 @@ sale | rent
 
 Если текущая product model требует другой enum — сначала сверить PRD и Core, не придумывать новые значения.
 
-## TASK 03.2 — Numeric DB contract
+## TASK 24.2 — Numeric DB contract
 
 Проверить money/area types.
 
@@ -724,7 +832,7 @@ area = decimal(10,2) equivalent
 
 Не полагаться только на application validation.
 
-## TASK 03.3 — Feed invariants
+## TASK 24.3 — Feed invariants
 
 Server-side invariants:
 
@@ -737,7 +845,7 @@ origin=feed
 market must match feed source market
 ```
 
-## TASK 03.4 — Manual publication invariant
+## TASK 24.4 — Manual publication invariant
 
 Manual passport нельзя считать publishable, если нет:
 
@@ -753,7 +861,7 @@ required facts
 
 Publish gate должен быть server/schema-level.
 
-## TASK 03.5 — Redesign safe-deactivation approval
+## TASK 24.5 — Redesign safe-deactivation approval
 
 Убрать общий:
 
@@ -775,7 +883,7 @@ decision
 
 Допустим отдельный collection/document или embedded contract — выбрать минимальный вариант.
 
-## TASK 03.6 — Approval validation
+## TASK 24.6 — Approval validation
 
 Mass deactivation разрешена только если:
 
@@ -787,7 +895,7 @@ consumedAt == null
 decision == approved
 ```
 
-## TASK 03.7 — Baseline safety
+## TASK 24.7 — Baseline safety
 
 Первый full run:
 
@@ -795,7 +903,7 @@ decision == approved
 never mass deactivate
 ```
 
-## TASK 03.8 — Tests
+## TASK 24.8 — Tests
 
 Обязательные cases:
 
@@ -810,7 +918,7 @@ absolute limit breach → suspicious
 approved exact run → deactivation allowed once
 ```
 
-## TASK 03.9 — Migration proof
+## TASK 24.9 — Migration proof
 
 ```text
 clean DB migration
@@ -835,14 +943,14 @@ pnpm verify
 
 ---
 
-# EPIC 04 — JOBS SCHEDULER + JANITOR + RECOVERY
+# EPIC 25 — JOBS SCHEDULER + JANITOR + RECOVERY
 
 **Priority:** P0/P1  
 **Risk:** RISKY
 
-## TASK 04.1 — Исправить cron
+## TASK 25.1 — Исправить cron
 
-Исполняется в EPIC 00 как hotfix (TASK 00.8); здесь остаётся нормативное описание.
+Исполняется в EPIC 19 как hotfix (TASK 19.8); здесь остаётся нормативное описание.
 
 Ошибочная семантика в `src/project/jobs/maintenance/scheduled-tasks.ts`:
 
@@ -865,7 +973,7 @@ Payload 3.x понимает обе, но смешивать стили внут
 Проверить заодно `src/project/jobs/imports/dispatch-due-feeds.ts`, где то же
 выражение `"* 0/5 * * * *"`.
 
-## TASK 04.2 — Cron guard
+## TASK 25.2 — Cron guard
 
 Добавить tests:
 
@@ -874,7 +982,7 @@ Payload 3.x понимает обе, но смешивать стили внут
 - no accidental per-second schedule;
 - **все cron-выражения проекта используют один диалект шага** (`0/N`, не `*/N`).
 
-## TASK 04.3 — autoRun contract
+## TASK 25.3 — autoRun contract
 
 Явно задать для queues:
 
@@ -886,7 +994,7 @@ disableScheduling
 
 Не оставлять implicit concurrency.
 
-## TASK 04.4 — Реальный jobsJanitor
+## TASK 25.4 — Реальный jobsJanitor
 
 Заменить stub handler.
 
@@ -899,7 +1007,7 @@ Janitor должен:
 - сохранять безопасную summary;
 - не трогать active healthy jobs.
 
-## TASK 04.5 — Import orphan recovery
+## TASK 25.5 — Import orphan recovery
 
 Если dispatcher:
 
@@ -910,7 +1018,7 @@ created import-run
 
 janitor должен позже обнаружить orphan.
 
-## TASK 04.6 — Lead recovery pagination
+## TASK 25.6 — Lead recovery pagination
 
 Убрать hard ceiling `1000`.
 
@@ -918,13 +1026,13 @@ janitor должен позже обнаружить orphan.
 
 То же проверить для `payload-jobs`.
 
-## TASK 04.7 — Maintenance registry
+## TASK 25.7 — Maintenance registry
 
 Убрать позиционную деструктуризацию массива tasks.
 
 Получать task по slug или создавать explicit objects.
 
-## TASK 04.8 — One jobs owner — `OWNER_DECISION_REQUIRED`
+## TASK 25.8 — One jobs owner — `OWNER_DECISION_REQUIRED`
 
 Цель: machine-checkable runtime contract `exactly one JOBS_AUTORUN=true`.
 
@@ -958,14 +1066,14 @@ pnpm verify
 
 ---
 
-# EPIC 05 — LEAD DELIVERY END-TO-END
+# EPIC 23 — LEAD DELIVERY END-TO-END
 
 **Priority:** P0 / BLOCKER  
 **Risk:** RISKY / PII / OUTBOUND  
-**Depends on:** EPIC 11 (транспорт зафиксирован до построения доставки)  
+**Depends on:** EPIC 22 (транспорт зафиксирован до построения доставки)  
 **Цель:** пользовательская заявка реально доходит до Telegram и корректно переживает ошибки.
 
-## TASK 05.1 — Channel composition root
+## TASK 23.1 — Channel composition root
 
 Создать новую директорию и файл:
 
@@ -986,7 +1094,7 @@ composition root не является job-обработчиком.
 5. возвращать registry `channelId → LeadDeliveryChannel`;
 6. fail closed при неизвестном/неполном active channel.
 
-### TASK 05.1.1 — Guard allow-list
+### TASK 23.1.1 — Guard allow-list
 
 Guard 1 (`scripts/lib/architecture-guards.mjs`) блокирует `overrideAccess: true`
 вне пофайлового списка `privilegedSystemFiles`.
@@ -995,13 +1103,13 @@ Guard 1 (`scripts/lib/architecture-guards.mjs`) блокирует `overrideAcce
 
 ```text
 channel-registry.ts     → НЕ использует overrideAccess; в allow-list не вносить
-System Gateway helper из TASK 05.3 → обязан быть внесён в privilegedSystemFiles
+System Gateway helper из TASK 23.3 → обязан быть внесён в privilegedSystemFiles
 ```
 
 Без этой подзадачи `pnpm verify:guards` упадёт на новом привилегированном файле,
 и AI начнёт чинить не тот слой.
 
-## TASK 05.2 — Telegram URL
+## TASK 23.2 — Telegram URL
 
 Проверить реальный Telegram Bot API path.
 
@@ -1009,12 +1117,12 @@ System Gateway helper из TASK 05.3 → обязан быть внесён в p
 
 Добавить deterministic unit test для URL.
 
-## TASK 05.3 — System Gateway read
+## TASK 23.3 — System Gateway read
 
 Создать privileged helper в `src/core/data-access/system/` и внести его в
-`privilegedSystemFiles` (см. 05.1.1).
+`privilegedSystemFiles` (см. TASK 23.1.1).
 
-Возвращаемый контракт **должен включать retry-состояние**, иначе на шаге 05.4
+Возвращаемый контракт **должен включать retry-состояние**, иначе на шаге TASK 23.4
 придётся делать второй запрос к БД или счётчик попыток обнулится:
 
 ```text
@@ -1033,14 +1141,14 @@ leadDeliveryId
 
 Не передавать raw Payload docs в handler.
 
-## TASK 05.4 — Full deliverLead handler
+## TASK 23.4 — Full deliverLead handler
 
 Реальная последовательность:
 
 ```text
 claim pending → sending
-→ load delivery + lead + attempts + attemptLog   (TASK 05.3)
-→ resolve channel                                 (TASK 05.1)
+→ load delivery + lead + attempts + attemptLog   (TASK 23.3)
+→ resolve channel                                 (TASK 23.1)
 → deliver()
 ```
 
@@ -1076,7 +1184,7 @@ claim pending → sending
 → abandoned
 ```
 
-## TASK 05.5 — Ввести `maxAttempts` в retry-plan — RISKY
+## TASK 23.5 — Ввести `maxAttempts` в retry-plan — RISKY
 
 **Фактическое состояние кода** (`src/core/leads/delivery-state.ts`):
 
@@ -1117,7 +1225,7 @@ immediate → +1m → +5m → +15m → +60m → +240m → abandoned
 Это изменение типов в трёх файлах, а не косметика. Обязательны обновлённые
 `test:lead-delivery-state` и `test:lead-delivery-task`.
 
-## TASK 05.6 — Unknown outcome policy
+## TASK 23.6 — Unknown outcome policy
 
 Для Telegram timeout/unknown:
 
@@ -1133,7 +1241,7 @@ unknown
 
 Если owner policy уже зафиксирована — следовать ей.
 
-## TASK 05.7 — Heartbeat
+## TASK 23.7 — Heartbeat
 
 Для долгой outbound operation:
 
@@ -1146,7 +1254,7 @@ Heartbeat interval < stale threshold.
 
 Heartbeat не хранит PII.
 
-## TASK 05.8 — Enqueue failure observability
+## TASK 23.8 — Enqueue failure observability
 
 `enqueueLeadDelivery` не проглатывает ошибку молча.
 
@@ -1169,7 +1277,7 @@ token
 chat id
 ```
 
-## TASK 05.9 — E2E fake transport tests
+## TASK 23.9 — E2E fake transport tests
 
 Cases:
 
@@ -1185,7 +1293,7 @@ queue unavailable
 process crash after commit before enqueue
 ```
 
-## TASK 05.10 — Proof G
+## TASK 23.10 — Proof G
 
 Доказать:
 
@@ -1198,13 +1306,13 @@ POST /api/public/leads
 → sent + externalRef
 ```
 
-## TASK 05.11 — Честная политика дублей (ADR)
+## TASK 23.11 — Честная политика дублей (ADR)
 
 `lead-deliveries.idempotencyKey` существует, уникален и формируется как
 `lead:<id>:channel:<channelId>`. Но **Telegram Bot API не принимает
 idempotency key**: защиты от дубля на стороне получателя нет.
 
-В связке с политикой 05.6 (`unknown → retryable`) таймауты гарантированно
+В связке с политикой TASK 23.6 (`unknown → retryable`) таймауты гарантированно
 дадут повторные сообщения.
 
 Требования:
@@ -1213,9 +1321,9 @@ idempotency key**: защиты от дубля на стороне получа
 2. включить `deliveryId` в текст сообщения как визуальный маркер для оператора;
 3. описать в OPERATIONS, как оператор распознаёт дубль.
 
-Без этой задачи 05.6 создаёт операционную проблему вместо её решения.
+Без этой задачи TASK 23.6 создаёт операционную проблему вместо её решения.
 
-## TASK 05.12 — Операторский путь ручного retry
+## TASK 23.12 — Операторский путь ручного retry
 
 `retryAbandonedLeadDelivery` и `manualRetryAudit` реализованы, есть
 `test:lead-delivery-admin`. Не описано, **через что оператор это вызывает**.
@@ -1248,16 +1356,16 @@ pnpm verify
 
 ---
 
-# EPIC 06 — INGEST END-TO-END
+# EPIC 26 — INGEST END-TO-END
 
 **Priority:** P0 before feed activation  
 **Risk:** RISKY / DATA
 
-## TASK 06.1 — Ingest composition root
+## TASK 26.1 — Ingest composition root
 
 Создать реальный ingest orchestration layer.
 
-## TASK 06.2 — Resolve feed secret reference
+## TASK 26.2 — Resolve feed secret reference
 
 `feedUrlRef` содержит только SecretMaster reference.
 
@@ -1265,9 +1373,14 @@ Raw credential/feed URL не хранить в DB.
 
 Нужен adapter, который получает фактический URL из разрешённого secret contour.
 
-Если нет подключённого runtime SecretMaster API — зафиксировать owner/runtime injection contract без помещения secret в repository.
+**Решение владельца (2026-09-18):** runtime injection достаточно. Фактический
+feed URL остаётся снаружи (runtime env на сервере), в репозиторий не попадает
+ни в каком виде. Новый secret API в рамках этой программы не вводится.
 
-## TASK 06.3 — Fetch
+В `feedUrlRef` хранится только имя ссылки; adapter читает значение из runtime env
+по этому имени и падает с понятной ошибкой, если переменная не задана.
+
+## TASK 26.3 — Fetch
 
 Pipeline:
 
@@ -1279,7 +1392,7 @@ SafeOutboundClient
 → timeout
 ```
 
-## TASK 06.4 — Conditional response
+## TASK 26.4 — Conditional response
 
 ```text
 304
@@ -1288,7 +1401,7 @@ SafeOutboundClient
 → correct run finalization
 ```
 
-## TASK 06.5 — Parse
+## TASK 26.5 — Parse
 
 ```text
 parser registry
@@ -1299,7 +1412,7 @@ parser registry
 
 Critical/suspicious parse не должен изменять live inventory.
 
-## TASK 06.6 — Normalize
+## TASK 26.6 — Normalize
 
 Raw feed offer:
 
@@ -1310,7 +1423,7 @@ Raw feed offer:
 
 Не писать raw feed shape напрямую в `properties`.
 
-## TASK 06.7 — Idempotent upsert
+## TASK 26.7 — Idempotent upsert
 
 Для каждого offer:
 
@@ -1322,13 +1435,13 @@ Raw feed offer:
 → create/update/touch-seen
 ```
 
-## TASK 06.8 — Business ownership
+## TASK 26.8 — Business ownership
 
 Feed не может перезаписывать manual-owned fields.
 
 Field ownership policy должна быть explicit и tested.
 
-## TASK 06.9 — Import issues
+## TASK 26.9 — Import issues
 
 Сохранять bounded diagnostics:
 
@@ -1342,7 +1455,7 @@ safe message
 
 Не сохранять raw secret/feed credentials.
 
-## TASK 06.10 — Safe deactivation
+## TASK 26.10 — Safe deactivation
 
 После успешного полного run:
 
@@ -1355,7 +1468,7 @@ missing scope
 → archive
 ```
 
-## TASK 06.11 — Run finalization
+## TASK 26.11 — Run finalization
 
 Terminal states:
 
@@ -1369,7 +1482,7 @@ interrupted
 
 Ни один штатный run не остаётся `running` навсегда.
 
-## TASK 06.12 — Heartbeat
+## TASK 26.12 — Heartbeat
 
 Во время long import:
 
@@ -1378,7 +1491,7 @@ periodic heartbeat
 outside business transaction
 ```
 
-## TASK 06.13 — Batch cache invalidation
+## TASK 26.13 — Batch cache invalidation
 
 После commit:
 
@@ -1389,7 +1502,7 @@ catalog
 → one batch invalidation
 ```
 
-## TASK 06.15 — Scheduling contract для `nextDueAt`
+## TASK 26.15 — Scheduling contract для `nextDueAt`
 
 **Факт:** `dispatchDueFeeds` сдвигает `nextDueAt` один раз — в момент claim.
 Поведение после завершения run нигде не определено.
@@ -1406,7 +1519,7 @@ catalog
 есть ли backoff у постоянно падающего фида
 ```
 
-## TASK 06.14 — Proof A/C/D
+## TASK 26.14 — Proof A/C/D
 
 Минимум:
 
@@ -1440,12 +1553,12 @@ pnpm verify
 
 ---
 
-# EPIC 07 — RUNTIME PUBLISHING + CACHE INVALIDATION
+# EPIC 27 — RUNTIME PUBLISHING + CACHE INVALIDATION
 
 **Priority:** P1  
 **Risk:** RISKY
 
-## TASK 07.1 — Dynamic route publication contract
+## TASK 27.1 — Dynamic route publication contract
 
 Проверить:
 
@@ -1461,7 +1574,7 @@ pnpm verify
 - сохранить server-first route;
 - использовать controlled cache/revalidation.
 
-## TASK 07.2 — CMS publish without deploy test
+## TASK 27.2 — CMS publish without deploy test
 
 Сценарий:
 
@@ -1472,7 +1585,7 @@ create published complex
 → 200
 ```
 
-## TASK 07.3 — Collection invalidation hooks
+## TASK 27.3 — Collection invalidation hooks
 
 Подключить после успешного commit:
 
@@ -1489,7 +1602,7 @@ navigation
 
 к CacheInvalidator.
 
-## TASK 07.4 — No invalidation rollback
+## TASK 27.4 — No invalidation rollback
 
 Cache failure:
 
@@ -1499,7 +1612,7 @@ business write remains committed
 → retry/monitoring
 ```
 
-## TASK 07.5 — Silent fallback observability
+## TASK 27.5 — Silent fallback observability
 
 Public readers не должны превращать DB/Payload outage в тихое `[]` без operational signal.
 
@@ -1511,7 +1624,7 @@ empty business result
 infrastructure failure
 ```
 
-## TASK 07.6 — B2 proof (endpoint уже существует)
+## TASK 27.6 — B2 proof (endpoint уже существует)
 
 `src/app/api/internal/revalidate/route.ts` и `test:internal-revalidate` уже есть.
 Писать endpoint не нужно.
@@ -1531,12 +1644,12 @@ Runtime CMS publication работает без rebuild и без stale content.
 
 ---
 
-# EPIC 08 — SEO / SITEMAP / ARCHIVED LIFECYCLE
+# EPIC 28 — SEO / SITEMAP / ARCHIVED LIFECYCLE
 
 **Priority:** P1  
 **Risk:** STANDARD/RISKY
 
-## TASK 08.1 — Unified sitemap sources
+## TASK 28.1 — Unified sitemap sources
 
 Sitemap должен включать:
 
@@ -1549,7 +1662,7 @@ published developers
 published articles later
 ```
 
-## TASK 08.2 — Exclusions
+## TASK 28.2 — Exclusions
 
 Никогда не включать:
 
@@ -1563,7 +1676,7 @@ filter states
 archived noindex
 ```
 
-## TASK 08.3 — Dynamic passport metadata
+## TASK 28.3 — Dynamic passport metadata
 
 Manual property:
 
@@ -1576,7 +1689,7 @@ OG
 structured data only from facts
 ```
 
-## TASK 08.4 — Archived retention — содержит `OWNER_DECISION_REQUIRED`
+## TASK 28.4 — Archived retention — содержит `OWNER_DECISION_REQUIRED`
 
 Выбор между `301` и `410` при отсутствии достоверной релевантной цели —
 owner-решение по §1.4. AI фиксирует кандидатов и останавливается, а не выбирает.
@@ -1601,13 +1714,13 @@ no relevant replacement
 
 Не редиректить всё автоматически на `/obekty/`.
 
-## TASK 08.5 — Catalog lifecycle execution
+## TASK 28.5 — Catalog lifecycle execution
 
 `catalogLifecycle` должен не только считать expired records.
 
 Должен формировать/исполнять lifecycle decision либо поддерживать route-level typed decision source.
 
-## TASK 08.6 — Redirect safety
+## TASK 28.6 — Redirect safety
 
 Проверить:
 
@@ -1619,7 +1732,7 @@ target exists
 no redirect to generic home
 ```
 
-## TASK 08.7 — Sitemap runtime test
+## TASK 28.7 — Sitemap runtime test
 
 Publish:
 
@@ -1637,12 +1750,12 @@ SEO lifecycle соответствует фактическому publication li
 
 ---
 
-# EPIC 09 — REGIONS: SINGLE SOURCE OF TRUTH
+# EPIC 29 — REGIONS: SINGLE SOURCE OF TRUTH
 
 **Priority:** P1  
 **Risk:** RISKY / DATA
 
-## TASK 09.1 — Инвентаризация duplicated data
+## TASK 29.1 — Инвентаризация duplicated data
 
 Сравнить:
 
@@ -1653,7 +1766,7 @@ src/content/regions/region-dtos.ts
 SEO registry
 ```
 
-## TASK 09.2 — Ownership decision
+## TASK 29.2 — Ownership decision
 
 Зафиксировать:
 
@@ -1663,7 +1776,7 @@ Code = routing/composition policy
 SEO registry = explicit index policy
 ```
 
-## TASK 09.3 — Перенос фактического domain content
+## TASK 29.3 — Перенос фактического domain content
 
 Убрать из hardcoded route plan, где это уже CMS-owned:
 
@@ -1677,7 +1790,7 @@ status
 hierarchy
 ```
 
-## TASK 09.4 — Route path
+## TASK 29.4 — Route path
 
 Path вычислять из:
 
@@ -1687,7 +1800,7 @@ parent relation
 reserved namespace policy
 ```
 
-## TASK 09.5 — Stub Sochi
+## TASK 29.5 — Stub Sochi
 
 Сохранить текущий продуктовый contract:
 
@@ -1699,7 +1812,7 @@ no child cluster
 
 пока owner не меняет решение.
 
-## TASK 09.6 — Internal links
+## TASK 29.6 — Internal links
 
 Генерировать из domain hierarchy + approved cross-links.
 
@@ -1709,12 +1822,12 @@ no child cluster
 
 ---
 
-# EPIC 10 — UI CORE 5.0 CONFORMANCE
+# EPIC 30 — UI CORE 5.0 CONFORMANCE
 
 **Priority:** P1  
 **Risk:** STANDARD
 
-## TASK 10.1 — Motion contract
+## TASK 30.1 — Motion contract
 
 Удалить project duration token:
 
@@ -1732,7 +1845,7 @@ duration-fast
 
 Semantic easing сохранить через `--ease-*`.
 
-## TASK 10.2 — LeadForm primitives
+## TASK 30.2 — LeadForm primitives
 
 Перевести client LeadForm на canonical shadcn primitives:
 
@@ -1747,11 +1860,11 @@ Label
 
 Не менять transport/business contract.
 
-## TASK 10.3 — Один canonical Button/control system
+## TASK 30.3 — Один canonical Button/control system
 
 Проверить отсутствие второго визуального pattern.
 
-## TASK 10.4 — Presentation DTO guard
+## TASK 30.4 — Presentation DTO guard
 
 UI drift audit должен также ловить:
 
@@ -1763,7 +1876,7 @@ UI drift audit должен также ловить:
 
 в presentation.
 
-## TASK 10.5 — P2 drift report
+## TASK 30.5 — P2 drift report
 
 UI Drift:
 
@@ -1772,7 +1885,7 @@ P0/P1 → blocking
 P2 → report/backlog
 ```
 
-## TASK 10.6 — Responsive/accessibility regression
+## TASK 30.6 — Responsive/accessibility regression
 
 Representative widths:
 
@@ -1800,15 +1913,15 @@ UI соответствует v5.0 без визуального redesign.
 
 ---
 
-# EPIC 11 — OUTBOUND SECURITY HARDENING
+# EPIC 22 — OUTBOUND SECURITY HARDENING
 
-**Priority:** P0 / BLOCKER (перемещён перед EPIC 05)  
+**Priority:** P0 / BLOCKER (перемещён перед EPIC 23)  
 **Risk:** SECURITY  
-**Почему раньше:** EPIC 05 строит доставку поверх Safe Outbound Client. Менять
+**Почему раньше:** EPIC 23 строит доставку поверх Safe Outbound Client. Менять
 семантику redirect и DNS-политику после доказанной доставки означает
 переделывать proof G. Транспорт фиксируется первым.
 
-## TASK 11.1 — Redirect method semantics
+## TASK 22.1 — Redirect method semantics
 
 SafeOutboundClient:
 
@@ -1816,7 +1929,7 @@ SafeOutboundClient:
 - 301/302 для non-GET → безопасная подтверждённая политика;
 - 307/308 → preserve method/body only if policy allows.
 
-## TASK 11.2 — Cross-host redirect headers
+## TASK 22.2 — Cross-host redirect headers
 
 При смене host:
 
@@ -1824,7 +1937,7 @@ SafeOutboundClient:
 - заново проверять allowlist;
 - заново проверять resolved IP.
 
-## TASK 11.3 — DNS rebinding / TOCTOU
+## TASK 22.3 — DNS rebinding / TOCTOU
 
 Закрыть разрыв:
 
@@ -1837,7 +1950,7 @@ DNS safety check
 
 Если выбранный HTTP stack не позволяет надёжный pinning — зафиксировать residual risk и компенсирующие меры.
 
-## TASK 11.4 — SSRF test matrix
+## TASK 22.4 — SSRF test matrix
 
 ```text
 https allowlisted public IP → allowed
@@ -1856,12 +1969,12 @@ Safe Outbound Client остаётся единственным configurable outb
 
 ---
 
-# EPIC 12 — S3 / MEDIA PRODUCTION CONTRACT
+# EPIC 31 — S3 / MEDIA PRODUCTION CONTRACT
 
 **Priority:** P1 before production  
 **Risk:** RISKY / INFRA
 
-## TASK 12.1 — Production env fail-fast
+## TASK 31.1 — Production env fail-fast
 
 В production profile S3 обязателен:
 
@@ -1873,7 +1986,7 @@ S3_ACCESS_KEY
 S3_SECRET_KEY
 ```
 
-## TASK 12.2 — Timeweb S3 compatibility
+## TASK 31.2 — Timeweb S3 compatibility
 
 Проверить:
 
@@ -1882,7 +1995,7 @@ S3_SECRET_KEY
 - path-style vs virtual-host;
 - exact Next image remotePatterns.
 
-## TASK 12.3 — Upload policy
+## TASK 31.3 — Upload policy
 
 Добавить/проверить:
 
@@ -1894,7 +2007,7 @@ alt policy
 decorative policy
 ```
 
-## TASK 12.4 — Object source of truth
+## TASK 31.4 — Object source of truth
 
 Доказать:
 
@@ -1905,7 +2018,7 @@ upload via Payload
 → media remains available
 ```
 
-## TASK 12.5 — Versioning / recovery
+## TASK 31.5 — Versioning / recovery
 
 Зафиксировать Timeweb capability:
 
@@ -1915,7 +2028,7 @@ provider-independent backup if required
 restore procedure
 ```
 
-## TASK 12.6 — Missing image
+## TASK 31.6 — Missing image
 
 Один canonical fallback pattern.
 
@@ -1928,7 +2041,10 @@ VPS disk не нужен для постоянного хранения user med
 # EPIC 13 — TIMEWEB RUNTIME + STAGING
 
 **Priority:** BLOCKER before production  
-**Risk:** RISKY / INFRA
+**Risk:** RISKY / INFRA  
+**Существующая работа:** ветка `codex/epic-13-runtime` (6 коммитов, восстановлена
+и запушена 2026-09-18). Перебазировать на актуальный `main`, сверить с задачами
+ниже, доделать недостающее и закрыть одним PR. Не начинать эпик с нуля.
 
 ## TASK 13.1 — Удалить active static Nginx contract
 
@@ -2038,7 +2154,7 @@ Production topology повторяем, откатываем и не завис�
 
 ---
 
-# EPIC 14 — INTEGRATION PROOF MATRIX
+# EPIC 32 — INTEGRATION PROOF MATRIX
 
 **Priority:** BLOCKER  
 **Risk:** RISKY  
@@ -2203,12 +2319,12 @@ region
 
 ---
 
-# EPIC 15 — PRODUCTION RELEASE GATE
+# EPIC 33 — PRODUCTION RELEASE GATE
 
 **Priority:** FINAL  
 **Risk:** RISKY / OWNER GATE
 
-## TASK 15.1 — Exact head
+## TASK 33.1 — Exact head
 
 ```text
 clean main
@@ -2217,7 +2333,7 @@ no uncommitted changes
 all PR merged
 ```
 
-## TASK 15.2 — SourceCraft final gate
+## TASK 33.2 — SourceCraft final gate
 
 ```bash
 pnpm install --frozen-lockfile
@@ -2228,7 +2344,7 @@ pnpm verify:schema
 
 Exact-head RISKY.
 
-## TASK 15.3 — Production DB
+## TASK 33.3 — Production DB
 
 Перед миграцией:
 
@@ -2237,14 +2353,14 @@ Exact-head RISKY.
 - migration plan;
 - no destructive surprise.
 
-## TASK 15.4 — Production S3
+## TASK 33.4 — Production S3
 
 - bucket exists;
 - credentials;
 - upload/read proof;
 - remotePatterns exact.
 
-## TASK 15.5 — Secrets
+## TASK 33.5 — Secrets
 
 Secrets приходят только из SecretMaster/runtime env.
 
@@ -2257,7 +2373,7 @@ secret in logs
 secret in task input
 ```
 
-## TASK 15.6 — Deploy
+## TASK 33.6 — Deploy
 
 ```text
 build artifact
@@ -2270,7 +2386,7 @@ build artifact
 → smoke
 ```
 
-## TASK 15.7 — Live smoke
+## TASK 33.7 — Live smoke
 
 Проверить:
 
@@ -2291,17 +2407,17 @@ manual passport
 redirect/410
 ```
 
-## TASK 15.8 — Rollback proof
+## TASK 33.8 — Rollback proof
 
 Фактически выполнить controlled rollback на предыдущий artifact.
 
-## TASK 15.9 — Final domain
+## TASK 33.9 — Final domain
 
 `moreigori.ru` переключать только отдельным owner decision после technical preview.
 
 ## Release criterion
 
-Production считается готовым только после фактического прохождения EPIC 14 и 15.
+Production считается готовым только после фактического прохождения EPIC 32 и 33.
 
 ---
 
@@ -2415,17 +2531,17 @@ YES — owner-approved release <SHA>
 
 ## BLOCKER
 
-В порядке исполнения v2:
+Канонические номера, в порядке исполнения:
 
 ```text
-EPIC 00  (+ cron hotfix, verify:quick audit)
-EPIC 01
-EPIC 02
-EPIC 11  (транспорт до доставки)
-EPIC 05  (горит: теряется реальный трафик заявок)
-EPIC 03
-EPIC 04
-EPIC 06
+EPIC 19  Baseline + docs (+ cron hotfix, verify:quick audit)
+EPIC 20  Payload Access Boundary
+EPIC 21  DTO / Presentation Boundary
+EPIC 22  Outbound Security (транспорт до доставки)
+EPIC 23  Lead Delivery E2E (горит: теряется реальный трафик заявок)
+EPIC 24  Schema Hardening + Safe Deactivation
+EPIC 25  Jobs Scheduler + Janitor + Recovery
+EPIC 26  Ingest End-to-End
 ```
 
 Без них не включать production leads/feed и не считать Realty Core завершённым.
@@ -2433,19 +2549,25 @@ EPIC 06
 ## BEFORE PRODUCTION
 
 ```text
-EPIC 07
-EPIC 08
-EPIC 09
-EPIC 10
-EPIC 12
-EPIC 13
-EPIC 14
+EPIC 27  Runtime Publishing + Cache
+EPIC 28  SEO / Sitemap / Archived Lifecycle
+EPIC 29  Regions Single Source of Truth
+EPIC 30  UI Core 5.0 Conformance
+EPIC 31  S3 / Media Production Contract
+EPIC 13  Timeweb Runtime + Staging (продолжение существующей ветки)
+EPIC 32  Integration Proof Matrix
 ```
 
 ## FINAL
 
 ```text
-EPIC 15
+EPIC 33  Production Release Gate
+```
+
+## Вне программы ремедиации
+
+```text
+EPIC 14, 18  продуктовые: analytics posts и оставшиеся content gates
 ```
 
 ---
@@ -2471,4 +2593,4 @@ WORKING SYSTEM
 
 Главная цель remediation — убрать разрыв между «код существует и покрыт unit tests» и «подсистема действительно выполняет бизнес-задачу end-to-end».
 
-После завершения EPIC 00–15 проект можно считать приведённым к целевому AMS Realty Platform 5.5 контуру и готовым к отдельному owner-approved production release.
+После завершения EPIC 19–33 и EPIC 13 проект можно считать приведённым к целевому AMS Realty Platform 5.5 контуру и готовым к отдельному owner-approved production release.
