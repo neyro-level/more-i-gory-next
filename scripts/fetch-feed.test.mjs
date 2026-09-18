@@ -122,8 +122,10 @@ test("fetch stage stores the outbound response and stops before parse", async ()
 
 test("importFeed composition fetches after resolving the env-named URL", async () => {
   const requests = [];
+  const writes = [];
   const payload = {
-    async update() {
+    async update(args) {
+      writes.push(args);
       return { docs: [{ id: "501" }] };
     },
     async findByID(args) {
@@ -144,7 +146,7 @@ test("importFeed composition fetches after resolving the env-named URL", async (
             contentType: "application/xml",
             etag: '"abc"',
             lastModified: null,
-            status: 304,
+            status: 200,
           };
         },
       },
@@ -153,7 +155,9 @@ test("importFeed composition fetches after resolving the env-named URL", async (
   });
 
   assert.equal(requests[0].headers["If-None-Match"], '"abc"');
-  assert.equal(result.state.fetch?.status, 304);
-  assert.equal(result.pendingStage, "classify-conditional");
+  assert.equal(result.state.fetch?.status, 200);
+  assert.equal(result.pendingStage, "parse");
+  assert.equal(result.state.conditional?.kind, "read-body");
   assert.equal(JSON.stringify(requests[0].headers).includes("https://"), false);
+  assert.equal(writes.some((write) => write.collection === "properties"), false);
 });

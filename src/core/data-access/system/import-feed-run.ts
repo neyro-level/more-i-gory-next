@@ -35,3 +35,29 @@ export async function transitionImportRunToRunning(
   const result = transition as { docs?: Array<{ id: number | string }> };
   return Array.isArray(result.docs) && result.docs.length > 0;
 }
+
+export async function finalizeUnchangedImportRun(
+  payload: PayloadLike,
+  input: ImportFeedRunInput,
+  now = new Date(),
+): Promise<boolean> {
+  const transition = await payload.update({
+    collection: "import-runs",
+    data: {
+      finishedAt: now.toISOString(),
+      offeredCount: 0,
+      status: "skipped",
+      summary: "Feed unchanged (HTTP 304).",
+    },
+    overrideAccess: true,
+    where: {
+      and: [
+        { id: { equals: input.importRunId } },
+        { feedSource: { equals: input.feedSourceId } },
+        { status: { equals: "running" } },
+      ],
+    },
+  });
+  const result = transition as { docs?: Array<{ id: number | string }> };
+  return Array.isArray(result.docs) && result.docs.length > 0;
+}

@@ -28,6 +28,10 @@ export type IngestPipelineState = {
     lastModified: string | null;
     status: number;
   };
+  conditional?: {
+    businessWrite: false;
+    kind: "not-modified" | "read-body";
+  };
 };
 
 export type IngestStageContext = {

@@ -2,9 +2,13 @@ import type { TaskConfig } from "payload";
 
 import { loadFeedSourceConditionalState } from "../../../core/data-access/system/load-feed-source-conditional.ts";
 import { loadFeedSourceUrlRef } from "../../../core/data-access/system/load-feed-source-url-ref.ts";
+import { createClassifyConditionalHandler } from "../../../core/ingest/classify-conditional.ts";
 import { createFetchFeedHandler, parseOutboundAllowedHosts } from "../../../core/ingest/fetch-feed.ts";
 import { createResolveFeedUrlHandler } from "../../../core/ingest/resolve-feed-url.ts";
-import { transitionImportRunToRunning } from "../../../core/data-access/system/import-feed-run.ts";
+import {
+  finalizeUnchangedImportRun,
+  transitionImportRunToRunning,
+} from "../../../core/data-access/system/import-feed-run.ts";
 import { createSafeOutboundClient, type SafeOutboundClient } from "../../../core/security/outbound-http/index.ts";
 import {
   createImportFeedClaimHandler,
@@ -30,7 +34,7 @@ export function createImportFeedPipelineHandlers(
   payload: ImportFeedPayload,
   lookupEnv: (name: string) => string | undefined | Promise<string | undefined>,
   outbound: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>),
-): Partial<Record<"claim-running" | "resolve-feed-url" | "fetch", IngestStageHandler>> {
+): Partial<Record<"claim-running" | "resolve-feed-url" | "fetch" | "classify-conditional", IngestStageHandler>> {
   return {
     "claim-running": createImportFeedClaimHandler((claimInput) =>
       transitionImportRunToRunning(payload, claimInput),
@@ -42,6 +46,9 @@ export function createImportFeedPipelineHandlers(
     fetch: createFetchFeedHandler({
       loadConditionalState: (feedSourceId) => loadFeedSourceConditionalState(payload, feedSourceId),
       outbound,
+    }),
+    "classify-conditional": createClassifyConditionalHandler({
+      finalizeUnchanged: (claimInput) => finalizeUnchangedImportRun(payload, claimInput),
     }),
   };
 }
