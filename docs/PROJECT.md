@@ -22,7 +22,7 @@ Source of Truth проекта.
 | Secret Master | project `more-i-gory-server`, env `prod` — единственный source of truth для server и DB credentials |
 | Production database | отдельная Timeweb Managed PostgreSQL, регион `ru-1`, достижима с сервера (проверено 2026-09-18) |
 | Staging database | отдельная Timeweb Managed PostgreSQL, без production PII |
-| Manual media | Timeweb S3 через Payload upload adapter |
+| Manual media | Timeweb S3 bucket `moreigory-media`, endpoint `s3.twcstorage.ru`, region `ru-1`, path-style, публичное чтение; создан и проверен 2026-09-18 |
 | Repository | SourceCraft `integrator-p/more-i-gory-next` |
 
 Production и staging не используют общую БД, secrets или пользовательские
@@ -33,10 +33,10 @@ Production и staging не используют общую БД, secrets или 
 | Область | Текущее решение |
 |---|---|
 | Active feeds/parsers | отсутствуют; XML/YRL ingest выключен до EPIC 16 и появления фактического feed |
-| Non-secret integrations | Payload Admin, Timeweb Managed PostgreSQL, Timeweb S3 и Telegram delivery запланированы; production endpoints и accounts пока не утверждены |
+| Non-secret integrations | Payload Admin, Timeweb Managed PostgreSQL и Timeweb S3 подтверждены; внешний канал оповещений о заявках решением владельца не подключается |
 | Backup | planned: automatic Managed PostgreSQL backup + S3 versioning; retention и provider-independent copy — `TODO` до EPIC 13 |
 | Restore proof | не выполнялся; обязательный фактический restore test в EPIC 13 |
-| Monitoring | planned: внешний uptime monitor + TLS alert; provider и alert destination — `TODO` до EPIC 13 |
+| Monitoring | базовый уровень в EPIC 13 (health endpoint, restart policy, контроль срока TLS, ротация логов); внешний uptime monitor и адрес алертов — отложенное улучшение |
 | Legal | оператор ПДн и публичные реквизиты утверждены владельцем; privacy/consent опубликованы как `privacy-2026-09-17` и `pdn-consent-2026-09-17`; банковские реквизиты не публикуются |
 | Core version | нормативная база — локальные конституции `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md` и `docs/AMS_UI_CORE_v5.0_FINAL.md` |
 | Server state | проверено 2026-09-18: nginx active (только default site), приложение не развёрнуто, Node/pnpm/docker отсутствуют — EPIC 13 является первичным провижинингом |
@@ -116,7 +116,7 @@ status=active`. Unit/filter/layout URL не получают самостоят�
 - CRM не включена, но delivery port остаётся расширяемым;
 - success формы зависит от локального commit lead + pending deliveries, а не от
   ответа Telegram;
-- фактический Telegram destination и fallback routing: `TODO` до secret/owner gate;
+- внешний канал оповещений не подключается: заявки сохраняются в БД и проверяются оператором в Payload Admin;
 - `deliverLead` использует concurrency key `delivery:<leadDeliveryId>` как
   owner-approved safe proxy для пары `lead + channel`: запись
   `lead-deliveries` имеет уникальный индекс по этой паре, а job input остаётся
@@ -160,11 +160,11 @@ CACHE_INVALIDATION_MODE=http
 | Cache mode | `CACHE_INVALIDATION_MODE` | `http` |
 | Internal revalidation URL | `INTERNAL_REVALIDATE_BASE_URL` | server-only |
 | Internal revalidation auth | `REVALIDATE_SECRET` | secret |
-| S3 | `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY` | credentials are secret |
+| S3 | `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY` | credentials are secret; до записи в Secret Master читаются из Timeweb API |
 | Outbound policy | `OUTBOUND_ALLOWED_HOSTS` | exact allowlist |
 | Lead channels | `LEAD_CHANNELS` | `telegram` |
 | Lead outbound policy | `LEAD_OUTBOUND_HOSTS` | exact allowlist |
-| Telegram | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | secrets |
+| Lead channel | не настроен; канал оповещений исключён из текущей программы |
 | Alerts | `ALERT_WEBHOOK_URL` | optional secret integration |
 | Feed sources | `FEED_SOURCE_*` | только при configured ingest source |
 

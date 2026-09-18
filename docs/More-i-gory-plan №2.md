@@ -58,7 +58,7 @@ Default epic delivery_mode: MERGE_AFTER_GATE (подтверждено влад�
 
 Проверено по коду, не по памяти:
 
-- `deliverLead` только переводит delivery в `sending`, Telegram не вызывается.
+- `deliverLead` только переводит delivery в `sending`, канал не вызывается.
 - `importFeed` только переводит run в `running`, parse/upsert нет.
 - `jobsJanitor` handler возвращает `{ status: "registered" }`; cron `* 0/5 * * * *`.
 - raw `Page` из `@/payload-types` импортируется в `src/components/page-blocks/*`.
@@ -90,6 +90,9 @@ Default epic delivery_mode: MERGE_AFTER_GATE (подтверждено влад�
 | Нумерация продолжает историю проекта | §2.0: remediation = EPIC 19–33, существующий EPIC 13 сохранён; таблица соответствия черновым номерам |
 | Секрет фида остаётся снаружи | TASK 26.2: runtime injection, ничего в репозиторий |
 | Две конституции | Раздел «Конституции проекта» + TASK 19.5b по фиксации в канонe; допустимы явно записанные исключения |
+| Канал оповещений о лидах не подключаем | Telegram полностью исключён из программы; EPIC 23 строит pipeline и доказывает его на fake-канале; заявки живут в Payload Admin |
+| S3 заказать самостоятельно | Бакет `moreigory-media` создан через Timeweb API и проверен PUT/GET/DELETE; EPIC 31 и proof 14.G стали автономными |
+| Мониторинг | Базовый уровень — TASK 13.10 автономно; внешний uptime-провайдер вынесен в `IMPROVEMENT` |
 
 ## Continuous-run audit — 2026-09-18 (v4)
 
@@ -102,7 +105,8 @@ Default epic delivery_mode: MERGE_AFTER_GATE (подтверждено влад�
 | TASK 25.8 jobs owner | ждал выбор из трёх вариантов | исполняется вариант 3 автономно; 1/2 — опция в EPIC 34 |
 | TASK 28.4 `301` vs `410` | ждал решение по каждому URL | детерминированное правило по умолчанию; список `410` — отчёт владельцу |
 | EPIC 13 Timeweb runtime | не хватало сервера/БД/доступа | доступ, sudo и Managed PostgreSQL проверены фактически (§1.7); эпик автономен, включая провижининг |
-| EPIC 31 / proof 14.G / real Telegram send | не хватало `S3_*` и токена | код и fake-adapter автономно, реальные proof'ы — EPIC 34 |
+| EPIC 31 и proof 14.G | не хватало `S3_*` | бакет заказан и проверен 2026-09-18; эпик и proof автономны |
+| Внешний канал доставки лидов | требовался токен | канал исключён из программы решением владельца; pipeline доказывается на fake-канале |
 
 Дополнительно введены: §1.4.1 continuous-run contract, `docs/OWNER_QUEUE.md`
 (TASK 19.0), EPIC 34 как единственная штатная точка ожидания, классификация
@@ -125,7 +129,7 @@ Managed PostgreSQL и Secret Master `more-i-gory-server/prod` подтвержд
 | A5 verification-only | ACCEPTED | `test:leads-privacy` и `test:public-inventory-boundary` существуют | Правило внесено в §1.3; TASK 20.6 переведён в verification-first |
 | A6 дыра в `verify:quick` | ACCEPTED, цифра уточнена | Проверено скриптом: из 57 `test:*` вне `verify:quick` ровно один — `test:lead-delivery-admin` | Добавлен TASK 19.7 с machine-check |
 | A7 revalidate уже есть | ACCEPTED | `src/app/api/internal/revalidate/route.ts` + `test:internal-revalidate` существуют | TASK 27.6 переформулирован на доказательство сквозного пути |
-| B1 нет дедупликации | ACCEPTED | `idempotencyKey` есть в коллекции (unique) и в `LeadDeliveryPayload`, но Telegram его не принимает | Добавлен TASK 23.11 |
+| B1 нет дедупликации | ACCEPTED | `idempotencyKey` есть в коллекции (unique) и в `LeadDeliveryPayload`, но внешний канал его не обязан принимать | TASK 23.11 переведён в контракт канала |
 | B2 владелец `nextDueAt` | ACCEPTED | `dispatchDueFeeds` сдвигает `nextDueAt` только при claim; пост-run поведения нет | Добавлен TASK 26.15 |
 | B3 путь ручного retry | ACCEPTED | `retryAbandonedLeadDelivery` + `manualRetryAudit` реализованы, операторский путь нигде не описан | Добавлен TASK 23.12 |
 | B4 PII в логах | ACCEPTED | `test:lead-delivery-secrets` — статический контракт, runtime-захвата stdout нет | Добавлен proof 14.K |
@@ -345,11 +349,58 @@ runbook, тест на fixture, отчёт о влиянии. Недоступе
 | Сервер Timeweb + SSH + sudo | **есть, проверен** | EPIC 13 исполняется автономно, включая провижининг runtime |
 | Managed PostgreSQL (production) | **есть, доступна с сервера** | миграции и restore-тест выполняются автономно |
 | Secret Master `more-i-gory-server/prod` | **есть, все имена на месте** | runtime env собирается автономно |
-| `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | отсутствуют | EPIC 23 и proof 14.B идут на fake-канале; реальная отправка — EPIC 34 |
-| `S3_*` | отсутствуют | EPIC 31 делает код и fail-fast; proof 14.G на реальном бакете — EPIC 34 |
+| S3 бакет `moreigory-media` | **заказан и проверен 2026-09-18** | EPIC 31 и proof 14.G исполняются автономно на реальном бакете |
+| Внешний канал доставки лидов | **исключён из программы** решением владельца | EPIC 23 строит pipeline без активного канала, см. ниже |
 | `FEED_SOURCE_*` | отсутствуют | EPIC 26 и proof 14.D идут на локальных fixture-фидах |
 | Staging domain и вторая БД | не подтверждены | TASK 13.7 в EPIC 34; остальной EPIC 13 не ждёт |
-| Monitoring provider | не выбран | EPIC 34 |
+| Monitoring | базовый уровень автономен, внешний провайдер — позже | см. TASK 13.10 |
+
+### Канал доставки лидов исключён из программы
+
+Решение владельца 2026-09-18: Telegram (и любой другой внешний канал
+оповещений) в этой программе не подключается. Следствия зафиксированы явно,
+чтобы это не превратилось в тихую потерю заявок:
+
+```text
+заявка сохраняется в БД и видна в Payload Admin  → это основная ценность
+delivery-запись создаётся и остаётся неотправленной
+активных каналов нет → система НЕ репортует ложный success
+пользователь на сайте получает корректный ответ об успешной отправке формы
+оператор обязан проверять заявки в Admin — автоматических оповещений нет
+```
+
+Операционный риск принят владельцем: пока канала нет, единственный способ
+узнать о заявке — Payload Admin. Это фиксируется в `docs/OPERATIONS.md`.
+
+Вся инженерная часть EPIC 23 остаётся в силе: дефект «обработчик-заглушка»,
+retry с `maxAttempts`, переход в `abandoned`, идемпотентность, fail-closed,
+отсутствие PII в логах. Меняется только то, что конкретный транспорт не
+подключается и токен не нужен.
+
+### S3: фактическое состояние
+
+Заказан через Timeweb Cloud API и проверен живыми запросами:
+
+```text
+bucket        : moreigory-media
+preset        : стандартный 1 GB, 1 ₽/мес, регион ru-1 (тот же, что сервер)
+endpoint      : https://s3.twcstorage.ru
+addressing    : path-style (forcePathStyle = true)
+type          : public — публичное чтение объектов
+PUT SigV4     : PASS (200)
+публичное GET : PASS (200, без авторизации)
+DELETE        : PASS (204)
+```
+
+Ключи выпущены и в любой момент читаются из Timeweb API по
+`TIMEWEB_API_TOKEN`. Тариф расширяется без пересоздания бакета.
+
+Одно ограничение: machine identity в Secret Master имеет **только чтение**
+(`403 PermissionDenied` на create). Поэтому `S3_ENDPOINT`, `S3_REGION`,
+`S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY` пока не записаны в
+`more-i-gory-server/prod`. Это запись в `docs/OWNER_QUEUE.md`, но она **не
+блокирует** работу: до появления доступа на запись deploy-шаг получает
+значения из Timeweb API.
 
 Отсутствие этих ресурсов **не является** причиной остановки: оно заранее учтено
 в разбиении задач.
@@ -1243,12 +1294,23 @@ pnpm verify
 **Priority:** P0 / BLOCKER  
 **Risk:** RISKY / PII / OUTBOUND  
 **Depends on:** EPIC 22 (транспорт зафиксирован до построения доставки)  
-**Цель:** пользовательская заявка реально доходит до Telegram и корректно переживает ошибки.
+**Цель:** заявка надёжно сохраняется, проходит весь delivery-pipeline и корректно переживает ошибки — без привязки к конкретному каналу.
 
-**Без реального токена.** `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` в проекте
-отсутствуют. Весь эпик строится и доказывается на фейковом канале, который
-подменяет транспорт и подтверждает факт вызова (Guard D). Реальная отправка —
-одна запись в `docs/OWNER_QUEUE.md` и проверка в EPIC 34. Ждать токен не нужно.
+**Без внешнего канала.** По решению владельца Telegram и любой другой канал
+оповещений в этой программе не подключаются. Эпик строится и доказывается на
+фейковом канале, который подменяет транспорт и подтверждает факт вызова (Guard D).
+
+Что это меняет:
+
+```text
+channel-registry поддерживает канал как контракт, а не как конкретный сервис
+активных каналов нет → fail-closed, без ложного success
+заявка всё равно сохраняется и видна в Payload Admin
+задачи под конкретный сервис из эпика исключены
+токен не требуется ни на одном шаге
+```
+
+Подключение реального канала — отдельная будущая работа вне этого плана.
 
 ## TASK 23.1 — Channel composition root
 
@@ -1267,7 +1329,7 @@ composition root не является job-обработчиком.
 1. читать env только через `src/project/env.ts`;
 2. parse `LEAD_CHANNELS`;
 3. создавать SafeOutboundClient;
-4. создавать Telegram channel;
+4. создавать channel-адаптер по контракту `LeadDeliveryChannel`;
 5. возвращать registry `channelId → LeadDeliveryChannel`;
 6. fail closed при неизвестном/неполном active channel.
 
@@ -1286,11 +1348,17 @@ System Gateway helper из TASK 23.3 → обязан быть внесён в p
 Без этой подзадачи `pnpm verify:guards` упадёт на новом привилегированном файле,
 и AI начнёт чинить не тот слой.
 
-## TASK 23.2 — Telegram URL
+## TASK 23.2 — Контракт канала
 
-Проверить реальный Telegram Bot API path.
+Зафиксировать интерфейс `LeadDeliveryChannel` как единственную точку расширения:
+идентификатор канала, вызов отправки, классификация исхода (`sent` / `retryable`
+/ `permanent`), возвращаемый `externalRef`.
 
-Токен не должен повреждаться URL-кодированием.
+Конкретный транспорт не реализуется. Проверяется, что регистрация нового канала
+не требует правок в job-обработчике и в data-access слое.
+
+Секреты канала, когда он появится, приходят только из runtime env через
+`src/project/env.ts` и не попадают в URL-логи.
 
 Добавить deterministic unit test для URL.
 
@@ -1404,7 +1472,7 @@ immediate → +1m → +5m → +15m → +60m → +240m → abandoned
 
 ## TASK 23.6 — Unknown outcome policy
 
-Для Telegram timeout/unknown:
+Для timeout/unknown со стороны канала:
 
 Default safe policy:
 
@@ -1479,22 +1547,22 @@ POST /api/public/leads
 → DB lead
 → delivery
 → job
-→ fake/controlled Telegram
+→ fake/controlled channel
 → sent + externalRef
 ```
 
 ## TASK 23.11 — Честная политика дублей (ADR)
 
 `lead-deliveries.idempotencyKey` существует, уникален и формируется как
-`lead:<id>:channel:<channelId>`. Но **Telegram Bot API не принимает
-idempotency key**: защиты от дубля на стороне получателя нет.
+`lead:<id>:channel:<channelId>`. Но внешний канал оповещений, как правило,
+**не принимает idempotency key**: защиты от дубля на стороне получателя нет.
 
 В связке с политикой TASK 23.6 (`unknown → retryable`) таймауты гарантированно
 дадут повторные сообщения.
 
 Требования:
 
-1. зафиксировать в ADR, что дедупликация на стороне Telegram невозможна;
+1. зафиксировать в ADR, что дедупликация на стороне получателя не гарантируется;
 2. включить `deliveryId` в текст сообщения как визуальный маркер для оператора;
 3. описать в OPERATIONS, как оператор распознаёт дубль.
 
@@ -2174,10 +2242,21 @@ Safe Outbound Client остаётся единственным configurable outb
 **Priority:** P1 before production  
 **Risk:** RISKY / INFRA
 
-**Автономная граница:** `S3_*` в проекте нет. Задачи 31.1–31.3 и 31.6 — код,
-fail-fast и политика, выполняются сразу. Задачи 31.4 и 31.5 требуют реального
-бакета: их proof уезжает в EPIC 34 вместе с proof 14.G. Код при этом пишется
-и покрывается тестом на фейковом storage-адаптере, чтобы не ждать ресурс.
+**Ресурс готов.** Бакет `moreigory-media` заказан и проверен 2026-09-18 (§1.4.1),
+поэтому весь эпик, включая proof 14.G, исполняется автономно на реальном S3.
+
+Зафиксированные параметры, от которых нельзя отклоняться без причины:
+
+```text
+endpoint    : https://s3.twcstorage.ru
+region      : ru-1
+bucket      : moreigory-media
+addressing  : path-style (forcePathStyle = true)
+access      : публичное чтение объектов, запись только по ключам
+```
+
+Ключи читаются из Timeweb API по `TIMEWEB_API_TOKEN`, пока они не записаны
+в Secret Master (см. §1.4.1).
 
 ## TASK 31.1 — Production env fail-fast
 
@@ -2378,6 +2457,26 @@ backup
 → app reads restored state
 ```
 
+## TASK 13.10 — Мониторинг: базовый уровень
+
+«Monitoring provider» — это внешний сервис, который раз в минуту дёргает сайт
+снаружи и сообщает, что он упал или что истекает TLS-сертификат. Выбор такого
+сервиса — отдельное решение, и он **не блокирует** программу.
+
+Автономный базовый уровень, который делается здесь и сейчас:
+
+```text
+health endpoint отвечает 200 и проверяет доступность БД
+systemd restart policy поднимает упавший процесс
+локальная проверка срока действия TLS-сертификата
+ротация логов настроена, диск не заполняется
+короткий runbook «что смотреть, если сайт не отвечает» в OPERATIONS.md
+```
+
+Чего базовый уровень не даёт: если сервер недоступен целиком, никто об этом
+не узнает автоматически. Внешний монитор и адрес алертов — запись в
+`docs/OWNER_QUEUE.md` со статусом `IMPROVEMENT`.
+
 ## Acceptance Criteria
 
 Production topology повторяем, откатываем и не зависит от ручной правки кода на сервере.
@@ -2410,7 +2509,7 @@ PASS / FAIL
 | Proof | Где исполняется | Ждёт ресурс |
 |---|---|---|
 | 14.A access | локально / dev DB | нет |
-| 14.B leads | fake Telegram channel | нет |
+| 14.B leads | fake channel | нет |
 | 14.C crash window | локально | нет |
 | 14.D ingest | локальные fixture-фиды | нет |
 | 14.E cache | локально | нет |
@@ -2419,8 +2518,8 @@ PASS / FAIL
 | 14.I jobs | локально + сервер | нет |
 | 14.K PII в логах | локально | нет |
 | 14.J browser | локальный production build | нет |
-| 14.G S3 | — | да: бакет и `S3_*` → EPIC 34 |
-| 14.B real send | — | да: Telegram token → EPIC 34 |
+| 14.G S3 | реальный бакет `moreigory-media` | нет |
+
 
 Ни один ожидающий proof не останавливает EPIC 32: он помечается `DEFERRED`
 с причиной и уходит в EPIC 34.
@@ -2442,10 +2541,10 @@ HTTP POST
 → DB transaction
 → pending delivery
 → job
-→ outbound fake Telegram
+→ outbound fake channel
 → sent
 
-Telegram down
+channel down
 → lead still committed
 → retry
 → later sent
@@ -2593,12 +2692,11 @@ IMPROVEMENT         → можно после релиза
 |---|---|---|
 | TASK 24.1b | применить enum-миграцию к существующим записям | да, если отчёт нашёл расхождения |
 | TASK 13.7 | staging domain + вторая Managed PostgreSQL | нет, если rehearsal на сервере пройден |
-| TASK 31.4 / 31.5 / proof 14.G | S3 бакет и `S3_*` | да |
-| EPIC 23 real send | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | да |
+| TASK 31.x | записать `S3_*` в Secret Master (machine identity только на чтение) | нет, значения берутся из Timeweb API |
 | EPIC 26 activation | `FEED_SOURCE_*` | нет, ingest активируется отдельно |
 | TASK 25.8 варианты 1/2 | усиление jobs-owner контроля | нет |
 | TASK 28.4 | точечные `301` вместо `410` по списку | нет |
-| Monitoring | provider и alert destination | да |
+| Monitoring | внешний uptime-провайдер и адрес алертов | нет, базовый уровень закрыт в TASK 13.10 |
 | Domain cutover | `moreigori.ru` | да |
 
 ## TASK 34.3 — Закрыть каждый отложенный proof
@@ -2695,7 +2793,6 @@ Payload Admin
 S3
 DB
 lead E2E
-Telegram
 jobs
 newbuild
 manual passport
