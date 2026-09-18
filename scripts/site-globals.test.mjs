@@ -61,11 +61,14 @@ test("navigation global exposes header, footer and legal slots", () => {
   assert.deepEqual(["header", "headerCta", "footer", "legal"].every((name) => flattenFieldNames(Navigation.fields).includes(name)), true);
 });
 
-test("site globals are publicly readable and writable only by owner", async () => {
+test("site globals deny anonymous REST and allow authenticated Admin plus Local API", async () => {
+  const localRequest = { req: { payloadAPI: "local" } };
+
   for (const globalConfig of [SiteSettings, Navigation]) {
     assert.equal(await globalConfig.access?.read?.(ownerRequest), true);
     assert.equal(await globalConfig.access?.read?.(editorRequest), true);
-    assert.equal(await globalConfig.access?.read?.(anonymousRequest), true);
+    assert.equal(await globalConfig.access?.read?.(anonymousRequest), false);
+    assert.equal(await globalConfig.access?.read?.(localRequest), true);
 
     assert.equal(await globalConfig.access?.update?.(ownerRequest), true);
     assert.equal(await globalConfig.access?.update?.(editorRequest), false);
