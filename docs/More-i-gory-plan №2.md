@@ -3,8 +3,10 @@
 
 ```text
 Plan ID: more-i-gory-remediation-2026-09
-Version: v5
-Status: REVIEW
+Version: v6
+Status: APPROVED
+Approved by: owner
+Approved at: 2026-09-18T17:19:00+03:00
 Delivery profile: COMMERCIAL
 Canonical repository: SourceCraft integrator-p/more-i-gory-next
 GitHub mirror: neyro-level/more-i-gory-next (не primary)
@@ -12,7 +14,7 @@ Base SHA: 27ea4c2393e970797da50c7dc78b614f815820bb
 Platform: Realty Platform / REALTY_BASE / BUILD
 UX: PUBLIC_COMMERCIAL
 Epic numbering: continues project history (0–18 заняты); remediation = EPIC 19–33 + существующий EPIC 13
-Task Manager import: not allowed until «План утверждён»
+Task Manager import: allowed after this APPROVED snapshot
 Default epic delivery_mode: MERGE_AFTER_GATE (подтверждено владельцем 2026-09-18)
 ```
 
@@ -92,7 +94,9 @@ Default epic delivery_mode: MERGE_AFTER_GATE (подтверждено влад�
 | Две конституции | Раздел «Конституции проекта» + TASK 19.5b по фиксации в канонe; допустимы явно записанные исключения |
 | Канал оповещений о лидах не подключаем | Telegram полностью исключён из программы; EPIC 23 строит pipeline и доказывает его на fake-канале; заявки живут в Payload Admin |
 | S3 заказать самостоятельно | Бакет `moreigory-media` создан через Timeweb API и проверен PUT/GET/DELETE; EPIC 31 и proof 14.G стали автономными |
-| Мониторинг | Базовый уровень — TASK 13.10 автономно; внешний uptime-провайдер вынесен в `IMPROVEMENT` |
+| Полноценный staging | TASK 13.7 входит в EPIC 13 на временном preview-домене `more-previu.tw1.ru`; cutover на `moreigori.ru` позже |
+| XML-фид 3–4 месяца не нужен | EPIC 26 строится и доказывается на fixture; затем ingest замораживается выключенным. Реальный фид — вне этой программы |
+| План утверждён | 2026-09-18, snapshot v6 |
 
 ## Continuous-run audit — 2026-09-18 (v4)
 
@@ -351,9 +355,8 @@ runbook, тест на fixture, отчёт о влиянии. Недоступе
 | Secret Master `more-i-gory-server/prod` | **есть, все имена на месте** | runtime env собирается автономно |
 | S3 бакет `moreigory-media` | **заказан и проверен 2026-09-18** | EPIC 31 и proof 14.G исполняются автономно на реальном бакете |
 | Внешний канал доставки лидов | **исключён из программы** решением владельца | EPIC 23 строит pipeline без активного канала, см. ниже |
-| `FEED_SOURCE_*` | отсутствуют | EPIC 26 и proof 14.D идут на локальных fixture-фидах |
-| Staging domain и вторая БД | не подтверждены | TASK 13.7 в EPIC 34; остальной EPIC 13 не ждёт |
-| Monitoring | базовый уровень автономен, внешний провайдер — позже | см. TASK 13.10 |
+| XML-фид | **не активируется 3–4 месяца** | EPIC 26 настраивается и замораживается; proof на fixture. Если владелец даст тестовый XML — использовать как доп. proof, не ждать |
+| Staging | **нужен полноценный** | TASK 13.7 в EPIC 13 на `more-previu.tw1.ru`; отдельная БД на том же Managed PostgreSQL; cutover домена позже |
 
 ### Канал доставки лидов исключён из программы
 
@@ -1606,11 +1609,22 @@ pnpm verify
 **Priority:** P0 before feed activation  
 **Risk:** RISKY / DATA
 
-**Без реального фида.** `FEED_SOURCE_*` не настроены, ingest выключен. Эпик
-исполняется и доказывается на локальных fixture-фидах в репозитории: baseline,
-повторный прогон, `304`, изменённый объект, обрезанный feed, подозрительная
-деактивация, прерванный импорт. Реальный источник подключается в EPIC 34 и
-активируется отдельным решением, не блокируя цепочку.
+**Без живого каталога объектов.** Решения владельца 2026-09-18: реального XML-фида
+не будет 3–4 месяца, база объектов в этом окне не нужна. Эпик всё равно
+исполняется полностью: pipeline, recovery и proof на локальных fixture-фидах
+в репозитории. Если владелец даст тестовый XML во время эпика — прогнать его
+как дополнительный proof, не блокируя ожидание.
+
+После PASS ingest **замораживается**:
+
+```text
+JOBS ingest / dispatchDueFeeds не включаются на preview и production
+FEED_SOURCE_* не обязательны
+публичный каталог объектов из фида остаётся пустым/выключенным
+повторная активация — отдельная команда владельца, вне этой программы
+```
+
+Реальный источник в EPIC 34 не подключается.
 
 ## TASK 26.1 — Ingest composition root
 
@@ -1790,6 +1804,15 @@ next run succeeds
 
 `importFeed` — полноценный ingestion task, а не status transition.
 
+## TASK 26.16 — Freeze ingest
+
+После proof:
+
+- autorun ingest выключен;
+- нет обязательного `FEED_SOURCE_*`;
+- OPERATIONS фиксирует: «каталог из фида заморожен до отдельной команды»;
+- повторный запуск не происходит сам после деплоя.
+
 ## Proof
 
 ```bash
@@ -1860,7 +1883,7 @@ Cache failure:
 ```text
 business write remains committed
 → operational issue logged
-→ retry/monitoring
+→ retry/observability
 ```
 
 ## TASK 27.5 — Silent fallback observability
@@ -2413,26 +2436,26 @@ restart
 smoke
 ```
 
-## TASK 13.7 — Staging — часть в DEFERRED QUEUE
+## TASK 13.7 — Полноценный staging на preview-домене
 
-Автономно: конфиги, env-шаблон, `noindex`, restricted access, отдельный
-prefix/схема — всё, что делается в коде и репозитории.
+Полноценный staging **нужен и входит в этот эпик**, не в очередь.
 
-В EPIC 34 уезжает только то, чего физически нет: staging domain и вторая
-Managed PostgreSQL. До их появления rehearsal деплоя выполняется на том же
-сервере в отдельном release-каталоге и на отдельном порту, без публичного домена.
+Временный домен деплоя уже есть: `more-previu.tw1.ru` (окно порядка недель).
+Финальный `moreigori.ru` — later cutover, не этот эпик.
 
-Отдельно:
+Контур staging:
 
 ```text
-domain
-Managed PostgreSQL
-S3 bucket/prefix
-secrets
-noindex
-restricted access
-no production PII
+публичный хост     : more-previu.tw1.ru
+runtime            : тот же сервер, отдельный release-каталог / unit
+база               : отдельная database name на уже существующем Managed PostgreSQL, без production PII
+S3                 : отдельный prefix бакета moreigory-media
+secrets            : отдельный набор имён, не копия production leads
+индексация         : noindex, restricted access по необходимости
+jobs ingest        : выключен (freeze из EPIC 26)
 ```
+
+Cutover домена на `moreigori.ru` в эту задачу не входит.
 
 ## TASK 13.8 — Jobs owner handover
 
@@ -2456,26 +2479,6 @@ backup
 → restore into disposable/staging DB
 → app reads restored state
 ```
-
-## TASK 13.10 — Мониторинг: базовый уровень
-
-«Monitoring provider» — это внешний сервис, который раз в минуту дёргает сайт
-снаружи и сообщает, что он упал или что истекает TLS-сертификат. Выбор такого
-сервиса — отдельное решение, и он **не блокирует** программу.
-
-Автономный базовый уровень, который делается здесь и сейчас:
-
-```text
-health endpoint отвечает 200 и проверяет доступность БД
-systemd restart policy поднимает упавший процесс
-локальная проверка срока действия TLS-сертификата
-ротация логов настроена, диск не заполняется
-короткий runbook «что смотреть, если сайт не отвечает» в OPERATIONS.md
-```
-
-Чего базовый уровень не даёт: если сервер недоступен целиком, никто об этом
-не узнает автоматически. Внешний монитор и адрес алертов — запись в
-`docs/OWNER_QUEUE.md` со статусом `IMPROVEMENT`.
 
 ## Acceptance Criteria
 
@@ -2504,7 +2507,8 @@ PASS / FAIL
 Отчёт без сырого вывода не является proof. Через месяц «мы это проверяли»
 без файла не имеет силы.
 
-## Что выполняется сразу, а что ждёт ресурс
+Все proofs EPIC 32 исполняются в этой программе: ingest — на fixture, S3 — на
+реальном бакете, leads — на fake-канале. Отложенных proof нет.
 
 | Proof | Где исполняется | Ждёт ресурс |
 |---|---|---|
@@ -2521,8 +2525,7 @@ PASS / FAIL
 | 14.G S3 | реальный бакет `moreigory-media` | нет |
 
 
-Ни один ожидающий proof не останавливает EPIC 32: он помечается `DEFERRED`
-с причиной и уходит в EPIC 34.
+Ни один proof не останавливает EPIC 32.
 
 ## 14.A — Access
 
@@ -2691,13 +2694,10 @@ IMPROVEMENT         → можно после релиза
 | Источник | Что требуется | Блокирует release |
 |---|---|---|
 | TASK 24.1b | применить enum-миграцию к существующим записям | да, если отчёт нашёл расхождения |
-| TASK 13.7 | staging domain + вторая Managed PostgreSQL | нет, если rehearsal на сервере пройден |
 | TASK 31.x | записать `S3_*` в Secret Master (machine identity только на чтение) | нет, значения берутся из Timeweb API |
-| EPIC 26 activation | `FEED_SOURCE_*` | нет, ingest активируется отдельно |
 | TASK 25.8 варианты 1/2 | усиление jobs-owner контроля | нет |
 | TASK 28.4 | точечные `301` вместо `410` по списку | нет |
-| Monitoring | внешний uptime-провайдер и адрес алертов | нет, базовый уровень закрыт в TASK 13.10 |
-| Domain cutover | `moreigori.ru` | да |
+| Domain cutover | `moreigori.ru` | да, но это отдельная команда после программы |
 
 ## TASK 34.3 — Закрыть каждый отложенный proof
 

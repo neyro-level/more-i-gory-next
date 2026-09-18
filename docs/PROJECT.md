@@ -16,12 +16,12 @@ Source of Truth проекта.
 |---|---|
 | Проект | «Море и Горы» — инвестиционное бюро курортной недвижимости |
 | Production domain | `more-previu.tw1.ru` technical preview; final `moreigori.ru` reserved for later cutover and currently not used by this release |
-| Staging domain | `TODO: подтвердить до EPIC 13` |
+| Staging domain | `more-previu.tw1.ru` — полноценный staging/preview; `moreigori.ru` reserved for later cutover |
 | Production runtime | один Next.js standalone + Payload runtime за host Nginx; jobs остаются `JOBS_AUTORUN=false` до отдельного production jobs gate |
 | Production server | Timeweb `Moregory`, регион `ru-1`, Ubuntu 26.04; SSH aliases `moreigory` (deploy, sudo) и `moreigory-root` |
 | Secret Master | project `more-i-gory-server`, env `prod` — единственный source of truth для server и DB credentials |
 | Production database | отдельная Timeweb Managed PostgreSQL, регион `ru-1`, достижима с сервера (проверено 2026-09-18) |
-| Staging database | отдельная Timeweb Managed PostgreSQL, без production PII |
+| Staging database | отдельная database name на существующем Managed PostgreSQL, без production PII |
 | Manual media | Timeweb S3 bucket `moreigory-media`, endpoint `s3.twcstorage.ru`, region `ru-1`, path-style, публичное чтение; создан и проверен 2026-09-18 |
 | Repository | SourceCraft `integrator-p/more-i-gory-next` |
 
@@ -32,11 +32,10 @@ Production и staging не используют общую БД, secrets или 
 
 | Область | Текущее решение |
 |---|---|
-| Active feeds/parsers | отсутствуют; XML/YRL ingest выключен до EPIC 16 и появления фактического feed |
+| Active feeds/parsers | pipeline настраивается в EPIC 26 и сразу замораживается; живой XML-фид и каталог объектов не активируются 3–4 месяца |
 | Non-secret integrations | Payload Admin, Timeweb Managed PostgreSQL и Timeweb S3 подтверждены; внешний канал оповещений о заявках решением владельца не подключается |
 | Backup | planned: automatic Managed PostgreSQL backup + S3 versioning; retention и provider-independent copy — `TODO` до EPIC 13 |
 | Restore proof | не выполнялся; обязательный фактический restore test в EPIC 13 |
-| Monitoring | базовый уровень в EPIC 13 (health endpoint, restart policy, контроль срока TLS, ротация логов); внешний uptime monitor и адрес алертов — отложенное улучшение |
 | Legal | оператор ПДн и публичные реквизиты утверждены владельцем; privacy/consent опубликованы как `privacy-2026-09-17` и `pdn-consent-2026-09-17`; банковские реквизиты не публикуются |
 | Core version | нормативная база — локальные конституции `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md` и `docs/AMS_UI_CORE_v5.0_FINAL.md` |
 | Server state | проверено 2026-09-18: nginx active (только default site), приложение не развёрнуто, Node/pnpm/docker отсутствуют — EPIC 13 является первичным провижинингом |
@@ -55,18 +54,17 @@ Production и staging не используют общую БД, secrets или 
 - public/system gateways и DTO contracts;
 - Payload Jobs и HTTP cache invalidation;
 - leads и transactional delivery outbox;
-- Telegram как единственный стартовый delivery channel;
-- Nginx, staging, migrations, backup, monitoring и operations.
+- Nginx, staging, migrations, backup и operations.
 
 ### Отложенные модули
 
 | Модуль | Статус | Условие активации |
 |---|---|---|
 | Newbuild schema | enabled | EPIC 15: hidden-by-default collections, no unit routes |
-| XML/YRL ingest | enabled, jobs explicit | EPIC 16: feed sources/import runs/issues; no autorun without configured source |
+| XML/YRL ingest | implemented then frozen | EPIC 26: proof on fixture, затем jobs выключены до отдельной команды |
 | Public newbuild catalog | enabled | EPIC 17: `/novostroyki/`, `/novostroyki/<complex-slug>/`, `/zastroyshchik/<slug>/` |
 | Posts `/analitika/<slug>/` | disabled | EPIC 18 после EPIC 14 и решения владельца |
-| CRM delivery | disabled | отдельное решение; стартовый канал — Telegram |
+| CRM delivery | disabled | внешний канал оповещений не подключается в этой программе |
 | Maps | disabled / `TODO` | отдельное решение provider/license до подключения |
 | Reviews, offices, stats, price history | disabled | отдельное доказанное продуктовое требование |
 
@@ -112,7 +110,7 @@ status=active`. Unit/filter/layout URL не получают самостоят�
 
 ## 5. Leads и routing
 
-- стартовый канал: `telegram`;
+- стартовый канал: не подключается; заявки живут в Payload Admin;
 - CRM не включена, но delivery port остаётся расширяемым;
 - success формы зависит от локального commit lead + pending deliveries, а не от
   ответа Telegram;
