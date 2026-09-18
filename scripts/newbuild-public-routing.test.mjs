@@ -48,7 +48,11 @@ test("EPIC 17 routes use public newbuild gateway and keep /obekty manual-only", 
   assert.match(catalogPage, /listPublishedComplexes/);
   assert.match(complexPage, /getPublishedComplexBySlug/);
   assert.match(complexPage, /listActiveNewbuildInventoryByComplex/);
+  assert.match(complexPage, /generateStaticParams/);
+  assert.doesNotMatch(complexPage, /dynamicParams\s*=\s*false/);
   assert.match(developerPage, /getPublishedDeveloperBySlug/);
+  assert.match(developerPage, /generateStaticParams/);
+  assert.doesNotMatch(developerPage, /dynamicParams\s*=\s*false/);
   assert.match(objectsPage, /listPublishedManualProperties/);
   assert.doesNotMatch(objectsPage, /listPublishedComplexes|listActiveNewbuildInventoryByComplex/);
 });

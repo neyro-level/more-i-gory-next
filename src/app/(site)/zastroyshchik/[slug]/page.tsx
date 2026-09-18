@@ -15,8 +15,6 @@ type DeveloperPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export const dynamicParams = false;
-
 export async function generateStaticParams() {
   const slugs = await listPublishedDeveloperSlugs();
   return slugs.map((slug) => ({ slug }));
