@@ -70,7 +70,7 @@ export async function findPropertiesByExternalId(
       feedSource: relationId(doc.feedSource),
       id: doc.id,
       importHash: doc.importHash,
-      origin: doc.origin,
+      origin: doc.origin === "manual" ? "manual" : "feed",
       title: typeof doc.title === "string" ? doc.title : null,
     }));
 }

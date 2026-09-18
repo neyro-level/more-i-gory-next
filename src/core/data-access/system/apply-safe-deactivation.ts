@@ -19,7 +19,7 @@ type PayloadLike = {
     select?: Record<string, true>;
   }) => Promise<Record<string, unknown>>;
   update: (args: {
-    collection: "properties" | "feed-sources";
+    collection: "properties" | "feed-sources" | "import-runs";
     data: Record<string, unknown>;
     id?: number | string;
     overrideAccess: true;

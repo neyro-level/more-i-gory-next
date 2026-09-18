@@ -15,6 +15,7 @@ import { createUpsertFeedHandler } from "../../../core/ingest/upsert-feed.ts";
 import { createNormalizeFeedHandler } from "../../../core/ingest/normalize-feed.ts";
 import { createParseFeedHandler } from "../../../core/ingest/parse-feed.ts";
 import { createResolveFeedUrlHandler } from "../../../core/ingest/resolve-feed-url.ts";
+import { createFinalizeImportHandler } from "../../../core/ingest/finalize-import.ts";
 import {
   finalizeUnchangedImportRun,
   transitionImportRunToRunning,
@@ -32,7 +33,7 @@ type ImportFeedTask = {
     importRunId: string;
   };
   output: {
-    status: "failed" | "running" | "skipped";
+    status: "failed" | "running" | "skipped" | "completed" | "suspicious";
   };
 };
 
@@ -59,7 +60,8 @@ export function createImportFeedPipelineHandlers(
     | "normalize"
     | "upsert"
     | "record-issues"
-    | "safe-deactivation",
+    | "safe-deactivation"
+    | "finalize",
     IngestStageHandler
   >
 > {
@@ -85,6 +87,7 @@ export function createImportFeedPipelineHandlers(
     upsert: createUpsertFeedHandler({ payload }),
     "record-issues": createRecordImportIssuesHandler({ payload }),
     "safe-deactivation": createSafeDeactivationHandler({ payload }),
+    finalize: createFinalizeImportHandler({ payload }),
   };
 }
 

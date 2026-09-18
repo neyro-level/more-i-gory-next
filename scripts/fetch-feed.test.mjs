@@ -177,7 +177,12 @@ test("importFeed composition fetches after resolving the env-named URL", async (
 
   assert.equal(requests[0].headers["If-None-Match"], '"abc"');
   assert.equal(result.state.fetch?.status, 200);
-  assert.equal(result.pendingStage, "finalize");
+  assert.equal(result.pendingStage, null);
+  assert.equal(result.status, "completed");
+  const runWrite = writes.find((write) => write.collection === "import-runs" && write.data.status === "completed");
+  assert.ok(runWrite);
+  assert.equal(typeof runWrite.data.finishedAt, "string");
+  assert.equal(runWrite.data.createdCount, 1);
   assert.equal(result.state.conditional?.kind, "read-body");
   assert.equal(result.state.parse?.suspicious, false);
   assert.equal(result.state.upsert?.createdCount, 1);

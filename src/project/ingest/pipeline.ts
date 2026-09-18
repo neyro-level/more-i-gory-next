@@ -50,9 +50,11 @@ export type IngestStageContext = {
   state: IngestPipelineState;
 };
 
+export type IngestRunStatus = "failed" | "running" | "skipped" | "completed" | "suspicious";
+
 export type IngestStageResult = {
   continue: boolean;
-  status: "failed" | "running" | "skipped";
+  status: IngestRunStatus;
 };
 
 export type IngestStageHandler = (context: IngestStageContext) => Promise<IngestStageResult> | IngestStageResult;
@@ -60,7 +62,7 @@ export type IngestStageHandler = (context: IngestStageContext) => Promise<Ingest
 export type IngestPipelineResult = {
   completedStages: IngestStageId[];
   pendingStage: IngestStageId | null;
-  status: "failed" | "running" | "skipped";
+  status: IngestRunStatus;
   state: IngestPipelineState;
 };
 
