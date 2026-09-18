@@ -73,7 +73,7 @@ test("completed full run stamps lastSuccessfulRunAt and lastFullRunAt", async ()
     },
   });
 
-  assert.deepEqual(result, { continue: false, status: "completed" });
+  assert.deepEqual(result, { continue: true, status: "completed" });
   const runWrite = writes.find((write) => write.collection === "import-runs");
   const sourceWrite = writes.find((write) => write.collection === "feed-sources");
   assert.equal(runWrite.data.status, "completed");
@@ -114,7 +114,7 @@ test("suspicious deactivation finalizes without lastSuccessfulRunAt", async () =
     },
   });
 
-  assert.deepEqual(result, { continue: false, status: "suspicious" });
+  assert.deepEqual(result, { continue: true, status: "suspicious" });
   const runWrite = writes.find((write) => write.collection === "import-runs");
   const sourceWrite = writes.find((write) => write.collection === "feed-sources");
   assert.equal(runWrite.data.status, "suspicious");

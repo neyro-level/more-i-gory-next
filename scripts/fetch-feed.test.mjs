@@ -11,6 +11,7 @@ import {
 import { DEFAULT_FEED_PARSER_LIMITS } from "../src/core/ingest/parsers/limits.ts";
 import { createImportFeedClaimHandler, runIngestPipeline } from "../src/project/ingest/pipeline.ts";
 import { createResolveFeedUrlHandler } from "../src/core/ingest/resolve-feed-url.ts";
+import { createCacheInvalidator } from "../src/core/cache/invalidator.ts";
 import { createImportFeedPipelineHandlers } from "../src/project/jobs/imports/import-feed.ts";
 import { SafeOutboundRequestError } from "../src/core/security/outbound-http/index.ts";
 
@@ -123,6 +124,7 @@ test("fetch stage stores the outbound response and stops before parse", async ()
 test("importFeed composition fetches after resolving the env-named URL", async () => {
   const requests = [];
   const writes = [];
+  const batches = [];
   const payload = {
     async update(args) {
       writes.push(args);
@@ -171,6 +173,12 @@ test("importFeed composition fetches after resolving the env-named URL", async (
           };
         },
       },
+      {
+        invalidator: createCacheInvalidator({
+          branch: "http",
+          invalidateBatch: async (batch) => batches.push(batch),
+        }),
+      },
     ),
     input: { feedSourceId: "101", importRunId: "501" },
   });
@@ -191,4 +199,6 @@ test("importFeed composition fetches after resolving the env-named URL", async (
   assert.equal(created.data.origin, "feed");
   assert.equal(created.data.externalId, "flat-1");
   assert.equal("source" in created.data, false);
+  assert.equal(batches.length, 1);
+  assert.ok(batches[0].some((target) => target.kind === "tag" && target.tag === "catalog"));
 });

@@ -43,6 +43,8 @@ export type IngestPipelineState = {
   upsert?: UpsertFeedSummary;
   recordedIssues?: RecordedImportIssue[];
   deactivation?: SafeDeactivationPlan;
+  affectedComplexSlugs?: string[];
+  affectedSliceSlugs?: string[];
 };
 
 export type IngestStageContext = {

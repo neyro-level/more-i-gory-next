@@ -53,8 +53,8 @@ const requestSchema = z
   .strict();
 
 const internalRateLimitStore = new Map<string, RateLimitBucket>();
-const tagAllowlist = /^(catalog|navigation|redirects|site-settings|page(?::[a-z0-9-]+)+|property(?::[a-z0-9-]+)+|region(?::[a-z0-9-]+)+)$/;
-const publicPathAllowlist = /^\/$|^\/(?:analitika|consent|investicionnaya-nedvizhimost|kontakty|metodika|o-kompanii|obekty|podbor|privacy)(?:\/[a-z0-9-]+)*\/?$/;
+const tagAllowlist = /^(catalog|catalog-slice(?::[a-z0-9-]+)+|complex(?::[a-z0-9-]+)+|navigation|redirects|site-settings|page(?::[a-z0-9-]+)+|property(?::[a-z0-9-]+)+|region(?::[a-z0-9-]+)+)$/;
+const publicPathAllowlist = /^\/$|^\/(?:analitika|consent|investicionnaya-nedvizhimost|kontakty|metodika|novostroyki|o-kompanii|obekty|podbor|privacy)(?:\/[a-z0-9-]+)*\/?$/;
 
 function jsonResponse(body: unknown, init: ResponseInit): Response {
   return Response.json(body, {

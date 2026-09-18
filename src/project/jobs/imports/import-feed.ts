@@ -16,6 +16,8 @@ import { createNormalizeFeedHandler } from "../../../core/ingest/normalize-feed.
 import { createParseFeedHandler } from "../../../core/ingest/parse-feed.ts";
 import { createResolveFeedUrlHandler } from "../../../core/ingest/resolve-feed-url.ts";
 import { createFinalizeImportHandler } from "../../../core/ingest/finalize-import.ts";
+import { createInvalidateImportCacheHandler } from "../../../core/ingest/invalidate-import-cache.ts";
+import { createCacheInvalidator, type CacheInvalidator } from "../../../core/cache/invalidator.ts";
 import {
   finalizeUnchangedImportRun,
   touchImportRunHeartbeat,
@@ -51,6 +53,7 @@ export function createImportFeedPipelineHandlers(
   payload: ImportFeedPayload,
   lookupEnv: (name: string) => string | undefined | Promise<string | undefined>,
   outbound: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>),
+  cache?: { invalidator: CacheInvalidator },
 ): Partial<
   Record<
     | "claim-running"
@@ -62,10 +65,17 @@ export function createImportFeedPipelineHandlers(
     | "upsert"
     | "record-issues"
     | "safe-deactivation"
-    | "finalize",
+    | "finalize"
+    | "invalidate-cache",
     IngestStageHandler
   >
 > {
+  const invalidator =
+    cache?.invalidator ??
+    createCacheInvalidator({
+      branch: "http",
+      invalidateBatch: async () => {},
+    });
   return {
     "claim-running": createImportFeedClaimHandler((claimInput) =>
       transitionImportRunToRunning(payload, claimInput),
@@ -89,6 +99,7 @@ export function createImportFeedPipelineHandlers(
     "record-issues": createRecordImportIssuesHandler({ payload }),
     "safe-deactivation": createSafeDeactivationHandler({ payload }),
     finalize: createFinalizeImportHandler({ payload }),
+    "invalidate-cache": createInvalidateImportCacheHandler({ invalidator }),
   };
 }
 
@@ -107,6 +118,7 @@ async function createFeedOutboundClient(): Promise<SafeOutboundClient> {
 export const importFeedHeartbeatIntervalMs = 60_000;
 
 export async function runImportFeedWithHeartbeat(args: {
+  cache?: { invalidator: CacheInvalidator };
   clearHeartbeatInterval?: (handle: ReturnType<typeof setInterval>) => void;
   lookupEnv: (name: string) => string | undefined | Promise<string | undefined>;
   outbound: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>);
@@ -121,12 +133,40 @@ export async function runImportFeedWithHeartbeat(args: {
   }, importFeedHeartbeatIntervalMs);
   try {
     return await runIngestPipeline({
-      handlers: createImportFeedPipelineHandlers(args.payload, args.lookupEnv, args.outbound),
+      handlers: createImportFeedPipelineHandlers(
+        args.payload,
+        args.lookupEnv,
+        args.outbound,
+        args.cache,
+      ),
       input: args.input,
     });
   } finally {
     clear(handle);
   }
+}
+
+async function createImportFeedHttpInvalidator(): Promise<CacheInvalidator> {
+  return createCacheInvalidator({
+    branch: "http",
+    async invalidateBatch(targets) {
+      const { env } = await import("../../env.ts");
+      if (!env.REVALIDATE_SECRET || !env.INTERNAL_REVALIDATE_BASE_URL) {
+        throw new Error("HTTP cache invalidation is not configured.");
+      }
+      const response = await fetch(new URL("/api/internal/revalidate", env.INTERNAL_REVALIDATE_BASE_URL), {
+        body: JSON.stringify({ targets }),
+        headers: {
+          authorization: `Bearer ${env.REVALIDATE_SECRET}`,
+          "content-type": "application/json",
+        },
+        method: "POST",
+      });
+      if (!response.ok) {
+        throw new Error("internal revalidate failed");
+      }
+    },
+  });
 }
 
 export const importFeedTask: TaskConfig<ImportFeedTask> = {
@@ -143,6 +183,7 @@ export const importFeedTask: TaskConfig<ImportFeedTask> = {
   retries: 0,
   handler: async ({ input, req }) => {
     const result = await runImportFeedWithHeartbeat({
+      cache: { invalidator: await createImportFeedHttpInvalidator() },
       input,
       lookupEnv: lookupFeedUrlRuntimeEnv,
       outbound: createFeedOutboundClient,

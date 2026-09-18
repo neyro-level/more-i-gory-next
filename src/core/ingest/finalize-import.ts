@@ -65,6 +65,6 @@ export function createFinalizeImportHandler(deps: {
       successful: !suspicious,
     });
 
-    return { continue: false, status };
+    return { continue: true, status };
   };
 }
