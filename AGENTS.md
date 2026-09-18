@@ -14,12 +14,14 @@
 ## Порядок чтения
 
 1. `docs/README.md` — карта документов и текущая точка.
-2. `docs/01_PRD.md` — продукт, аудитория, позиционирование.
-3. `docs/02_PRODUCT_STRUCTURE.md` — PAGE-ID, URL, SEO, контент и публикация.
-4. `docs/03_ARCHITECTURE.md` — stack, boundaries, build и integrations.
-5. `docs/TECHNICAL_CORE.md` — UI-relevant runtime facts для UI scope.
-6. `docs/06_DESIGN_SYSTEM.md` — визуальная система.
-7. Текущий PR/Task из `docs/04_BACKLOG.md`.
+2. `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md` — техническая конституция стека.
+3. `docs/AMS_UI_CORE_v5.0_FINAL.md` — UI-конституция (для UI-задач обязательно).
+4. `docs/01_PRD.md` — продукт, аудитория, позиционирование.
+5. `docs/02_PRODUCT_STRUCTURE.md` — PAGE-ID, URL, SEO, контент и публикация.
+6. `docs/03_ARCHITECTURE.md` — stack, boundaries, build и integrations.
+7. `docs/TECHNICAL_CORE.md` — UI-relevant runtime facts для UI scope.
+8. `docs/06_DESIGN_SYSTEM.md` — визуальная система.
+9. Текущий PR/Task из `docs/04_BACKLOG.md`.
 
 Исследования в `docs/research/` — evidence, а не параллельный Source of Truth.
 
@@ -33,7 +35,10 @@
 - Фильтры и параметры не создают индексируемые URL.
 - Нельзя выдумывать проекты, цены, доходность, кейсы, команду и юридические факты.
 - Сырой transfer package не коммитится; разрешены только выбранные локальные ассеты.
-- Payload уже владеет CMS/auth/schema; публичный read adapter переключается в EPIC 8. Prisma и второй ORM запрещены.
+- Payload уже владеет CMS/auth/schema; публичный `ContentService` пока читает
+  local adapters. Prisma и второй ORM запрещены.
+- Стек сверяется с Realty Platform Core 5.5, UI — с UI Core 5.0. Исключения
+  только через `docs/README.md` § Approved exceptions и ADR.
 
 ## Основные команды
 

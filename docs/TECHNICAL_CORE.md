@@ -1,18 +1,33 @@
 # Project UI Technical Core — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 1.0
-**Дата:** 2026-09-12
+**Версия:** 1.1
+**Дата:** 2026-09-18
 **Назначение:** короткий UI-адаптер к действующему
 [03_ARCHITECTURE.md](03_ARCHITECTURE.md), а не второй архитектурный канон.
+Static export не является действующим UI/runtime contract.
 
 ## 1. Core Profile
 
-- Selected AMS Core: REALTY_BASE transition, Next.js Node runtime; Payload starts in EPIC 2.
+- Selected AMS Core: REALTY_BASE, Next.js Node runtime, Payload 3.89 in-tree.
 - Canonical repository: SourceCraft integrator-p/more-i-gory-next.
 - Package manager: pnpm.
 - UX scope: PUBLIC_COMMERCIAL.
 - AMS Distribution Mode: DISABLED; private @ams registry не подключён.
+
+Действующий runtime UI-слоя:
+
+```text
+Next.js standalone
+Payload
+PostgreSQL
+S3
+Node runtime
+Server-first
+```
+
+`output: "standalone"` задан в `next.config.ts`. `"use client"` разрешён только в
+`src/ui/interactive/**`. Public pages остаются Server Components.
 
 ## 2. Runtime / Exact Versions
 
@@ -36,7 +51,9 @@ src/app/(site)/globals.css, primitives в src/components/ui.
 - Responsive contract: fill только вместе с stable wrapper и sizes.
 - LCP contract: единственный hero asset получает `preload`; card/gallery media
   не загружается eager без причины.
-- Runtime remote images запрещены до точных S3 `remotePatterns`.
+- Remote media: `next.config.ts` собирает S3 `remotePatterns` из
+  `S3_BUCKET`/`S3_ENDPOINT`; без этих env список пуст и remote fetch не
+  открывается.
 
 ## 4. Fonts
 
@@ -56,8 +73,8 @@ Official evidence:
 
 - Canonical lead UI: LeadForm.
 - Transport: browser POST `/api/public/leads` через `src/ui/interactive/lead-form-client.tsx`.
-- Server validation/integration owner: отдельный AMS Leads API, не UI.
-- Current mode: fail-closed до legal/Leads API approval.
+- Server owner: тот же Node runtime и Payload collections `leads` /
+  `lead-deliveries`; отдельный static-export AMS Leads API не используется.
 - PII/legal: consent version и policy gate из Product Structure/Architecture.
 
 Форма остаётся server-first и использует framework-free progressive enhancement.
@@ -69,14 +86,16 @@ data-invalid.
 - UI input: project DTO / safe view contract.
 - Formation layer: Content Service + Repository contracts.
 - Reusable UI не импортирует persistence/CMS/ORM types.
-- Payload 3.89 + PostgreSQL 18 foundation реализуется в EPIC 2; Prisma запрещён.
-- Публичный UI до EPIC 8 продолжает читать текущие JSON/Markdown adapters.
+- Payload 3.89 + PostgreSQL 18 foundation в `main`; Prisma запрещён.
+- Публичный UI продолжает читать текущие JSON/Markdown adapters.
 
 ## 7. Deployment Target
 
-- Production model: immutable Next.js image → один `next start` runtime → Nginx.
-- Production topology и rollout реализуются в EPIC 13.
-- Production-like proof EPIC 1 выполняется локально через итоговый build и `next start`.
+- Production model: Next.js standalone Node process с in-tree Payload,
+  PostgreSQL и S3 media; reverse proxy — Nginx (EPIC 13).
+- Не Docker-only «immutable Next.js image» и не static HTML export.
+- Staging/production rollout — EPIC 13; локальный production-like proof —
+  `next build` + `next start`.
 
 ## 8. Performance Budget
 

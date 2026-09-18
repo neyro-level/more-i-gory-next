@@ -1,23 +1,31 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.2 Payload foundation
-**Дата:** 2026-09-15
-**Engineering baseline:** глобальный AMS Engineering Standard / Constitution
-**Важно:** этот документ фиксирует только проектную конкретику.
+**Версия:** 2.3 After EPIC 12
+**Дата:** 2026-09-18
+**Engineering baseline:** AMS Realty Platform Core 5.5 (норматив стека)
+**Важно:** этот документ фиксирует только проектную конкретику. Стек, границы
+данных и jobs сверяются с
+[`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md).
+Молчаливые отклонения запрещены.
 
 ## 0. Transition contract
 
 EPIC 1 перевёл публичный сайт со static export на production Node.js runtime.
-EPIC 2 добавляет Payload 3.89, users/auth, Jobs schema и migrations-only adapter
-PostgreSQL. Публичный сайт до EPIC 8 продолжает читать текущий JSON/Markdown.
+EPIC 2–12 и 15–17 в `main`: Payload 3.89, PostgreSQL migrations, gateways, media/S3,
+regions, properties, newbuild/ingest/catalog, leads и maintenance. Публичный
+`ContentService` всё ещё читает локальные JSON/Markdown adapters;
+`PayloadContentRepository` зарезервирован.
 
 Принятая цель — `AMS_PROFILE=REALTY_BASE`: Next.js + Payload в одном Node.js
 runtime, Managed PostgreSQL, S3 и один jobs owner. Решение принято в
 [`ADR-004`](adr/ADR-004-realty-platform-runtime.md), project-specific профиль —
-в [`PROJECT.md`](PROJECT.md). Переход выполняется последовательно: EPIC 1
-удаляет static-only runtime, EPIC 2 добавляет Payload и PostgreSQL, следующие
-эпики вводят gateway, data и operations contracts.
+в [`PROJECT.md`](PROJECT.md).
+
+Remediation baseline (TASK 19.1): все дальнейшие изменения поверх
+`BASE_SHA=27ea4c2393e970797da50c7dc78b614f815820bb`, профиль `REALTY_BASE`,
+целевой стек AMS Realty Platform 5.5 и AMS UI Core 5.0. Карта — в
+[`README.md`](README.md#audit--remediation-baseline).
 
 ## 1. Architecture Summary
 
@@ -125,8 +133,10 @@ Backend:
 - PostgreSQL adapter работает только через committed migrations (`push:false`);
 - отдельный AMS Leads API пока остаётся будущим контуром заявок.
 
-Границы EPIC 2:
-- публичные страницы не переключаются на Payload до EPIC 8;
+Границы, сохранённые после EPIC 2–8:
+
+- публичный `ContentService` не переключён на Payload; local adapters остаются
+  действующим public read path;
 - GraphQL отключён, anonymous users REST закрыт access rules;
 - `next/headers` запрещён в `core/ingest/**`, `core/cache/**` и job handlers;
 - `overrideAccess:true` разрешён только controlled owner bootstrap в System Gateway;
@@ -135,7 +145,7 @@ Backend:
 
 ## 3. Architecture Layers
 
-Текущая реализация до EPIC 8:
+Текущая реализация public render:
 
 ```text
 src/app
@@ -147,7 +157,7 @@ src/app
 
 UI не импортирует контент-файлы напрямую.
 
-Принятая цель EPIC 3/8:
+Целевой public path (ещё не включён):
 
 ```text
 src/app
@@ -157,9 +167,9 @@ src/app
 ```
 
 Payload schema и `payload-types.ts` остаются server-only внутри
-`src/core/data-access/**`. `ContentService`, `ContentRepository` и local/Payload
-adapters удаляются в EPIC 8; принцип изоляции UI от persistence сохраняется.
-Prisma как второй ORM запрещён.
+`src/core/data-access/**`. `ContentService` и local adapters пока обслуживают
+публичный рендер; `PayloadContentRepository` зарезервирован. Принцип изоляции UI
+от persistence сохраняется. Prisma как второй ORM запрещён.
 
 ## 4. Domain Modules
 

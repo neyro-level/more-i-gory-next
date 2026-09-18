@@ -6,6 +6,10 @@
 **Назначение:** проектная visual policy. Числовые значения живут только в
 src/app/(site)/globals.css.
 
+UI сверяется с [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md):
+primitives, composition, `REUSE → VARIANT → CREATE`. Этот файл — visual policy
+проекта, а не вторая конституция. Отклонения — только approved exception.
+
 ## 1. Visual Character
 
 ~~~text

@@ -1,6 +1,8 @@
 # ADR-002: Content Repository Boundary
 
-Status: Superseded by ADR-004
+Status: Superseded
+Superseded by: ADR-004
+History: retained; do not delete this file
 Date: 2026-09-10
 
 ## Context
