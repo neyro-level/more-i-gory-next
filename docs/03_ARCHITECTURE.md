@@ -449,7 +449,10 @@ Production gate:
 - no raw HTML from Markdown;
 - dependency versions locked;
 - forms rate-limited server-side;
-- staging noindex + auth.
+- staging noindex + auth;
+- Safe Outbound pins TCP via `https.request` `lookup` to the already-validated
+  DNS answer; TLS `servername` stays the original hostname. Custom `fetchImpl`
+  is test-only and does not perform the socket pin.
 
 ## 21. Deployment
 

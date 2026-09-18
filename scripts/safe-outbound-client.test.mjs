@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createPinnedLookup,
   createSafeOutboundClient,
+  pickPinnedAddress,
   SafeOutboundRequestError,
 } from "../src/core/security/outbound-http/index.ts";
 
@@ -87,6 +89,124 @@ test("safe outbound client re-checks redirects before following them", async () 
   );
 });
 
+test("303 converts any method to GET without a body", async () => {
+  const calls = [];
+  const outbound = client({
+    fetchImpl: async (url, init) => {
+      calls.push({ method: init.method, hasBody: Boolean(init.body), href: String(url) });
+      if (calls.length === 1) {
+        return new Response(null, {
+          headers: { location: "https://api.telegram.org/follow" },
+          status: 303,
+        });
+      }
+      return new Response(encoder.encode("ok"), { status: 200 });
+    },
+  });
+
+  await outbound.request({
+    ...baseRequest,
+    body: encoder.encode("payload"),
+    method: "POST",
+  });
+
+  assert.equal(calls[0].method, "POST");
+  assert.equal(calls[0].hasBody, true);
+  assert.equal(calls[1].method, "GET");
+  assert.equal(calls[1].hasBody, false);
+});
+
+test("301 and 302 convert non-GET to GET without a body", async () => {
+  const calls = [];
+  const outbound = client({
+    fetchImpl: async (url, init) => {
+      calls.push({ method: init.method, hasBody: Boolean(init.body) });
+      if (calls.length === 1) {
+        return new Response(null, {
+          headers: { location: "https://api.telegram.org/follow" },
+          status: 302,
+        });
+      }
+      return new Response(encoder.encode("ok"), { status: 200 });
+    },
+  });
+
+  await outbound.request({
+    ...baseRequest,
+    body: encoder.encode("payload"),
+    method: "POST",
+  });
+
+  assert.equal(calls[1].method, "GET");
+  assert.equal(calls[1].hasBody, false);
+});
+
+test("307 and 308 preserve method and body when policy allows", async () => {
+  const calls = [];
+  const outbound = client({
+    fetchImpl: async (url, init) => {
+      calls.push({ method: init.method, hasBody: Boolean(init.body) });
+      if (calls.length === 1) {
+        return new Response(null, {
+          headers: { location: "https://api.telegram.org/follow" },
+          status: 307,
+        });
+      }
+      return new Response(encoder.encode("ok"), { status: 200 });
+    },
+  });
+
+  await outbound.request({
+    ...baseRequest,
+    body: encoder.encode("payload"),
+    method: "POST",
+  });
+
+  assert.equal(calls[1].method, "POST");
+  assert.equal(calls[1].hasBody, true);
+});
+
+test("cross-host redirects drop auth-like headers and re-check host plus IP", async () => {
+  const resolved = [];
+  const calls = [];
+  const outbound = client({
+    allowedHosts: ["api.telegram.org", "core.telegram.org"],
+    resolveHostAddresses: async (hostname) => {
+      resolved.push(hostname);
+      return hostname === "core.telegram.org" ? ["149.154.167.221"] : ["149.154.167.220"];
+    },
+    fetchImpl: async (url, init) => {
+      calls.push({
+        href: String(url),
+        authorization: init.headers?.authorization ?? init.headers?.Authorization,
+        contentType: init.headers?.["content-type"] ?? init.headers?.["Content-Type"],
+      });
+      if (calls.length === 1) {
+        return new Response(null, {
+          headers: { location: "https://core.telegram.org/follow" },
+          status: 307,
+        });
+      }
+      return new Response(encoder.encode("ok"), { status: 200 });
+    },
+  });
+
+  await outbound.request({
+    ...baseRequest,
+    body: encoder.encode("payload"),
+    headers: {
+      authorization: "Bearer secret",
+      "content-type": "application/json",
+    },
+    method: "POST",
+  });
+
+  assert.equal(calls[0].authorization, "Bearer secret");
+  assert.equal(calls[1].authorization, undefined);
+  assert.equal(calls[1].contentType, "application/json");
+  assert.deepEqual(resolved, ["api.telegram.org", "core.telegram.org"]);
+});
+
 test("safe outbound client enforces max response size", async () => {
   const outbound = client({
     fetchImpl: async () => new Response(encoder.encode("too-large")),
@@ -95,5 +215,81 @@ test("safe outbound client enforces max response size", async () => {
   await rejectsWithSafeCode(
     () => outbound.request({ ...baseRequest, maxResponseBytes: 4 }),
     "outbound_response_too_large",
+  );
+});
+
+test("DNS lookup is pinned to the address already validated as public", async () => {
+  assert.deepEqual(pickPinnedAddress(["149.154.167.220", "2a00:1450:4001:81b::200e"]), {
+    address: "149.154.167.220",
+    family: 4,
+  });
+
+  const lookup = createPinnedLookup(["149.154.167.220"]);
+  const pinned = await new Promise((resolve, reject) => {
+    lookup("evil.example", {}, (error, address, family) => {
+      if (error) reject(error);
+      else resolve({ address, family });
+    });
+  });
+  assert.deepEqual(pinned, { address: "149.154.167.220", family: 4 });
+
+  const outbound = client({
+    fetchImpl: async (url) => {
+      assert.equal(url.hostname, "api.telegram.org");
+      return new Response(encoder.encode("ok"), { status: 200 });
+    },
+  });
+
+  await outbound.request(baseRequest);
+});
+
+test("SSRF matrix allows only HTTPS allowlisted public targets", async () => {
+  const allowed = await client().request(baseRequest);
+  assert.equal(allowed.status, 200);
+
+  await rejectsWithSafeCode(
+    () => client().request({ ...baseRequest, url: new URL("http://api.telegram.org/botx/sendMessage") }),
+    "outbound_non_https",
+  );
+  await rejectsWithSafeCode(
+    () => client({ resolveHostAddresses: async () => ["127.0.0.1"] }).request(baseRequest),
+    "outbound_address_not_allowed",
+  );
+  await rejectsWithSafeCode(
+    () => client({ resolveHostAddresses: async () => ["10.1.2.3"] }).request(baseRequest),
+    "outbound_address_not_allowed",
+  );
+  await rejectsWithSafeCode(
+    () => client({ resolveHostAddresses: async () => ["169.254.1.1"] }).request(baseRequest),
+    "outbound_address_not_allowed",
+  );
+  await rejectsWithSafeCode(
+    () => client({ resolveHostAddresses: async () => ["fd12:3456:789a:1::1"] }).request(baseRequest),
+    "outbound_address_not_allowed",
+  );
+  await rejectsWithSafeCode(
+    () =>
+      client({
+        allowedHosts: ["api.telegram.org", "evil.local"],
+        fetchImpl: async () =>
+          new Response(null, {
+            headers: { location: "https://evil.local/private" },
+            status: 302,
+          }),
+        resolveHostAddresses: async (hostname) =>
+          hostname === "evil.local" ? ["192.168.0.10"] : ["149.154.167.220"],
+      }).request(baseRequest),
+    "outbound_address_not_allowed",
+  );
+  await rejectsWithSafeCode(
+    () =>
+      client({
+        fetchImpl: async () =>
+          new Response(null, {
+            headers: { location: "https://example.com/handoff" },
+            status: 302,
+          }),
+      }).request(baseRequest),
+    "outbound_host_not_allowed",
   );
 });
