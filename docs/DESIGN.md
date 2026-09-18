@@ -12,7 +12,8 @@ Platform.
 
 - public site сохраняет проектную систему «premium / calm / evidence-led»;
 - Payload Admin остаётся native CMS-интерфейсом и не копирует публичный бренд;
-- reusable primitives принадлежат 'packages/ui' после EPIC 3;
+- reusable primitives живут в `src/components/**`; `packages/ui` зарезервирован
+  и не является текущим owner;
 - страницы получают только DTO/contracts и не импортируют Payload persistence;
 - решение компонентов: 'REUSE → VARIANT → CREATE'.
 
@@ -23,15 +24,24 @@ Platform.
 Новый route является новой композицией утверждённых patterns, а не новой
 визуальной системой.
 
-## Runtime transition
+## Runtime
 
-- EPIC 1 заменяет static-export image/navigation adapters на 'next/image' и
-  'next/link', не меняя визуальное направление;
-- EPIC 3 переносит DTO/contracts и UI в package boundaries;
-- EPIC 6 подключает Payload/S3 media с теми же semantic media roles;
-- EPIC 9 выполняет отдельный drift audit и закрывает P0/P1;
-- 'use client' остаётся только в минимальных interactive leaves;
-- dark mode выключен, reduced motion обязателен.
+Static-export image/navigation adapters сняты. Действующий UI runtime:
+
+```text
+Next.js standalone
+Payload
+PostgreSQL
+S3
+Node runtime
+Server-first
+```
+
+- изображения и навигация — `next/image` и `next/link`;
+- media roles те же после Payload/S3;
+- `'use client'` только в минимальных interactive leaves;
+- dark mode выключен, reduced motion обязателен;
+- package-boundary перенос UI не является текущим design contract.
 
 ## CMS-native boundary
 
