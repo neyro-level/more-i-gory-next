@@ -49,7 +49,7 @@ type MaintenanceScheduleDefinition = Readonly<{
 export const maintenanceQueue = "maintenance" as const;
 
 export const maintenanceSchedules = [
-  { slug: "jobsJanitor", cron: "* 0/5 * * * *" },
+  { slug: "jobsJanitor", cron: "0 0/5 * * * *" },
   { slug: "recoverLeadDeliveries", cron: "30 0/5 * * * *" },
   { slug: "catalogLifecycle", cron: "0 0 * * * *" },
   { slug: "leadRetentionCleanup", cron: "0 30 2 * * *" },

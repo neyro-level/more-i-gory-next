@@ -13,9 +13,10 @@ import {
   recoverLeadDeliveriesTask,
   registeredMaintenanceTasks,
 } from "../src/project/jobs/maintenance/scheduled-tasks.ts";
+import { assertSafeScheduledCron, firesPerHour } from "./lib/cron-schedule-guard.mjs";
 
 const expectedMaintenanceSchedules = [
-  { slug: "jobsJanitor", cron: "* 0/5 * * * *" },
+  { slug: "jobsJanitor", cron: "0 0/5 * * * *" },
   { slug: "recoverLeadDeliveries", cron: "30 0/5 * * * *" },
   { slug: "catalogLifecycle", cron: "0 0 * * * *" },
   { slug: "leadRetentionCleanup", cron: "0 30 2 * * *" },
@@ -116,4 +117,24 @@ test("leadRetentionCleanup maintenance task delegates to retention handler", asy
   );
   assert.equal(findCalls.length, 1);
   assert.equal(findCalls[0].collection, "leads");
+});
+
+test("maintenance and dispatcher cron expressions are not per-second and use 0/N steps", () => {
+  const config = createJobsConfig("false");
+  const crons = (config.tasks ?? []).flatMap((task) => task.schedule?.map((item) => item.cron) ?? []);
+
+  assert.ok(crons.length > 0);
+  for (const cron of crons) {
+    assertSafeScheduledCron(cron);
+  }
+
+  assert.throws(() => assertSafeScheduledCron("* 0/5 * * * *"), /per-second/);
+  assert.throws(() => assertSafeScheduledCron("0 */5 * * * *"), /0\/N/);
+});
+
+test("maintenance schedules fire at the approved frequency", () => {
+  assert.equal(firesPerHour("0 0/5 * * * *"), 12);
+  assert.equal(firesPerHour("30 0/5 * * * *"), 12);
+  assert.equal(firesPerHour("0 0 * * * *"), 1);
+  assert.equal(firesPerHour("0 30 2 * * *"), 1 / 24);
 });
