@@ -1,7 +1,7 @@
 # Project Profile — «Море и Горы»
 
 **Статус:** Active — BUILD MODE
-**Дата:** 2026-09-15
+**Дата:** 2026-09-18
 **Профиль:** `AMS_PROFILE=REALTY_BASE`
 **Delivery profile:** `COMMERCIAL`
 **Timezone:** `Europe/Moscow`
@@ -42,6 +42,27 @@ Production и staging не используют общую БД, secrets или 
 
 Эта таблица фиксирует статусы, а не доказательство готовности. Planned integration
 не включается и не требует secrets до своего эпика.
+
+## 1.1. Implementation status (TASK 19.3)
+
+Статусы: `IMPLEMENTED` — код в `main`; `PARTIAL` — код есть, контракт неполный;
+`DISABLED` — выключено решением; `NOT_PROVEN` — нет runtime/E2E evidence;
+`OWNER_GATE` — только команда владельца.
+
+| Подсистема | Статус | Комментарий |
+|---|---|---|
+| Payload CMS / Admin / schema | IMPLEMENTED + NOT_PROVEN public render | Admin живёт; публичный `ContentService` ещё на JSON adapters |
+| PostgreSQL | IMPLEMENTED local; PARTIAL managed | Managed DB есть и доступна с сервера; app на хосте не развёрнут |
+| S3 | IMPLEMENTED bucket + PARTIAL app wiring | бакет `moreigory-media` проверен; Payload adapter на сервере NOT_PROVEN |
+| Leads intake | IMPLEMENTED + NOT_PROVEN E2E | форма/API/commit есть |
+| Lead delivery | PARTIAL + NOT_PROVEN | handler-заглушка; внешний канал DISABLED |
+| Newbuild schema / public catalog | IMPLEMENTED namespaces | живого каталога объектов нет |
+| Feed ingest | PARTIAL; DISABLED autorun | код в `main`; freeze до отдельной команды; 3–4 месяца без живого фида |
+| Jobs | IMPLEMENTED registry + NOT_PROVEN runtime | `JOBS_AUTORUN=false`; janitor stub |
+| Retention | IMPLEMENTED code + NOT_PROVEN live clock | |
+| Cache invalidation | IMPLEMENTED `http` + NOT_PROVEN live | endpoint есть; B2 live в EPIC 13/27 |
+| Staging | NOT_PROVEN | контур описан; поднимается в EPIC 13 на `more-previu.tw1.ru` |
+| Production | OWNER_GATE | EPIC 33; выкат только по отдельной команде |
 
 ## 2. Включённые модули
 
