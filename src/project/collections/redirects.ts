@@ -1,5 +1,7 @@
 import type { CollectionBeforeValidateHook, CollectionConfig } from "payload";
 
+import { createCmsMutationInvalidationHook } from "@/core/cache/collection-invalidation";
+
 import { isOwnerAccess, publicReadAccess } from "@/project/globals/access";
 import { seoRegistry } from "@/seo/registry";
 import { normalizeRedirectPath, validateRedirectEntries, type RedirectEntry } from "@/project/redirects/validation";
@@ -72,6 +74,8 @@ export const Redirects: CollectionConfig = {
     { name: "permanent", type: "checkbox", defaultValue: true, required: true },
   ],
   hooks: {
+    afterChange: [createCmsMutationInvalidationHook("redirects")],
+    afterDelete: [createCmsMutationInvalidationHook("redirects")],
     beforeValidate: [validateRedirects],
   },
   timestamps: true,

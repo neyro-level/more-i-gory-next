@@ -8,6 +8,11 @@ import {
   createCacheInvalidator,
   invalidateAfterCommit,
 } from "../src/core/cache/invalidator.ts";
+import {
+  cmsCacheEntities,
+  cmsMutationCacheTargets,
+  createCmsMutationInvalidationHook,
+} from "../src/core/cache/collection-invalidation.ts";
 
 const targets = [
   { kind: "tag", tag: "catalog" },
@@ -127,6 +132,18 @@ test("typed cache targets map approved domain changes to paths and tags", () => 
   assert.deepEqual(cacheTargets.pageDoc("privacy"), [
     { kind: "tag", tag: "page:privacy" },
     { kind: "path", path: "/privacy/" },
+  ]);
+  assert.deepEqual(cacheTargets.developerPage("sample-developer"), [
+    { kind: "tag", tag: "developer:sample-developer" },
+    { kind: "path", path: "/zastroyshchik/sample-developer/" },
+    { kind: "tag", tag: "developers" },
+    { kind: "tag", tag: "catalog" },
+    { kind: "path", path: "/obekty/" },
+    { kind: "path", path: "/novostroyki/" },
+  ]);
+  assert.deepEqual(cacheTargets.redirects(), [
+    { kind: "tag", tag: "redirects" },
+    { kind: "tag", tag: "navigation" },
   ]);
   assert.deepEqual(cacheTargets.navigation(), [{ kind: "tag", tag: "navigation" }]);
   assert.deepEqual(cacheTargets.siteSettings(), [
@@ -248,4 +265,69 @@ test("post-commit invalidation reports success after one batch", async () => {
       context: { targetCount: 2 },
     },
   ]);
+});
+
+test("CMS mutations map to CacheInvalidator targets after commit", () => {
+  assert.deepEqual(cmsCacheEntities, [
+    "pages",
+    "properties",
+    "regions",
+    "residential-complexes",
+    "developers",
+    "redirects",
+    "site-settings",
+    "navigation",
+  ]);
+  assert.ok(cmsMutationCacheTargets("pages", { slug: "privacy" }).some((target) => target.kind === "tag" && target.tag === "page:privacy"));
+  assert.ok(cmsMutationCacheTargets("properties", { slug: "sample-resort" }).some((target) => target.kind === "tag" && target.tag === "properties"));
+  assert.ok(cmsMutationCacheTargets("regions", { slug: "yalta" }).some((target) => target.kind === "path" && target.path === "/investicionnaya-nedvizhimost/krym/yalta/"));
+  assert.ok(cmsMutationCacheTargets("residential-complexes", { slug: "sample-complex" }).some((target) => target.kind === "tag" && target.tag === "complex:sample-complex"));
+  assert.ok(cmsMutationCacheTargets("developers", { slug: "sample-developer" }).some((target) => target.kind === "path" && target.path === "/zastroyshchik/sample-developer/"));
+  assert.ok(cmsMutationCacheTargets("redirects").some((target) => target.kind === "tag" && target.tag === "redirects"));
+  assert.ok(cmsMutationCacheTargets("site-settings").some((target) => target.kind === "tag" && target.tag === "site-settings"));
+  assert.deepEqual(cmsMutationCacheTargets("navigation"), [{ kind: "tag", tag: "navigation" }]);
+});
+
+test("CMS collection hook invalidates after commit and does not throw on cache failure", async () => {
+  const batches = [];
+  const hook = createCmsMutationInvalidationHook("residential-complexes", {
+    invalidator: {
+      async invalidate(targets) {
+        batches.push(targets);
+      },
+    },
+    logger: { error() {}, info() {} },
+  });
+
+  await hook({ doc: { slug: "fresh-complex" } });
+  assert.equal(batches.length, 1);
+  assert.ok(batches[0].some((target) => target.kind === "tag" && target.tag === "complex:fresh-complex"));
+
+  const failingHook = createCmsMutationInvalidationHook("pages", {
+    invalidator: {
+      async invalidate() {
+        throw new Error("revalidate unavailable");
+      },
+    },
+    logger: { error() {}, info() {} },
+  });
+  await failingHook({ doc: { slug: "privacy" } });
+});
+
+test("CMS collections and globals wire after-commit CacheInvalidator hooks", async () => {
+  const files = [
+    "src/project/collections/pages.ts",
+    "src/project/collections/properties.ts",
+    "src/project/collections/regions.ts",
+    "src/project/collections/residential-complexes.ts",
+    "src/project/collections/developers.ts",
+    "src/project/collections/redirects.ts",
+    "src/project/globals/site-settings.ts",
+    "src/project/globals/navigation.ts",
+  ];
+  for (const file of files) {
+    const source = await readFile(file, "utf8");
+    assert.match(source, /createCmsMutationInvalidationHook/);
+    assert.match(source, /afterChange/);
+  }
 });

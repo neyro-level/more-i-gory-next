@@ -1,5 +1,7 @@
 import type { CollectionBeforeValidateHook, CollectionConfig } from "payload";
 
+import { createCmsMutationInvalidationHook } from "../../core/cache/collection-invalidation.ts";
+
 import { pageBlocks } from "../blocks/page-blocks.ts";
 import { assertPublishedSeo, seoFields } from "../fields/seo.ts";
 import { isOwnerAccess, publicReadAccess } from "../globals/access.ts";
@@ -77,6 +79,8 @@ export const Regions: CollectionConfig = {
     },
   ],
   hooks: {
+    afterChange: [createCmsMutationInvalidationHook("regions")],
+    afterDelete: [createCmsMutationInvalidationHook("regions")],
     beforeValidate: [validatePublishedSeo],
   },
   lockDocuments: {
