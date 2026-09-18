@@ -13,7 +13,7 @@ type FieldName = keyof typeof messages;
 
 type LeadFormClientProps = {
   consentVersion: string;
-  enabled: boolean;
+  enabled?: boolean;
   formId: string;
   sourcePath: string;
 };
@@ -47,7 +47,7 @@ function setFieldState(form: HTMLFormElement, field: FieldName, hasError: boolea
 
 export function LeadFormClient({
   consentVersion,
-  enabled,
+  enabled = process.env.NEXT_PUBLIC_LEADS_ENABLED === "true",
   formId,
   sourcePath,
 }: LeadFormClientProps) {

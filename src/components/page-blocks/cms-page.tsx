@@ -1,4 +1,4 @@
-import type { CmsPageDTO } from "@/core/data-access/public/cms-page-contract";
+import type { CmsPageDTO } from "@/core/dto";
 import { renderPageBlock } from "./page-block-registry";
 
 export function CmsPage({ page }: { page: CmsPageDTO }) {

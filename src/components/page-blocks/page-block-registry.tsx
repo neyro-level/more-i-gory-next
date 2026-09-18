@@ -1,6 +1,6 @@
 import { SectionShell } from "@/components/layout/section-shell";
 import { ActionLink } from "@/components/navigation/action-link";
-import type { CmsPageBlockDTO } from "@/core/data-access/public/cms-page-contract";
+import type { CmsPageBlockDTO } from "@/core/dto";
 
 type PageBlock = CmsPageBlockDTO;
 type PageBlockType = PageBlock["blockType"];

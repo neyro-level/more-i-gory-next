@@ -1,7 +1,7 @@
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { ActionLink } from "@/components/navigation/action-link";
-import type { SiteChrome, SiteNavigationLink } from "@/core/data-access/public";
+import type { SiteChrome, SiteNavigationLink } from "@/core/dto";
 import { Container } from "./container";
 
 type SiteHeaderProps = Readonly<{

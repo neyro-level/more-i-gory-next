@@ -227,6 +227,28 @@ test("Guard 9 rejects persistence and project data dependencies in ui", () => {
   });
 });
 
+test("Guard 9 rejects Payload and data-access imports in presentation components", () => {
+  expectGuard(9, {
+    files: [
+      { path: "src/components/page-blocks/cms-page.tsx", content: 'import type { CmsPageDTO } from "@/core/data-access/public/cms-page-contract";' },
+      { path: "src/ui/interactive/lead-form-client.tsx", content: 'import { env } from "@/project/env";' },
+    ],
+    manifests: [],
+  });
+});
+
+test("Guard 9 allows DTO imports in presentation components", () => {
+  assert.doesNotThrow(() =>
+    assertArchitectureGuards({
+      files: [
+        { path: "src/components/page-blocks/cms-page.tsx", content: 'import type { CmsPageDTO } from "@/core/dto";' },
+        { path: "src/components/layout/site-header.tsx", content: 'import type { SiteChrome } from "@/core/dto";' },
+      ],
+      manifests: [],
+    }),
+  );
+});
+
 test("Guard 10 rejects dark variants while dark mode is disabled", () => {
   expectGuard(10, {
     files: [{ path: "src/components/marketing/card.tsx", content: 'export const className = "bg-card dark:bg-background";' }],
