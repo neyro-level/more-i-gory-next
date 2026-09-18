@@ -1,6 +1,6 @@
 import type { CollectionBeforeValidateHook, CollectionConfig } from "payload";
 
-import { isOwnerAccess, publicReadAccess } from "../globals/access.ts";
+import { authenticatedFieldReadAccess, isOwnerAccess, publicReadAccess } from "../globals/access.ts";
 import { assertMediaAlt } from "../media/alt.ts";
 
 const validateMediaAlt: CollectionBeforeValidateHook = ({ data }) => {
@@ -33,12 +33,14 @@ export const Media: CollectionConfig = {
         { label: "UI asset", value: "ui" },
       ],
       required: true,
+      access: { read: authenticatedFieldReadAccess },
     },
     {
       name: "decorative",
       type: "checkbox",
       defaultValue: false,
       required: true,
+      access: { read: authenticatedFieldReadAccess },
     },
     {
       name: "alt",
@@ -50,10 +52,12 @@ export const Media: CollectionConfig = {
     {
       name: "caption",
       type: "textarea",
+      access: { read: authenticatedFieldReadAccess },
     },
     {
       name: "sourceLabel",
       type: "text",
+      access: { read: authenticatedFieldReadAccess },
       admin: {
         description: "Legacy media registry id for seeded assets, or a human-readable source label for new uploads.",
       },
@@ -61,6 +65,7 @@ export const Media: CollectionConfig = {
     {
       name: "sourceUrl",
       type: "text",
+      access: { read: authenticatedFieldReadAccess },
     },
   ],
   hooks: {

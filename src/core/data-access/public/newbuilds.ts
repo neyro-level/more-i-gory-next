@@ -6,6 +6,7 @@ import type { SelectType, Where } from "payload";
 import { z } from "zod";
 
 import config from "../../../../payload.config.ts";
+import { publicMediaSchema } from "./media-contract.ts";
 import type { Developer, Media, Property, Region, ResidentialComplex } from "../../../payload-types.ts";
 
 const fallbackCover = {
@@ -14,13 +15,6 @@ const fallbackCover = {
   src: "/images/projects/sample-resort/cover.webp",
   width: 1478,
 };
-
-const mediaSchema = z.object({
-  alt: z.string().min(1),
-  height: z.number().int().positive(),
-  src: z.union([z.string().startsWith("/"), z.string().url()]),
-  width: z.number().int().positive(),
-});
 
 const publicDeveloperSchema = z.object({
   description: z.string().optional(),
@@ -34,7 +28,7 @@ const publicComplexSchema = z.object({
   address: z.string().optional(),
   developer: publicDeveloperSchema,
   id: z.string().min(1),
-  image: mediaSchema,
+  image: publicMediaSchema,
   path: z.string().startsWith("/").endsWith("/"),
   regionLabel: z.string().min(1),
   slug: z.string().min(1),

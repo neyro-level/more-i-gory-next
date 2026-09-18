@@ -2,6 +2,7 @@ import type { SelectType, Where } from "payload";
 import { z } from "zod";
 
 import type { Media, Property, Region } from "../../../payload-types.ts";
+import { publicMediaSchema } from "./media-contract.ts";
 
 type PublicPropertyRecord = Readonly<
   Pick<Property, "id" | "origin" | "publishedAt" | "slug" | "status" | "title"> &
@@ -31,20 +32,13 @@ const fallbackCover = {
   width: 1478,
 };
 
-const mediaSchema = z.object({
-  alt: z.string().min(1),
-  height: z.number().int().positive(),
-  src: z.union([z.string().startsWith("/"), z.string().url()]),
-  width: z.number().int().positive(),
-});
-
 const publicPropertySchema = z.object({
   budgetNote: z.string().optional(),
   deactivatedAt: z.string().optional(),
   description: z.string().optional(),
   facts: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).default([]),
   id: z.string().min(1),
-  image: mediaSchema,
+  image: publicMediaSchema,
   path: z.string().startsWith("/").endsWith("/"),
   publishedAt: z.string().min(1),
   regionLabel: z.string().min(1),
