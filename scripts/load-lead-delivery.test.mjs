@@ -16,7 +16,7 @@ test("System Gateway lead-delivery loader is privileged and does not leak raw do
   assert.match(guards, /src\/core\/data-access\/system\/load-lead-delivery\.ts/);
   assert.match(foundation, /src\/core\/data-access\/system\/load-lead-delivery\.ts/);
   assert.match(source, /overrideAccess:\s*true/);
-  assert.equal(job.includes("loadLeadDeliveryForSend"), false);
+  assert.match(job, /loadLeadDeliveryForSend/);
   assert.equal(source.includes("return delivery"), false);
   assert.equal(source.includes("return lead"), false);
 });
