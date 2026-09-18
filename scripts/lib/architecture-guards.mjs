@@ -14,6 +14,7 @@ const privilegedSystemFiles = new Set([
   "src/core/data-access/system/load-feed-source-market.ts",
   "src/core/data-access/system/load-feed-source-url-ref.ts",
   "src/core/data-access/system/load-feed-source-conditional.ts",
+  "src/core/data-access/system/load-feed-source-parser.ts",
 ]);
 const privateFieldPattern = /\b(?:apartmentNumber|cadastralNumber|internalComment|ownerContact|credentials|diagnosticRawData)\b/;
 const lowLevelDbImportPattern = /(?:from\s+|import\s*\(|require\s*\()\s*["'](?:@payloadcms\/db-postgres|drizzle-orm(?:\/[^"']*)?|pg|postgres)["']/;

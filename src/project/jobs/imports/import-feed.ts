@@ -1,9 +1,11 @@
 import type { TaskConfig } from "payload";
 
 import { loadFeedSourceConditionalState } from "../../../core/data-access/system/load-feed-source-conditional.ts";
+import { loadFeedSourceParser } from "../../../core/data-access/system/load-feed-source-parser.ts";
 import { loadFeedSourceUrlRef } from "../../../core/data-access/system/load-feed-source-url-ref.ts";
 import { createClassifyConditionalHandler } from "../../../core/ingest/classify-conditional.ts";
 import { createFetchFeedHandler, parseOutboundAllowedHosts } from "../../../core/ingest/fetch-feed.ts";
+import { createParseFeedHandler } from "../../../core/ingest/parse-feed.ts";
 import { createResolveFeedUrlHandler } from "../../../core/ingest/resolve-feed-url.ts";
 import {
   finalizeUnchangedImportRun,
@@ -28,13 +30,16 @@ type ImportFeedTask = {
 
 type ImportFeedPayload = Parameters<typeof transitionImportRunToRunning>[0] &
   Parameters<typeof loadFeedSourceUrlRef>[0] &
-  Parameters<typeof loadFeedSourceConditionalState>[0];
+  Parameters<typeof loadFeedSourceConditionalState>[0] &
+  Parameters<typeof loadFeedSourceParser>[0];
 
 export function createImportFeedPipelineHandlers(
   payload: ImportFeedPayload,
   lookupEnv: (name: string) => string | undefined | Promise<string | undefined>,
   outbound: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>),
-): Partial<Record<"claim-running" | "resolve-feed-url" | "fetch" | "classify-conditional", IngestStageHandler>> {
+): Partial<
+  Record<"claim-running" | "resolve-feed-url" | "fetch" | "classify-conditional" | "parse", IngestStageHandler>
+> {
   return {
     "claim-running": createImportFeedClaimHandler((claimInput) =>
       transitionImportRunToRunning(payload, claimInput),
@@ -49,6 +54,9 @@ export function createImportFeedPipelineHandlers(
     }),
     "classify-conditional": createClassifyConditionalHandler({
       finalizeUnchanged: (claimInput) => finalizeUnchangedImportRun(payload, claimInput),
+    }),
+    parse: createParseFeedHandler({
+      loadParser: (feedSourceId) => loadFeedSourceParser(payload, feedSourceId),
     }),
   };
 }

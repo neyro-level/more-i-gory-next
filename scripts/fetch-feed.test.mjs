@@ -130,6 +130,7 @@ test("importFeed composition fetches after resolving the env-named URL", async (
     },
     async findByID(args) {
       if (args.select?.feedUrlRef) return { feedUrlRef: "FEED_URL_PRIMARY" };
+      if (args.select?.parser) return { parser: "yrl" };
       return { lastEtag: '"abc"', lastModified: null };
     },
   };
@@ -142,7 +143,7 @@ test("importFeed composition fetches after resolving the env-named URL", async (
         async request(request) {
           requests.push(request);
           return {
-            body: new TextEncoder().encode("<yml/>"),
+            body: new TextEncoder().encode(`<?xml version="1.0" encoding="UTF-8"?><yml_catalog><shop><offers><offer id="flat-1"><name>Апартамент</name></offer></offers></shop></yml_catalog>`),
             contentType: "application/xml",
             etag: '"abc"',
             lastModified: null,
@@ -156,8 +157,9 @@ test("importFeed composition fetches after resolving the env-named URL", async (
 
   assert.equal(requests[0].headers["If-None-Match"], '"abc"');
   assert.equal(result.state.fetch?.status, 200);
-  assert.equal(result.pendingStage, "parse");
+  assert.equal(result.pendingStage, "normalize");
   assert.equal(result.state.conditional?.kind, "read-body");
+  assert.equal(result.state.parse?.suspicious, false);
   assert.equal(JSON.stringify(requests[0].headers).includes("https://"), false);
   assert.equal(writes.some((write) => write.collection === "properties"), false);
 });

@@ -1,3 +1,5 @@
+import type { FeedParserResult } from "../../core/ingest/parsers/types.ts";
+
 export const ingestStageOrder = [
   "claim-running",
   "resolve-feed-url",
@@ -32,6 +34,7 @@ export type IngestPipelineState = {
     businessWrite: false;
     kind: "not-modified" | "read-body";
   };
+  parse?: FeedParserResult;
 };
 
 export type IngestStageContext = {

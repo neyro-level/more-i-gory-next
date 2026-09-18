@@ -34,6 +34,7 @@ const requiredFiles = [
   "src/core/data-access/system/load-feed-source-market.ts",
   "src/core/data-access/system/load-feed-source-url-ref.ts",
   "src/core/data-access/system/load-feed-source-conditional.ts",
+  "src/core/data-access/system/load-feed-source-parser.ts",
   "src/core/cache/invalidator.ts",
   "src/core/dto/index.ts",
   "src/core/query/index.ts",
@@ -344,7 +345,8 @@ const overrideAccessConsumers = sourceFiles.filter((file) => {
     !normalized.endsWith("/src/core/data-access/system/import-feed-run.ts") &&
     !normalized.endsWith("/src/core/data-access/system/load-feed-source-market.ts") &&
     !normalized.endsWith("/src/core/data-access/system/load-feed-source-url-ref.ts") &&
-    !normalized.endsWith("/src/core/data-access/system/load-feed-source-conditional.ts")
+    !normalized.endsWith("/src/core/data-access/system/load-feed-source-conditional.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/load-feed-source-parser.ts")
   );
 });
 if (overrideAccessConsumers.length > 0) {
