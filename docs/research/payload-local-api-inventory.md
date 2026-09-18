@@ -68,8 +68,8 @@
 | `src/core/data-access/system/lead-retention.ts:75` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
 | `src/core/data-access/system/lead-retention.ts:98` | `delete` | SYSTEM GATEWAY | `await payload.delete({` |
 | `src/core/data-access/system/lead-retention.ts:103` | `delete` | SYSTEM GATEWAY | `await payload.delete({` |
-| `src/core/data-access/system/load-lead-delivery.ts:102` | `findByID` | SYSTEM GATEWAY | `const delivery = (await payload.findByID({` |
-| `src/core/data-access/system/load-lead-delivery.ts:119` | `findByID` | SYSTEM GATEWAY | `const lead = (await payload.findByID({` |
+| `src/core/data-access/system/load-lead-delivery.ts:100` | `findByID` | SYSTEM GATEWAY | `const delivery = (await payload.findByID({` |
+| `src/core/data-access/system/load-lead-delivery.ts:117` | `findByID` | SYSTEM GATEWAY | `const lead = (await payload.findByID({` |
 | `src/project/collections/redirects.ts:15` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/collections/redirects.ts:23` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/jobs/imports/dispatch-due-feeds.ts:23` | `req.payload` | SYSTEM GATEWAY | `const result = await dispatchDueFeeds(req.payload as unknown as Parameters<typeof dispatchDueFeeds>[0]);` |
