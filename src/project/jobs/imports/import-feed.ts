@@ -19,7 +19,9 @@ import { createFinalizeImportHandler } from "../../../core/ingest/finalize-impor
 import { createInvalidateImportCacheHandler } from "../../../core/ingest/invalidate-import-cache.ts";
 import { createCacheInvalidator, type CacheInvalidator } from "../../../core/cache/invalidator.ts";
 import {
+  finalizeFailedImportRun,
   finalizeUnchangedImportRun,
+  scheduleFeedSourceAfterRun,
   touchImportRunHeartbeat,
   transitionImportRunToRunning,
 } from "../../../core/data-access/system/import-feed-run.ts";
@@ -132,7 +134,7 @@ export async function runImportFeedWithHeartbeat(args: {
     void touchImportRunHeartbeat(args.payload, args.input);
   }, importFeedHeartbeatIntervalMs);
   try {
-    return await runIngestPipeline({
+    const result = await runIngestPipeline({
       handlers: createImportFeedPipelineHandlers(
         args.payload,
         args.lookupEnv,
@@ -141,6 +143,26 @@ export async function runImportFeedWithHeartbeat(args: {
       ),
       input: args.input,
     });
+    const claimed = result.completedStages.includes("claim-running");
+    const lostClaim = result.status === "skipped" && result.completedStages.length === 1;
+    if (claimed && result.status === "failed") {
+      await finalizeFailedImportRun(args.payload, args.input);
+    }
+    if (
+      claimed &&
+      !lostClaim &&
+      (result.status === "completed" ||
+        result.status === "skipped" ||
+        result.status === "suspicious" ||
+        result.status === "failed")
+    ) {
+      await scheduleFeedSourceAfterRun(args.payload, {
+        feedSourceId: args.input.feedSourceId,
+        importRunId: args.input.importRunId,
+        outcome: result.status,
+      });
+    }
+    return result;
   } finally {
     clear(handle);
   }

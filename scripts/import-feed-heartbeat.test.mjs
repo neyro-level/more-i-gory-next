@@ -40,6 +40,9 @@ test("importFeed schedules periodic heartbeat and clears it after the pipeline r
       writes.push(args);
       return { docs: [{ id: "501" }] };
     },
+    async find() {
+      return { docs: [] };
+    },
     async findByID(args) {
       if (args.select?.feedUrlRef) return { feedUrlRef: "FEED_URL_PRIMARY" };
       return { lastEtag: null, lastModified: null };

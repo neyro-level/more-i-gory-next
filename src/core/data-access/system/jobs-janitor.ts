@@ -1,3 +1,4 @@
+import { scheduleFeedSourceAfterRun } from "./import-feed-run.ts";
 import {
   defaultDispatcherIntervalMinutes,
   defaultStaleRunningThresholdMinutes,
@@ -5,33 +6,13 @@ import {
   planImportRunJanitor,
 } from "../../ingest/import-maintenance.ts";
 
-type PayloadLike = {
-  find?: (args: {
-    collection: "import-runs";
-    depth: 0;
-    limit: number;
-    overrideAccess: true;
-    pagination: false;
-    select: {
-      createdAt: true;
-      heartbeatAt: true;
-      id: true;
-      startedAt: true;
-      status: true;
-    };
-    where: Record<string, unknown>;
-  }) => Promise<{ docs?: ImportRunMaintenanceRecord[] }>;
-  update: (args: {
-    collection: "import-runs";
-    data: {
-      finishedAt: string;
-      status: "interrupted";
-      summary: string;
-    };
-    overrideAccess: true;
-    where: Record<string, unknown>;
-  }) => Promise<unknown>;
-};
+type PayloadLike = Parameters<typeof scheduleFeedSourceAfterRun>[0];
+
+function feedSourceId(value: ImportRunMaintenanceRecord["feedSource"]): string | null {
+  if (typeof value === "string" || typeof value === "number") return String(value);
+  if (value && typeof value === "object" && value.id != null) return String(value.id);
+  return null;
+}
 
 export type JobsJanitorSummary = {
   interrupted: number;
@@ -53,6 +34,7 @@ export async function jobsJanitor(
     pagination: false,
     select: {
       createdAt: true,
+      feedSource: true,
       heartbeatAt: true,
       id: true,
       startedAt: true,
@@ -65,10 +47,23 @@ export async function jobsJanitor(
     },
   });
 
+  const runs: ImportRunMaintenanceRecord[] = [];
+  for (const run of result?.docs ?? []) {
+    if (run.id == null || (run.status !== "queued" && run.status !== "running")) continue;
+    runs.push({
+      createdAt: run.createdAt,
+      feedSource: run.feedSource,
+      heartbeatAt: run.heartbeatAt,
+      id: run.id,
+      startedAt: run.startedAt,
+      status: run.status,
+    });
+  }
+  const byId = new Map(runs.map((run) => [String(run.id), run]));
   const actions = planImportRunJanitor({
     dispatcherIntervalMinutes: defaultDispatcherIntervalMinutes,
     nowIso,
-    runs: result?.docs ?? [],
+    runs,
     staleRunningThresholdMinutes: defaultStaleRunningThresholdMinutes,
   });
 
@@ -84,6 +79,18 @@ export async function jobsJanitor(
         ],
       },
     });
+    if (action.reason !== "stale-running") continue;
+    const sourceId = feedSourceId(byId.get(String(action.id))?.feedSource);
+    if (!sourceId) continue;
+    await scheduleFeedSourceAfterRun(
+      payload,
+      {
+        feedSourceId: sourceId,
+        importRunId: String(action.id),
+        outcome: "interrupted",
+      },
+      now,
+    );
   }
 
   return {

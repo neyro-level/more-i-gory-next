@@ -1,9 +1,41 @@
+import {
+  calculatePostRunNextDueAt,
+  consecutiveImportFailureCount,
+  type PostRunScheduleOutcome,
+} from "../../ingest/schedule-next-due.ts";
+
 type ImportFeedRunInput = {
   feedSourceId: string;
   importRunId: string;
 };
 
 type PayloadLike = {
+  find?: (args: {
+    collection: "import-runs";
+    depth: 0;
+    limit: number;
+    overrideAccess: true;
+    pagination: false;
+    select?: Record<string, true>;
+    sort?: string;
+    where: Record<string, unknown>;
+  }) => Promise<{
+    docs?: Array<{
+      createdAt?: string;
+      feedSource?: number | string | { id?: number | string } | null;
+      heartbeatAt?: string | null;
+      id?: number | string;
+      startedAt?: string | null;
+      status?: string;
+    }>;
+  }>;
+  findByID?: (args: {
+    collection: "feed-sources";
+    depth: 0;
+    id: number | string;
+    overrideAccess: true;
+    select: { refreshIntervalMinutes: true };
+  }) => Promise<{ refreshIntervalMinutes?: number | null }>;
   update: (args: {
     collection: "import-runs" | "feed-sources";
     data: Record<string, unknown>;
@@ -160,4 +192,73 @@ export async function touchImportRunHeartbeat(
   });
   const result = transition as { docs?: Array<{ id: number | string }> };
   return Array.isArray(result.docs) && result.docs.length > 0;
+}
+
+export async function finalizeFailedImportRun(
+  payload: PayloadLike,
+  input: ImportFeedRunInput,
+  now = new Date(),
+): Promise<boolean> {
+  const transition = await payload.update({
+    collection: "import-runs",
+    data: {
+      finishedAt: now.toISOString(),
+      status: "failed",
+      summary: "Import run failed before finalization.",
+    },
+    overrideAccess: true,
+    where: {
+      and: [
+        { id: { equals: input.importRunId } },
+        { feedSource: { equals: input.feedSourceId } },
+        { status: { equals: "running" } },
+      ],
+    },
+  });
+  const failed = transition as { docs?: Array<{ id: number | string }> };
+  return Array.isArray(failed.docs) && failed.docs.length > 0;
+}
+
+export async function scheduleFeedSourceAfterRun(
+  payload: PayloadLike,
+  input: ImportFeedRunInput & { outcome: PostRunScheduleOutcome },
+  now = new Date(),
+): Promise<string> {
+  const source = await payload.findByID?.({
+    collection: "feed-sources",
+    depth: 0,
+    id: input.feedSourceId,
+    overrideAccess: true,
+    select: { refreshIntervalMinutes: true },
+  });
+  const intervalMinutes =
+    typeof source?.refreshIntervalMinutes === "number" && source.refreshIntervalMinutes > 0
+      ? source.refreshIntervalMinutes
+      : 60;
+  const history = await payload.find?.({
+    collection: "import-runs",
+    depth: 0,
+    limit: 20,
+    overrideAccess: true,
+    pagination: false,
+    select: { status: true },
+    sort: "-finishedAt",
+    where: { feedSource: { equals: input.feedSourceId } },
+  });
+  const consecutiveFailures = consecutiveImportFailureCount(
+    (history?.docs ?? []).map((doc) => (typeof doc.status === "string" ? doc.status : "")),
+  );
+  const nextDueAt = calculatePostRunNextDueAt({
+    consecutiveFailures,
+    intervalMinutes,
+    now,
+    outcome: input.outcome,
+  }).toISOString();
+  await payload.update({
+    collection: "feed-sources",
+    data: { nextDueAt },
+    id: input.feedSourceId,
+    overrideAccess: true,
+  });
+  return nextDueAt;
 }
