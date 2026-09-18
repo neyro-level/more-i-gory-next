@@ -18,14 +18,16 @@
 | `scripts/seed-regions.mjs:89` | `getPayload` | SYSTEM GATEWAY | `const payload = await getPayload({ config });` |
 | `scripts/seed-regions.mjs:100` | `update` | SYSTEM GATEWAY | `? await payload.update({ collection: "regions", data, id: existing.id, overrideAccess: true })` |
 | `scripts/seed-regions.mjs:101` | `create` | SYSTEM GATEWAY | `: await payload.create({ collection: "regions", data, overrideAccess: true });` |
-| `scripts/verify-architecture-guards.test.mjs:98` | `find` | TEST | `files: [{ path: "src/core/data-access/system/jobs.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
-| `scripts/verify-architecture-guards.test.mjs:105` | `find` | TEST | `files: [{ path: "src/core/data-access/system/lead-delivery.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
-| `src/core/data-access/public/newbuilds.ts:182` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/newbuilds.ts:183` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/public/newbuilds.ts:201` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/newbuilds.ts:202` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/public/newbuilds.ts:264` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/newbuilds.ts:265` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `scripts/verify-architecture-guards.test.mjs:66` | `find` | TEST | `files: [{ path: "src/core/data-access/public/pages.ts", content: 'payload.find({ collection: "pages" });' }],` |
+| `scripts/verify-architecture-guards.test.mjs:79` | `find` | TEST | `content: 'payload.find({ collection: "pages", overrideAccess: false });',` |
+| `scripts/verify-architecture-guards.test.mjs:128` | `find` | TEST | `files: [{ path: "src/core/data-access/system/jobs.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
+| `scripts/verify-architecture-guards.test.mjs:135` | `find` | TEST | `files: [{ path: "src/core/data-access/system/lead-delivery.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
+| `src/core/data-access/public/newbuilds.ts:176` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/newbuilds.ts:177` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/newbuilds.ts:195` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/newbuilds.ts:196` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/newbuilds.ts:258` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/newbuilds.ts:259` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/pages.ts:11` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/pages.ts:12` | `find` | PUBLIC GATEWAY | `const pages = await payload.find({` |
 | `src/core/data-access/public/properties.ts:27` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |

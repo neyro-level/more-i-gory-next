@@ -13,6 +13,15 @@ import {
 
 const privateFields = ["unitNumber", "cadastralNumber", "internalComment", "ownerContact"];
 
+function matchesWhere(where, record) {
+  return where.and.every((predicate) => {
+    const [field, condition] = Object.entries(predicate)[0];
+    if ("equals" in condition) return record[field] === condition.equals;
+    if (condition.exists === true) return Boolean(record[field]);
+    return false;
+  });
+}
+
 test("public properties predicate exposes only manual active published passports", () => {
   assert.deepEqual(propertyPublicationWhere(), {
     and: [
@@ -40,6 +49,25 @@ test("property detail route predicate includes archived manual passports but sti
       { slug: { equals: "archived-passport" } },
     ],
   });
+});
+
+test("published active passports are listed; unpublished and archived stay hidden", () => {
+  const listWhere = propertyPublicationWhere();
+
+  assert.equal(
+    matchesWhere(listWhere, { origin: "manual", status: "active", publishedAt: "2026-09-17T00:00:00.000Z" }),
+    true,
+  );
+  assert.equal(
+    matchesWhere(listWhere, { origin: "manual", status: "active" }),
+    false,
+    "draft/unpublished properties must stay off the public list",
+  );
+  assert.equal(
+    matchesWhere(listWhere, { origin: "manual", status: "archived", publishedAt: "2026-09-17T00:00:00.000Z" }),
+    false,
+    "archived properties must stay off the public list",
+  );
 });
 
 test("public properties select excludes private fields", () => {
