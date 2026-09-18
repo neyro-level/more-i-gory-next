@@ -49,10 +49,40 @@ test("clean architecture fixture passes all guards", () => {
 });
 
 test("Guard 1 rejects overrideAccess outside System Gateway", () => {
-  expectGuard(1, {
-    files: [{ path: "src/app/api/public/route.ts", content: "const options = { overrideAccess: true };" }],
-    manifests: [],
-  });
+  assert.throws(
+    () =>
+      assertArchitectureGuards({
+        files: [{ path: "src/app/api/public/route.ts", content: "const options = { overrideAccess: true };" }],
+        manifests: [],
+      }),
+    /overrideAccess:true outside registered System Gateway/,
+  );
+});
+
+test("Guard 1 rejects Local API call without explicit overrideAccess", () => {
+  assert.throws(
+    () =>
+      assertArchitectureGuards({
+        files: [{ path: "src/core/data-access/public/pages.ts", content: 'payload.find({ collection: "pages" });' }],
+        manifests: [],
+      }),
+    /Local API call without explicit overrideAccess/,
+  );
+});
+
+test("Guard 1 allows Public Gateway Local API with explicit overrideAccess false", () => {
+  assert.deepEqual(
+    findArchitectureGuardViolations({
+      files: [
+        {
+          path: "src/core/data-access/public/pages.ts",
+          content: 'payload.find({ collection: "pages", overrideAccess: false });',
+        },
+      ],
+      manifests: [],
+    }),
+    [],
+  );
 });
 
 test("Guard 1 rejects unregistered privileged files inside System Gateway", () => {

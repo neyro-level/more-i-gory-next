@@ -14,8 +14,8 @@ async function readSiteChrome(): Promise<SiteChrome> {
   try {
     const payload = await getPayload({ config });
     const [settings, navigation] = await Promise.all([
-      payload.findGlobal({ slug: "site-settings", depth: 0 }),
-      payload.findGlobal({ slug: "navigation", depth: 0 }),
+      payload.findGlobal({ slug: "site-settings", depth: 0, overrideAccess: false }),
+      payload.findGlobal({ slug: "navigation", depth: 0, overrideAccess: false }),
     ]);
 
     return mapSiteChrome(settings, navigation);

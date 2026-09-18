@@ -29,11 +29,14 @@ test("public newbuild selects exclude raw feed and private property fields", () 
   }
 });
 
-test("published developers and complexes are publicly readable while writes remain owner-only", () => {
-  assert.equal(Developers.access?.read?.({ req: {} }), true);
-  assert.equal(ResidentialComplexes.access?.read?.({ req: {} }), true);
+test("developers and complexes deny anonymous REST; public catalog goes through Public Gateway", () => {
+  assert.equal(Developers.access?.read?.({ req: {} }), false);
+  assert.equal(ResidentialComplexes.access?.read?.({ req: {} }), false);
+  assert.equal(Developers.access?.read?.({ req: { user: { collection: "users", role: "owner" } } }), true);
+  assert.equal(ResidentialComplexes.access?.read?.({ req: { user: { collection: "users", role: "owner" } } }), true);
   assert.notEqual(Developers.access?.update?.({ req: {} }), true);
   assert.notEqual(ResidentialComplexes.access?.update?.({ req: {} }), true);
+  assert.match(gatewaySource, /overrideAccess:\s*false/);
 });
 
 test("EPIC 17 routes use public newbuild gateway and keep /obekty manual-only", async () => {

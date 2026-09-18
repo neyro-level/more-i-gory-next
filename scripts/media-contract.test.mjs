@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { cmsOnlyMediaFields, publicMediaSchema, publicMediaSourceFields } from "../src/core/data-access/public/media-contract.ts";
 import { Media } from "../src/project/collections/media.ts";
+import { authenticatedFieldReadAccess } from "../src/project/globals/access.ts";
 import { assertMediaAlt } from "../src/project/media/alt.ts";
 
 test("media collection is an upload-enabled image library", () => {
@@ -31,6 +33,23 @@ test("media documents keep the legacy registry id as the import key", () => {
 
   assert.equal(sourceLabel.type, "text");
   assert.match(sourceLabel.admin.description, /Legacy media registry id/);
+});
+
+test("public media DTO is limited to alt, src, width and height", () => {
+  assert.deepEqual(Object.keys(publicMediaSchema.shape), ["alt", "height", "src", "width"]);
+  assert.deepEqual([...publicMediaSourceFields], ["alt", "url", "width", "height"]);
+});
+
+test("CMS-only media fields are hidden from unauthenticated reads", async () => {
+  const localReq = { req: { payloadAPI: "local" } };
+  const ownerReq = { req: { user: { collection: "users", role: "owner" } } };
+
+  for (const name of cmsOnlyMediaFields) {
+    const field = Media.fields.find((candidate) => candidate.name === name);
+    assert.equal(field.access.read, authenticatedFieldReadAccess, name);
+    assert.equal(await field.access.read(localReq), false, `${name} local`);
+    assert.equal(await field.access.read(ownerReq), true, `${name} owner`);
+  }
 });
 
 test("media alt contract supports decorative empty alt only when explicit", () => {

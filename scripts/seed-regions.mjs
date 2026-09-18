@@ -55,6 +55,7 @@ async function findMediaId(payload, sourceLabel) {
     collection: "media",
     depth: 0,
     limit: 1,
+    overrideAccess: true,
     where: { sourceLabel: { equals: sourceLabel } },
   });
 
@@ -68,6 +69,7 @@ async function findRegion(payload, slug) {
     collection: "regions",
     depth: 0,
     limit: 1,
+    overrideAccess: true,
     where: { slug: { equals: slug } },
   });
 

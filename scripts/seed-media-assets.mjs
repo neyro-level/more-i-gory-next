@@ -66,6 +66,7 @@ async function seed() {
     const existing = await payload.find({
       collection: "media",
       limit: 1,
+      overrideAccess: true,
       where: {
         filename: {
           equals: asset.filename,
@@ -79,6 +80,7 @@ async function seed() {
         data: asset.payloadData,
         filePath: asset.filePath,
         id: existing.docs[0].id,
+        overrideAccess: true,
         overwriteExistingFiles: true,
       });
       payload.logger.info(`Updated media asset ${asset.id} from ${asset.src}`);
@@ -89,6 +91,7 @@ async function seed() {
       collection: "media",
       data: asset.payloadData,
       filePath: asset.filePath,
+      overrideAccess: true,
       overwriteExistingFiles: true,
     });
     payload.logger.info(`Created media asset ${asset.id} from ${asset.src}`);
