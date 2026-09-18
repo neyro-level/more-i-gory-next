@@ -17,7 +17,10 @@ import { createParseFeedHandler } from "../../../core/ingest/parse-feed.ts";
 import { createResolveFeedUrlHandler } from "../../../core/ingest/resolve-feed-url.ts";
 import { createFinalizeImportHandler } from "../../../core/ingest/finalize-import.ts";
 import { createInvalidateImportCacheHandler } from "../../../core/ingest/invalidate-import-cache.ts";
-import { createCacheInvalidator, type CacheInvalidator } from "../../../core/cache/invalidator.ts";
+import {
+  createHttpCacheInvalidator,
+  type CacheInvalidator,
+} from "../../../core/cache/invalidation.ts";
 import {
   finalizeFailedImportRun,
   finalizeUnchangedImportRun,
@@ -72,12 +75,7 @@ export function createImportFeedPipelineHandlers(
     IngestStageHandler
   >
 > {
-  const invalidator =
-    cache?.invalidator ??
-    createCacheInvalidator({
-      branch: "http",
-      invalidateBatch: async () => {},
-    });
+  const invalidator = cache?.invalidator ?? createHttpCacheInvalidator(async () => {});
   return {
     "claim-running": createImportFeedClaimHandler((claimInput) =>
       transitionImportRunToRunning(payload, claimInput),
@@ -194,9 +192,7 @@ export async function createImportFeedHttpInvalidator(deps?: {
   loadEnv?: () => ImportFeedHttpEnv | Promise<ImportFeedHttpEnv>;
   outbound?: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>);
 }): Promise<CacheInvalidator> {
-  return createCacheInvalidator({
-    branch: "http",
-    async invalidateBatch(targets) {
+  return createHttpCacheInvalidator(async (targets) => {
       const envSlice = deps?.loadEnv ? await deps.loadEnv() : (await import("../../env.ts")).env;
       if (!envSlice.REVALIDATE_SECRET || !envSlice.INTERNAL_REVALIDATE_BASE_URL) {
         throw new Error("HTTP cache invalidation is not configured.");
@@ -216,7 +212,6 @@ export async function createImportFeedHttpInvalidator(deps?: {
       if (response.status < 200 || response.status >= 300) {
         throw new Error("internal revalidate failed");
       }
-    },
   });
 }
 

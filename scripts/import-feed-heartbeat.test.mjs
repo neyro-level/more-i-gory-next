@@ -97,6 +97,7 @@ test("importFeed HTTP cache invalidation uses Safe Outbound Client instead of co
     "utf8",
   );
   assert.equal(/\bfetch\s*\(/.test(source), false);
+  assert.equal(/core\/cache\/invalidator/.test(source), false);
 
   const requests = [];
   const invalidator = await createImportFeedHttpInvalidator({

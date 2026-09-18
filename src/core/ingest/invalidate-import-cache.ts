@@ -2,7 +2,7 @@ import {
   cacheTargets,
   invalidateAfterCommit,
   type CacheInvalidator,
-} from "../cache/invalidator.ts";
+} from "../cache/invalidation.ts";
 import type { StructuredLogger } from "../observability/index.ts";
 import type { IngestPipelineState, IngestRunStatus } from "../../project/ingest/pipeline.ts";
 
