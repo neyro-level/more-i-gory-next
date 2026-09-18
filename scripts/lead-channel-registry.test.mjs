@@ -16,6 +16,12 @@ test("channel registry lives in the project composition root and reads env only 
   assert.match(source, /LeadDeliveryChannel/);
   assert.equal(source.includes("process.env"), false);
   assert.equal(source.includes("overrideAccess"), false);
+  assert.equal(
+    readFileSync(new URL("../scripts/lib/architecture-guards.mjs", import.meta.url), "utf8").includes(
+      "src/project/leads/channel-registry.ts",
+    ),
+    false,
+  );
 });
 
 test("empty LEAD_CHANNELS returns an empty fail-closed registry", () => {
