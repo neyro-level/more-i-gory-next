@@ -1,8 +1,8 @@
 import { SectionShell } from "@/components/layout/section-shell";
 import { ActionLink } from "@/components/navigation/action-link";
-import type { Page } from "@/payload-types";
+import type { CmsPageBlockDTO } from "@/core/data-access/public/cms-page-contract";
 
-type PageBlock = NonNullable<Page["blocks"]>[number];
+type PageBlock = CmsPageBlockDTO;
 type PageBlockType = PageBlock["blockType"];
 type PageBlockByType<Type extends PageBlockType> = Extract<PageBlock, { blockType: Type }>;
 type PageBlockComponent<Type extends PageBlockType> = (props: { block: PageBlockByType<Type> }) => React.ReactNode;
@@ -34,7 +34,7 @@ function ThesisBlock({ block }: { block: Extract<PageBlock, { blockType: "thesis
     <SectionShell title={block.title}>
       <div className="grid gap-4 md:grid-cols-3">
         {block.items.map((item) => (
-          <article key={item.id ?? item.title} className="rounded-card border p-5">
+          <article key={item.title} className="rounded-card border p-5">
             <h3 className="text-body font-semibold">{item.title}</h3>
             <p className="mt-3 text-body-sm text-muted-foreground">{item.text}</p>
           </article>
@@ -57,7 +57,7 @@ function NumberedStepsBlock({ block }: { block: Extract<PageBlock, { blockType: 
     <SectionShell eyebrow={block.eyebrow ?? undefined} title={block.title} lead={block.lead ?? undefined}>
       <ol className="grid gap-4 md:grid-cols-3">
         {block.steps.map((step, index) => (
-          <li key={step.id ?? step.title} className="rounded-card border p-5">
+          <li key={step.title} className="rounded-card border p-5">
             <span className="text-caption text-action">{String(index + 1).padStart(2, "0")}</span>
             <h3 className="mt-3 text-body font-semibold">{step.title}</h3>
             <p className="mt-3 text-body-sm text-muted-foreground">{step.text}</p>
@@ -77,7 +77,7 @@ function ScenarioTableBlock({ block }: { block: Extract<PageBlock, { blockType: 
     <SectionShell title={block.title}>
       <div className="grid gap-3">
         {block.rows.map((row) => (
-          <article key={row.id ?? row.scenario} className="grid gap-2 rounded-card border p-5 md:grid-cols-3">
+          <article key={row.scenario} className="grid gap-2 rounded-card border p-5 md:grid-cols-3">
             <h3 className="text-body font-semibold">{row.scenario}</h3>
             <p className="text-body-sm text-muted-foreground">{row.assumption}</p>
             <p className="text-body-sm text-foreground">{row.investorQuestion}</p>
@@ -93,7 +93,7 @@ function CardsGridBlock({ block }: { block: Extract<PageBlock, { blockType: "car
     <SectionShell title={block.title} lead={block.lead ?? undefined}>
       <div className="grid gap-4 md:grid-cols-3">
         {block.cards.map((card) => (
-          <article key={card.id ?? card.title} className="rounded-card border p-5">
+          <article key={card.title} className="rounded-card border p-5">
             <h3 className="text-body font-semibold">{card.title}</h3>
             <p className="mt-3 text-body-sm text-muted-foreground">{card.text}</p>
             {card.link?.href && card.link.label ? <ActionLink href={card.link.href} variant="link" className="mt-4">{card.link.label}</ActionLink> : null}
@@ -109,7 +109,7 @@ function ObjectCardsBlock({ block }: { block: Extract<PageBlock, { blockType: "o
     <SectionShell title={block.title} lead={block.lead ?? undefined}>
       <div className="grid gap-4 md:grid-cols-3">
         {block.items.map((item) => (
-          <article key={item.id ?? item.href} className="rounded-card border p-5">
+          <article key={item.href} className="rounded-card border p-5">
             <p className="text-caption text-muted-foreground">{item.location} · {item.status}</p>
             <h3 className="mt-3 text-body font-semibold">{item.title}</h3>
             <p className="mt-3 text-body-sm text-muted-foreground">{item.thesis}</p>
