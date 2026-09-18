@@ -3,6 +3,7 @@ import type { TaskConfig } from "payload";
 import {
   markLeadDeliverySent,
   recordLeadDeliveryFailureAndMaybeRetry,
+  touchLeadDeliveryHeartbeat,
   transitionLeadDeliveryToSending,
 } from "../../../core/data-access/system/lead-delivery.ts";
 import { loadLeadDeliveryForSend } from "../../../core/data-access/system/load-lead-delivery.ts";
@@ -26,7 +27,8 @@ type DeliverLeadTask = {
 type PayloadLike = Parameters<typeof transitionLeadDeliveryToSending>[0] &
   Parameters<typeof loadLeadDeliveryForSend>[0] &
   Parameters<typeof markLeadDeliverySent>[0] &
-  Parameters<typeof recordLeadDeliveryFailureAndMaybeRetry>[0];
+  Parameters<typeof recordLeadDeliveryFailureAndMaybeRetry>[0] &
+  Parameters<typeof touchLeadDeliveryHeartbeat>[0];
 
 export const leadDeliveryBackoffMs = [
   0,
@@ -37,6 +39,8 @@ export const leadDeliveryBackoffMs = [
   4 * 60 * 60_000,
 ] as const;
 
+export const leadDeliveryHeartbeatIntervalMs = 60_000;
+
 type DeliverLeadRuntime = Readonly<{
   env?: LeadChannelEnv;
   leadDeliveryId: string;
@@ -45,6 +49,7 @@ type DeliverLeadRuntime = Readonly<{
   now?: Date;
   payload: PayloadLike;
   resolveChannel?: (channelId: string) => LeadDeliveryChannel | undefined;
+  setHeartbeatInterval?: typeof setInterval;
 }>;
 
 function silentLogger(): Pick<StructuredLogger, "info" | "warn" | "error"> {
@@ -137,7 +142,18 @@ export async function deliverLead(runtime: DeliverLeadRuntime): Promise<DeliverL
   }
 
   try {
-    const result = await channel.deliver(loaded.payload);
+    await touchLeadDeliveryHeartbeat(runtime.payload, { leadDeliveryId: runtime.leadDeliveryId }, now);
+    const scheduleHeartbeat = runtime.setHeartbeatInterval ?? setInterval;
+    const heartbeat = scheduleHeartbeat(() => {
+      void touchLeadDeliveryHeartbeat(runtime.payload, { leadDeliveryId: runtime.leadDeliveryId }, new Date());
+    }, leadDeliveryHeartbeatIntervalMs);
+
+    let result;
+    try {
+      result = await channel.deliver(loaded.payload);
+    } finally {
+      clearInterval(heartbeat);
+    }
     const marked = await markLeadDeliverySent(
       runtime.payload,
       { externalRef: result.externalRef, leadDeliveryId: runtime.leadDeliveryId },

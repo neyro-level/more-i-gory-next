@@ -171,6 +171,28 @@ export async function retryAbandonedLeadDelivery(
   return retried;
 }
 
+export async function touchLeadDeliveryHeartbeat(
+  payload: PayloadLike,
+  input: LeadDeliveryTransitionInput,
+  now = new Date(),
+): Promise<boolean> {
+  const update = await payload.update({
+    collection: "lead-deliveries",
+    data: {
+      heartbeatAt: now.toISOString(),
+    },
+    overrideAccess: true,
+    where: {
+      and: [
+        { id: { equals: input.leadDeliveryId } },
+        { status: { equals: "sending" } },
+      ],
+    },
+  });
+  const result = update as { docs?: LeadDeliveryRecord[] };
+  return Array.isArray(result.docs) && result.docs.length > 0;
+}
+
 export async function markLeadDeliverySent(
   payload: PayloadLike,
   input: LeadDeliverySentInput,
