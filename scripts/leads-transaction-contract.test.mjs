@@ -34,3 +34,13 @@ test("createLead uses one Payload transaction for lead and pending deliveries", 
   assert.match(source, /idempotencyKey:\s*`lead:\$\{lead\.id\}:channel:\$\{channelId\}`/);
   assert.match(source, /retentionStatus:\s*"active"/);
 });
+
+test("enqueue failure is logged with a safe code and no PII", () => {
+  const source = fs.readFileSync("src/core/data-access/system/create-lead.ts", "utf8");
+  assert.match(source, /safeCode:\s*"lead_enqueue_failed"/);
+  assert.match(source, /leadDeliveryId:\s*String\(leadDeliveryId\)/);
+  assert.match(source, /state:\s*"queue_unavailable"/);
+  assert.doesNotMatch(source, /logger\.error\([^)]*phone/);
+  assert.doesNotMatch(source, /logger\.error\([^)]*email/);
+  assert.doesNotMatch(source, /catch\s*\{\s*return false;\s*\}/);
+});
