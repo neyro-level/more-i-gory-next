@@ -13,6 +13,8 @@ const privilegedSystemFiles = new Set([
 const privateFieldPattern = /\b(?:apartmentNumber|cadastralNumber|internalComment|ownerContact|credentials|diagnosticRawData)\b/;
 const lowLevelDbImportPattern = /(?:from\s+|import\s*\(|require\s*\()\s*["'](?:@payloadcms\/db-postgres|drizzle-orm(?:\/[^"']*)?|pg|postgres)["']/;
 const payloadJobsCollectionAccessPattern = /\bcollection\s*:\s*["']payload-jobs["']/;
+const localApiCallPattern =
+  /\b(?:req\.)?payload(?:\?\.|\.)(?:jobs(?:\?\.|\.))?(?:findByID|findGlobal|find|create|update|delete|queue)\s*(?:\?\.)?\s*\(/g;
 const moduleSpecifierPattern =
   /(?:import\s+(?:type\s+)?[^"'()]*?\s+from\s+|export\s+(?:type\s+)?[^"']*?\s+from\s+|import\s*\(\s*|require\s*\(\s*)["']([^"']+)["']/g;
 const darkVariantPattern = /(?:^|[\s"'`])(?:[\w!*\-[\]():/>&=.]+:)*dark:/;
@@ -38,6 +40,42 @@ function isProductionCode(filePath) {
 
 function addViolation(violations, guard, filePath, message) {
   violations.push(`Guard ${guard}: ${message}: ${filePath}`);
+}
+
+function extractFirstObjectLiteral(source, fromIndex) {
+  const start = source.indexOf("{", fromIndex);
+  if (start < 0) return null;
+
+  let depth = 0;
+  let inString = null;
+  let escaped = false;
+
+  for (let index = start; index < source.length; index += 1) {
+    const char = source[index];
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (char === "\\") {
+        escaped = true;
+        continue;
+      }
+      if (char === inString) inString = null;
+      continue;
+    }
+    if (char === "'" || char === '"') {
+      inString = char;
+      continue;
+    }
+    if (char === "{") depth += 1;
+    if (char === "}") {
+      depth -= 1;
+      if (depth === 0) return source.slice(start, index + 1);
+    }
+  }
+
+  return null;
 }
 
 function isExactDependencyVersion(name, version) {
@@ -126,11 +164,16 @@ export function findArchitectureGuardViolations({ files, manifests }) {
     const content = entry.content;
     if (!isProductionCode(filePath)) continue;
 
-    if (
-      /\boverrideAccess\s*:\s*true\b/.test(content) &&
-      !privilegedSystemFiles.has(filePath)
-    ) {
-      addViolation(violations, 1, filePath, "overrideAccess: true is allowed only in registered System Gateway implementations");
+    if (/\boverrideAccess\s*:\s*true\b/.test(content) && !privilegedSystemFiles.has(filePath)) {
+      addViolation(violations, 1, filePath, "overrideAccess:true outside registered System Gateway");
+    }
+
+    localApiCallPattern.lastIndex = 0;
+    for (const match of content.matchAll(localApiCallPattern)) {
+      const objectLiteral = extractFirstObjectLiteral(content, match.index ?? 0);
+      if (!objectLiteral || !/\boverrideAccess\s*:\s*(true|false)\b/.test(objectLiteral)) {
+        addViolation(violations, 1, filePath, "Local API call without explicit overrideAccess");
+      }
     }
 
     if (
