@@ -1,6 +1,7 @@
 import type { TaskConfig } from "payload";
 
 import { transitionImportRunToRunning } from "../../../core/data-access/system/import-feed-run.ts";
+import { createImportFeedClaimHandler, runIngestPipeline } from "../../ingest/pipeline.ts";
 
 type ImportFeedTask = {
   input: {
@@ -25,11 +26,18 @@ export const importFeedTask: TaskConfig<ImportFeedTask> = {
   },
   retries: 0,
   handler: async ({ input, req }) => {
-    const transitioned = await transitionImportRunToRunning(
-      req.payload as unknown as Parameters<typeof transitionImportRunToRunning>[0],
+    const result = await runIngestPipeline({
+      handlers: {
+        "claim-running": createImportFeedClaimHandler((claimInput) =>
+          transitionImportRunToRunning(
+            req.payload as unknown as Parameters<typeof transitionImportRunToRunning>[0],
+            claimInput,
+          ),
+        ),
+      },
       input,
-    );
+    });
 
-    return { output: { status: transitioned ? "running" : "skipped" } };
+    return { output: { status: result.status === "running" ? "running" : "skipped" } };
   },
 };
