@@ -18,9 +18,25 @@ export class LeadChannelRegistryError extends Error {
   }
 }
 
-const registeredChannelFactories: Readonly<
-  Record<string, (input: { env: LeadChannelEnv; outbound: SafeOutboundClient }) => LeadDeliveryChannel>
+const registeredChannelFactories: Record<
+  string,
+  (input: { env: LeadChannelEnv; outbound: SafeOutboundClient }) => LeadDeliveryChannel
 > = {};
+
+export function registerLeadChannelFactory(
+  id: string,
+  factory: (input: { env: LeadChannelEnv; outbound: SafeOutboundClient }) => LeadDeliveryChannel,
+) {
+  if (!/^[a-z0-9-]{2,40}$/.test(id)) {
+    throw new LeadChannelRegistryError(`Unknown or incomplete lead channel: ${id}`);
+  }
+
+  registeredChannelFactories[id] = factory;
+}
+
+export function unregisterLeadChannelFactory(id: string) {
+  delete registeredChannelFactories[id];
+}
 
 function parseOutboundHosts(projectEnv: LeadChannelEnv): readonly string[] {
   const raw = projectEnv.LEAD_OUTBOUND_HOSTS ?? projectEnv.OUTBOUND_ALLOWED_HOSTS;

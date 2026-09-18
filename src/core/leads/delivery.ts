@@ -1,6 +1,7 @@
 import type { SafeOutboundClient } from "@/core/security/outbound-http";
 
 export type DeliveryCertainty = "confirmed" | "not_delivered" | "unknown";
+export type LeadDeliveryClassification = "sent" | "retryable" | "permanent";
 
 export type LeadDeliveryPayload = Readonly<{
   consent: {
@@ -20,6 +21,7 @@ export type LeadDeliveryPayload = Readonly<{
 }>;
 
 export type LeadDeliveryResult = Readonly<{
+  classification: "sent";
   deliveryCertainty: "confirmed";
   externalRef?: string;
 }>;
@@ -45,11 +47,25 @@ export class LeadDeliveryFailure extends Error {
     this.retryable = input.retryable;
     this.safeCode = input.safeCode;
   }
+
+  get classification(): Exclude<LeadDeliveryClassification, "sent"> {
+    return this.retryable ? "retryable" : "permanent";
+  }
 }
 
 export interface LeadDeliveryChannel {
   readonly id: string;
   deliver(payload: LeadDeliveryPayload): Promise<LeadDeliveryResult>;
+}
+
+export function redactLeadOutboundUrl(url: URL): string {
+  const redacted = new URL(url.href);
+  redacted.username = "";
+  redacted.password = "";
+  redacted.hash = "";
+  redacted.search = "";
+  redacted.pathname = redacted.pathname.replace(/\/bot[^/]+/i, "/bot[redacted]");
+  return `${redacted.protocol}//${redacted.host}${redacted.pathname}`;
 }
 
 type TelegramLeadDeliveryConfig = Readonly<{
@@ -146,6 +162,7 @@ export function createTelegramLeadDeliveryChannel(config: TelegramLeadDeliveryCo
         if (response.status >= 200 && response.status < 300 && parsed.ok === true) {
           const messageId = parsed.result?.message_id;
           return {
+            classification: "sent",
             deliveryCertainty: "confirmed",
             externalRef: messageId == null ? undefined : `telegram:${messageId}`,
           };

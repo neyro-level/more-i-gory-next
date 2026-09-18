@@ -5,6 +5,7 @@ import test from "node:test";
 import {
   createTelegramLeadDeliveryChannel,
   LeadDeliveryFailure,
+  redactLeadOutboundUrl,
 } from "../src/core/leads/delivery.ts";
 
 const decoder = new TextDecoder();
@@ -56,6 +57,7 @@ test("telegram delivery channel sends through Safe Outbound Client", async () =>
   const result = await channel.deliver(payload);
 
   assert.deepEqual(result, {
+    classification: "sent",
     deliveryCertainty: "confirmed",
     externalRef: "telegram:42",
   });
@@ -94,6 +96,7 @@ test("telegram delivery failures expose only redacted operational details", asyn
       assert.equal(error.retryable, false);
       assert.equal(error.safeCode, "telegram_rejected");
       assert.equal(error.deliveryCertainty, "not_delivered");
+      assert.equal(error.classification, "permanent");
       assert.equal(error.redactedMessage.includes("secret-token"), false);
       assert.equal(error.redactedMessage.includes("-100123456"), false);
       assert.equal(error.redactedMessage.includes(payload.lead.phone), false);
@@ -106,4 +109,9 @@ test("telegram delivery failures expose only redacted operational details", asyn
 test("lead delivery implementation does not bypass outbound or env layers", () => {
   assert.equal(source.includes("fetch("), false);
   assert.equal(source.includes("process.env"), false);
+});
+
+test("outbound URL logs redact secrets deterministically", () => {
+  const url = new URL("https://user:token@api.telegram.org/bot123456:secret-token/sendMessage?timeout=1");
+  assert.equal(redactLeadOutboundUrl(url), "https://api.telegram.org/bot[redacted]/sendMessage");
 });
