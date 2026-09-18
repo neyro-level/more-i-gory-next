@@ -1,28 +1,45 @@
-import type { Navigation, SiteSetting } from "../../../payload-types.ts";
+import { z } from "zod";
 
-export type SiteNavigationLink = Readonly<{
-  href: string;
-  label: string;
-  nofollow: boolean;
-  openInNewTab: boolean;
-}>;
+const siteNavigationLinkSchema = z.object({
+  href: z.string().min(1),
+  label: z.string().min(1),
+  nofollow: z.boolean(),
+  openInNewTab: z.boolean(),
+});
 
-export type SiteChrome = Readonly<{
-  brand: {
-    siteName: string;
-    shortName: string;
-    tagline: string;
-  };
-  legalNotice: string;
-  navigation: {
-    footer: readonly SiteNavigationLink[];
-    header: readonly SiteNavigationLink[];
-    headerCta: SiteNavigationLink;
-    legal: readonly SiteNavigationLink[];
-  };
-}>;
+export const siteChromeSchema = z.object({
+  brand: z.object({
+    shortName: z.string().min(1),
+    siteName: z.string().min(1),
+    tagline: z.string().min(1),
+  }),
+  legalNotice: z.string().min(1),
+  navigation: z.object({
+    footer: z.array(siteNavigationLinkSchema),
+    header: z.array(siteNavigationLinkSchema),
+    headerCta: siteNavigationLinkSchema,
+    legal: z.array(siteNavigationLinkSchema),
+  }),
+});
 
-export const fallbackSiteChrome: SiteChrome = {
+export type SiteNavigationLink = z.infer<typeof siteNavigationLinkSchema>;
+export type SiteChrome = z.infer<typeof siteChromeSchema>;
+
+export const publicSiteSettingsSelect = {
+  legalNotice: true,
+  shortName: true,
+  siteName: true,
+  tagline: true,
+} as const;
+
+export const publicNavigationSelect = {
+  footer: true,
+  header: true,
+  headerCta: true,
+  legal: true,
+} as const;
+
+export const fallbackSiteChrome: SiteChrome = siteChromeSchema.parse({
   brand: {
     siteName: "Море и Горы",
     shortName: "МГ",
@@ -53,32 +70,44 @@ export const fallbackSiteChrome: SiteChrome = {
       { href: "/consent/", label: "Согласие на обработку данных", nofollow: false, openInNewTab: false },
     ],
   },
-};
+});
+
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+}
 
 function hasText(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function mapLinks(items: Navigation["header"] | Navigation["footer"] | Navigation["legal"]): readonly SiteNavigationLink[] {
-  return (items ?? [])
-    .filter((item) => hasText(item.label) && hasText(item.href))
-    .map((item) => ({
-      href: item.href.trim(),
-      label: item.label.trim(),
-      nofollow: item.nofollow === true,
-      openInNewTab: item.openInNewTab === true,
-    }));
+function mapLinks(items: unknown): readonly SiteNavigationLink[] {
+  if (!Array.isArray(items)) return [];
+
+  return items.flatMap((item) => {
+    const record = asRecord(item);
+    if (!hasText(record.label) || !hasText(record.href)) return [];
+
+    return [
+      {
+        href: record.href.trim(),
+        label: record.label.trim(),
+        nofollow: record.nofollow === true,
+        openInNewTab: record.openInNewTab === true,
+      },
+    ];
+  });
 }
 
 function firstNonEmpty<T>(items: readonly T[], fallback: readonly T[]): readonly T[] {
   return items.length > 0 ? items : fallback;
 }
 
-function mapHeaderCta(navigation: Navigation): SiteNavigationLink {
-  if (hasText(navigation.headerCta?.label) && hasText(navigation.headerCta?.href)) {
+function mapHeaderCta(navigation: Record<string, unknown>): SiteNavigationLink {
+  const cta = asRecord(navigation.headerCta);
+  if (hasText(cta.label) && hasText(cta.href)) {
     return {
-      href: navigation.headerCta.href.trim(),
-      label: navigation.headerCta.label.trim(),
+      href: cta.href.trim(),
+      label: cta.label.trim(),
       nofollow: false,
       openInNewTab: false,
     };
@@ -87,23 +116,25 @@ function mapHeaderCta(navigation: Navigation): SiteNavigationLink {
   return fallbackSiteChrome.navigation.headerCta;
 }
 
-export function mapSiteChrome(settings: SiteSetting | null, navigation: Navigation | null): SiteChrome {
-  const header = firstNonEmpty(mapLinks(navigation?.header), fallbackSiteChrome.navigation.header);
-  const footer = firstNonEmpty(mapLinks(navigation?.footer), fallbackSiteChrome.navigation.footer);
-  const legal = firstNonEmpty(mapLinks(navigation?.legal), fallbackSiteChrome.navigation.legal);
+export function mapSiteChrome(settings: unknown, navigation: unknown): SiteChrome {
+  const settingsRecord = asRecord(settings);
+  const navigationRecord = navigation && typeof navigation === "object" ? asRecord(navigation) : null;
+  const header = firstNonEmpty(mapLinks(navigationRecord?.header), fallbackSiteChrome.navigation.header);
+  const footer = firstNonEmpty(mapLinks(navigationRecord?.footer), fallbackSiteChrome.navigation.footer);
+  const legal = firstNonEmpty(mapLinks(navigationRecord?.legal), fallbackSiteChrome.navigation.legal);
 
-  return {
+  return siteChromeSchema.parse({
     brand: {
-      siteName: hasText(settings?.siteName) ? settings.siteName.trim() : fallbackSiteChrome.brand.siteName,
-      shortName: hasText(settings?.shortName) ? settings.shortName.trim() : fallbackSiteChrome.brand.shortName,
-      tagline: hasText(settings?.tagline) ? settings.tagline.trim() : fallbackSiteChrome.brand.tagline,
+      siteName: hasText(settingsRecord.siteName) ? settingsRecord.siteName.trim() : fallbackSiteChrome.brand.siteName,
+      shortName: hasText(settingsRecord.shortName) ? settingsRecord.shortName.trim() : fallbackSiteChrome.brand.shortName,
+      tagline: hasText(settingsRecord.tagline) ? settingsRecord.tagline.trim() : fallbackSiteChrome.brand.tagline,
     },
-    legalNotice: hasText(settings?.legalNotice) ? settings.legalNotice.trim() : fallbackSiteChrome.legalNotice,
+    legalNotice: hasText(settingsRecord.legalNotice) ? settingsRecord.legalNotice.trim() : fallbackSiteChrome.legalNotice,
     navigation: {
       footer,
       header,
-      headerCta: navigation ? mapHeaderCta(navigation) : fallbackSiteChrome.navigation.headerCta,
+      headerCta: navigationRecord ? mapHeaderCta(navigationRecord) : fallbackSiteChrome.navigation.headerCta,
       legal,
     },
-  };
+  });
 }
