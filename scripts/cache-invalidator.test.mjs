@@ -303,15 +303,25 @@ test("CMS collection hook invalidates after commit and does not throw on cache f
   assert.equal(batches.length, 1);
   assert.ok(batches[0].some((target) => target.kind === "tag" && target.tag === "complex:fresh-complex"));
 
+  const logs = [];
   const failingHook = createCmsMutationInvalidationHook("pages", {
     invalidator: {
       async invalidate() {
         throw new Error("revalidate unavailable");
       },
     },
-    logger: { error() {}, info() {} },
+    logger: {
+      error: (message, context) => logs.push({ message, context }),
+      info() {},
+    },
   });
   await failingHook({ doc: { slug: "privacy" } });
+  assert.deepEqual(logs, [
+    {
+      message: "cache invalidation operational issue",
+      context: { code: "cache_invalidation_failed", targetCount: 2 },
+    },
+  ]);
 });
 
 test("CMS collections and globals wire after-commit CacheInvalidator hooks", async () => {
