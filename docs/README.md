@@ -1,8 +1,8 @@
 # Документация проекта «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.1 Payload foundation
-**Дата:** 2026-09-11
+**Версия:** 2.3 After EPIC 12
+**Дата:** 2026-09-18
 **Стандарт:** AMS Product Development Standard 2.0
 
 ## Что создаём
@@ -19,14 +19,14 @@
 
 ## Текущий статус
 
-- технический фундамент и Node runtime собраны;
-- production не выпускался;
-- все коммерческие и аналитические страницы остаются под content/trust gate;
-- EPIC 0 зафиксировал governance и IA;
-- EPIC 1 перевёл сайт на Node.js runtime;
-- EPIC 2 добавляет Payload 3.89 и миграционный контур PostgreSQL 18; локальная
-  clean-DB проверка выполнена, Managed PostgreSQL для staging/production ещё не создавался;
-- production release остаётся отдельным этапом после платформенной перестройки.
+- `origin/main` закрыт по EPIC 12: Payload/PostgreSQL, gateways, media/S3,
+  regions, properties, newbuild/ingest/catalog, leads/delivery/maintenance и
+  standalone artifact;
+- публичный `ContentService` всё ещё читает локальные JSON/Markdown adapters;
+  `PayloadContentRepository` зарезервирован и не включён;
+- production не выпускался; technical preview — `more-previu.tw1.ru`;
+- коммерческие и аналитические страницы остаются под content/trust/index gate;
+- Managed PostgreSQL staging/production и Nginx cutover — EPIC 13 / human gates.
 
 ## Platform contract
 
@@ -74,9 +74,8 @@ Research объясняет причины решений, но не являе�
 
 ## Current Focus
 
-Активна программа перехода к Realty Platform. EPIC 0 и EPIC 1 завершены; EPIC 2
-реализует Payload/PostgreSQL foundation. Cloud provisioning остаётся отдельным
-инфраструктурным gate до закрытия эпика.
-Атомарное состояние программы ведётся в импортированном Beads-графе,
-а этот Backlog остаётся проектным source of truth верхнего уровня. Production не
-выпускался и текущим потоком не разрешён.
+NOW: EPIC 13 — Nginx, runtime, backup/restore и operations proof на preview-домене.
+Следующие эпики — только по dependency graph; EPIC 14/18 и production release
+не стартуют из этого документа автоматически.
+Атомарное состояние программы ведётся в локальном Beads-графе, Backlog остаётся
+верхним source of truth. Production не выпускался и текущим потоком не разрешён.

@@ -8,7 +8,7 @@
 
 ## 1. Core Profile
 
-- Selected AMS Core: REALTY_BASE transition, Next.js Node runtime; Payload starts in EPIC 2.
+- Selected AMS Core: REALTY_BASE, Next.js Node runtime, Payload 3.89 in-tree.
 - Canonical repository: SourceCraft integrator-p/more-i-gory-next.
 - Package manager: pnpm.
 - UX scope: PUBLIC_COMMERCIAL.
@@ -69,8 +69,8 @@ data-invalid.
 - UI input: project DTO / safe view contract.
 - Formation layer: Content Service + Repository contracts.
 - Reusable UI не импортирует persistence/CMS/ORM types.
-- Payload 3.89 + PostgreSQL 18 foundation реализуется в EPIC 2; Prisma запрещён.
-- Публичный UI до EPIC 8 продолжает читать текущие JSON/Markdown adapters.
+- Payload 3.89 + PostgreSQL 18 foundation в `main`; Prisma запрещён.
+- Публичный UI продолжает читать текущие JSON/Markdown adapters.
 
 ## 7. Deployment Target
 

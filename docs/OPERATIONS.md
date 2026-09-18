@@ -54,9 +54,10 @@ Backup не считается доказанным без успешного re
 
 ## Jobs runtime
 
-'TODO EPIC 4/13': один jobs-active runtime с 'JOBS_AUTORUN=true'. Handover:
-новый runtime стартует с 'false', проходит readiness, старый останавливается,
-после подтверждения единственного владельца новый перезапускается с 'true'.
+Один jobs-capable runtime есть; `JOBS_AUTORUN=true` только у единственного
+jobs-active process после production jobs gate (EPIC 13). Handover: новый
+runtime стартует с `false`, проходит readiness, старый останавливается, после
+подтверждения единственного владельца новый перезапускается с `true`.
 
 ### Payload jobs diagnostics
 
@@ -82,23 +83,26 @@ Owner-only read diagnostics включается через `jobsCollectionOverr
 
 ## Imports
 
-Не активны до EPIC 16 и появления фактического feed. Будущий runbook обязан
-покрывать suspicious run, source isolation, deactivation approval, recovery и
-запрет массовой деактивации после неполного feed.
+Коллекции и jobs ingest в `main` (EPIC 16). Autorun запрещён без configured
+source и owner-approved feed. Runbook обязан покрывать suspicious run, source
+isolation, deactivation approval, recovery и запрет массовой деактивации после
+неполного feed.
 
 ## Leads
 
-'TODO EPIC 10–12': intake, transactional outbox, Telegram delivery,
-retry/recovery, retention и manual retry. PII и secrets в логи не попадают.
+Intake, transactional outbox, Telegram delivery, retry/recovery и retention
+реализованы в EPIC 10–12. Production destination и outbound secrets остаются
+human gate. PII и secrets в логи не попадают.
 
 ## S3 and media
 
-'TODO EPIC 6/13': Payload upload → Timeweb S3, versioning, MIME/size policy,
-restore/rollback procedure. VPS disk не является source of truth.
+Payload upload adapter и media pipeline в `main` (EPIC 6). Production
+versioning, restore/rollback procedure и VPS-disk policy закрываются в EPIC 13.
+VPS disk не является source of truth.
 
 ## Staging
 
-'TODO EPIC 2/13': отдельные domain, database и non-production secrets; Basic
+'TODO EPIC 13': отдельные domain, database и non-production secrets; Basic
 Auth, 'X-Robots-Tag: noindex, nofollow', без production PII dump.
 
 ## Monitoring and alerts
