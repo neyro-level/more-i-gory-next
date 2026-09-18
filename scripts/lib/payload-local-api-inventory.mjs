@@ -26,6 +26,7 @@ export function classifyLocalApiPath(filePath) {
   if (
     normalized.startsWith("src/core/data-access/system/") ||
     normalized.startsWith("src/project/jobs/") ||
+    normalized.startsWith("src/project/leads/") ||
     normalized.startsWith("scripts/seed-") ||
     normalized === "scripts/bootstrap-owner.mjs"
   ) {
