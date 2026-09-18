@@ -324,6 +324,68 @@ test("CMS collection hook invalidates after commit and does not throw on cache f
   ]);
 });
 
+test("B2 proof: CMS mutation HTTP-revalidates so the next public request sees fresh data", async () => {
+  const secret = "12345678901234567890123456789012";
+  const publicByTag = new Map([["complex:fresh-complex", { title: "stale title" }]]);
+  const outboundCalls = [];
+  const { handleInternalRevalidateRequest } = await import("../src/core/cache/revalidate-endpoint.ts");
+  const { createHttpRevalidateInvalidator } = await import("../src/core/cache/http-revalidate-invalidator.ts");
+
+  const httpInvalidator = await createHttpRevalidateInvalidator({
+    loadEnv: () => ({
+      INTERNAL_REVALIDATE_BASE_URL: "https://more-previu.tw1.ru",
+      REVALIDATE_SECRET: secret,
+    }),
+    outbound: {
+      async request(request) {
+        outboundCalls.push({ method: request.method, url: String(request.url) });
+        const response = await handleInternalRevalidateRequest(
+          new Request(request.url, {
+            body: request.body,
+            headers: request.headers,
+            method: request.method,
+          }),
+          {
+            invalidator: {
+              async invalidate(targets) {
+                for (const target of targets) {
+                  if (target.kind === "tag") publicByTag.delete(target.tag);
+                }
+              },
+            },
+            logger: { error() {}, info() {}, warn() {} },
+            secret,
+            store: new Map(),
+          },
+        );
+        return {
+          body: new Uint8Array(),
+          contentType: "application/json",
+          etag: null,
+          lastModified: null,
+          status: response.status,
+        };
+      },
+    },
+  });
+
+  assert.equal(publicByTag.get("complex:fresh-complex")?.title, "stale title");
+
+  const hook = createCmsMutationInvalidationHook("residential-complexes", {
+    invalidator: httpInvalidator,
+    logger: { error() {}, info() {} },
+  });
+  await hook({ doc: { slug: "fresh-complex", status: "published", title: "fresh title" } });
+
+  assert.deepEqual(outboundCalls, [
+    { method: "POST", url: "https://more-previu.tw1.ru/api/internal/revalidate" },
+  ]);
+  assert.equal(publicByTag.has("complex:fresh-complex"), false);
+
+  publicByTag.set("complex:fresh-complex", { title: "fresh title" });
+  assert.equal(publicByTag.get("complex:fresh-complex")?.title, "fresh title");
+});
+
 test("CMS collections and globals wire after-commit CacheInvalidator hooks", async () => {
   const files = [
     "src/project/collections/pages.ts",
