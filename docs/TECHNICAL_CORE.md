@@ -51,9 +51,9 @@ src/app/(site)/globals.css, primitives в src/components/ui.
 - Responsive contract: fill только вместе с stable wrapper и sizes.
 - LCP contract: единственный hero asset получает `preload`; card/gallery media
   не загружается eager без причины.
-- Remote media: `next.config.ts` собирает S3 `remotePatterns` из
-  `S3_BUCKET`/`S3_ENDPOINT`; без этих env список пуст и remote fetch не
-  открывается.
+- Missing image: один canonical fallback `media-og-default`
+  (`/images/og/default.webp`) через `publicMediaOrFallback`; отдельные cover
+  заглушки для каталога запрещены.
 
 ## 4. Fonts
 

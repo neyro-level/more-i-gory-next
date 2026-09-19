@@ -358,6 +358,10 @@ public/assets/
 Rules:
 - `next/image` — единственный image component;
 - remote runtime images запрещены до включения точных S3 `remotePatterns`;
+- Timeweb S3: `https://s3.twcstorage.ru`, `ru-1`, bucket `moreigory-media`,
+  path-style addressing, `remotePatterns` pathname `/moreigory-media/media/**`;
+- upload policy: `image/avif|jpeg|png|webp`, max 8 MiB, content kinds cannot
+  be decorative; decorative empty alt only for `kind=ui`;
 - width/height или stable aspect ratio обязательны;
 - content image имеет meaningful alt;
 - decorative image = `alt=""` + explicit decorative flag;

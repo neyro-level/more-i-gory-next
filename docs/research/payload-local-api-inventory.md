@@ -23,12 +23,12 @@
 | `scripts/verify-architecture-guards.test.mjs:79` | `find` | TEST | `content: 'payload.find({ collection: "pages", overrideAccess: false });',` |
 | `scripts/verify-architecture-guards.test.mjs:128` | `find` | TEST | `files: [{ path: "src/core/data-access/system/jobs.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
 | `scripts/verify-architecture-guards.test.mjs:135` | `find` | TEST | `files: [{ path: "src/core/data-access/system/lead-delivery.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
-| `src/core/data-access/public/newbuilds.ts:180` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/newbuilds.ts:181` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/public/newbuilds.ts:201` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/newbuilds.ts:202` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/public/newbuilds.ts:266` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/newbuilds.ts:267` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/newbuilds.ts:171` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/newbuilds.ts:172` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/newbuilds.ts:192` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/newbuilds.ts:193` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/newbuilds.ts:257` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/newbuilds.ts:258` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/pages.ts:15` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/pages.ts:16` | `find` | PUBLIC GATEWAY | `const pages = await payload.find({` |
 | `src/core/data-access/public/properties.ts:32` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |

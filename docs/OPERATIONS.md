@@ -59,6 +59,15 @@ CODE EXISTS на стороне Timeweb Managed PostgreSQL (провайдер �
 RUNTIME NOT PROVEN: фактический restore test ещё не выполнялся (EPIC 13).
 PRODUCTION NOT PROVEN.
 
+S3 media (TASK 31.5):
+
+```text
+versioning     : enabled on moreigory-media (Timeweb S3 capability; operator must keep it on)
+retention      : noncurrent versions at least 30 days; never empty-bucket as cleanup
+independent    : required — ru-1 is a single region; copy media/ off Timeweb on a schedule in EPIC 13
+restore        : restore VersionId onto the same key; do not pull files from the VPS disk
+```
+
 Backup не считается доказанным без успешного restore evidence.
 
 ## Jobs runtime
@@ -149,7 +158,10 @@ get `403`. Do not flip `status` by hand in Admin; that skips audit and enqueue.
 ## S3 and media
 
 CODE EXISTS: Payload upload adapter и бакет `moreigory-media` (EPIC 6 + API
-smoke 2026-09-18). RUNTIME NOT PROVEN на VPS. PRODUCTION NOT PROVEN.
+smoke 2026-09-18). Object SoT: `disableLocalStorage: true`, path-style URL
+`https://s3.twcstorage.ru/moreigory-media/media/<filename>`. Restart/redeploy
+VPS не должен удалять объекты: они не пишутся на диск приложения. RUNTIME
+upload→HeadObject на живом runtime — EPIC 13/14.G. PRODUCTION NOT PROVEN.
 VPS disk не является source of truth.
 
 ## Staging

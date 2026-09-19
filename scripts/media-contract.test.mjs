@@ -5,10 +5,15 @@ import { cmsOnlyMediaFields, publicMediaSchema, publicMediaSourceFields } from "
 import { Media } from "../src/project/collections/media.ts";
 import { authenticatedFieldReadAccess } from "../src/project/globals/access.ts";
 import { assertMediaAlt } from "../src/project/media/alt.ts";
+import {
+  assertMediaKindPolicy,
+  assertMediaUploadFile,
+  MEDIA_UPLOAD_POLICY,
+} from "../src/project/media/upload-policy.ts";
 
 test("media collection is an upload-enabled image library", () => {
   assert.equal(Media.slug, "media");
-  assert.equal(Media.upload.mimeTypes.includes("image/*"), true);
+  assert.deepEqual(Media.upload.mimeTypes, [...MEDIA_UPLOAD_POLICY.allowedMimeTypes]);
   assert.equal(Media.upload.pasteURL, false);
   assert.equal(Media.upload.adminThumbnail, "thumbnail");
   assert.deepEqual(
@@ -58,4 +63,34 @@ test("media alt contract supports decorative empty alt only when explicit", () =
 
   assert.throws(() => assertMediaAlt({ alt: "", decorative: false }), /meaningful alt/);
   assert.throws(() => assertMediaAlt({ alt: "Decorative wave", decorative: true }), /empty alt/);
+});
+
+test("media upload policy is image-only with an explicit size limit", () => {
+  assert.equal(MEDIA_UPLOAD_POLICY.imageOnly, true);
+  assert.equal(MEDIA_UPLOAD_POLICY.maxFileSizeBytes, 8 * 1024 * 1024);
+  assert.doesNotThrow(() => assertMediaUploadFile({ mimetype: "image/webp", size: 1024 }));
+  assert.throws(() => assertMediaUploadFile({ mimetype: "application/pdf", size: 1024 }), /raster images/);
+  assert.throws(
+    () => assertMediaUploadFile({ mimetype: "image/jpeg", size: MEDIA_UPLOAD_POLICY.maxFileSizeBytes + 1 }),
+    /byte limit/,
+  );
+});
+
+test("decorative policy is limited to UI assets", () => {
+  assert.doesNotThrow(() => assertMediaKindPolicy({ kind: "ui", decorative: true }));
+  assert.doesNotThrow(() => assertMediaKindPolicy({ kind: "project", decorative: false }));
+  assert.throws(() => assertMediaKindPolicy({ kind: "project", decorative: true }), /UI assets/);
+  assert.throws(() => assertMediaKindPolicy({ kind: "og", decorative: true }), /UI assets/);
+});
+
+test("missing image uses one canonical registered fallback", async () => {
+  const { CANONICAL_MISSING_IMAGE, CANONICAL_MISSING_IMAGE_ID, publicMediaOrFallback } = await import(
+    "../src/core/data-access/public/missing-image.ts"
+  );
+
+  assert.equal(CANONICAL_MISSING_IMAGE_ID, "media-og-default");
+  assert.equal(CANONICAL_MISSING_IMAGE.src, "/images/og/default.webp");
+  assert.deepEqual(publicMediaOrFallback({ src: "" }), CANONICAL_MISSING_IMAGE);
+  assert.equal(publicMediaOrFallback({ src: "https://s3.twcstorage.ru/moreigory-media/media/cover.webp" }).src.includes("cover.webp"), true);
+  assert.equal(publicMediaOrFallback({ src: undefined }).src, "/images/og/default.webp");
 });

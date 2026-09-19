@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import type { Media, Property, Region } from "../../../payload-types.ts";
 import { publicMediaSchema } from "./media-contract.ts";
+import { publicMediaOrFallback } from "./missing-image.ts";
 
 type PublicPropertyRecord = Readonly<
   Pick<Property, "id" | "origin" | "publishedAt" | "slug" | "status" | "title"> &
@@ -26,13 +27,6 @@ type PublicPropertyRecord = Readonly<
       >
     >
 >;
-
-const fallbackCover = {
-  alt: "Черновая обложка инвестиционного паспорта курортного проекта",
-  height: 1000,
-  src: "/images/projects/sample-resort/cover.webp",
-  width: 1478,
-};
 
 const publicPropertySchema = z.object({
   budgetNote: z.string().optional(),
@@ -135,18 +129,13 @@ function isRelationDocument<T extends { id: number }>(value: number | T | null |
 
 function getImage(property: PublicPropertyRecord) {
   const firstImage = property.images?.find((image): image is Media => isRelationDocument(image));
-  const src = firstImage?.url;
-
-  if (!src) {
-    return fallbackCover;
-  }
-
-  return {
-    alt: firstImage.alt?.trim() || property.title,
-    height: firstImage.height ?? fallbackCover.height,
-    src,
-    width: firstImage.width ?? fallbackCover.width,
-  };
+  return publicMediaOrFallback({
+    alt: firstImage?.alt,
+    height: firstImage?.height,
+    src: firstImage?.url,
+    titleFallback: property.title,
+    width: firstImage?.width,
+  });
 }
 
 function getRegionLabel(property: PublicPropertyRecord): string {

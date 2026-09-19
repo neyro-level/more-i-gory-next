@@ -57,8 +57,33 @@ const rawEnvSchema = z
     }
   });
 
+export function isProductionRuntimeProfile(source: NodeJS.ProcessEnv): boolean {
+  return (
+    source.NODE_ENV === "production" &&
+    source.NEXT_PHASE !== "phase-production-build" &&
+    source.VERIFY_RUNTIME !== "1"
+  );
+}
+
 export function parseProjectEnv(source: NodeJS.ProcessEnv) {
-  return rawEnvSchema.parse(source);
+  const parsed = rawEnvSchema.parse(source);
+
+  if (isProductionRuntimeProfile(source)) {
+    const s3Keys = ["S3_ENDPOINT", "S3_REGION", "S3_BUCKET", "S3_ACCESS_KEY", "S3_SECRET_KEY"] as const;
+    for (const key of s3Keys) {
+      if (!parsed[key]) {
+        throw new z.ZodError([
+          {
+            code: "custom",
+            message: `${key} is required in the production profile`,
+            path: [key],
+          },
+        ]);
+      }
+    }
+  }
+
+  return parsed;
 }
 
 export function lookupRuntimeEnv(name: string, source: NodeJS.ProcessEnv = process.env): string | undefined {

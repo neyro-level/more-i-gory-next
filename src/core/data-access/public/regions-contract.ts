@@ -6,7 +6,9 @@ import { regionSeedContent } from "../../../content/regions/region-seed-content.
 import { getRegionRoutePlan } from "../../../content/regions/region-route-plan.ts";
 import type { RegionInternalLink } from "../../../content/regions/region-route-plan.ts";
 import { composeRegionPathFromSlugs } from "../../../content/regions/region-path-policy.ts";
+import { getMediaAsset } from "../../../content/media/media-assets.ts";
 import { publicMediaSchema } from "./media-contract.ts";
+import { CANONICAL_MISSING_IMAGE, publicMediaOrFallback } from "./missing-image.ts";
 
 type PublicRegionRecord = Readonly<
   Pick<Region, "id" | "investmentThesis" | "kind" | "lead" | "order" | "riskSummary" | "slug" | "status" | "title"> & {
@@ -15,12 +17,17 @@ type PublicRegionRecord = Readonly<
   }
 >;
 
-const fallbackImage = {
-  alt: "Панорамный вид курортного побережья для сайта Море и Горы",
-  height: 1524,
-  src: "/images/og/default.webp",
-  width: 2560,
-};
+function mapImage(value: PublicRegionRecord["heroMedia"]) {
+  if (value && typeof value === "object" && typeof value.url === "string") {
+    return publicMediaOrFallback({
+      alt: value.alt,
+      height: value.height,
+      src: value.url,
+      width: value.width,
+    });
+  }
+  return CANONICAL_MISSING_IMAGE;
+}
 
 export const publicRegionSchema = z.object({
   id: z.string().min(1),
@@ -57,18 +64,6 @@ function relationSlug(value: PublicRegionRecord["parent"]): string | undefined {
   if (value && typeof value === "object" && "slug" in value && typeof value.slug === "string") {
     return value.slug;
   }
-}
-
-function mapImage(value: PublicRegionRecord["heroMedia"]) {
-  if (value && typeof value === "object" && typeof value.url === "string") {
-    return publicMediaSchema.parse({
-      alt: value.alt || fallbackImage.alt,
-      height: value.height ?? fallbackImage.height,
-      src: value.url,
-      width: value.width ?? fallbackImage.width,
-    });
-  }
-  return fallbackImage;
 }
 
 function regionStatus(value: string): PublicRegionDTO["status"] {
@@ -133,7 +128,7 @@ export function listFallbackPublicRegions(): readonly PublicRegionDTO[] {
 
     return publicRegionSchema.parse({
       id: `fallback:${entry.key}`,
-      image: fallbackImage,
+      image: publicMediaOrFallback(getMediaAsset(content.mediaSourceLabel) ?? CANONICAL_MISSING_IMAGE),
       investmentThesis: content.investmentThesis,
       kind: content.kind,
       lead: content.lead,

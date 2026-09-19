@@ -34,7 +34,7 @@ Production и staging не используют общую БД, secrets или 
 |---|---|
 | Active feeds/parsers | pipeline настраивается в EPIC 26 и сразу замораживается; живой XML-фид и каталог объектов не активируются 3–4 месяца |
 | Non-secret integrations | Payload Admin, Timeweb Managed PostgreSQL и Timeweb S3 подтверждены; внешний канал оповещений о заявках решением владельца не подключается |
-| Backup | planned: automatic Managed PostgreSQL backup + S3 versioning; retention и provider-independent copy — `TODO` до EPIC 13 |
+| Backup | PostgreSQL: Timeweb Managed automatic backup. S3: versioning enabled + ≥30 days noncurrent retention; provider-independent copy of `media/` is required (single region `ru-1`); live restore proof in EPIC 13 |
 | Restore proof | не выполнялся; обязательный фактический restore test в EPIC 13 |
 | Legal | оператор ПДн и публичные реквизиты утверждены владельцем; privacy/consent опубликованы как `privacy-2026-09-17` и `pdn-consent-2026-09-17`; банковские реквизиты не публикуются |
 | Core version | нормативная база — локальные конституции `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md` и `docs/AMS_UI_CORE_v5.0_FINAL.md` |
@@ -179,7 +179,7 @@ CACHE_INVALIDATION_MODE=http
 | Cache mode | `CACHE_INVALIDATION_MODE` | `http` |
 | Internal revalidation URL | `INTERNAL_REVALIDATE_BASE_URL` | server-only |
 | Internal revalidation auth | `REVALIDATE_SECRET` | secret |
-| S3 | `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY` | credentials are secret; до записи в Secret Master читаются из Timeweb API |
+| S3 | `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY` | credentials are secret; required fail-fast in production runtime; local/build/verify-runtime may omit them |
 | Outbound policy | `OUTBOUND_ALLOWED_HOSTS` | exact allowlist |
 | Lead channels | `LEAD_CHANNELS` | `telegram` |
 | Lead outbound policy | `LEAD_OUTBOUND_HOSTS` | exact allowlist |

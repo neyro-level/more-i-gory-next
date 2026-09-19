@@ -7,13 +7,13 @@ import { createS3MediaRemotePatterns } from "../src/project/media/next-image.ts"
 test("next/image remotePatterns allow only the exact approved S3 host and media prefix", () => {
   assert.deepEqual(
     createS3MediaRemotePatterns({
-      S3_BUCKET: "moreigori-media",
-      S3_ENDPOINT: "https://s3.timeweb.cloud",
+      S3_BUCKET: "moreigory-media",
+      S3_ENDPOINT: "https://s3.twcstorage.ru",
     }),
     [
       {
-        hostname: "s3.timeweb.cloud",
-        pathname: "/moreigori-media/media/**",
+        hostname: "s3.twcstorage.ru",
+        pathname: "/moreigory-media/media/**",
         port: "",
         protocol: "https",
       },
@@ -23,17 +23,17 @@ test("next/image remotePatterns allow only the exact approved S3 host and media 
 
 test("next/image remotePatterns stay disabled until S3 endpoint and bucket are configured together", () => {
   assert.deepEqual(createS3MediaRemotePatterns({}), []);
-  assert.deepEqual(createS3MediaRemotePatterns({ S3_ENDPOINT: "https://s3.timeweb.cloud" }), []);
-  assert.deepEqual(createS3MediaRemotePatterns({ S3_BUCKET: "moreigori-media" }), []);
+  assert.deepEqual(createS3MediaRemotePatterns({ S3_ENDPOINT: "https://s3.twcstorage.ru" }), []);
+  assert.deepEqual(createS3MediaRemotePatterns({ S3_BUCKET: "moreigory-media" }), []);
 });
 
 test("next/image remotePatterns reject wildcard hosts and bucket paths", () => {
   assert.throws(
-    () => createS3MediaRemotePatterns({ S3_BUCKET: "moreigori-media", S3_ENDPOINT: "https://*.timeweb.cloud" }),
+    () => createS3MediaRemotePatterns({ S3_BUCKET: "moreigory-media", S3_ENDPOINT: "https://*.twcstorage.ru" }),
     /wildcard hosts are forbidden/,
   );
   assert.throws(
-    () => createS3MediaRemotePatterns({ S3_BUCKET: "moreigori-media/path", S3_ENDPOINT: "https://s3.timeweb.cloud" }),
+    () => createS3MediaRemotePatterns({ S3_BUCKET: "moreigory-media/path", S3_ENDPOINT: "https://s3.twcstorage.ru" }),
     /without wildcards or path separators/,
   );
 });

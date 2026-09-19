@@ -120,7 +120,7 @@ const serverLogs = [];
 const nextBin = path.join(projectRoot, "node_modules", "next", "dist", "bin", "next");
 const server = spawn(process.execPath, [nextBin, "start", "-H", host, "-p", String(port)], {
   cwd: projectRoot,
-  env: { ...process.env, NODE_ENV: "production" },
+  env: { ...process.env, NODE_ENV: "production", VERIFY_RUNTIME: "1" },
   stdio: ["ignore", "pipe", "pipe"],
 });
 

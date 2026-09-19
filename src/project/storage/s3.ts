@@ -5,38 +5,80 @@ import type { parseProjectEnv } from "../env";
 
 type ProjectEnv = ReturnType<typeof parseProjectEnv>;
 
+export const TIMEWEB_S3_CONTRACT = {
+  bucket: "moreigory-media",
+  endpoint: "https://s3.twcstorage.ru",
+  forcePathStyle: true,
+  hostname: "s3.twcstorage.ru",
+  mediaPrefix: "media",
+  region: "ru-1",
+} as const;
+
 export function isS3StorageConfigured(env: ProjectEnv): boolean {
   return Boolean(env.S3_ENDPOINT && env.S3_REGION && env.S3_BUCKET && env.S3_ACCESS_KEY && env.S3_SECRET_KEY);
+}
+
+export function assertTimewebS3Compatibility(env: Pick<ProjectEnv, "S3_BUCKET" | "S3_ENDPOINT" | "S3_REGION">): void {
+  let url: URL;
+  try {
+    url = new URL(String(env.S3_ENDPOINT ?? ""));
+  } catch {
+    throw new Error("S3_ENDPOINT must be an absolute URL for Timeweb S3.");
+  }
+
+  if (url.origin !== TIMEWEB_S3_CONTRACT.endpoint) {
+    throw new Error(`S3_ENDPOINT must be ${TIMEWEB_S3_CONTRACT.endpoint}`);
+  }
+  if (url.pathname !== "" && url.pathname !== "/") {
+    throw new Error("S3_ENDPOINT must not include a path; Timeweb S3 uses path-style addressing.");
+  }
+  if (env.S3_REGION !== TIMEWEB_S3_CONTRACT.region) {
+    throw new Error(`S3_REGION must be ${TIMEWEB_S3_CONTRACT.region}`);
+  }
+  if (env.S3_BUCKET !== TIMEWEB_S3_CONTRACT.bucket) {
+    throw new Error(`S3_BUCKET must be ${TIMEWEB_S3_CONTRACT.bucket}`);
+  }
+}
+
+export function createS3SdkConfig(env: ProjectEnv) {
+  assertTimewebS3Compatibility(env);
+  return {
+    credentials: {
+      accessKeyId: env.S3_ACCESS_KEY as string,
+      secretAccessKey: env.S3_SECRET_KEY as string,
+    },
+    endpoint: env.S3_ENDPOINT as string,
+    forcePathStyle: TIMEWEB_S3_CONTRACT.forcePathStyle,
+    region: env.S3_REGION as string,
+  };
+}
+
+export function createPublicS3ObjectUrl(filename: string): string {
+  const name = filename.trim().replace(/^\/+/, "");
+  if (!name || name.includes("..") || name.includes("\\")) {
+    throw new Error("S3 object filename must be a safe relative object name.");
+  }
+  return `${TIMEWEB_S3_CONTRACT.endpoint}/${TIMEWEB_S3_CONTRACT.bucket}/${TIMEWEB_S3_CONTRACT.mediaPrefix}/${name}`;
+}
+
+export function isVpsDiskMediaSourceOfTruth(): false {
+  return false;
 }
 
 export function createStoragePlugins(env: ProjectEnv): Plugin[] {
   if (!isS3StorageConfigured(env)) return [];
 
-  const s3 = {
-    accessKey: env.S3_ACCESS_KEY as string,
-    bucket: env.S3_BUCKET as string,
-    endpoint: env.S3_ENDPOINT as string,
-    region: env.S3_REGION as string,
-    secretKey: env.S3_SECRET_KEY as string,
-  };
+  const config = createS3SdkConfig(env);
 
   return [
     s3Storage({
-      bucket: s3.bucket,
+      bucket: env.S3_BUCKET as string,
       collections: {
         media: {
-          prefix: "media",
+          prefix: TIMEWEB_S3_CONTRACT.mediaPrefix,
         },
       },
-      config: {
-        credentials: {
-          accessKeyId: s3.accessKey,
-          secretAccessKey: s3.secretKey,
-        },
-        endpoint: s3.endpoint,
-        forcePathStyle: true,
-        region: s3.region,
-      },
+      config,
       disableLocalStorage: true,
     }),
   ];

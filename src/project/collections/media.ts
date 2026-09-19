@@ -2,9 +2,14 @@ import type { CollectionBeforeValidateHook, CollectionConfig } from "payload";
 
 import { authenticatedFieldReadAccess, isOwnerAccess, publicReadAccess } from "../globals/access.ts";
 import { assertMediaAlt } from "../media/alt.ts";
+import { assertMediaKindPolicy, assertMediaUploadFile, MEDIA_UPLOAD_POLICY } from "../media/upload-policy.ts";
 
-const validateMediaAlt: CollectionBeforeValidateHook = ({ data }) => {
-  if (data) assertMediaAlt(data);
+const validateMediaUpload: CollectionBeforeValidateHook = ({ data, req }) => {
+  if (req.file) assertMediaUploadFile(req.file);
+  if (data) {
+    assertMediaKindPolicy(data);
+    assertMediaAlt(data);
+  }
   return data;
 };
 
@@ -69,7 +74,7 @@ export const Media: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeValidate: [validateMediaAlt],
+    beforeValidate: [validateMediaUpload],
   },
   timestamps: true,
   upload: {
@@ -101,7 +106,7 @@ export const Media: CollectionConfig = {
         width: 1200,
       },
     ],
-    mimeTypes: ["image/*"],
+    mimeTypes: [...MEDIA_UPLOAD_POLICY.allowedMimeTypes],
     pasteURL: false,
   },
   versions: false,

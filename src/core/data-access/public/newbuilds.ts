@@ -7,15 +7,9 @@ import { z } from "zod";
 
 import config from "../../../../payload.config.ts";
 import { publicMediaSchema } from "./media-contract.ts";
+import { publicMediaOrFallback } from "./missing-image.ts";
 import { publicReadWithFallback } from "./read-fallback.ts";
 import type { Developer, Media, Property, Region, ResidentialComplex } from "../../../payload-types.ts";
-
-const fallbackCover = {
-  alt: "Новостройка у моря для инвестиционного разбора",
-  height: 1000,
-  src: "/images/projects/sample-resort/cover.webp",
-  width: 1478,
-};
 
 const publicDeveloperSchema = z.object({
   description: z.string().optional(),
@@ -119,16 +113,13 @@ function isRelationDocument<T extends { id: number }>(value: RelationDocument<T>
 
 function getImage(complex: PublicComplexRecord) {
   const firstImage = complex.media?.find((image): image is Media => isRelationDocument(image));
-  const src = firstImage?.url;
-
-  if (!src) return fallbackCover;
-
-  return {
-    alt: firstImage.alt?.trim() || complex.title,
-    height: firstImage.height ?? fallbackCover.height,
-    src,
-    width: firstImage.width ?? fallbackCover.width,
-  };
+  return publicMediaOrFallback({
+    alt: firstImage?.alt,
+    height: firstImage?.height,
+    src: firstImage?.url,
+    titleFallback: complex.title,
+    width: firstImage?.width,
+  });
 }
 
 function getRegionLabel(complex: PublicComplexRecord): string {
