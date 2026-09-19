@@ -6,18 +6,13 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { RegionCard } from "@/components/marketing/region-card";
 import { ProofBlock } from "@/components/marketing/proof-block";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
-import { getMediaAsset } from "@/content/media/media-assets";
-import { getRegionHubPlan } from "@/content/regions/region-route-plan";
+import { listPublicHubRegions } from "@/core/data-access/public";
 
 export const metadata = getStaticMetadata("PAGE-002");
 
 export default async function FederalInvestmentHubPage() {
   const seo = getSeoEntry("PAGE-002");
-  const regions = getRegionHubPlan();
-  const regionCards = regions.map((region) => ({
-    media: getMediaAsset(region.mediaSourceLabel),
-    region,
-  }));
+  const regions = await listPublicHubRegions();
 
   return (
     <main>
@@ -47,16 +42,11 @@ export default async function FederalInvestmentHubPage() {
         }
       >
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {regionCards.map(({ media, region }) => (
+          {regions.map((region) => (
             <RegionCard
-              key={region.key}
+              key={region.id}
               href={region.path}
-              image={{
-                alt: media?.alt ?? region.title,
-                height: media?.height ?? 1524,
-                src: media?.src ?? "/images/og/default.webp",
-                width: media?.width ?? 2560,
-              }}
+              image={region.image}
               risk={region.riskSummary}
               thesis={region.investmentThesis}
               title={region.title}

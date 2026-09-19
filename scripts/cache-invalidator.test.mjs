@@ -122,11 +122,15 @@ test("typed cache targets map approved domain changes to paths and tags", () => 
   assert.deepEqual(cacheTargets.regionPage("krym"), [
     { kind: "tag", tag: "region:krym" },
     { kind: "path", path: "/investicionnaya-nedvizhimost/krym/" },
+    { kind: "tag", tag: "catalog" },
+    { kind: "tag", tag: "sitemap" },
     { kind: "tag", tag: "navigation" },
   ]);
   assert.deepEqual(cacheTargets.regionPage("krym/yalta"), [
     { kind: "tag", tag: "region:krym:yalta" },
     { kind: "path", path: "/investicionnaya-nedvizhimost/krym/yalta/" },
+    { kind: "tag", tag: "catalog" },
+    { kind: "tag", tag: "sitemap" },
     { kind: "tag", tag: "navigation" },
   ]);
   assert.deepEqual(cacheTargets.pageDoc("privacy"), [

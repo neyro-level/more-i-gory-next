@@ -1,8 +1,15 @@
 import { pathToFileURL } from "node:url";
 
 import { getRegionRoutePath, regionRouteEntries as regionSeedEntries } from "../src/content/regions/region-route-plan.ts";
+import { regionSeedContent } from "../src/content/regions/region-seed-content.ts";
 
 export { regionSeedEntries };
+
+function seedEntry(entry) {
+  const content = regionSeedContent[entry.key];
+  if (!content) throw new Error(`Missing CMS seed content for region "${entry.key}".`);
+  return { ...entry, ...content, path: getRegionRoutePath(entry) };
+}
 
 function createBlocks(entry) {
   return [
@@ -25,29 +32,30 @@ function createBlocks(entry) {
 }
 
 export function getPayloadRegionData(entry, parentId, heroMediaId) {
+  const content = seedEntry(entry);
   return {
-    blocks: createBlocks(entry),
+    blocks: createBlocks(content),
     heroMedia: heroMediaId,
-    investmentThesis: entry.investmentThesis,
-    kind: entry.kind,
-    lead: entry.lead,
-    order: entry.order,
+    investmentThesis: content.investmentThesis,
+    kind: content.kind,
+    lead: content.lead,
+    order: content.order,
     parent: parentId ?? undefined,
-    riskSummary: entry.riskSummary,
+    riskSummary: content.riskSummary,
     seo: {
-      description: `${entry.title}: черновик страницы до утверждения контента владельцем.`,
-      priority: entry.seoPriority,
+      description: `${content.title}: черновик страницы до утверждения контента владельцем.`,
+      priority: content.seoPriority,
       robots: "noindex-follow",
-      title: `${entry.title} — черновик региона`,
+      title: `${content.title} — черновик региона`,
     },
-    slug: entry.slug,
-    status: entry.status,
-    title: entry.title,
+    slug: content.slug,
+    status: content.status,
+    title: content.title,
   };
 }
 
 export function getRegionSeedPlan() {
-  return regionSeedEntries.map((entry) => ({ ...entry, path: getRegionRoutePath(entry) }));
+  return regionSeedEntries.map((entry) => seedEntry(entry));
 }
 
 async function findMediaId(payload, sourceLabel) {
@@ -90,7 +98,8 @@ async function seed() {
   const regionIds = new Map();
 
   for (const entry of regionSeedEntries) {
-    const heroMediaId = await findMediaId(payload, entry.mediaSourceLabel);
+    const content = seedEntry(entry);
+    const heroMediaId = await findMediaId(payload, content.mediaSourceLabel);
     const parentId = entry.parentKey ? regionIds.get(entry.parentKey) : undefined;
     if (entry.parentKey && !parentId) throw new Error(`Parent "${entry.parentKey}" must be seeded before "${entry.key}".`);
 

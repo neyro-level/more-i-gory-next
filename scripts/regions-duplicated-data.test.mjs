@@ -4,6 +4,7 @@ import test from "node:test";
 
 import { regionDtos } from "../src/content/regions/region-dtos.ts";
 import { getRegionRoutePlan, regionRouteEntries } from "../src/content/regions/region-route-plan.ts";
+import { regionSeedContent } from "../src/content/regions/region-seed-content.ts";
 import { Regions } from "../src/project/collections/regions.ts";
 
 const seoRegistry = JSON.parse(readFileSync("src/seo/registry.json", "utf8"));
@@ -29,7 +30,7 @@ test("region inventory covers Payload, route plan, DTO and SEO registry", () => 
   assert.match(inventory, /src\/content\/regions\/region-route-plan\.ts/);
   assert.match(inventory, /src\/content\/regions\/region-dtos\.ts/);
   assert.match(inventory, /src\/seo\/registry\.json/);
-  assert.match(inventory, /do not read Payload/);
+  assert.match(inventory, /listPublicHubRegions/);
 });
 
 test("the four sources share the same ten region keys and pageIds", () => {
@@ -55,18 +56,18 @@ test("domain copy and hierarchy exist in both Payload schema and hardcoded plan"
     assert.equal(payloadFieldNames.includes(name), true, name);
   }
 
-  const krym = regionRouteEntries.find((entry) => entry.key === "krym");
+  const krym = regionSeedContent.krym;
   const dto = regionDtos.find((entry) => entry.pageId === "PAGE-007");
-  assert.equal(krym?.title, dto?.title);
-  assert.equal(krym?.lead, dto?.lead);
-  assert.equal(krym?.investmentThesis, dto?.investmentThesis);
-  assert.equal(krym?.riskSummary, dto?.riskSummary);
+  assert.equal(krym.title, dto?.title);
+  assert.equal(krym.lead, dto?.lead);
+  assert.equal(krym.investmentThesis, dto?.investmentThesis);
+  assert.equal(krym.riskSummary, dto?.riskSummary);
 });
 
 test("SEO registry is a separate index policy and already drifts from the route plan on PAGE-009", () => {
-  const sevastopol = regionRouteEntries.find((entry) => entry.pageId === "PAGE-009");
+  const sevastopol = regionSeedContent.sevastopol;
   const seo = seoRegistry.find((entry) => entry.pageId === "PAGE-009");
-  assert.equal(sevastopol?.seoPriority, "P1");
+  assert.equal(sevastopol.seoPriority, "P1");
   assert.equal(seo?.priority, "P2");
   assert.match(inventory, /PAGE-009: plan P1 vs registry P2/);
 });
@@ -74,8 +75,8 @@ test("SEO registry is a separate index policy and already drifts from the route 
 test("public region route still composes from the code plan rather than Payload", () => {
   const page = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx", "utf8");
   assert.match(page, /from "@\/content\/regions\/region-route-plan"/);
-  assert.doesNotMatch(page, /listPublished|getPayload|collection:\s*"regions"/);
+  assert.match(page, /getPublicRegionByPath/);
   const dtoSource = readFileSync("src/content/regions/region-dtos.ts", "utf8");
-  assert.match(dtoSource, /getRegionRoutePlan/);
+  assert.match(dtoSource, /regionSeedContent/);
   assert.doesNotMatch(dtoSource, /collection:\s*"regions"/);
 });

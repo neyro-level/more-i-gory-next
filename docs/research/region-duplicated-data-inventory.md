@@ -11,11 +11,12 @@
 | Source | Path | Role today |
 |---|---|---|
 | Payload regions | `src/project/collections/regions.ts` + seed `scripts/seed-regions.mjs` | CMS schema and seedable documents: title, slug, kind, parent, order, lead, investmentThesis, riskSummary, heroMedia, blocks, seo, status |
-| Code route plan | `src/content/regions/region-route-plan.ts` | Live public routing and page body: path from slug+parent, hub cards, related links, invalidation path lookup |
-| Code DTOs | `src/content/regions/region-dtos.ts` | Transfer DTO mapped only from the route plan, not from Payload |
+| Code route plan | `src/content/regions/region-route-plan.ts` | Routing/composition: key, pageId, slug, parentKey, computed path, related-link graph |
+| CMS seed content | `src/content/regions/region-seed-content.ts` | Bootstrap copy for `regions:seed` and DTO package; not the live UI source |
+| Code DTOs | `src/content/regions/region-dtos.ts` | Transfer DTO mapped from route plan + seed content, not from live Payload |
 | SEO registry | `src/seo/registry.json` | Explicit index/sitemap/title/h1/canonical/contentGate; metadata via `getStaticMetadata(pageId)` |
 
-Public region pages (`src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx`) read **route plan + SEO registry + media assets**. They do not read Payload `regions`.
+TASK 29.3: live hub/home/catch-all pages read Payload through Public Gateway (`listPublicHubRegions` / `getPublicRegionByPath`). Route plan remains routing/composition. Seed content is CMS bootstrap, not the public body.
 
 ## Shared keys (10 routes)
 
@@ -38,16 +39,16 @@ PAGE-002 (`/investicionnaya-nedvizhimost/`) is the hub page, not a `regions` doc
 
 | Field | Payload | route plan | DTO | SEO registry | Drift |
 |---|---|---|---|---|---|
-| title (short) | yes | yes | yes | different full SEO title | three copies of short title; registry has its own title/h1 |
+| title (short) | yes | no | yes (seed) | different full SEO title | live UI uses Payload; seed/DTO still duplicate until seed freeze |
 | slug | yes | yes | yes | inside canonical | sibling uniqueness is CMS-side; path composition is code |
-| kind | yes | yes | no | no | duplicated schema+code |
-| parent / parentKey | yes | yes | parentPageId derived | path encodes parent | two hierarchy encodings |
-| order | yes | yes | no | no | duplicated |
-| lead | yes | **public body** | yes | no | duplicated; live UI uses code |
-| investmentThesis | yes | **public body** | yes | no | duplicated; live UI uses code |
-| riskSummary | yes | **public body** | yes | no | duplicated; live UI uses code |
-| media | heroMedia relation | mediaSourceLabel | heroMediaId | no | three encodings; live UI uses code media assets |
-| status | yes | yes | mapped draft/review/published | index/sitemap gates | stub Sochi is code+registry; Payload seed copies stub |
+| kind | yes | no | no | no | live UI uses Payload |
+| parent / parentKey | yes | yes (until 29.4) | parentPageId derived | path encodes parent | two hierarchy encodings remain for routing |
+| order | yes | no | no | no | Payload-owned |
+| lead | yes | no | yes (seed) | no | live UI uses Payload |
+| investmentThesis | yes | no | yes (seed) | no | live UI uses Payload |
+| riskSummary | yes | no | yes (seed) | no | live UI uses Payload |
+| media | heroMedia relation | no | heroMediaId from seed | no | live UI uses Payload media |
+| status | yes | no | mapped draft/review/published | index/sitemap gates | live UI uses Payload; Sochi stub page remains a dedicated route |
 | seo.priority | seed from plan | seoPriority | no | priority | **PAGE-009: plan P1 vs registry P2** |
 | seo.robots | seed always noindex-follow | no | no | index gate/noindex | seed robots not the registry gate |
 | primaryQuery | no | yes | yes | yes | duplicated plan vs registry |
@@ -57,7 +58,7 @@ PAGE-002 (`/investicionnaya-nedvizhimost/`) is the hub page, not a `regions` doc
 
 ## Runtime vs CMS
 
-ADR-006 says Payload owns regional route **inputs** and path is computed, not stored. Current runtime still treats the hardcoded route plan as the public database. Payload is seeded from that plan and then unused on the public route.
+ADR-006 says Payload owns regional content; path is computed, not stored. After TASK 29.3 live UI reads Public Gateway. Hardcoded route plan still owns path composition until TASK 29.4. Seed content remains a bootstrap copy, not a second live database.
 
 ## Not duplicated here
 

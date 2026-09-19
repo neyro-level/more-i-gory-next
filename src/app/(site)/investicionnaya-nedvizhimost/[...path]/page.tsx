@@ -6,7 +6,7 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { RiskBlock } from "@/components/marketing/risk-block";
 import { ActionLink } from "@/components/navigation/action-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getMediaAsset } from "@/content/media/media-assets";
+import { getPublicRegionByPath, listPublicRegions } from "@/core/data-access/public";
 import { findRegionRouteBySegments, getRegionRelatedLinks, getRegionRoutePlan } from "@/content/regions/region-route-plan";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
@@ -40,26 +40,30 @@ export async function generateMetadata({ params }: RegionRoutePageProps) {
 
 export default async function RegionRoutePage({ params }: RegionRoutePageProps) {
   const entry = await getRouteEntry(params);
-  if (!entry || entry.status === "stub") notFound();
+  if (!entry) notFound();
+
+  const region = await getPublicRegionByPath(entry.path);
+  if (!region || region.status === "stub") notFound();
 
   const seo = getSeoEntry(entry.pageId);
-  const media = getMediaAsset(entry.mediaSourceLabel);
-  const relatedLinks = getRegionRelatedLinks(entry);
+  const published = await listPublicRegions();
+  const titles = Object.fromEntries(
+    getRegionRoutePlan().flatMap((route) => {
+      const match = published.find((item) => item.path === route.path);
+      return match ? [[route.key, match.title] as const] : [];
+    }),
+  );
+  const relatedLinks = getRegionRelatedLinks(entry, titles);
 
   return (
     <main>
       <PageHero
-        eyebrow={entry.kind === "segment" ? "Инвестиционный сегмент" : "Региональный инвестиционный хаб"}
+        eyebrow={region.kind === "segment" ? "Инвестиционный сегмент" : "Региональный инвестиционный хаб"}
         title={seo.h1}
-        lead={entry.lead}
+        lead={region.lead}
         primaryCta={{ href: "/podbor/", label: "Получить подбор" }}
         secondaryCta={{ href: "/investicionnaya-nedvizhimost/", label: "Сравнить регионы" }}
-        image={{
-          alt: media?.alt ?? entry.title,
-          height: media?.height ?? 1524,
-          src: media?.src ?? "/images/og/default.webp",
-          width: media?.width ?? 2560,
-        }}
+        image={region.image}
         proof="Публикация в индекс — только после content gate. Путь страницы вычисляется из slug и parent chain."
       />
 
@@ -69,13 +73,13 @@ export default async function RegionRoutePage({ params }: RegionRoutePageProps) 
         lead="На этом этапе страница остаётся безопасным черновым каркасом: без обещаний доходности, без неподтверждённых объектов и без тонких URL."
       >
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <RiskBlock title="Ключевое ограничение" text={entry.riskSummary} />
+          <RiskBlock title="Ключевое ограничение" text={region.riskSummary} />
           <Card className="rounded-large bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Инвестиционный тезис</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-5 text-body text-muted-foreground">
-              <p>{entry.investmentThesis}</p>
+              <p>{region.investmentThesis}</p>
               <p>
                 Следующий слой страницы: районы, форматы, бюджет входа, управление, риски,
                 проекты и сценарии выхода — только на подтверждённых данных.
@@ -103,7 +107,7 @@ export default async function RegionRoutePage({ params }: RegionRoutePageProps) 
       </SectionShell>
 
       <SectionShell className="pt-0">
-        <LeadFormSection title={`Получить разбор: ${entry.title}`} />
+        <LeadFormSection title={`Получить разбор: ${region.title}`} />
       </SectionShell>
     </main>
   );
