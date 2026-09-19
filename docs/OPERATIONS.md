@@ -111,8 +111,8 @@ recovery plan and explicit owner decision.
 Payload является единственным schema owner; `push:false`, schema меняется только
 committed migrations. `pnpm verify:schema` генерирует types и проверяет drift во
 временной директории, не загрязняя checkout. Clean local PostgreSQL 18 proof
-выполнен в EPIC 2. Staging/production migration: CODE EXISTS (процедура в
-EPIC 13), RUNTIME NOT PROVEN, PRODUCTION NOT PROVEN.
+выполнен в EPIC 2. Staging/production migration: CODE EXISTS (EPIC 13), live
+restore FAIL без owner DB, PRODUCTION NOT PROVEN.
 
 ## Backup and restore
 
@@ -134,7 +134,7 @@ S3 media (TASK 31.5):
 ```text
 versioning     : enabled on moreigory-media (Timeweb S3 capability; operator must keep it on)
 retention      : noncurrent versions at least 30 days; never empty-bucket as cleanup
-independent    : required — ru-1 is a single region; copy media/ off Timeweb on a schedule in EPIC 13
+independent    : required — ru-1 is a single region; copy media/ off Timeweb — IMPROVEMENT / owner
 restore        : restore VersionId onto the same key; do not pull files from the VPS disk
 ```
 
@@ -143,7 +143,7 @@ Backup не считается доказанным без успешного re
 ## Jobs runtime
 
 Один jobs-capable runtime есть; `JOBS_AUTORUN=true` только у единственного
-jobs-active process после production jobs gate (EPIC 13). Machine-lock не
+jobs-active process после production jobs gate (EPIC 33). Machine-lock не
 вводится (TASK 25.8 вариант 3): проверка — runbook + deploy-шаг.
 
 Handover:
@@ -236,7 +236,7 @@ CODE EXISTS: Payload upload adapter и бакет `moreigory-media` (EPIC 6 + AP
 smoke 2026-09-18). Object SoT: `disableLocalStorage: true`, path-style URL
 `https://s3.twcstorage.ru/moreigory-media/media/<filename>`. Restart/redeploy
 VPS не должен удалять объекты: они не пишутся на диск приложения. RUNTIME
-upload→HeadObject на живом runtime — EPIC 13/14.G. PRODUCTION NOT PROVEN.
+upload→HeadObject на живом runtime — TAP 14.G; PRODUCTION NOT PROVEN.
 VPS disk не является source of truth.
 
 ## Staging

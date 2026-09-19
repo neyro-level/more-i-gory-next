@@ -1,8 +1,8 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.3 After EPIC 12
-**Дата:** 2026-09-18
+**Версия:** 2.4 After remediation 19–32 / 13 / 34
+**Дата:** 2026-09-19
 **Engineering baseline:** AMS Realty Platform Core 5.5 (норматив стека)
 **Важно:** этот документ фиксирует только проектную конкретику. Стек, границы
 данных и jobs сверяются с
@@ -12,20 +12,20 @@
 ## 0. Transition contract
 
 EPIC 1 перевёл публичный сайт со static export на production Node.js runtime.
-EPIC 2–12 и 15–17 в `main`: Payload 3.89, PostgreSQL migrations, gateways, media/S3,
-regions, properties, newbuild/ingest/catalog, leads и maintenance. Публичный
-`ContentService` всё ещё читает локальные JSON/Markdown adapters;
-`PayloadContentRepository` зарезервирован.
+EPIC 2–13, 15–17, 19–32 и 34 в `main` (`fbed2c11`): Payload 3.89, PostgreSQL
+migrations, Public Gateway, media/S3, regions, properties, newbuild/ingest,
+leads, jobs, preview Nginx/systemd и proof matrix. Публичный read идёт через
+`src/core/data-access/public/**` (Payload Local API + DTO); при недоступности
+Payload действует безопасный fallback.
 
 Принятая цель — `AMS_PROFILE=REALTY_BASE`: Next.js + Payload в одном Node.js
 runtime, Managed PostgreSQL, S3 и один jobs owner. Решение принято в
 [`ADR-004`](adr/ADR-004-realty-platform-runtime.md), project-specific профиль —
-в [`PROJECT.md`](PROJECT.md).
+в [`PROJECT.md`](PROJECT.md). Следующий шаг — [`OWNER_QUEUE.md`](OWNER_QUEUE.md)
+и EPIC 33 только по отдельной команде владельца.
 
-Remediation baseline (TASK 19.1): все дальнейшие изменения поверх
-`BASE_SHA=27ea4c2393e970797da50c7dc78b614f815820bb`, профиль `REALTY_BASE`,
-целевой стек AMS Realty Platform 5.5 и AMS UI Core 5.0. Карта — в
-[`README.md`](README.md#audit--remediation-baseline).
+Remediation baseline (TASK 19.1) был `27ea4c2` (после EPIC 12). Актуальный
+canonical SHA — `fbed2c11`. Карта — в [`README.md`](README.md).
 
 ## 1. Architecture Summary
 
@@ -33,13 +33,12 @@ Remediation baseline (TASK 19.1): все дальнейшие изменения
 локально schema проверяется на изолированной PostgreSQL 18 database.
 
 ```text
-typed content / Markdown / media
-→ Content Adapters
-→ Repository Contract
-→ Content Service
-→ Next.js App Router build
+Payload published entities
+→ Public Gateway (`src/core/data-access/public/**`)
+→ serializable DTO
+→ Next.js App Router
 → один `next start` Node.js process
-→ Nginx reverse proxy (EPIC 13)
+→ Nginx reverse proxy (`more-previu.tw1.ru`)
 ```
 
 Целевая runtime topology (TASK 13.2), одинаковая для preview и production:
@@ -151,10 +150,10 @@ Images:
 - fallback — заранее оптимизированные локальные WebP/AVIF.
 
 Production:
-- immutable Next.js image;
-- один jobs-active runtime;
-- Nginx reverse proxy;
-- versioned rollout и rollback по EPIC 13.
+- immutable Next.js standalone artifact;
+- один jobs-active runtime (preview не jobs owner);
+- Nginx reverse proxy на `more-previu.tw1.ru`;
+- versioned rollout и rollback: CODE EXISTS; live restore — FAIL, см. OWNER_QUEUE.
 
 Backend:
 - Next.js + Payload Node runtime для public render, Admin и штатного REST;
@@ -162,10 +161,10 @@ Backend:
 - PostgreSQL adapter работает только через committed migrations (`push:false`);
 - отдельный AMS Leads API пока остаётся будущим контуром заявок.
 
-Границы, сохранённые после EPIC 2–8:
+Границы, сохранённые после remediation:
 
-- публичный `ContentService` не переключён на Payload; local adapters остаются
-  действующим public read path;
+- публичный UI читает только Public Gateway DTO; Payload types остаются
+  server-only в `src/core/data-access/**`;
 - GraphQL отключён, anonymous users REST закрыт access rules;
 - `next/headers` запрещён в `core/ingest/**`, `core/cache/**` и job handlers;
 - `overrideAccess:true` разрешён только controlled owner bootstrap в System Gateway;
@@ -178,27 +177,16 @@ Backend:
 
 ```text
 src/app
-→ Content Service
-→ Content Repository Contract
-→ Local Adapters
-→ typed content / Markdown / media registry
-```
-
-UI не импортирует контент-файлы напрямую.
-
-Целевой public path (ещё не включён):
-
-```text
-src/app
 → Public Gateway
 → serializable DTO
 → presentation
 ```
 
+UI не импортирует контент-файлы и Payload types напрямую.
+
 Payload schema и `payload-types.ts` остаются server-only внутри
-`src/core/data-access/**`. `ContentService` и local adapters пока обслуживают
-публичный рендер; `PayloadContentRepository` зарезервирован. Принцип изоляции UI
-от persistence сохраняется. Prisma как второй ORM запрещён.
+`src/core/data-access/**`. Принцип изоляции UI от persistence сохраняется.
+Prisma как второй ORM запрещён.
 
 ## 4. Domain Modules
 

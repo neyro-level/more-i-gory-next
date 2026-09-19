@@ -84,17 +84,17 @@ data-invalid.
 ## 6. Data Boundary
 
 - UI input: project DTO / safe view contract.
-- Formation layer: Content Service + Repository contracts.
+- Formation layer: Public Gateway + serializable DTO.
 - Reusable UI не импортирует persistence/CMS/ORM types.
 - Payload 3.89 + PostgreSQL 18 foundation в `main`; Prisma запрещён.
-- Публичный UI продолжает читать текущие JSON/Markdown adapters.
+- Публичный UI читает Payload Local API через `src/core/data-access/public/**`.
 
 ## 7. Deployment Target
 
 - Production model: Next.js standalone Node process с in-tree Payload,
-  PostgreSQL и S3 media; reverse proxy — Nginx (EPIC 13).
+  PostgreSQL и S3 media; reverse proxy — Nginx на `more-previu.tw1.ru`.
 - Не Docker-only «immutable Next.js image» и не static HTML export.
-- Staging/production rollout — EPIC 13; локальный production-like proof —
+- Production rollout — EPIC 33 / owner; локальный production-like proof —
   `next build` + `next start`.
 
 ## 8. Performance Budget

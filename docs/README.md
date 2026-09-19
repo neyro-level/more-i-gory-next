@@ -1,8 +1,8 @@
 # Документация проекта «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.3 After EPIC 12
-**Дата:** 2026-09-18
+**Версия:** 2.4 After remediation 19–32 / 13 / 34
+**Дата:** 2026-09-19
 **Стандарт:** AMS Product Development Standard 2.0
 
 ## Что создаём
@@ -19,23 +19,22 @@
 
 ## Текущий статус
 
-- `origin/main` закрыт по EPIC 12: Payload/PostgreSQL, gateways, media/S3,
-  regions, properties, newbuild/ingest/catalog, leads/delivery/maintenance и
-  standalone artifact;
-- публичный `ContentService` всё ещё читает локальные JSON/Markdown adapters;
-  `PayloadContentRepository` зарезервирован и не включён;
+- `origin/main` (`fbed2c11`) закрыт по EPIC 0–13, 15–17, 19–32 и 34;
+- публичный read идёт через Public Gateway / Payload Local API и DTO;
+  при недоступности БД действует безопасный fallback, не local JSON adapters;
 - production не выпускался; technical preview — `more-previu.tw1.ru`;
 - коммерческие и аналитические страницы остаются под content/trust/index gate;
-- Managed PostgreSQL staging/production и Nginx cutover — EPIC 13 / human gates.
+- live restore и cutover `moreigori.ru` — `BLOCKS_RELEASE` в
+  [`OWNER_QUEUE.md`](OWNER_QUEUE.md); EPIC 33 только по отдельной команде.
 
 ## Audit / remediation baseline
 
-Программа `more-i-gory-remediation-2026-09` v6 идёт **поверх** этого SHA, а не
-вместо него. Новые ветки эпиков 19–33 и 13 ответвляются от актуального
-`origin/main`, который на момент фиксации совпадает с baseline.
+Программа `more-i-gory-remediation-2026-09` v6 **завершена в коде** поверх
+исторического SHA после EPIC 12. Новые эпики больше не ответвляются от него.
 
 ```text
-BASE_SHA=27ea4c2393e970797da50c7dc78b614f815820bb
+HISTORIC_BASE=27ea4c2393e970797da50c7dc78b614f815820bb  # после EPIC 12
+CANONICAL_MAIN=fbed2c11d6cf8c8ce5a19ec3482a72b97f5b00e4  # после EPIC 34
 PROFILE=REALTY_BASE
 TARGET_CORE=AMS Realty Platform 5.5
 UI_CORE=AMS UI Core 5.0
@@ -43,14 +42,14 @@ UI_CORE=AMS UI Core 5.0
 
 | Поле | Значение |
 |---|---|
-| Canonical main | SourceCraft `integrator-p/more-i-gory-next` @ `27ea4c2` |
+| Canonical main | SourceCraft `integrator-p/more-i-gory-next` @ `fbed2c11` |
 | Профиль | `AMS_PROFILE=REALTY_BASE`, режим BUILD |
 | Техническая конституция | [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) |
 | UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
 | Мастер-план | [`More-i-gory-plan №2.md`](More-i-gory-plan%20№2.md) v6 APPROVED |
+| Указатель волны | [`DELIVERY_STATE.yaml`](DELIVERY_STATE.yaml) |
 
-Нельзя описывать последующую работу как «до Payload» или как новый foundation
-ниже этого SHA.
+Нельзя описывать текущий `main` как «до Payload» или как состояние после EPIC 12.
 
 ## Platform contract
 
@@ -78,7 +77,7 @@ Payload Admin, users/jobs schema и migrations-only PostgreSQL adapter. Целе
 | Адаптер дизайн-решений Realty Platform к визуальному канону проекта | [`DESIGN.md`](DESIGN.md) |
 | Операционный runbook: deploy, rollback, backup, imports, leads и incidents | [`OPERATIONS.md`](OPERATIONS.md) |
 | Труднообратимые решения | [`adr/README.md`](adr/README.md) |
-| Исследования и исторические evidence | [`research/`](research/) |
+| Очередь отложенных решений перед production | [`OWNER_QUEUE.md`](OWNER_QUEUE.md) |
 | Техническая конституция стека | [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) |
 | UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
 | Очередь отложенных решений | [`OWNER_QUEUE.md`](OWNER_QUEUE.md) |
@@ -110,8 +109,8 @@ Research объясняет причины решений, но не являе�
 
 ## Current Focus
 
-NOW: EPIC 13 — Nginx, runtime, backup/restore и operations proof на preview-домене.
-Следующие эпики — только по dependency graph; EPIC 14/18 и production release
+NOW: owner gates перед EPIC 33 — очередь в [`OWNER_QUEUE.md`](OWNER_QUEUE.md).
+Код-граф remediation (EPIC 19–32, 13, 34) смержен. EPIC 14/18 и production
 не стартуют из этого документа автоматически.
 Атомарное состояние программы ведётся в локальном Beads-графе, Backlog остаётся
 верхним source of truth. Production не выпускался и текущим потоком не разрешён.

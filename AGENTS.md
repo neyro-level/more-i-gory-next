@@ -28,15 +28,16 @@
 ## Инварианты
 
 - `SERVER FIRST`; `"use client"` разрешён только в `src/ui/interactive/**`.
-- Страницы получают контент через `ContentService` и `ContentRepository`.
+- Страницы получают контент через Public Gateway (`src/core/data-access/public/**`)
+  и serializable DTO; UI не импортирует Payload types.
 - Только `published` сущности создают production routes и sitemap entries.
 - Новый индексируемый URL сначала фиксируется в `docs/02_PRODUCT_STRUCTURE.md`.
 - Metadata берётся из единого registry.
 - Фильтры и параметры не создают индексируемые URL.
 - Нельзя выдумывать проекты, цены, доходность, кейсы, команду и юридические факты.
 - Сырой transfer package не коммитится; разрешены только выбранные локальные ассеты.
-- Payload уже владеет CMS/auth/schema; публичный `ContentService` пока читает
-  local adapters. Prisma и второй ORM запрещены.
+- Payload владеет CMS/auth/schema; публичный read идёт через Public Gateway
+  с fallback при недоступности Payload. Prisma и второй ORM запрещены.
 - Стек сверяется с Realty Platform Core 5.5, UI — с UI Core 5.0. Исключения
   только через `docs/README.md` § Approved exceptions и ADR.
 

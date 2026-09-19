@@ -1,25 +1,18 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 3.2 Remediation stream
-**Дата:** 2026-09-18
+**Версия:** 3.3 After remediation 19–32 / 13 / 34
+**Дата:** 2026-09-19
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
-В `origin/main` (`BASE_SHA=27ea4c2393e970797da50c7dc78b614f815820bb`) смержены
-EPIC 0–12, 15–17 и standalone production artifact. Это **не** «до Payload»:
-Payload уже владеет Admin, schema, jobs, media, leads и внутренними gateway.
-Публичный сайт по-прежнему рендерится через локальные content adapters —
-это PARTIAL, не будущий этап.
+В `origin/main` (`fbed2c11`) смержены EPIC 0–13, 15–17, 19–32 и 34.
+Публичный сайт читает Payload через Public Gateway и DTO. Leads/ingest/jobs
+имеют код и TAP/proofs; live restore и production — нет.
 
-Leads, ingest и EPIC 10–12 **есть в коде**, но end-to-end runtime не доказан:
-обработчики доставки/импорта и janitor ещё не выполняют бизнес-задачу. Их
-нельзя считать полностью завершёнными.
-
-NOW: remediation EPIC 19 (baseline docs) в ветке `work/epic-19`. Дальше по
-утверждённому графу v6: 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 →
-30 → 31 → 13 → 32 → 34 → 33. Один эпик = одна ветка/PR, `MERGE_AFTER_GATE`.
+NOW: `docs/OWNER_QUEUE.md` (`BLOCKS_RELEASE`) и EPIC 33 только по отдельной
+команде владельца. Один эпик = одна ветка/PR, `MERGE_AFTER_GATE`.
 
 Production не выпускался. Коммерческие и аналитические страницы остаются под
 content/trust/index gate, пока не пройден editorial gate.
@@ -52,6 +45,22 @@ content/trust/index gate, пока не пройден editorial gate.
 | PR-42 | Release — standalone production artifact | DONE |
 | PR-43 | EPIC 11 — Lead delivery | DONE |
 | PR-44 | EPIC 12 — Maintenance, retention и recovery | DONE |
+| PR-46 | EPIC 19 — baseline SoT, verify:quick, cron hotfix | DONE |
+| PR-47 | EPIC 20 — Payload Access Boundary | DONE |
+| PR-48 | EPIC 21 — DTO / Presentation Boundary | DONE |
+| PR-49 | EPIC 22 — Outbound Security Hardening | DONE |
+| PR-50 | EPIC 23 — Lead Delivery End-to-End | DONE |
+| PR-51 | EPIC 24 — schema hardening and safe deactivation | DONE |
+| PR-52 | EPIC 25 — Jobs Scheduler + Janitor + Recovery | DONE |
+| PR-53 | EPIC 26 — ingest pipeline, fixture proof, freeze | DONE |
+| PR-54 | EPIC 27 — runtime publishing and CMS cache | DONE |
+| PR-55 | EPIC 28 — SEO sitemap and archived lifecycle | DONE |
+| PR-56 | EPIC 29 — Regions Single Source of Truth | DONE |
+| PR-57 | EPIC 30 — UI Core 5.0 Conformance | DONE |
+| PR-58 | EPIC 31 — S3 / Media Production Contract | DONE |
+| PR-59 | EPIC 13 — Timeweb Runtime + Staging | DONE |
+| PR-60 | EPIC 32 — Integration Proof Matrix | DONE |
+| PR-61 | EPIC 34 — Owner Queue | DONE |
 
 Git-история и SourceCraft PR являются доказательством отдельных merge, а не этот
 документ.
@@ -78,18 +87,12 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 
 ## 4. NOW / NEXT — Realty Platform remediation
 
-Код EPIC 0–12 и 15–17 в `main` — foundation, не доказанный production runtime.
+Код EPIC 0–13, 15–17, 19–32 и 34 в `main` — целевой Realty 5.5 контур без production.
 
 | Состояние | Эпик | Результат |
 |---|---|---|
-| DONE (code) | EPIC 0–9, 15, 17 | foundation в `main`; public ContentService ещё на local adapters |
-| PARTIAL / NOT_PROVEN | EPIC 10–12, 16 | leads/delivery/maintenance/ingest код есть; E2E нет |
-| NOW | EPIC 19 | Baseline + docs Source of Truth |
-| NEXT (graph) | EPIC 20–26 | access, DTO, outbound, leads E2E, schema, jobs, ingest freeze |
-| NEXT (graph) | EPIC 27–31 | publish/cache, SEO, regions, UI 5.0, S3 |
-| NEXT (graph) | EPIC 13 | Timeweb runtime + staging на `more-previu.tw1.ru` |
-| NEXT (graph) | EPIC 32, 34 | proofs, owner queue |
-| FINAL | EPIC 33 | Production release gate; выкат только по отдельной команде |
+| DONE | EPIC 0–13, 15–17, 19–32, 34 | код и delivery в `main` `fbed2c11`; публичный read — Public Gateway |
+| NOW | OWNER_QUEUE / EPIC 33 | `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md`; production только по отдельной команде |
 | OUT OF STREAM | EPIC 14, 18 | analytics posts и content gates |
 
 Контентные, legal и production решения остаются human gates и не подменяются
@@ -198,9 +201,9 @@ Risk: Closed
 Status: Open — частично закрыто PR-42
 Risk: High for production; none for local development
 
-Standalone artifact в `main` есть. Нет доказанного Nginx reverse proxy,
-Managed PostgreSQL, backup/restore и rollback на preview/production host.
-Production запрещён до EPIC 13 и отдельной команды владельца.
+Standalone artifact, Nginx, systemd, pack/rollback и preview contour в `main`.
+Live restore в disposable DB FAIL (нет `CREATEDB`). Production запрещён до
+очистки `BLOCKS_RELEASE` и отдельной команды владельца.
 
 ### TD-003 — Draft article shells находятся в preview artifact
 
@@ -216,7 +219,7 @@ Risk: Low
 Не блокируют техническую ветку, но блокируют production:
 
 - контентные доказательства и реальные проекты;
-- Telegram destination / outbound secrets и production Leads API;
+- внешний канал оповещений о заявках (в этой программе исключён);
 - карта/provider, если публикуется на страницах;
 - финальная команда на release и cutover `moreigori.ru`.
 

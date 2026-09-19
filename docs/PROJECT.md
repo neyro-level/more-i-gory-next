@@ -1,7 +1,7 @@
 # Project Profile — «Море и Горы»
 
 **Статус:** Active — BUILD MODE
-**Дата:** 2026-09-18
+**Дата:** 2026-09-19
 **Профиль:** `AMS_PROFILE=REALTY_BASE`
 **Delivery profile:** `COMMERCIAL`
 **Timezone:** `Europe/Moscow`
@@ -34,11 +34,11 @@ Production и staging не используют общую БД, secrets или 
 |---|---|
 | Active feeds/parsers | pipeline настраивается в EPIC 26 и сразу замораживается; живой XML-фид и каталог объектов не активируются 3–4 месяца |
 | Non-secret integrations | Payload Admin, Timeweb Managed PostgreSQL и Timeweb S3 подтверждены; внешний канал оповещений о заявках решением владельца не подключается |
-| Backup | PostgreSQL: Timeweb Managed automatic backup. S3: versioning enabled + ≥30 days noncurrent retention; provider-independent copy of `media/` is required (single region `ru-1`); live restore proof in EPIC 13 |
-| Restore proof | не выполнялся; обязательный фактический restore test в EPIC 13 |
+| Backup | PostgreSQL: Timeweb Managed automatic backup. S3 versioning + TAP; live disposable restore FAIL — `OWNER_QUEUE` |
+| Restore proof | live FAIL: app role cannot `CREATE DATABASE`; owner creates empty staging/restore DBs |
 | Legal | оператор ПДн и публичные реквизиты утверждены владельцем; privacy/consent опубликованы как `privacy-2026-09-17` и `pdn-consent-2026-09-17`; банковские реквизиты не публикуются |
 | Core version | нормативная база — локальные конституции `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md` и `docs/AMS_UI_CORE_v5.0_FINAL.md` |
-| Server state | проверено 2026-09-18: nginx active (только default site), приложение не развёрнуто, Node/pnpm/docker отсутствуют — EPIC 13 является первичным провижинингом |
+| Server state | EPIC 13 landed: Nginx/systemd/pack; preview `current` HTML/sitemap могли быть bootstrap `503` |
 
 Эта таблица фиксирует статусы, а не доказательство готовности. Planned integration
 не включается и не требует secrets до своего эпика.
@@ -51,18 +51,18 @@ Production и staging не используют общую БД, secrets или 
 
 | Подсистема | Статус | Комментарий |
 |---|---|---|
-| Payload CMS / Admin / schema | IMPLEMENTED + NOT_PROVEN public render | Admin живёт; публичный `ContentService` ещё на JSON adapters |
-| PostgreSQL | IMPLEMENTED local; PARTIAL managed | Managed DB есть и доступна с сервера; app на хосте не развёрнут |
-| S3 | IMPLEMENTED bucket + PARTIAL app wiring | бакет `moreigory-media` проверен; Payload adapter на сервере NOT_PROVEN |
-| Leads intake | IMPLEMENTED + NOT_PROVEN E2E | форма/API/commit есть |
-| Lead delivery | PARTIAL + NOT_PROVEN | handler-заглушка; внешний канал DISABLED |
-| Newbuild schema / public catalog | IMPLEMENTED namespaces | живого каталога объектов нет |
-| Feed ingest | PARTIAL; DISABLED autorun | код в `main`; freeze до отдельной команды; 3–4 месяца без живого фида |
-| Jobs | IMPLEMENTED registry + NOT_PROVEN runtime | `JOBS_AUTORUN=false`; janitor stub |
-| Retention | IMPLEMENTED code + NOT_PROVEN live clock | |
-| Cache invalidation | IMPLEMENTED `http` + NOT_PROVEN live | endpoint есть; B2 live в EPIC 13/27 |
-| Staging | NOT_PROVEN | контур описан; поднимается в EPIC 13 на `more-previu.tw1.ru` |
-| Production | OWNER_GATE | EPIC 33; выкат только по отдельной команде |
+| Payload CMS / Admin / schema | IMPLEMENTED | Admin и public pages через Public Gateway; fallback при недоступности Payload |
+| PostgreSQL | IMPLEMENTED managed + local | app env на preview; staging/restore DB names — owner |
+| S3 | IMPLEMENTED bucket + app contract | `moreigory-media` path-style; SM write of keys — IMPROVEMENT |
+| Leads intake | IMPLEMENTED + TAP | POST `/api/public/leads`; PII logs proof 14.K |
+| Lead delivery | IMPLEMENTED pipeline; channel DISABLED | внешний канал не подключается |
+| Newbuild schema / public catalog | IMPLEMENTED namespaces | живой XML-фид заморожен |
+| Feed ingest | IMPLEMENTED then frozen | fixture proof; autorun off |
+| Jobs | IMPLEMENTED one-owner runbook | preview не jobs owner |
+| Retention | IMPLEMENTED + TAP | live clock не обязателен для 14.H |
+| Cache invalidation | IMPLEMENTED http + TAP | B2 proof в EPIC 27/32 |
+| Staging | PARTIAL | contour в коде; empty staging DB — owner |
+| Production | OWNER_GATE | EPIC 33 |
 
 ## 2. Включённые модули
 

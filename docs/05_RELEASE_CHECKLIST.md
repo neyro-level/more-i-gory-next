@@ -2,7 +2,7 @@
 
 **Статус:** Active — TECHNICAL PREVIEW RELEASE
 **Версия:** 2.0 Payload foundation
-**Дата:** 2026-09-15
+**Дата:** 2026-09-19
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
 пройденным. Production выполняется только по отдельной команде владельца.
@@ -103,7 +103,7 @@ SEO 69 объясняется единственным ожидаемым fail: 
 
 Production сейчас блокируют не фундамент Next.js, а:
 
-1. неутверждённый контент и реальные project passports;
-2. production Leads API;
-3. release/rollback infrastructure proof;
-4. финальный exact-main browser/performance audit после контентных правок.
+1. `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md` (staging/restore DB, enum drift,
+   ротация credentials, domain cutover);
+2. неутверждённый контент и реальные project passports;
+3. отдельная команда владельца на EPIC 33.
