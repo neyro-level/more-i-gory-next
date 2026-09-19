@@ -247,8 +247,10 @@ test("oversized Content-Length rejects before the response body is read", async 
 
 test("chunked oversized bodies abort before the remaining body is produced", async () => {
   let produced = 0;
+  let producedBytes = 0;
   let cancelled = false;
   const chunks = [encoder.encode("abc"), encoder.encode("def"), encoder.encode("ghi")];
+  const fullBodyBytes = chunks.reduce((total, chunk) => total + chunk.byteLength, 0);
   const body = new ReadableStream({
     cancel() {
       cancelled = true;
@@ -256,7 +258,10 @@ test("chunked oversized bodies abort before the remaining body is produced", asy
     pull(controller) {
       const chunk = chunks[produced];
       produced += 1;
-      if (chunk) controller.enqueue(chunk);
+      if (chunk) {
+        producedBytes += chunk.byteLength;
+        controller.enqueue(chunk);
+      }
       else controller.close();
     },
   }, { highWaterMark: 0 });
@@ -268,6 +273,8 @@ test("chunked oversized bodies abort before the remaining body is produced", asy
   );
   assert.equal(cancelled, true);
   assert.equal(produced, 2);
+  assert.ok(producedBytes <= 4 + chunks[0].byteLength, "reader must be bounded to the limit plus one transport chunk");
+  assert.ok(producedBytes < fullBodyBytes, "producer must be cancelled before the full body is emitted");
 });
 
 test("the exact response limit succeeds", async () => {
@@ -293,13 +300,19 @@ test("requestStream exposes bounded chunks without using the buffered helper", a
 
 test("timeout remains active while a response body is streaming", async () => {
   let cancelled = false;
+  let completed = false;
+  let producedBytes = 0;
   const body = new ReadableStream({
     cancel() {
       cancelled = true;
     },
     async pull(controller) {
       await new Promise((resolve) => setTimeout(resolve, 80));
-      controller.enqueue(encoder.encode("late"));
+      const chunk = encoder.encode("late");
+      producedBytes += chunk.byteLength;
+      controller.enqueue(chunk);
+      completed = true;
+      controller.close();
     },
   }, { highWaterMark: 0 });
   const outbound = client({ fetchImpl: async () => new Response(body) });
@@ -309,6 +322,8 @@ test("timeout remains active while a response body is streaming", async () => {
     "outbound_request_timeout",
   );
   assert.equal(cancelled, true);
+  assert.equal(completed, false);
+  assert.equal(producedBytes, 0);
 });
 
 test("DNS lookup is pinned to the address already validated as public", async () => {
