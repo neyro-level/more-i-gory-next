@@ -45,5 +45,5 @@ export async function getPublicRegionByPath(path: string): Promise<PublicRegionD
 
 export async function listPublicHubRegions(): Promise<readonly PublicRegionDTO[]> {
   const regions = await listPublicRegions();
-  return regions.filter((region) => region.status !== "stub");
+  return regions.filter((region) => region.status !== "stub" && region.slug !== "sochi");
 }
