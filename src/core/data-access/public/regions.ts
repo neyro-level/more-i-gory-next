@@ -12,7 +12,7 @@ import {
 } from "./regions-contract.ts";
 
 export type { PublicRegionDTO } from "./regions-contract.ts";
-export { composePublicRegionPath, mapPublicRegion, mapPublicRegions } from "./regions-contract.ts";
+export { composePublicRegionPath, getPublicRegionRelatedLinks, mapPublicRegion, mapPublicRegions } from "./regions-contract.ts";
 
 async function readPublicRegions(): Promise<readonly PublicRegionDTO[]> {
   return publicReadWithFallback({

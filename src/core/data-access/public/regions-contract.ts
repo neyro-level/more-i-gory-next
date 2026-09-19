@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import type { Media, Region } from "../../../payload-types.ts";
 import { getRegionRoutePlan } from "../../../content/regions/region-route-plan.ts";
+import type { RegionInternalLink } from "../../../content/regions/region-route-plan.ts";
 import { composeRegionPathFromSlugs } from "../../../content/regions/region-path-policy.ts";
 import { publicMediaSchema } from "./media-contract.ts";
 
@@ -118,4 +119,48 @@ export function mapPublicRegions(records: readonly PublicRegionRecord[]): readon
   return [...records]
     .sort((left, right) => left.order - right.order)
     .map((record) => mapPublicRegion(record, records));
+}
+
+const approvedRegionCrossLinks: readonly RegionInternalLink[] = [
+  { href: "/metodika/", label: "Методика отбора", relation: "methodology" },
+  { href: "/obekty/", label: "Объекты", relation: "objects" },
+];
+
+function visiblePublicRegions(regions: readonly PublicRegionDTO[]): readonly PublicRegionDTO[] {
+  return regions.filter((region) => region.status !== "stub" && region.slug !== "sochi");
+}
+
+export function getPublicRegionRelatedLinks(
+  region: PublicRegionDTO,
+  regions: readonly PublicRegionDTO[],
+): RegionInternalLink[] {
+  const catalog = visiblePublicRegions(regions);
+  const links: RegionInternalLink[] = [];
+
+  if (region.parentSlug) {
+    const parent = catalog.find((item) => item.slug === region.parentSlug && region.path.startsWith(item.path));
+    if (parent) links.push({ href: parent.path, label: parent.title, relation: "parent" });
+  }
+
+  links.push(
+    ...catalog
+      .filter((item) => item.parentSlug === region.slug && item.path.startsWith(region.path))
+      .map((item) => ({ href: item.path, label: item.title, relation: "child" as const })),
+  );
+
+  if (region.parentSlug) {
+    links.push(
+      ...catalog
+        .filter((item) => item.parentSlug === region.parentSlug && item.id !== region.id)
+        .map((item) => ({ href: item.path, label: item.title, relation: "sibling" as const })),
+    );
+  }
+
+  links.push(...approvedRegionCrossLinks);
+
+  if (region.slug === "novostroyki" && region.parentSlug === "krym") {
+    links.push({ href: "/novostroyki/", label: "Каталог ЖК", relation: "objects" });
+  }
+
+  return links;
 }

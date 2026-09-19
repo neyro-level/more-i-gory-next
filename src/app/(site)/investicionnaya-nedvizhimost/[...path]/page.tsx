@@ -6,9 +6,8 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { RiskBlock } from "@/components/marketing/risk-block";
 import { ActionLink } from "@/components/navigation/action-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getPublicRegionByPath, listPublicHubRegions, listPublicRegions } from "@/core/data-access/public";
+import { getPublicRegionByPath, getPublicRegionRelatedLinks, listPublicHubRegions, listPublicRegions } from "@/core/data-access/public";
 import { composeRegionPathFromSlugs } from "@/content/regions/region-path-policy";
-import { findRegionRouteBySegments, getRegionRelatedLinks, getRegionRoutePlan } from "@/content/regions/region-route-plan";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 
@@ -25,8 +24,7 @@ async function getRegionPageModel(params: RegionRoutePageProps["params"]) {
     notFound();
   }
   const region = await getPublicRegionByPath(href);
-  const entry = findRegionRouteBySegments(path);
-  return { entry, href, region };
+  return { href, region };
 }
 
 export async function generateStaticParams() {
@@ -43,18 +41,12 @@ export async function generateMetadata({ params }: RegionRoutePageProps) {
 }
 
 export default async function RegionRoutePage({ params }: RegionRoutePageProps) {
-  const { entry, region } = await getRegionPageModel(params);
+  const { region } = await getRegionPageModel(params);
   if (!region || region.status === "stub") notFound();
 
   const seo = getSeoEntry(region.pageId);
   const published = await listPublicRegions();
-  const titles = Object.fromEntries(
-    getRegionRoutePlan().flatMap((route) => {
-      const match = published.find((item) => item.path === route.path);
-      return match ? [[route.key, match.title] as const] : [];
-    }),
-  );
-  const relatedLinks = entry ? getRegionRelatedLinks(entry, titles) : [];
+  const relatedLinks = getPublicRegionRelatedLinks(region, published);
 
   return (
     <main>

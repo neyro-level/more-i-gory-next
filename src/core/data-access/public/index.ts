@@ -7,6 +7,7 @@ export {
 export {
   composePublicRegionPath,
   getPublicRegionByPath,
+  getPublicRegionRelatedLinks,
   listPublicHubRegions,
   listPublicRegions,
   mapPublicRegion,
