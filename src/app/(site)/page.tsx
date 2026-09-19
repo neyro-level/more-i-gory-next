@@ -10,32 +10,21 @@ import {
   ResponsibilitySection,
   type HomeRegionCardModel,
 } from "@/components/marketing/home-sections";
-import { getMediaAsset } from "@/content/media/media-assets";
-import { getRegionHubPlan } from "@/content/regions/region-route-plan";
+import { listPublicHubRegions } from "@/core/data-access/public";
 import { getStaticMetadata } from "@/seo/metadata";
 
 export const metadata = getStaticMetadata("PAGE-001");
 
 export default async function HomePage() {
-  const regions = getRegionHubPlan().filter((region) => region.kind === "region");
-  const regionCards: HomeRegionCardModel[] = await Promise.all(
-    regions.map(async (region) => {
-      const media = getMediaAsset(region.mediaSourceLabel);
-      return {
-        href: region.path,
-        id: region.key,
-        image: {
-          alt: media?.alt ?? region.title,
-          height: media?.height ?? 1524,
-          src: media?.src ?? "/images/og/default.webp",
-          width: media?.width ?? 2560,
-        },
-        risk: region.riskSummary,
-        thesis: region.investmentThesis,
-        title: region.title,
-      };
-    }),
-  );
+  const regions = (await listPublicHubRegions()).filter((region) => region.kind === "region");
+  const regionCards: HomeRegionCardModel[] = regions.map((region) => ({
+    href: region.path,
+    id: region.slug,
+    image: region.image,
+    risk: region.riskSummary,
+    thesis: region.investmentThesis,
+    title: region.title,
+  }));
 
   return (
     <main>

@@ -1,7 +1,19 @@
 import "server-only";
 
 export { createPublicGateway } from "./gateway.ts";
-export { getCmsPageByPath } from "./pages.ts";
+export {
+  getCmsPageByPath,
+} from "./pages.ts";
+export {
+  composePublicRegionPath,
+  getPublicRegionByPath,
+  getPublicRegionRelatedLinks,
+  listPublicHubRegions,
+  listPublicRegions,
+  mapPublicRegion,
+  mapPublicRegions,
+} from "./regions.ts";
+export type { PublicRegionDTO } from "./regions.ts";
 export {
   activeNewbuildInventoryWhere,
   getPublishedComplexBySlug,

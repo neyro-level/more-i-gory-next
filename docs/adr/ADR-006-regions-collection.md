@@ -29,6 +29,20 @@ Realty Base не требует отдельную коллекцию `regions`,
 - хранить полный URL отдельным полем;
 - отдельные collections для region, locality и segment.
 
+## Ownership (TASK 29.2)
+
+```text
+Payload = domain/content owner
+Code = routing/composition policy
+SEO registry = explicit index policy
+```
+
+- Payload `regions` владеет title, lead, investment thesis, risk summary, media, blocks, status, kind, parent, order и slug.
+- Код владеет вычислением path из slug+parent, reserved namespace, composition внутренних ссылок и stub presentation. Полный path в CMS не хранится.
+- SEO registry владеет явным index/sitemap/canonical/priority/contentGate. Это не дубль доменного текста.
+
+Перенос живого UI на Payload — TASK 29.3; это решение фиксирует владельцев, а не текущий runtime drift.
+
 ## Consequences
 
 - одна иерархическая collection владеет региональными route inputs;

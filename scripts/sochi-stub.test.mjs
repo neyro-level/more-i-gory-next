@@ -33,3 +33,15 @@ test("Sochi stub page renders honest copy and CTA", () => {
   assert.match(source, /Регион в проработке/);
   assert.match(source, /\/podbor\//);
 });
+
+test("CMS-backed hub and catch-all keep Sochi as a dedicated noindex stub without a child cluster", () => {
+  const hubReader = readFileSync("src/core/data-access/public/regions.ts", "utf8");
+  assert.match(hubReader, /status !== "stub"/);
+  assert.match(hubReader, /slug !== "sochi"/);
+
+  const catchAll = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx", "utf8");
+  assert.match(catchAll, /region\.status === "stub"/);
+
+  const seed = readFileSync("src/content/regions/region-seed-content.ts", "utf8");
+  assert.match(seed, /status: "stub"/);
+});

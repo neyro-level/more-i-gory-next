@@ -1,6 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, GlobalAfterChangeHook } from "payload";
 
-import { regionRouteEntries, getRegionRoutePath } from "../../content/regions/region-route-plan.ts";
+import { composeRegionPathFromSlugs, REGION_RESERVED_NAMESPACE } from "../../content/regions/region-path-policy.ts";
 import type { StructuredLogger } from "../observability/index.ts";
 import {
   cacheTargets,
@@ -31,13 +31,23 @@ function stringField(doc: CmsDoc, name: string): string | null {
   return typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
 }
 
+function parentSlug(value: unknown): string | null {
+  if (value && typeof value === "object" && "slug" in value && typeof value.slug === "string") {
+    return value.slug.trim() || null;
+  }
+  return null;
+}
+
 function regionPathSlug(doc: CmsDoc): string | null {
   const slug = stringField(doc, "slug");
   if (!slug) return null;
-  const entry = regionRouteEntries.find((item) => item.slug === slug || item.key === slug);
-  if (!entry) return slug;
-  return getRegionRoutePath(entry)
-    .replace(/^\/investicionnaya-nedvizhimost\//, "")
+
+  const slugs = [slug];
+  const parent = parentSlug(doc.parent);
+  if (parent) slugs.unshift(parent);
+
+  return composeRegionPathFromSlugs(slugs)
+    .replace(new RegExp(`^${REGION_RESERVED_NAMESPACE}/`), "")
     .replace(/\/$/, "");
 }
 

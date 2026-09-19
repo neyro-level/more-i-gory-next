@@ -9,7 +9,7 @@ test("investment hub map is built from the regions route plan and excludes stubs
 
   assert.equal(plan.length, 9);
   assert.equal(plan.some((entry) => entry.key === "sochi"), false);
-  assert.equal(plan.every((entry) => entry.status !== "stub"), true);
+  assert.equal(plan.every((entry) => entry.key !== "sochi"), true);
   assert.deepEqual(
     plan.map((entry) => entry.path),
     [
@@ -26,11 +26,12 @@ test("investment hub map is built from the regions route plan and excludes stubs
   );
 });
 
-test("investment hub page does not read the legacy regions JSON list", () => {
+test("investment hub page reads CMS-backed public regions", () => {
   const source = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/page.tsx", "utf8");
 
-  assert.match(source, /getRegionHubPlan/);
+  assert.match(source, /listPublicHubRegions/);
   assert.doesNotMatch(source, /listRegions\(/);
+  assert.doesNotMatch(source, /getRegionHubPlan/);
   assert.doesNotMatch(source, /heroMediaId/);
-  assert.match(source, /mediaSourceLabel/);
+  assert.doesNotMatch(source, /mediaSourceLabel/);
 });

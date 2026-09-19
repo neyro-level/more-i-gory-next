@@ -124,6 +124,8 @@ export const cacheTargets = {
     return [
       { kind: "tag", tag: `region:${tagSlug(slug, "region slug")}` },
       { kind: "path", path: `/investicionnaya-nedvizhimost/${normalized}/` },
+      { kind: "tag", tag: "catalog" },
+      { kind: "tag", tag: "sitemap" },
       ...this.navigation(),
     ];
   },

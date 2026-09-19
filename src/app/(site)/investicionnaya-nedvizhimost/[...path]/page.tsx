@@ -6,8 +6,8 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { RiskBlock } from "@/components/marketing/risk-block";
 import { ActionLink } from "@/components/navigation/action-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getMediaAsset } from "@/content/media/media-assets";
-import { findRegionRouteBySegments, getRegionRelatedLinks, getRegionRoutePlan } from "@/content/regions/region-route-plan";
+import { getPublicRegionByPath, getPublicRegionRelatedLinks, listPublicHubRegions, listPublicRegions } from "@/core/data-access/public";
+import { composeRegionPathFromSlugs } from "@/content/regions/region-path-policy";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 
@@ -15,52 +15,49 @@ type RegionRoutePageProps = {
   params: Promise<{ path?: string[] }>;
 };
 
-async function getRouteEntry(params: RegionRoutePageProps["params"]) {
+async function getRegionPageModel(params: RegionRoutePageProps["params"]) {
   const { path = [] } = await params;
-  return findRegionRouteBySegments(path);
+  let href: string;
+  try {
+    href = composeRegionPathFromSlugs(path);
+  } catch {
+    notFound();
+  }
+  const region = await getPublicRegionByPath(href);
+  return { href, region };
 }
 
-export function generateStaticParams() {
-  return getRegionRoutePlan()
-    .filter((entry) => entry.key !== "sochi")
-    .map((entry) => ({
-      path: entry.path
-        .replace(/^\/investicionnaya-nedvizhimost\//, "")
-        .replace(/\/$/, "")
-        .split("/"),
-    }));
+export async function generateStaticParams() {
+  const regions = await listPublicHubRegions();
+  return regions.map((region) => ({
+    path: region.path.replace(/^\/investicionnaya-nedvizhimost\//, "").replace(/\/$/, "").split("/"),
+  }));
 }
 
 export async function generateMetadata({ params }: RegionRoutePageProps) {
-  const entry = await getRouteEntry(params);
-  if (!entry) return {};
-
-  return getStaticMetadata(entry.pageId);
+  const { region } = await getRegionPageModel(params);
+  if (!region || region.status === "stub") return {};
+  return getStaticMetadata(region.pageId);
 }
 
 export default async function RegionRoutePage({ params }: RegionRoutePageProps) {
-  const entry = await getRouteEntry(params);
-  if (!entry || entry.status === "stub") notFound();
+  const { region } = await getRegionPageModel(params);
+  if (!region || region.status === "stub") notFound();
 
-  const seo = getSeoEntry(entry.pageId);
-  const media = getMediaAsset(entry.mediaSourceLabel);
-  const relatedLinks = getRegionRelatedLinks(entry);
+  const seo = getSeoEntry(region.pageId);
+  const published = await listPublicRegions();
+  const relatedLinks = getPublicRegionRelatedLinks(region, published);
 
   return (
     <main>
       <PageHero
-        eyebrow={entry.kind === "segment" ? "Инвестиционный сегмент" : "Региональный инвестиционный хаб"}
+        eyebrow={region.kind === "segment" ? "Инвестиционный сегмент" : "Региональный инвестиционный хаб"}
         title={seo.h1}
-        lead={entry.lead}
+        lead={region.lead}
         primaryCta={{ href: "/podbor/", label: "Получить подбор" }}
         secondaryCta={{ href: "/investicionnaya-nedvizhimost/", label: "Сравнить регионы" }}
-        image={{
-          alt: media?.alt ?? entry.title,
-          height: media?.height ?? 1524,
-          src: media?.src ?? "/images/og/default.webp",
-          width: media?.width ?? 2560,
-        }}
-        proof="Публикация в индекс — только после content gate. Путь страницы вычисляется из slug и parent chain."
+        image={region.image}
+        proof="Путь страницы собирается из reserved namespace, slug и parent relation в CMS."
       />
 
       <SectionShell
@@ -69,13 +66,13 @@ export default async function RegionRoutePage({ params }: RegionRoutePageProps) 
         lead="На этом этапе страница остаётся безопасным черновым каркасом: без обещаний доходности, без неподтверждённых объектов и без тонких URL."
       >
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <RiskBlock title="Ключевое ограничение" text={entry.riskSummary} />
+          <RiskBlock title="Ключевое ограничение" text={region.riskSummary} />
           <Card className="rounded-large bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Инвестиционный тезис</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-5 text-body text-muted-foreground">
-              <p>{entry.investmentThesis}</p>
+              <p>{region.investmentThesis}</p>
               <p>
                 Следующий слой страницы: районы, форматы, бюджет входа, управление, риски,
                 проекты и сценарии выхода — только на подтверждённых данных.
@@ -103,7 +100,7 @@ export default async function RegionRoutePage({ params }: RegionRoutePageProps) 
       </SectionShell>
 
       <SectionShell className="pt-0">
-        <LeadFormSection title={`Получить разбор: ${entry.title}`} />
+        <LeadFormSection title={`Получить разбор: ${region.title}`} />
       </SectionShell>
     </main>
   );

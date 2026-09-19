@@ -30,12 +30,12 @@ test("region seed covers the EPIC 7 URL map without indexing draft content", () 
 });
 
 test("region seed keeps hierarchy, kinds and media references explicit", () => {
-  const byKey = new Map(regionSeedEntries.map((entry) => [entry.key, entry]));
+  const byKey = new Map(getRegionSeedPlan().map((entry) => [entry.key, entry]));
 
   assert.equal(byKey.get("yalta").parentKey, "krym");
   assert.equal(byKey.get("krym-novostroyki").kind, "segment");
   assert.equal(byKey.get("krym-apartamenty").kind, "segment");
-  assert.equal(regionSeedEntries.every((entry) => mediaSourceLabels.has(entry.mediaSourceLabel)), true);
+  assert.equal(getRegionSeedPlan().every((entry) => mediaSourceLabels.has(entry.mediaSourceLabel)), true);
 });
 
 test("region payload data satisfies the collection requirements", () => {
