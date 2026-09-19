@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { mediaAssets } from "../src/content/media/media-assets.ts";
@@ -47,4 +48,15 @@ test("region payload data satisfies the collection requirements", () => {
   assert.equal(data.heroMedia, 1);
   assert.equal(data.blocks.length >= 1, true);
   assert.equal(data.seo.robots, "noindex-follow");
+});
+
+test("region seed script delegates privileged CRUD to its System Gateway owner", () => {
+  const script = readFileSync("scripts/seed-regions.mjs", "utf8");
+  const gateway = readFileSync("src/core/data-access/system/seed-regions.ts", "utf8");
+
+  assert.doesNotMatch(script, /payload\.(?:find|create|update)\s*\(/);
+  assert.doesNotMatch(script, /overrideAccess:\s*true/);
+  assert.match(script, /resolveSeedRegionMediaId/);
+  assert.match(script, /upsertRegionSeed/);
+  assert.match(gateway, /overrideAccess:\s*true/);
 });

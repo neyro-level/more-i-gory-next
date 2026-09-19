@@ -7,6 +7,7 @@ const skippedOperations = new Set(["getPayload", "req.payload"]);
 
 function expectedOverrideAccess(apiClass) {
   if (apiClass === "SYSTEM GATEWAY") return true;
+  if (apiClass === "ORCHESTRATION") return null;
   if (apiClass === "PUBLIC GATEWAY" || apiClass === "CMS ADMIN") return false;
   return null;
 }
@@ -49,7 +50,7 @@ function extractFirstObjectLiteral(source, fromIndex) {
 
 export function findImplicitAccessModeCalls(projectRoot) {
   const calls = assertLocalApiInventory(scanLocalApiCalls(projectRoot)).filter(
-    (call) => call.class !== "TEST" && !skippedOperations.has(call.operation),
+    (call) => call.class !== "TEST" && call.class !== "ORCHESTRATION" && !skippedOperations.has(call.operation),
   );
   const missing = [];
 

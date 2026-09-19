@@ -18,6 +18,8 @@ const privilegedSystemFiles = new Set([
   "src/core/data-access/system/apply-feed-upsert.ts",
   "src/core/data-access/system/create-import-issue.ts",
   "src/core/data-access/system/apply-safe-deactivation.ts",
+  "src/core/data-access/system/seed-media.ts",
+  "src/core/data-access/system/seed-regions.ts",
 ]);
 const privateFieldPattern = /\b(?:apartmentNumber|cadastralNumber|internalComment|ownerContact|credentials|diagnosticRawData)\b/;
 const lowLevelDbImportPattern = /(?:from\s+|import\s*\(|require\s*\()\s*["'](?:@payloadcms\/db-postgres|drizzle-orm(?:\/[^"']*)?|pg|postgres)["']/;
@@ -45,6 +47,73 @@ function isProductionCode(filePath) {
       filePath === "payload.config.ts" ||
       filePath === "next.config.ts")
   );
+}
+
+function isExecutableOperationalScript(filePath) {
+  return /^scripts\/[^/]+\.mjs$/.test(filePath) && !filePath.endsWith(".test.mjs");
+}
+
+function stripStringsAndComments(source) {
+  let result = "";
+  let state = "code";
+  let escaped = false;
+
+  for (let index = 0; index < source.length; index += 1) {
+    const char = source[index];
+    const next = source[index + 1];
+
+    if (state === "line-comment") {
+      if (char === "\n") {
+        state = "code";
+        result += "\n";
+      } else result += " ";
+      continue;
+    }
+    if (state === "block-comment") {
+      if (char === "*" && next === "/") {
+        result += "  ";
+        index += 1;
+        state = "code";
+      } else result += char === "\n" ? "\n" : " ";
+      continue;
+    }
+    if (state !== "code") {
+      if (escaped) {
+        escaped = false;
+      } else if (char === "\\") {
+        escaped = true;
+      } else if (
+        (state === "single-quote" && char === "'") ||
+        (state === "double-quote" && char === '"') ||
+        (state === "template" && char === "`")
+      ) {
+        state = "code";
+      }
+      result += char === "\n" ? "\n" : " ";
+      continue;
+    }
+
+    if (char === "/" && next === "/") {
+      result += "  ";
+      index += 1;
+      state = "line-comment";
+    } else if (char === "/" && next === "*") {
+      result += "  ";
+      index += 1;
+      state = "block-comment";
+    } else if (char === "'") {
+      result += " ";
+      state = "single-quote";
+    } else if (char === '"') {
+      result += " ";
+      state = "double-quote";
+    } else if (char === "`") {
+      result += " ";
+      state = "template";
+    } else result += char;
+  }
+
+  return result;
 }
 
 function addViolation(violations, guard, filePath, message) {
@@ -199,11 +268,15 @@ export function findArchitectureGuardViolations({ files, manifests }) {
   for (const entry of files) {
     const filePath = normalizePath(entry.path);
     const content = entry.content;
-    if (!isProductionCode(filePath)) continue;
+    const productionCode = isProductionCode(filePath);
+    const operationalScript = isExecutableOperationalScript(filePath);
+    if (!productionCode && !operationalScript) continue;
 
-    if (/\boverrideAccess\s*:\s*true\b/.test(content) && !privilegedSystemFiles.has(filePath)) {
+    if (/\boverrideAccess\s*:\s*true\b/.test(stripStringsAndComments(content)) && !privilegedSystemFiles.has(filePath)) {
       addViolation(violations, 1, filePath, "overrideAccess:true outside registered System Gateway");
     }
+
+    if (!productionCode) continue;
 
     localApiCallPattern.lastIndex = 0;
     for (const match of content.matchAll(localApiCallPattern)) {

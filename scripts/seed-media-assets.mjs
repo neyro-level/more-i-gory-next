@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { mediaAssets } from "../src/content/media/media-assets.ts";
+import { upsertMediaSeedAsset } from "../src/core/data-access/system/seed-media.ts";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -63,38 +64,12 @@ async function seed() {
   const payload = await getPayload({ config });
 
   for (const asset of plan) {
-    const existing = await payload.find({
-      collection: "media",
-      limit: 1,
-      overrideAccess: true,
-      where: {
-        filename: {
-          equals: asset.filename,
-        },
-      },
-    });
-
-    if (existing.docs[0]) {
-      await payload.update({
-        collection: "media",
-        data: asset.payloadData,
-        filePath: asset.filePath,
-        id: existing.docs[0].id,
-        overrideAccess: true,
-        overwriteExistingFiles: true,
-      });
-      payload.logger.info(`Updated media asset ${asset.id} from ${asset.src}`);
-      continue;
-    }
-
-    await payload.create({
-      collection: "media",
+    const outcome = await upsertMediaSeedAsset(payload, {
       data: asset.payloadData,
+      filename: asset.filename,
       filePath: asset.filePath,
-      overrideAccess: true,
-      overwriteExistingFiles: true,
     });
-    payload.logger.info(`Created media asset ${asset.id} from ${asset.src}`);
+    payload.logger.info(`${outcome === "updated" ? "Updated" : "Created"} media asset ${asset.id} from ${asset.src}`);
   }
 }
 

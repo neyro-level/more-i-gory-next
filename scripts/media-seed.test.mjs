@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { getSeedPlan } from "./seed-media-assets.mjs";
@@ -27,4 +28,14 @@ test("media seed writes legacy registry ids into payload data without changing p
     assert.equal(asset.payloadData.kind, asset.kind);
     assert.equal(asset.payloadData.alt, asset.alt);
   }
+});
+
+test("media seed script delegates privileged CRUD to its System Gateway owner", () => {
+  const script = readFileSync("scripts/seed-media-assets.mjs", "utf8");
+  const gateway = readFileSync("src/core/data-access/system/seed-media.ts", "utf8");
+
+  assert.doesNotMatch(script, /payload\.(?:find|create|update)\s*\(/);
+  assert.doesNotMatch(script, /overrideAccess:\s*true/);
+  assert.match(script, /upsertMediaSeedAsset/);
+  assert.match(gateway, /overrideAccess:\s*true/);
 });

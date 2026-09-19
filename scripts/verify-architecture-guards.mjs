@@ -18,6 +18,7 @@ function walk(relativeDirectory) {
 const sourceRoots = ["src", "packages", "migrations"];
 const files = [
   ...sourceRoots.flatMap((sourceRoot) => walk(sourceRoot)),
+  ...walk("scripts").filter((filePath) => /^scripts[\\/][^\\/]+\.mjs$/.test(filePath) && !filePath.endsWith(".test.mjs")),
   "payload.config.ts",
   "next.config.ts",
   "src/app/(site)/globals.css",

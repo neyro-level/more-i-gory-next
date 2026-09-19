@@ -13,10 +13,11 @@ import {
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-test("path classifier covers the five allowed Local API layers", () => {
+test("path classifier distinguishes System Gateway owners from orchestration", () => {
   assert.equal(classifyLocalApiPath("src/core/data-access/public/pages.ts"), "PUBLIC GATEWAY");
   assert.equal(classifyLocalApiPath("src/seo/sitemap-source.ts"), "PUBLIC GATEWAY");
   assert.equal(classifyLocalApiPath("src/core/data-access/system/create-lead.ts"), "SYSTEM GATEWAY");
+  assert.equal(classifyLocalApiPath("scripts/seed-regions.mjs"), "ORCHESTRATION");
   assert.equal(classifyLocalApiPath("src/project/jobs/imports/dispatch-due-feeds.ts"), "SYSTEM GATEWAY");
   assert.equal(classifyLocalApiPath("src/project/leads/owner-retry.ts"), "SYSTEM GATEWAY");
   assert.equal(classifyLocalApiPath("src/project/collections/redirects.ts"), "CMS ADMIN");
@@ -31,7 +32,7 @@ test("every live Payload Local API call has an allowed class and matches the inv
   const markdown = readFileSync(path.join(projectRoot, "docs/research/payload-local-api-inventory.md"), "utf8");
   assert.equal(markdown, formatLocalApiInventoryMarkdown(calls));
 
-  for (const required of ["PUBLIC GATEWAY", "SYSTEM GATEWAY", "CMS ADMIN", "TEST"]) {
+  for (const required of ["PUBLIC GATEWAY", "SYSTEM GATEWAY", "CMS ADMIN", "ORCHESTRATION", "TEST"]) {
     assert.ok(
       calls.some((call) => call.class === required),
       `inventory must include ${required}`,

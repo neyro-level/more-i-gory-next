@@ -9,6 +9,8 @@ import {
   systemOperationScopes,
   UnlistedSystemOperationError,
 } from "../src/core/data-access/system/gateway.ts";
+import { upsertMediaSeedAsset } from "../src/core/data-access/system/seed-media.ts";
+import { resolveSeedRegionMediaId, upsertRegionSeed } from "../src/core/data-access/system/seed-regions.ts";
 
 const input = {
   email: "owner@example.com",
@@ -106,4 +108,52 @@ test("System Gateway propagates denied privileged execution without fallback", a
     () => gateway.run({ input, operation: "bootstrap.owner" }),
     (error) => error === denied,
   );
+});
+
+test("region seed operations are collection-specific and always privileged", async () => {
+  const calls = [];
+  const payload = {
+    create: async (options) => {
+      calls.push(["create", options]);
+      return { id: 77 };
+    },
+    find: async (options) => {
+      calls.push(["find", options]);
+      return options.collection === "media" ? { docs: [{ id: 11 }] } : { docs: [] };
+    },
+  };
+
+  assert.equal(await resolveSeedRegionMediaId(payload, "media-region-krym"), 11);
+  assert.deepEqual(await upsertRegionSeed(payload, { data: { slug: "krym", title: "Крым" }, slug: "krym" }), {
+    id: 77,
+    outcome: "created",
+  });
+  assert.equal(calls.every(([, options]) => options.overrideAccess === true), true);
+  assert.deepEqual(calls.map(([, options]) => options.collection), ["media", "regions", "regions"]);
+});
+
+test("media seed operation updates only the matched media asset", async () => {
+  const calls = [];
+  const payload = {
+    find: async (options) => {
+      calls.push(["find", options]);
+      return { docs: [{ id: 15 }] };
+    },
+    update: async (options) => {
+      calls.push(["update", options]);
+      return { id: 15 };
+    },
+  };
+
+  assert.equal(
+    await upsertMediaSeedAsset(payload, {
+      data: { alt: "Крым", decorative: false, kind: "region", sourceLabel: "media-region-krym" },
+      filename: "crimea-coast.webp",
+      filePath: "C:/fixture/crimea-coast.webp",
+    }),
+    "updated",
+  );
+  assert.equal(calls.every(([, options]) => options.collection === "media" && options.overrideAccess === true), true);
+  assert.equal(calls[1][1].id, 15);
+  assert.equal(calls[1][1].overwriteExistingFiles, true);
 });

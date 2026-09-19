@@ -157,6 +157,39 @@ test("Guard 1 allows registered catalog lifecycle System Gateway access", () => 
   );
 });
 
+test("Guard 1 allows the two registered seed System Gateway owners", () => {
+  assert.deepEqual(
+    findArchitectureGuardViolations({
+      files: [
+        { path: "src/core/data-access/system/seed-media.ts", content: "const options = { overrideAccess: true };" },
+        { path: "src/core/data-access/system/seed-regions.ts", content: "const options = { overrideAccess: true };" },
+      ],
+      manifests: [],
+    }),
+    [],
+  );
+});
+
+test("Guard 1 rejects privileged access in executable operational scripts", () => {
+  expectGuard(1, {
+    files: [{ path: "scripts/example.mjs", content: "const options = { overrideAccess: true };" }],
+    manifests: [],
+  });
+});
+
+test("Guard 1 ignores tests and fixture strings when scanning scripts", () => {
+  assert.deepEqual(
+    findArchitectureGuardViolations({
+      files: [
+        { path: "scripts/example.test.mjs", content: "const options = { overrideAccess: true };" },
+        { path: "scripts/example.mjs", content: 'const fixture = "overrideAccess:true";' },
+      ],
+      manifests: [],
+    }),
+    [],
+  );
+});
+
 test("Guard 2 rejects low-level DB outside approved layers", () => {
   expectGuard(2, {
     files: [{ path: "src/app/api/public/route.ts", content: 'import postgres from "postgres";' }],

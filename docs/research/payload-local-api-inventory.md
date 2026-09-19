@@ -1,30 +1,26 @@
 # Payload Local API inventory
 
-**Дата:** 2026-09-18  
-**Задача:** TASK 20.1  
+**Дата:** 2026-09-19
+**Задача:** TASK 36.4
 **Статус:** Evidence only
 
 Каждый вызов `getPayload`, `payload.find/findByID/findGlobal/create/update/delete`,
 `payload.jobs.queue` и `req.payload.*` классифицирован одним слоем.
+`SYSTEM GATEWAY` означает только фактический owner-module внутри
+`src/core/data-access/system/**`; исполняемые seed-скрипты имеют класс
+`ORCHESTRATION` и не владеют привилегированным CRUD.
 
 | Location | Operation | Class | Snippet |
 |---|---|---|---|
 | `scripts/lead-delivery-proof-g.test.mjs:109` | `jobs.queue` | TEST | `await memory.payload.jobs.queue({` |
-| `scripts/seed-media-assets.mjs:63` | `getPayload` | SYSTEM GATEWAY | `const payload = await getPayload({ config });` |
-| `scripts/seed-media-assets.mjs:66` | `find` | SYSTEM GATEWAY | `const existing = await payload.find({` |
-| `scripts/seed-media-assets.mjs:78` | `update` | SYSTEM GATEWAY | `await payload.update({` |
-| `scripts/seed-media-assets.mjs:90` | `create` | SYSTEM GATEWAY | `await payload.create({` |
-| `scripts/seed-regions.mjs:62` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
-| `scripts/seed-regions.mjs:76` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
-| `scripts/seed-regions.mjs:97` | `getPayload` | SYSTEM GATEWAY | `const payload = await getPayload({ config });` |
-| `scripts/seed-regions.mjs:109` | `update` | SYSTEM GATEWAY | `? await payload.update({ collection: "regions", data, id: existing.id, overrideAccess: true })` |
-| `scripts/seed-regions.mjs:110` | `create` | SYSTEM GATEWAY | `: await payload.create({ collection: "regions", data, overrideAccess: true });` |
+| `scripts/seed-media-assets.mjs:64` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
+| `scripts/seed-regions.mjs:72` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/verify-architecture-guards.test.mjs:66` | `find` | TEST | `files: [{ path: "src/core/data-access/public/pages.ts", content: 'payload.find({ collection: "pages" });' }],` |
 | `scripts/verify-architecture-guards.test.mjs:79` | `find` | TEST | `content: 'payload.find({ collection: "pages", overrideAccess: false });',` |
 | `scripts/verify-architecture-guards.test.mjs:128` | `find` | TEST | `files: [{ path: "src/core/data-access/system/jobs.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
 | `scripts/verify-architecture-guards.test.mjs:135` | `find` | TEST | `files: [{ path: "src/core/data-access/system/lead-delivery.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
-| `scripts/verify-architecture-guards.test.mjs:299` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { slug: { exists: true } } });',` |
-| `scripts/verify-architecture-guards.test.mjs:312` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { status: { equals: "published" } } });',` |
+| `scripts/verify-architecture-guards.test.mjs:332` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { slug: { exists: true } } });',` |
+| `scripts/verify-architecture-guards.test.mjs:345` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { status: { equals: "published" } } });',` |
 | `src/core/data-access/public/newbuilds.ts:171` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/newbuilds.ts:172` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/newbuilds.ts:192` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
@@ -103,6 +99,13 @@
 | `src/core/data-access/system/load-feed-source-url-ref.ts:15` | `findByID` | SYSTEM GATEWAY | `const source = await payload.findByID({` |
 | `src/core/data-access/system/load-lead-delivery.ts:100` | `findByID` | SYSTEM GATEWAY | `const delivery = (await payload.findByID({` |
 | `src/core/data-access/system/load-lead-delivery.ts:117` | `findByID` | SYSTEM GATEWAY | `const lead = (await payload.findByID({` |
+| `src/core/data-access/system/seed-media.ts:13` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/system/seed-media.ts:26` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/seed-media.ts:37` | `create` | SYSTEM GATEWAY | `await payload.create({` |
+| `src/core/data-access/system/seed-regions.ts:6` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/system/seed-regions.ts:23` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/system/seed-regions.ts:33` | `update` | SYSTEM GATEWAY | `? await payload.update({` |
+| `src/core/data-access/system/seed-regions.ts:39` | `create` | SYSTEM GATEWAY | `: await payload.create({` |
 | `src/project/collections/properties.ts:43` | `req.payload` | CMS ADMIN | `(feedSourceId == null ? null : await loadFeedSourceMarket(req.payload, feedSourceId));` |
 | `src/project/collections/redirects.ts:17` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/collections/redirects.ts:25` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |

@@ -2,6 +2,7 @@ import { pathToFileURL } from "node:url";
 
 import { getRegionRoutePath, regionRouteEntries as regionSeedEntries } from "../src/content/regions/region-route-plan.ts";
 import { regionSeedContent } from "../src/content/regions/region-seed-content.ts";
+import { resolveSeedRegionMediaId, upsertRegionSeed } from "../src/core/data-access/system/seed-regions.ts";
 
 export { regionSeedEntries };
 
@@ -58,32 +59,6 @@ export function getRegionSeedPlan() {
   return regionSeedEntries.map((entry) => seedEntry(entry));
 }
 
-async function findMediaId(payload, sourceLabel) {
-  const result = await payload.find({
-    collection: "media",
-    depth: 0,
-    limit: 1,
-    overrideAccess: true,
-    where: { sourceLabel: { equals: sourceLabel } },
-  });
-
-  const media = result.docs[0];
-  if (!media) throw new Error(`Missing media seed with sourceLabel "${sourceLabel}". Run media seed first.`);
-  return media.id;
-}
-
-async function findRegion(payload, slug) {
-  const result = await payload.find({
-    collection: "regions",
-    depth: 0,
-    limit: 1,
-    overrideAccess: true,
-    where: { slug: { equals: slug } },
-  });
-
-  return result.docs[0] ?? null;
-}
-
 async function seed() {
   const dryRun = process.argv.includes("--dry-run");
   const plan = getRegionSeedPlan();
@@ -99,18 +74,15 @@ async function seed() {
 
   for (const entry of regionSeedEntries) {
     const content = seedEntry(entry);
-    const heroMediaId = await findMediaId(payload, content.mediaSourceLabel);
+    const heroMediaId = await resolveSeedRegionMediaId(payload, content.mediaSourceLabel);
     const parentId = entry.parentKey ? regionIds.get(entry.parentKey) : undefined;
     if (entry.parentKey && !parentId) throw new Error(`Parent "${entry.parentKey}" must be seeded before "${entry.key}".`);
 
     const data = getPayloadRegionData(entry, parentId, heroMediaId);
-    const existing = await findRegion(payload, entry.slug);
-    const doc = existing
-      ? await payload.update({ collection: "regions", data, id: existing.id, overrideAccess: true })
-      : await payload.create({ collection: "regions", data, overrideAccess: true });
+    const result = await upsertRegionSeed(payload, { data, slug: entry.slug });
 
-    regionIds.set(entry.key, doc.id);
-    payload.logger.info(`${existing ? "Updated" : "Created"} region seed ${entry.key}`);
+    regionIds.set(entry.key, result.id);
+    payload.logger.info(`${result.outcome === "updated" ? "Updated" : "Created"} region seed ${entry.key}`);
   }
 }
 

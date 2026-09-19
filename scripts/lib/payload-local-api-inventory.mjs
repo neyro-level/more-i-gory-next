@@ -6,6 +6,7 @@ export const LOCAL_API_CLASSES = Object.freeze([
   "SYSTEM GATEWAY",
   "CMS ADMIN",
   "MIGRATION",
+  "ORCHESTRATION",
   "TEST",
 ]);
 
@@ -26,11 +27,12 @@ export function classifyLocalApiPath(filePath) {
   if (
     normalized.startsWith("src/core/data-access/system/") ||
     normalized.startsWith("src/project/jobs/") ||
-    normalized.startsWith("src/project/leads/") ||
-    normalized.startsWith("scripts/seed-") ||
-    normalized === "scripts/bootstrap-owner.mjs"
+    normalized.startsWith("src/project/leads/")
   ) {
     return "SYSTEM GATEWAY";
+  }
+  if (normalized.startsWith("scripts/seed-") || normalized === "scripts/bootstrap-owner.mjs") {
+    return "ORCHESTRATION";
   }
   if (normalized.startsWith("src/project/collections/") || normalized.startsWith("src/project/globals/")) {
     return "CMS ADMIN";
@@ -155,12 +157,15 @@ export function formatLocalApiInventoryMarkdown(calls) {
 
   return `# Payload Local API inventory
 
-**Дата:** 2026-09-18  
-**Задача:** TASK 20.1  
+**Дата:** 2026-09-19
+**Задача:** TASK 36.4
 **Статус:** Evidence only
 
 Каждый вызов \`getPayload\`, \`payload.find/findByID/findGlobal/create/update/delete\`,
 \`payload.jobs.queue\` и \`req.payload.*\` классифицирован одним слоем.
+\`SYSTEM GATEWAY\` означает только фактический owner-module внутри
+\`src/core/data-access/system/**\`; исполняемые seed-скрипты имеют класс
+\`ORCHESTRATION\` и не владеют привилегированным CRUD.
 
 | Location | Operation | Class | Snippet |
 |---|---|---|---|
