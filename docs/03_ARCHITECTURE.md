@@ -509,7 +509,7 @@ production-like HTTP/Nginx контура.
 ## 24. Performance Budgets
 
 Initial targets:
-- Initial route JS ≤ 200 KB gzip; baseline Node runtime EPIC 1 — 190 KB на `/podbor/`;
+- Initial route JS ≤ 210 KB gzip; baseline Node runtime EPIC 1 — 190 KB на `/podbor/`;
 - one lazy chunk ≤ 300 KB gzip;
 - Project Passport initial transfer ≤ 1.5 MB excluding lazy gallery;
 - lab LCP target ≤ 2.5 s;

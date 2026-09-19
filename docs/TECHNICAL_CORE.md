@@ -101,7 +101,7 @@ data-invalid.
 
 - Mobile LCP: <= 2.5 s.
 - CLS: <= 0.1.
-- Initial route JavaScript budget: <= 200 KB gzip; EPIC 1 baseline — 190 KB.
+- Initial route JavaScript budget: <= 210 KB gzip; EPIC 1 baseline — 190 KB; LeadForm primitives add a small client cost on `/podbor/`.
 - Measurement: production-like build и representative mobile profile.
 
 ## 9. Verification Cadence

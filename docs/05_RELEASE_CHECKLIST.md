@@ -84,7 +84,7 @@
 
 ## 6. Budgets
 
-- [x] maximum route JavaScript: 190 KB gzip ≤ 200 KB (`/podbor/`);
+- [x] maximum route JavaScript: ≤ 210 KB gzip (`/podbor/`);
 - [x] largest initial script chunk: 70 KB gzip ≤ 300 KB;
 - [ ] Project Passport first screen ≤ 1.5 MB без lazy gallery;
 - [x] local lab LCP: 694 ms ≤ 2.5 s;

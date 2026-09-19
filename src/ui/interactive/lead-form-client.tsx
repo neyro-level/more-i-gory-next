@@ -2,6 +2,20 @@
 
 import { useRef, useState, type FormEvent } from "react";
 
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+
 const messages = {
   accepted: "Нужно согласие на обработку данных.",
   name: "Укажите имя.",
@@ -18,12 +32,7 @@ type LeadFormClientProps = {
   sourcePath: string;
 };
 
-const fieldClassName = "flex flex-col gap-2 data-[invalid=true]:text-destructive";
-const labelClassName = "text-label font-medium text-foreground";
-const errorClassName = "text-body-sm text-destructive";
-const controlClassName = "min-h-11 rounded-control bg-background px-3 text-body";
-const submitClassName =
-  "inline-flex min-h-14 w-full items-center justify-center rounded-control bg-accent px-6 text-label font-semibold text-accent-foreground transition-colors duration-fast ease-standard hover:bg-accent/90 disabled:pointer-events-none disabled:opacity-60";
+const controlClassName = "min-h-11 rounded-control text-body";
 const statusClassName =
   "rounded-card border border-transparent bg-muted p-4 text-body-sm text-muted-foreground data-[state=error]:border-destructive/30 data-[state=error]:bg-destructive/10 data-[state=error]:text-destructive data-[state=success]:border-success/30 data-[state=success]:bg-success/10 data-[state=success]:text-foreground data-[state=warning]:border-warning/40 data-[state=warning]:bg-warning/15 data-[state=warning]:text-warning-foreground";
 
@@ -146,63 +155,135 @@ export function LeadFormClient({
       noValidate
       onSubmit={handleSubmit}
     >
-      <fieldset className="flex flex-col gap-6">
-        <legend className="sr-only">Данные для инвестиционного разбора</legend>
+      <FieldSet className="flex flex-col gap-6">
+        <FieldLegend className="sr-only">Данные для инвестиционного разбора</FieldLegend>
+        <FieldGroup className="gap-6">
+          <Field data-lead-field>
+            <Label className="text-label font-medium text-foreground" htmlFor="name">
+              Имя
+            </Label>
+            <Input
+              autoComplete="name"
+              aria-describedby="name-error"
+              aria-invalid="false"
+              className={controlClassName}
+              id="name"
+              name="name"
+              placeholder="Как к вам обращаться"
+            />
+            <FieldError data-error-for="name" hidden id="name-error">
+              {messages.name}
+            </FieldError>
+          </Field>
 
-        <div className={fieldClassName} data-lead-field>
-          <label className={labelClassName} htmlFor="name">Имя</label>
-          <input className={controlClassName} id="name" name="name" placeholder="Как к вам обращаться" autoComplete="name" aria-describedby="name-error" aria-invalid="false" />
-          <p className={errorClassName} data-error-for="name" hidden id="name-error" role="alert" />
-        </div>
+          <Field data-lead-field>
+            <Label className="text-label font-medium text-foreground" htmlFor="phone">
+              Телефон или мессенджер
+            </Label>
+            <Input
+              autoComplete="tel"
+              aria-describedby="phone-error"
+              aria-invalid="false"
+              className={controlClassName}
+              id="phone"
+              name="phone"
+              placeholder="+7 или @username"
+            />
+            <FieldError data-error-for="phone" hidden id="phone-error">
+              {messages.phone}
+            </FieldError>
+          </Field>
 
-        <div className={fieldClassName} data-lead-field>
-          <label className={labelClassName} htmlFor="phone">Телефон или мессенджер</label>
-          <input className={controlClassName} id="phone" name="phone" placeholder="+7 или @username" autoComplete="tel" aria-describedby="phone-error" aria-invalid="false" />
-          <p className={errorClassName} data-error-for="phone" hidden id="phone-error" role="alert" />
-        </div>
+          <Field data-lead-field>
+            <Label className="text-label font-medium text-foreground" htmlFor="email">
+              Email
+            </Label>
+            <Input
+              autoComplete="email"
+              aria-describedby="email-help"
+              aria-invalid="false"
+              className={controlClassName}
+              id="email"
+              name="email"
+              placeholder="Если удобнее получить ответ письмом"
+            />
+            <FieldDescription id="email-help">Необязательно.</FieldDescription>
+          </Field>
 
-        <div className={fieldClassName} data-lead-field>
-          <label className={labelClassName} htmlFor="email">Email</label>
-          <input className={controlClassName} id="email" name="email" placeholder="Если удобнее получить ответ письмом" autoComplete="email" aria-describedby="email-help" aria-invalid="false" />
-          <p className="text-body-sm text-muted-foreground" id="email-help">Необязательно.</p>
-        </div>
+          <Field data-lead-field>
+            <Label className="text-label font-medium text-foreground" htmlFor="task">
+              Задача
+            </Label>
+            <Textarea
+              aria-describedby="task-help task-error"
+              aria-invalid="false"
+              className={controlClassName}
+              id="task"
+              name="task"
+              placeholder="Регион, бюджет, цель, горизонт, что уже смотрели"
+              rows={5}
+            />
+            <FieldDescription id="task-help">
+              Не указывайте чувствительные персональные данные. Для старта достаточно инвестиционной задачи.
+            </FieldDescription>
+            <FieldError data-error-for="task" hidden id="task-error">
+              {messages.task}
+            </FieldError>
+          </Field>
 
-        <div className={fieldClassName} data-lead-field>
-          <label className={labelClassName} htmlFor="task">Задача</label>
-          <textarea className={controlClassName} id="task" name="task" placeholder="Регион, бюджет, цель, горизонт, что уже смотрели" rows={5} aria-describedby="task-help task-error" aria-invalid="false" />
-          <p className="text-body-sm text-muted-foreground" id="task-help">
-            Не указывайте чувствительные персональные данные. Для старта достаточно инвестиционной задачи.
+          <Field className="grid grid-cols-[auto_1fr] items-start gap-3" data-lead-field orientation="horizontal">
+            <Checkbox
+              aria-describedby="accepted-help accepted-error"
+              aria-invalid="false"
+              className="mt-1 size-5"
+              id="accepted"
+              name="accepted"
+            />
+            <div className="flex min-h-11 flex-col gap-1">
+              <Label className="text-label font-medium text-foreground" htmlFor="accepted">
+                Согласен на обработку данных
+              </Label>
+              <FieldDescription id="accepted-help">
+                Я принимаю{" "}
+                <a className="text-link underline-offset-4 hover:underline" href="/consent/" rel="noreferrer" target="_blank">
+                  согласие на обработку персональных данных
+                </a>{" "}
+                и ознакомлен с{" "}
+                <a className="text-link underline-offset-4 hover:underline" href="/privacy/" rel="noreferrer" target="_blank">
+                  политикой конфиденциальности
+                </a>
+                .
+              </FieldDescription>
+              <FieldError data-error-for="accepted" hidden id="accepted-error">
+                {messages.accepted}
+              </FieldError>
+            </div>
+          </Field>
+
+          <Input autoComplete="off" className="hidden" name="company" tabIndex={-1} type="text" />
+          <Button
+            className="w-full min-h-14 duration-150 ease-standard"
+            data-lead-submit
+            disabled={submitting}
+            size="cta"
+            type="submit"
+            variant="accent"
+          >
+            {submitting ? "Отправляем..." : "Отправить задачу"}
+          </Button>
+
+          <p
+            aria-live="polite"
+            className={statusClassName}
+            data-lead-status
+            data-state={status?.state ?? "default"}
+            hidden={!status}
+            role="status"
+          >
+            {status?.message}
           </p>
-          <p className={errorClassName} data-error-for="task" hidden id="task-error" role="alert" />
-        </div>
-
-        <div className="grid grid-cols-[auto_1fr] items-start gap-3 data-[invalid=true]:text-destructive" data-lead-field>
-          <input className="mt-1 size-5 cursor-pointer accent-brand-navy" id="accepted" name="accepted" type="checkbox" aria-describedby="accepted-help accepted-error" aria-invalid="false" />
-          <div className="flex min-h-11 flex-col gap-1">
-            <label className={labelClassName} htmlFor="accepted">Согласен на обработку данных</label>
-            <p className="text-body-sm text-muted-foreground" id="accepted-help">
-              Я принимаю <a className="text-link underline-offset-4 hover:underline" href="/consent/" target="_blank" rel="noreferrer">согласие на обработку персональных данных</a> и ознакомлен с <a className="text-link underline-offset-4 hover:underline" href="/privacy/" target="_blank" rel="noreferrer">политикой конфиденциальности</a>.
-            </p>
-            <p className={errorClassName} data-error-for="accepted" hidden id="accepted-error" role="alert" />
-          </div>
-        </div>
-
-        <input autoComplete="off" className="hidden" name="company" tabIndex={-1} type="text" />
-        <button className={submitClassName} data-lead-submit disabled={submitting} type="submit">
-          {submitting ? "Отправляем..." : "Отправить задачу"}
-        </button>
-
-        <p
-          className={statusClassName}
-          data-lead-status
-          data-state={status?.state ?? "default"}
-          hidden={!status}
-          role="status"
-          aria-live="polite"
-        >
-          {status?.message}
-        </p>
-      </fieldset>
+        </FieldGroup>
+      </FieldSet>
     </form>
   );
 }

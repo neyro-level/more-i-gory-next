@@ -1,6 +1,8 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
+import { evaluateUiDriftGate } from "./lib/ui-drift-policy.mjs";
+
 const root = process.cwd();
 const findings = [];
 
@@ -33,6 +35,7 @@ const projectPatterns = [
   ["P2", /\bstyle=/, "inline style in project UI"],
   ["P2", /[☰✓↗]/, "text glyph used instead of canonical Lucide icon"],
   ["P1", /<img\b/, "raw img bypasses project media contract"],
+  ["P1", /<button\b/, "native button bypasses canonical Button"],
 ];
 
 for (const file of projectUiFiles) {
@@ -42,11 +45,21 @@ for (const file of projectUiFiles) {
   }
 }
 
+const forbiddenPresentationImport =
+  /from\s+["']@\/(?:payload-types(?:\/[^"']*)?|project\/[^"']+|core\/data-access\/[^"']+)["']/;
+
 for (const file of sourceFiles) {
   const content = readFileSync(file, "utf8");
+  const relativePath = relative(root, file).replaceAll("\\", "/");
   if (/\bdark:/.test(content)) report("P1", file, "dark variant while dark mode is disabled");
   if (/^[\"']use client[\"'];?/m.test(content) && !file.includes(join("src", "ui", "interactive"))) {
     report("P1", file, "client boundary outside approved interactive leaf");
+  }
+  if (
+    (relativePath.startsWith("src/components/") || relativePath.startsWith("src/ui/")) &&
+    forbiddenPresentationImport.test(content)
+  ) {
+    report("P1", file, "presentation imported payload-types, project, or data-access instead of DTO");
   }
 }
 
@@ -114,7 +127,7 @@ const requiredUtilities = [
   "rounded-control",
   "rounded-card",
   "rounded-large",
-  "duration-fast",
+  "duration-150",
   "ease-standard",
   "aspect-hero",
   "aspect-card",
@@ -138,17 +151,15 @@ if (!readFileSync(scenarioPath, "utf8").includes('from "@/components/ui/table"')
   report("P1", scenarioPath, "semantic data table does not use canonical shadcn Table");
 }
 
-const blockingFindings = findings.filter((finding) => finding.severity === "P0" || finding.severity === "P1");
-const backlogFindings = findings.filter((finding) => finding.severity === "P2");
+const gate = evaluateUiDriftGate(findings);
 
-if (blockingFindings.length > 0) {
+if (!gate.ok) {
   console.error(JSON.stringify(findings, null, 2));
-  throw new Error("UI drift audit failed with " + blockingFindings.length + " blocking finding(s).");
+  throw new Error(gate.message);
 }
 
-if (backlogFindings.length > 0) {
-  console.log(JSON.stringify({ backlogFindings }, null, 2));
-  console.log("ui drift audit ok: no P0/P1 findings; P2 findings are backlog candidates.");
-} else {
-  console.log("ui drift audit ok: no P0/P1 findings and no P2 backlog candidates.");
+if (gate.backlogFindings.length > 0) {
+  console.log(JSON.stringify({ backlogFindings: gate.backlogFindings }, null, 2));
 }
+
+console.log(gate.message);

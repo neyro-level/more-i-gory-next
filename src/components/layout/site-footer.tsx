@@ -31,9 +31,9 @@ export function SiteFooter({ brand, legal, legalNotice, navigation }: SiteFooter
             <p>ИП Колобова Ольга Викторовна, директор и основатель.</p>
             <p>Офис: Респ. Крым, г. Ялта, Набережная им. В.И. Ленина, 13.</p>
             <p>
-              <a className="transition-colors duration-fast ease-standard hover:text-surface-dark-foreground" href="tel:+79646686681">+7 964 668-66-81</a>
+              <a className="transition-colors duration-150 ease-standard hover:text-surface-dark-foreground" href="tel:+79646686681">+7 964 668-66-81</a>
               {" · "}
-              <a className="transition-colors duration-fast ease-standard hover:text-surface-dark-foreground" href="mailto:moregory-info@yandex.com">moregory-info@yandex.com</a>
+              <a className="transition-colors duration-150 ease-standard hover:text-surface-dark-foreground" href="mailto:moregory-info@yandex.com">moregory-info@yandex.com</a>
             </p>
             <p>Пн-Пт 9:00-18:00, Сб 9:00-14:00.</p>
           </div>
@@ -43,14 +43,14 @@ export function SiteFooter({ brand, legal, legalNotice, navigation }: SiteFooter
         <div className="grid gap-8 sm:grid-cols-2">
           <nav className="flex flex-col gap-3 text-label" aria-label="Навигация в подвале">
             {navigation.map((item) => (
-              <Link key={item.href} href={item.href} rel={linkRel(item)} target={linkTarget(item)} className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+              <Link key={item.href} href={item.href} rel={linkRel(item)} target={linkTarget(item)} className="block text-surface-dark-foreground/70 transition-colors duration-150 ease-standard hover:text-surface-dark-foreground">
                 {item.label}
               </Link>
             ))}
           </nav>
           <nav className="flex flex-col gap-3 text-label" aria-label="Юридическая навигация">
             {legal.map((item) => (
-              <Link key={item.href} href={item.href} rel={linkRel(item)} target={linkTarget(item)} className="block text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+              <Link key={item.href} href={item.href} rel={linkRel(item)} target={linkTarget(item)} className="block text-surface-dark-foreground/70 transition-colors duration-150 ease-standard hover:text-surface-dark-foreground">
                 {item.label}
               </Link>
             ))}

@@ -274,12 +274,20 @@ if (!rootPage.includes("CapitalTasksSection") || rootPage.split(/\r?\n/).length 
 }
 
 const leadForm = readFileSync(join(root, "src", "ui", "interactive", "lead-form-client.tsx"), "utf8");
+const requiredLeadFormPrimitives = [
+  'from "@/components/ui/input"',
+  'from "@/components/ui/textarea"',
+  'from "@/components/ui/button"',
+  'from "@/components/ui/checkbox"',
+  'from "@/components/ui/field"',
+  'from "@/components/ui/label"',
+];
 if (
-  !leadForm.includes('<fieldset className="flex flex-col gap-6">') ||
-  !leadForm.includes('type="checkbox"') ||
-  leadForm.includes('from "@/components/ui/checkbox"')
+  requiredLeadFormPrimitives.some((spec) => !leadForm.includes(spec)) ||
+  leadForm.includes('type="checkbox"') ||
+  !leadForm.includes('fetch("/api/public/leads"')
 ) {
-  throw new Error("Lead form must preserve the static semantic form contract");
+  throw new Error("Lead form must use canonical shadcn primitives without changing the public leads transport");
 }
 const illegalClientFiles = sourceFiles.filter((file) => {
   const text = readFileSync(file, "utf8");

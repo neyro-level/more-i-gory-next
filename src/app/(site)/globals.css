@@ -34,7 +34,6 @@
   --radius-large-value: 2rem;
   --site-container-width: 75rem;
   --narrow-container-width: 46rem;
-  --motion-duration-fast: 150ms;
 }
 
 @theme inline {
@@ -117,10 +116,6 @@
   --aspect-object: 8 / 5;
   --aspect-hero: 16 / 9;
   --shadow-surface: 0 1.5rem 4rem rgb(8 25 44 / 0.12);
-}
-
-@utility duration-fast {
-  transition-duration: var(--motion-duration-fast);
 }
 
 @layer base {

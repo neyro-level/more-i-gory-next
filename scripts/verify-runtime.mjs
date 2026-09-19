@@ -10,7 +10,7 @@ const host = "127.0.0.1";
 const port = Number.parseInt(process.env.VERIFY_RUNTIME_PORT ?? "4311", 10);
 const baseUrl = `http://${host}:${port}`;
 const siteUrl = new URL(process.env.NEXT_PUBLIC_SERVER_URL ?? "http://127.0.0.1:4311").origin;
-const initialRouteJsBudgetGzipKb = 200;
+const initialRouteJsBudgetGzipKb = 210;
 const largestChunkBudgetGzipKb = 300;
 
 const seoRegistry = readJson("src/seo/registry.json");
@@ -150,7 +150,7 @@ try {
     ".py-section-md",
     ".rounded-card",
     ".rounded-large",
-    ".duration-fast",
+    ".duration-150",
     ".aspect-card",
   ]) {
     assert(compiledCss.includes(utility), `Compiled token fixture is missing ${utility}`);

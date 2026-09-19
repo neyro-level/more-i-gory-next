@@ -32,14 +32,14 @@ export function SiteHeader({ brand, cta, navigation }: SiteHeaderProps) {
 
         <nav className="hidden items-center gap-6 text-label text-surface-dark-foreground/75 xl:flex" aria-label="Основная навигация">
           {navigation.map((item) => (
-            <Link key={item.href} href={item.href} rel={linkRel(item)} target={linkTarget(item)} className="transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+            <Link key={item.href} href={item.href} rel={linkRel(item)} target={linkTarget(item)} className="transition-colors duration-150 ease-standard hover:text-surface-dark-foreground">
               {item.label}
             </Link>
           ))}
         </nav>
 
         <div className="hidden items-center gap-3 xl:flex">
-          <Link href="/kontakty/" className="text-label text-surface-dark-foreground/70 transition-colors duration-fast ease-standard hover:text-surface-dark-foreground">
+          <Link href="/kontakty/" className="text-label text-surface-dark-foreground/70 transition-colors duration-150 ease-standard hover:text-surface-dark-foreground">
             Связаться
           </Link>
           <ActionLink href={cta.href} variant="accent" showArrow>
@@ -54,7 +54,7 @@ export function SiteHeader({ brand, cta, navigation }: SiteHeaderProps) {
           </summary>
           <nav className="absolute right-0 top-14 z-50 grid min-w-64 gap-2 rounded-card bg-card p-3 text-surface-dark shadow-surface" aria-label="Мобильная навигация">
             {navigation.map((item) => (
-              <Link key={item.href} href={item.href} rel={linkRel(item)} target={linkTarget(item)} className="rounded-control px-4 py-3 text-label font-semibold transition-colors duration-fast ease-standard hover:bg-muted">
+              <Link key={item.href} href={item.href} rel={linkRel(item)} target={linkTarget(item)} className="rounded-control px-4 py-3 text-label font-semibold transition-colors duration-150 ease-standard hover:bg-muted">
                 {item.label}
               </Link>
             ))}
