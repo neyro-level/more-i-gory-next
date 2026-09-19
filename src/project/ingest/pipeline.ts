@@ -28,17 +28,18 @@ export type IngestPipelineInput = {
 export type IngestPipelineState = {
   feedUrl?: string;
   fetch?: {
-    body: Uint8Array;
+    body: AsyncIterable<Uint8Array>;
     contentType: string | null;
     etag: string | null;
     lastModified: string | null;
+    previousFeedHash: string | null;
     status: number;
   };
   conditional?: {
     businessWrite: false;
-    kind: "not-modified" | "read-body";
+    kind: "not-modified" | "read-body" | "same-hash";
   };
-  parse?: FeedParserResult;
+  parse?: FeedParserResult & { feedHash?: string };
   normalize?: NormalizeFeedResult;
   upsert?: UpsertFeedSummary;
   recordedIssues?: RecordedImportIssue[];
@@ -52,7 +53,7 @@ export type IngestStageContext = {
   state: IngestPipelineState;
 };
 
-export type IngestRunStatus = "failed" | "running" | "skipped" | "completed" | "suspicious";
+export type IngestRunStatus = "failed" | "running" | "skipped" | "success" | "unchanged" | "suspicious";
 
 export type IngestStageResult = {
   continue: boolean;

@@ -3,11 +3,14 @@ import type { FeedFetchResult } from "./fetch-feed.ts";
 
 export type ConditionalClassifyState = {
   businessWrite: false;
-  kind: "not-modified" | "read-body";
+  kind: "not-modified" | "read-body" | "same-hash";
 };
 
 export function createClassifyConditionalHandler(deps: {
-  finalizeUnchanged: (input: { feedSourceId: string; importRunId: string }) => Promise<boolean>;
+  finalizeUnchanged: (
+    input: { feedSourceId: string; importRunId: string },
+    fetch: FeedFetchResult,
+  ) => Promise<boolean>;
 }) {
   return async (context: {
     input: { feedSourceId: string; importRunId: string };
@@ -25,9 +28,9 @@ export function createClassifyConditionalHandler(deps: {
       return { continue: true, status: "running" as const };
     }
 
-    const finalized = await deps.finalizeUnchanged(context.input);
+    const finalized = await deps.finalizeUnchanged(context.input, context.state.fetch!);
     return finalized
-      ? { continue: false, status: "skipped" as const }
+      ? { continue: false, status: "unchanged" as const }
       : { continue: false, status: "failed" as const };
   };
 }

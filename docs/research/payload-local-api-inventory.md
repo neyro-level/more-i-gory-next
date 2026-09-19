@@ -67,14 +67,16 @@
 | `src/core/data-access/system/dispatch-due-feeds.ts:129` | `jobs.queue` | SYSTEM GATEWAY | `job = await payload.jobs.queue({` |
 | `src/core/data-access/system/dispatch-due-feeds.ts:142` | `update` | SYSTEM GATEWAY | `await payload.update({` |
 | `src/core/data-access/system/import-feed-run.ts:54` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
-| `src/core/data-access/system/import-feed-run.ts:78` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
-| `src/core/data-access/system/import-feed-run.ts:116` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
-| `src/core/data-access/system/import-feed-run.ts:158` | `update` | SYSTEM GATEWAY | `await payload.update({` |
-| `src/core/data-access/system/import-feed-run.ts:178` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
-| `src/core/data-access/system/import-feed-run.ts:202` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
-| `src/core/data-access/system/import-feed-run.ts:227` | `findByID` | SYSTEM GATEWAY | `const source = await payload.findByID?.({` |
-| `src/core/data-access/system/import-feed-run.ts:238` | `find` | SYSTEM GATEWAY | `const history = await payload.find?.({` |
-| `src/core/data-access/system/import-feed-run.ts:257` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:84` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:104` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:135` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:177` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:196` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:220` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:245` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:270` | `findByID` | SYSTEM GATEWAY | `const source = await payload.findByID?.({` |
+| `src/core/data-access/system/import-feed-run.ts:281` | `find` | SYSTEM GATEWAY | `const history = await payload.find?.({` |
+| `src/core/data-access/system/import-feed-run.ts:300` | `update` | SYSTEM GATEWAY | `await payload.update({` |
 | `src/core/data-access/system/jobs-janitor.ts:29` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
 | `src/core/data-access/system/jobs-janitor.ts:71` | `update` | SYSTEM GATEWAY | `await payload.update({` |
 | `src/core/data-access/system/jobs.ts:50` | `find` | SYSTEM GATEWAY | `payload.find({` |
@@ -111,7 +113,7 @@
 | `src/project/collections/redirects.ts:25` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/collections/redirects.ts:34` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/jobs/imports/dispatch-due-feeds.ts:25` | `req.payload` | SYSTEM GATEWAY | `const result = await dispatchDueFeeds(req.payload as unknown as Parameters<typeof dispatchDueFeeds>[0]);` |
-| `src/project/jobs/imports/import-feed.ts:236` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as ImportFeedPayload,` |
+| `src/project/jobs/imports/import-feed.ts:253` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as ImportFeedPayload,` |
 | `src/project/jobs/leads/deliver-lead.ts:189` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as PayloadLike,` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:94` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof jobsJanitor>[0],` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:121` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof recoverLeadDeliveries>[0],` |

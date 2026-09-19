@@ -35,6 +35,13 @@ export type FeedParserInput = {
   nowMs?: () => number;
 };
 
+export type FeedParserStreamInput = {
+  parser: string | null | undefined;
+  body: AsyncIterable<Uint8Array>;
+  limits?: Partial<FeedParserLimits>;
+  nowMs?: () => number;
+};
+
 export type FeedParserResult = {
   parser: FeedParserSlug | "unknown";
   offers: ParsedFeedOffer[];
@@ -42,4 +49,8 @@ export type FeedParserResult = {
   offeredCount: number;
   skippedCount: number;
   suspicious: boolean;
+};
+
+export type FeedParserStreamResult = FeedParserResult & {
+  feedHash: string;
 };

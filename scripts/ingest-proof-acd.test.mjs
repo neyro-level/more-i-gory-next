@@ -124,9 +124,10 @@ async function runImport(world, { runId, status, body, etag }) {
     input: { feedSourceId: "101", importRunId: String(runId) },
     lookupEnv: () => "https://feeds.example/primary.xml",
     outbound: {
-      async request() {
+      async requestStream() {
+        const bytes = typeof body === "string" ? new TextEncoder().encode(body) : body;
         return {
-          body: typeof body === "string" ? new TextEncoder().encode(body) : body,
+          body: (async function* () { if (bytes.byteLength > 0) yield bytes; })(),
           contentType: "application/xml",
           etag,
           lastModified: null,
@@ -156,7 +157,7 @@ test("Proof A/C/D: fixture ingest covers baseline, 304, change, safety gate, int
     etag: '"v1"',
     body: yrlOffers(ten),
   });
-  assert.equal(baseline.status, "completed");
+  assert.equal(baseline.status, "success");
   assert.equal(baseline.state.deactivation?.action, "skip");
   assert.equal(baseline.state.deactivation?.reason, "baseline");
   assert.equal(world.activeExternalIds().length, 10);
@@ -169,8 +170,8 @@ test("Proof A/C/D: fixture ingest covers baseline, 304, change, safety gate, int
     etag: '"v2"',
     body: yrlOffers(ten),
   });
-  assert.equal(sameFeed.status, "completed");
-  assert.equal(sameFeed.state.upsert?.createdCount, 0);
+  assert.equal(sameFeed.status, "unchanged");
+  assert.equal(sameFeed.completedStages.includes("upsert"), false);
   assert.equal(world.properties.filter((doc) => doc.origin === "feed").length, 10);
 
   const unchanged = await runImport(world, {
@@ -179,7 +180,7 @@ test("Proof A/C/D: fixture ingest covers baseline, 304, change, safety gate, int
     etag: '"v2"',
     body: new Uint8Array(),
   });
-  assert.equal(unchanged.status, "skipped");
+  assert.equal(unchanged.status, "unchanged");
   assert.equal(unchanged.completedStages.includes("upsert"), false);
 
   const changed = await runImport(world, {
@@ -188,7 +189,7 @@ test("Proof A/C/D: fixture ingest covers baseline, 304, change, safety gate, int
     etag: '"v3"',
     body: yrlOffers(ten).replace("Offer keep-0", "Offer keep-0 updated"),
   });
-  assert.equal(changed.status, "completed");
+  assert.equal(changed.status, "success");
   assert.ok((changed.state.upsert?.updatedCount ?? 0) >= 1);
 
   const missing = await runImport(world, {
@@ -213,7 +214,7 @@ test("Proof A/C/D: fixture ingest covers baseline, 304, change, safety gate, int
     etag: '"v5"',
     body: yrlOffers(six),
   });
-  assert.equal(approved.status, "completed");
+  assert.equal(approved.status, "success");
   assert.equal(approved.state.deactivation?.action, "deactivate");
   assert.equal(world.properties.filter((doc) => doc.status === "archived").length, 4);
   assert.deepEqual(world.activeExternalIds().sort(), six);
@@ -224,9 +225,9 @@ test("Proof A/C/D: fixture ingest covers baseline, 304, change, safety gate, int
     etag: '"v6"',
     body: "<yml_catalog><shop><offers><offer id='gone'><name>Broken",
   });
-  assert.equal(cut.status, "failed");
+  assert.equal(cut.status, "suspicious");
   assert.equal(world.properties.filter((doc) => doc.status === "archived").length, 4);
-  assert.equal(world.runs.get("run-truncated").status, "failed");
+  assert.equal(world.runs.get("run-truncated").status, "suspicious");
 
   world.queueRun("run-killed");
   world.runs.get("run-killed").status = "running";
@@ -242,13 +243,13 @@ test("Proof A/C/D: fixture ingest covers baseline, 304, change, safety gate, int
     etag: '"v7"',
     body: yrlOffers(six),
   });
-  assert.equal(recovered.status, "completed");
-  assert.equal(world.runs.get("run-recovered").status, "completed");
+  assert.equal(recovered.status, "unchanged");
+  assert.equal(world.runs.get("run-recovered").status, "unchanged");
   const nextDue = calculatePostRunNextDueAt({
     consecutiveFailures: 0,
     intervalMinutes: 60,
     now: new Date("2026-09-18T12:00:00.000Z"),
-    outcome: "completed",
+    outcome: "success",
   });
   assert.ok(nextDue.getTime() > Date.parse("2026-09-18T12:00:00.000Z"));
 });

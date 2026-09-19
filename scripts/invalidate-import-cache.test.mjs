@@ -36,14 +36,14 @@ test("invalidate-cache stage sends one post-commit batch and keeps the terminal 
     },
   });
 
-  assert.deepEqual(result, { continue: false, status: "completed" });
+  assert.deepEqual(result, { continue: false, status: "success" });
   assert.equal(batches.length, 1);
   assert.ok(batches[0].some((target) => target.kind === "tag" && target.tag === "catalog"));
   assert.ok(batches[0].some((target) => target.kind === "tag" && target.tag === "complex:sample-complex"));
   assert.ok(batches[0].some((target) => target.kind === "path" && target.path === "/investicionnaya-nedvizhimost/krym/"));
 });
 
-test("cache invalidation failure does not roll back a completed import", async () => {
+test("cache invalidation failure does not roll back a successful import", async () => {
   const handler = createInvalidateImportCacheHandler({
     invalidator: createCacheInvalidator({
       branch: "http",

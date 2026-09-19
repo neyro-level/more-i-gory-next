@@ -1,13 +1,6 @@
-import { createHash } from "node:crypto";
-
 import { loadImportRunMode } from "../data-access/system/apply-safe-deactivation.ts";
 import { finalizeImportRun, markFeedSourceImportFinished } from "../data-access/system/import-feed-run.ts";
 import type { IngestPipelineState } from "../../project/ingest/pipeline.ts";
-
-export function hashFeedBody(body: Uint8Array | undefined): string | null {
-  if (!body || body.byteLength === 0) return null;
-  return createHash("sha256").update(body).digest("hex");
-}
 
 export function createFinalizeImportHandler(deps: {
   payload: Parameters<typeof finalizeImportRun>[0] & Parameters<typeof loadImportRunMode>[0];
@@ -19,7 +12,7 @@ export function createFinalizeImportHandler(deps: {
     const now = new Date();
     const nowIso = now.toISOString();
     const suspicious = context.state.deactivation?.action === "suspicious";
-    const status: "completed" | "suspicious" = suspicious ? "suspicious" : "completed";
+    const status: "success" | "suspicious" = suspicious ? "suspicious" : "success";
     const offeredCount = context.state.parse?.offeredCount ?? 0;
     const createdCount = context.state.upsert?.createdCount ?? 0;
     const updatedCount = context.state.upsert?.updatedCount ?? 0;
@@ -27,7 +20,7 @@ export function createFinalizeImportHandler(deps: {
     const deactivatedCount =
       context.state.deactivation?.action === "deactivate" ? context.state.deactivation.missingFromFeedCount : 0;
     const issueCount = (context.state.recordedIssues?.length ?? 0) + (suspicious ? 1 : 0);
-    const feedHash = hashFeedBody(context.state.fetch?.body);
+    const feedHash = context.state.parse?.feedHash ?? null;
     const mode = await loadImportRunMode(deps.payload, context.input.importRunId);
 
     const finalized = await finalizeImportRun(
@@ -44,7 +37,7 @@ export function createFinalizeImportHandler(deps: {
         offeredCount,
         skippedCount,
         status,
-        summary: suspicious ? "Run finished as suspicious." : "Run completed.",
+        summary: suspicious ? "Run finished as suspicious." : "Run succeeded.",
         updatedCount,
       },
       now,

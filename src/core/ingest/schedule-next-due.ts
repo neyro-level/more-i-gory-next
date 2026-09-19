@@ -1,4 +1,4 @@
-export type PostRunScheduleOutcome = "completed" | "skipped" | "suspicious" | "failed" | "interrupted";
+export type PostRunScheduleOutcome = "success" | "unchanged" | "suspicious" | "failed" | "interrupted";
 
 export const maxImportFailureBackoffMultiplier = 8;
 

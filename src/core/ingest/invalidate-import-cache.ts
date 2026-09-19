@@ -24,7 +24,7 @@ export function createInvalidateImportCacheHandler(deps: {
 
   return async (context: { state: IngestPipelineState }) => {
     const status: IngestRunStatus =
-      context.state.deactivation?.action === "suspicious" ? "suspicious" : "completed";
+      context.state.deactivation?.action === "suspicious" ? "suspicious" : "success";
     const targets = importCacheTargetsFromState(context.state);
     await invalidateAfterCommit({
       invalidator: deps.invalidator,

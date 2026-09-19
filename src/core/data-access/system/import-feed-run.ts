@@ -72,16 +72,21 @@ export async function transitionImportRunToRunning(
 
 export async function finalizeUnchangedImportRun(
   payload: PayloadLike,
-  input: ImportFeedRunInput,
+  input: ImportFeedRunInput & {
+    etag?: string | null;
+    fullBodyRead: boolean;
+    lastModified?: string | null;
+    reason: "http-304" | "same-hash";
+  },
   now = new Date(),
 ): Promise<boolean> {
+  const nowIso = now.toISOString();
   const transition = await payload.update({
     collection: "import-runs",
     data: {
-      finishedAt: now.toISOString(),
-      offeredCount: 0,
-      status: "skipped",
-      summary: "Feed unchanged (HTTP 304).",
+      finishedAt: nowIso,
+      status: "unchanged",
+      summary: input.reason === "http-304" ? "Feed unchanged (HTTP 304)." : "Feed unchanged (same SHA-256).",
     },
     overrideAccess: true,
     where: {
@@ -93,7 +98,21 @@ export async function finalizeUnchangedImportRun(
     },
   });
   const result = transition as { docs?: Array<{ id: number | string }> };
-  return Array.isArray(result.docs) && result.docs.length > 0;
+  const finalized = Array.isArray(result.docs) && result.docs.length > 0;
+  if (!finalized) return false;
+
+  await payload.update({
+    collection: "feed-sources",
+    data: {
+      ...(input.etag ? { lastEtag: input.etag } : {}),
+      ...(input.lastModified ? { lastModified: input.lastModified } : {}),
+      ...(input.fullBodyRead ? { lastFullRunAt: nowIso } : {}),
+      lastSuccessfulRunAt: nowIso,
+    },
+    id: input.feedSourceId,
+    overrideAccess: true,
+  });
+  return true;
 }
 
 export async function finalizeImportRun(
@@ -107,7 +126,7 @@ export async function finalizeImportRun(
     lastModified?: string | null;
     offeredCount: number;
     skippedCount: number;
-    status: "completed" | "suspicious";
+    status: "success" | "suspicious";
     summary: string;
     updatedCount: number;
   },
@@ -158,11 +177,10 @@ export async function markFeedSourceImportFinished(
   await payload.update({
     collection: "feed-sources",
     data: {
-      ...(input.etag ? { lastEtag: input.etag } : {}),
-      ...(input.feedHash ? { lastFeedHash: input.feedHash } : {}),
-      ...(input.lastModified ? { lastModified: input.lastModified } : {}),
-      lastOfferCount: input.lastOfferCount,
-      ...(input.successful ? { lastSuccessfulRunAt: input.nowIso } : {}),
+      ...(input.successful && input.etag ? { lastEtag: input.etag } : {}),
+      ...(input.successful && input.feedHash ? { lastFeedHash: input.feedHash } : {}),
+      ...(input.successful && input.lastModified ? { lastModified: input.lastModified } : {}),
+      ...(input.successful ? { lastOfferCount: input.lastOfferCount, lastSuccessfulRunAt: input.nowIso } : {}),
       ...(input.markFullRun && input.successful ? { lastFullRunAt: input.nowIso } : {}),
     },
     id: input.feedSourceId,
@@ -217,6 +235,31 @@ export async function finalizeFailedImportRun(
   });
   const failed = transition as { docs?: Array<{ id: number | string }> };
   return Array.isArray(failed.docs) && failed.docs.length > 0;
+}
+
+export async function finalizeSuspiciousImportRun(
+  payload: PayloadLike,
+  input: ImportFeedRunInput,
+  now = new Date(),
+): Promise<boolean> {
+  const transition = await payload.update({
+    collection: "import-runs",
+    data: {
+      finishedAt: now.toISOString(),
+      status: "suspicious",
+      summary: "Import received a structurally unsafe feed.",
+    },
+    overrideAccess: true,
+    where: {
+      and: [
+        { id: { equals: input.importRunId } },
+        { feedSource: { equals: input.feedSourceId } },
+        { status: { equals: "running" } },
+      ],
+    },
+  });
+  const suspicious = transition as { docs?: Array<{ id: number | string }> };
+  return Array.isArray(suspicious.docs) && suspicious.docs.length > 0;
 }
 
 export async function scheduleFeedSourceAfterRun(

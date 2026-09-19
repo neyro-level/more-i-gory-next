@@ -6,7 +6,7 @@ import { createClassifyConditionalHandler } from "../src/core/ingest/classify-co
 import { runIngestPipeline } from "../src/project/ingest/pipeline.ts";
 import { createImportFeedPipelineHandlers } from "../src/project/jobs/imports/import-feed.ts";
 
-test("finalizeUnchangedImportRun marks a running import as skipped without property writes", async () => {
+test("finalizeUnchangedImportRun marks a running import as unchanged without property writes", async () => {
   const writes = [];
   const payload = {
     async update(args) {
@@ -16,13 +16,13 @@ test("finalizeUnchangedImportRun marks a running import as skipped without prope
   };
 
   assert.equal(
-    await finalizeUnchangedImportRun(payload, { feedSourceId: "101", importRunId: "501" }, new Date("2026-09-18T12:00:00.000Z")),
+    await finalizeUnchangedImportRun(payload, { feedSourceId: "101", fullBodyRead: false, importRunId: "501", reason: "http-304" }, new Date("2026-09-18T12:00:00.000Z")),
     true,
   );
   assert.equal(writes[0].collection, "import-runs");
-  assert.equal(writes[0].data.status, "skipped");
+  assert.equal(writes[0].data.status, "unchanged");
   assert.equal(writes[0].data.finishedAt, "2026-09-18T12:00:00.000Z");
-  assert.equal(writes[0].data.offeredCount, 0);
+  assert.equal("offeredCount" in writes[0].data, false);
   assert.equal(writes[0].where.and[2].status.equals, "running");
   assert.equal(writes.some((write) => write.collection === "properties"), false);
 });
@@ -45,9 +45,9 @@ test("304 stops ingest without parse/upsert and finalizes the run as unchanged",
       payload,
       () => "https://feeds.example/primary.xml",
       {
-        async request() {
+        async requestStream() {
           return {
-            body: new Uint8Array(),
+            body: (async function* () {})(),
             contentType: null,
             etag: '"abc"',
             lastModified: null,
@@ -59,13 +59,13 @@ test("304 stops ingest without parse/upsert and finalizes the run as unchanged",
     input: { feedSourceId: "101", importRunId: "501" },
   });
 
-  assert.equal(result.status, "skipped");
+  assert.equal(result.status, "unchanged");
   assert.equal(result.pendingStage, null);
   assert.equal(result.state.conditional?.kind, "not-modified");
   assert.equal(result.state.conditional?.businessWrite, false);
   assert.equal(result.completedStages.includes("parse"), false);
   assert.equal(result.completedStages.includes("upsert"), false);
-  const runWrite = writes.find((write) => write.collection === "import-runs" && write.data.status === "skipped");
+  const runWrite = writes.find((write) => write.collection === "import-runs" && write.data.status === "unchanged");
   assert.ok(runWrite);
   assert.equal(writes.some((write) => write.collection === "properties"), false);
 });
@@ -80,10 +80,11 @@ test("non-304 body continues toward parse without treating it as a business writ
   });
   const state = {
     fetch: {
-      body: new TextEncoder().encode("<yml/>"),
+      body: (async function* () { yield new TextEncoder().encode("<yml/>"); })(),
       contentType: "application/xml",
       etag: null,
       lastModified: null,
+      previousFeedHash: null,
       status: 200,
     },
   };

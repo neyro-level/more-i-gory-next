@@ -6,10 +6,11 @@ import {
 } from "../security/outbound-http/index.ts";
 
 export type FeedFetchResult = {
-  body: Uint8Array;
+  body: AsyncIterable<Uint8Array>;
   contentType: string | null;
   etag: string | null;
   lastModified: string | null;
+  previousFeedHash: string | null;
   status: number;
 };
 
@@ -56,7 +57,7 @@ export async function fetchFeedDocument(args: {
   });
 
   try {
-    const response = await args.outbound.request({
+    const response = await args.outbound.requestStream({
       headers,
       maxResponseBytes: args.maxResponseBytes ?? DEFAULT_FEED_PARSER_LIMITS.maxBytes,
       method: "GET",
@@ -68,6 +69,7 @@ export async function fetchFeedDocument(args: {
       contentType: response.contentType,
       etag: response.etag,
       lastModified: response.lastModified,
+      previousFeedHash: null,
       status: response.status,
     };
   } catch (error) {
@@ -81,7 +83,7 @@ export async function fetchFeedDocument(args: {
 export function createFetchFeedHandler(deps: {
   loadConditionalState: (
     feedSourceId: string,
-  ) => Promise<{ lastEtag: string | null; lastModified: string | null }>;
+  ) => Promise<{ lastEtag: string | null; lastFeedHash: string | null; lastModified: string | null }>;
   outbound: SafeOutboundClient | (() => SafeOutboundClient | Promise<SafeOutboundClient>);
   maxResponseBytes?: number;
   timeoutMs?: number;
@@ -104,6 +106,7 @@ export function createFetchFeedHandler(deps: {
         maxResponseBytes: deps.maxResponseBytes,
         timeoutMs: deps.timeoutMs,
       });
+      context.state.fetch.previousFeedHash = conditional.lastFeedHash;
       return { continue: true, status: "running" as const };
     } catch (error) {
       if (error instanceof FeedFetchError) {

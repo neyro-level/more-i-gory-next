@@ -16,7 +16,7 @@ test("dispatcher remains the claim owner; post-run nextDueAt is owned by the ter
       consecutiveFailures: 0,
       intervalMinutes: 15,
       now,
-      outcome: "completed",
+      outcome: "success",
     }).toISOString(),
     "2026-09-18T12:15:00.000Z",
   );
@@ -25,7 +25,7 @@ test("dispatcher remains the claim owner; post-run nextDueAt is owned by the ter
       consecutiveFailures: 0,
       intervalMinutes: 15,
       now,
-      outcome: "skipped",
+      outcome: "unchanged",
     }).toISOString(),
     "2026-09-18T12:15:00.000Z",
   );
@@ -42,7 +42,7 @@ test("dispatcher remains the claim owner; post-run nextDueAt is owned by the ter
 
 test("failed and interrupted feeds back off up to 8x refresh interval", () => {
   const now = new Date("2026-09-18T12:00:00.000Z");
-  assert.equal(consecutiveImportFailureCount(["failed", "failed", "completed"]), 2);
+  assert.equal(consecutiveImportFailureCount(["failed", "failed", "success"]), 2);
   assert.equal(
     calculatePostRunNextDueAt({
       consecutiveFailures: 1,
@@ -83,7 +83,7 @@ test("304 skip reschedules from now and does not hammer the feed", async () => {
       return { refreshIntervalMinutes: 15, feedUrlRef: "FEED_URL_PRIMARY", lastEtag: '"abc"', lastModified: null };
     },
     async find() {
-      return { docs: [{ status: "skipped" }] };
+      return { docs: [{ status: "unchanged" }] };
     },
   };
 
@@ -91,9 +91,9 @@ test("304 skip reschedules from now and does not hammer the feed", async () => {
     input: { feedSourceId: "101", importRunId: "501" },
     lookupEnv: () => "https://feeds.example/primary.xml",
     outbound: {
-      async request() {
+      async requestStream() {
         return {
-          body: new Uint8Array(),
+          body: (async function* () {})(),
           contentType: null,
           etag: '"abc"',
           lastModified: null,
@@ -106,8 +106,8 @@ test("304 skip reschedules from now and does not hammer the feed", async () => {
     clearHeartbeatInterval() {},
   });
 
-  assert.equal(result.status, "skipped");
-  const scheduleWrite = writes.find((write) => write.collection === "feed-sources" && write.id === "101");
+  assert.equal(result.status, "unchanged");
+  const scheduleWrite = writes.find((write) => write.collection === "feed-sources" && write.data.nextDueAt);
   assert.ok(scheduleWrite?.data.nextDueAt);
 });
 

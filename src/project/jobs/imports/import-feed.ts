@@ -23,6 +23,7 @@ import {
 } from "../../../core/cache/invalidation.ts";
 import {
   finalizeFailedImportRun,
+  finalizeSuspiciousImportRun,
   finalizeUnchangedImportRun,
   scheduleFeedSourceAfterRun,
   touchImportRunHeartbeat,
@@ -41,7 +42,7 @@ type ImportFeedTask = {
     importRunId: string;
   };
   output: {
-    status: "failed" | "running" | "skipped" | "completed" | "suspicious";
+    status: "failed" | "running" | "skipped" | "success" | "unchanged" | "suspicious";
   };
 };
 
@@ -89,9 +90,22 @@ export function createImportFeedPipelineHandlers(
       outbound,
     }),
     "classify-conditional": createClassifyConditionalHandler({
-      finalizeUnchanged: (claimInput) => finalizeUnchangedImportRun(payload, claimInput),
+      finalizeUnchanged: (claimInput, fetch) => finalizeUnchangedImportRun(payload, {
+        ...claimInput,
+        etag: fetch.etag,
+        fullBodyRead: false,
+        lastModified: fetch.lastModified,
+        reason: "http-304",
+      }),
     }),
     parse: createParseFeedHandler({
+      finalizeSameHash: (claimInput, fetch) => finalizeUnchangedImportRun(payload, {
+        ...claimInput,
+        etag: fetch.etag,
+        fullBodyRead: true,
+        lastModified: fetch.lastModified,
+        reason: "same-hash",
+      }),
       loadParser: (feedSourceId) => loadFeedSourceParser(payload, feedSourceId),
     }),
     normalize: createNormalizeFeedHandler(),
@@ -146,11 +160,14 @@ export async function runImportFeedWithHeartbeat(args: {
     if (claimed && result.status === "failed") {
       await finalizeFailedImportRun(args.payload, args.input);
     }
+    if (claimed && result.status === "suspicious" && !result.completedStages.includes("finalize")) {
+      await finalizeSuspiciousImportRun(args.payload, args.input);
+    }
     if (
       claimed &&
       !lostClaim &&
-      (result.status === "completed" ||
-        result.status === "skipped" ||
+      (result.status === "success" ||
+        result.status === "unchanged" ||
         result.status === "suspicious" ||
         result.status === "failed")
     ) {

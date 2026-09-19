@@ -15,6 +15,10 @@ import { createCacheInvalidator } from "../src/core/cache/invalidator.ts";
 import { createImportFeedPipelineHandlers } from "../src/project/jobs/imports/import-feed.ts";
 import { SafeOutboundRequestError } from "../src/core/security/outbound-http/index.ts";
 
+async function* stream(bytes) {
+  if (bytes.byteLength > 0) yield bytes;
+}
+
 test("parseOutboundAllowedHosts splits unique hosts", () => {
   assert.deepEqual(parseOutboundAllowedHosts("Feeds.Example, feeds.example, other.test"), [
     "feeds.example",
@@ -26,10 +30,10 @@ test("parseOutboundAllowedHosts splits unique hosts", () => {
 test("fetchFeedDocument sends conditional headers, limits and timeout through SafeOutboundClient", async () => {
   const requests = [];
   const outbound = {
-    async request(request) {
+    async requestStream(request) {
       requests.push(request);
       return {
-        body: new TextEncoder().encode("<yml/>"),
+        body: stream(new TextEncoder().encode("<yml/>")),
         contentType: "application/xml",
         etag: '"abc"',
         lastModified: "Wed, 16 Sep 2026 12:00:00 GMT",
@@ -63,7 +67,7 @@ test("fetchFeedDocument fails closed when SafeOutboundClient rejects the request
       fetchFeedDocument({
         feedUrl: "https://feeds.example/primary.xml",
         outbound: {
-          async request() {
+          async requestStream() {
             throw new SafeOutboundRequestError("outbound_response_too_large");
           },
         },
@@ -75,14 +79,15 @@ test("fetchFeedDocument fails closed when SafeOutboundClient rejects the request
 test("System Gateway loads only conditional cache validators", async () => {
   const payload = {
     async findByID(args) {
-      assert.deepEqual(args.select, { lastEtag: true, lastModified: true });
+      assert.deepEqual(args.select, { lastEtag: true, lastFeedHash: true, lastModified: true });
       assert.equal(args.overrideAccess, true);
-      return { lastEtag: '"abc"', lastModified: "Wed, 16 Sep 2026 12:00:00 GMT", feedUrlRef: "must-not-load" };
+      return { lastEtag: '"abc"', lastFeedHash: "hash", lastModified: "Wed, 16 Sep 2026 12:00:00 GMT", feedUrlRef: "must-not-load" };
     },
   };
 
   assert.deepEqual(await loadFeedSourceConditionalState(payload, "101"), {
     lastEtag: '"abc"',
+    lastFeedHash: "hash",
     lastModified: "Wed, 16 Sep 2026 12:00:00 GMT",
   });
 });
@@ -97,11 +102,11 @@ test("fetch stage stores the outbound response and stops before parse", async ()
         lookupEnv: () => "https://feeds.example/primary.xml",
       }),
       fetch: createFetchFeedHandler({
-        loadConditionalState: async () => ({ lastEtag: null, lastModified: null }),
+        loadConditionalState: async () => ({ lastEtag: null, lastFeedHash: null, lastModified: null }),
         outbound: {
-          async request() {
+          async requestStream() {
             return {
-              body,
+              body: stream(body),
               contentType: "application/xml",
               etag: '"n"',
               lastModified: null,
@@ -118,7 +123,7 @@ test("fetch stage stores the outbound response and stops before parse", async ()
   assert.equal(result.pendingStage, "classify-conditional");
   assert.equal(result.state.fetch?.status, 200);
   assert.equal(result.state.fetch?.etag, '"n"');
-  assert.deepEqual(result.state.fetch?.body, body);
+  assert.equal(typeof result.state.fetch?.body[Symbol.asyncIterator], "function");
 });
 
 test("importFeed composition fetches after resolving the env-named URL", async () => {
@@ -162,10 +167,10 @@ test("importFeed composition fetches after resolving the env-named URL", async (
       payload,
       (name) => (name === "FEED_URL_PRIMARY" ? "https://feeds.example/primary.xml" : undefined),
       {
-        async request(request) {
+        async requestStream(request) {
           requests.push(request);
           return {
-            body: new TextEncoder().encode(`<?xml version="1.0" encoding="UTF-8"?><yml_catalog><shop><offers><offer id="flat-1"><name>Апартамент</name></offer></offers></shop></yml_catalog>`),
+            body: stream(new TextEncoder().encode(`<?xml version="1.0" encoding="UTF-8"?><yml_catalog><shop><offers><offer id="flat-1"><name>Апартамент</name></offer></offers></shop></yml_catalog>`)),
             contentType: "application/xml",
             etag: '"abc"',
             lastModified: null,
@@ -186,8 +191,8 @@ test("importFeed composition fetches after resolving the env-named URL", async (
   assert.equal(requests[0].headers["If-None-Match"], '"abc"');
   assert.equal(result.state.fetch?.status, 200);
   assert.equal(result.pendingStage, null);
-  assert.equal(result.status, "completed");
-  const runWrite = writes.find((write) => write.collection === "import-runs" && write.data.status === "completed");
+  assert.equal(result.status, "success");
+  const runWrite = writes.find((write) => write.collection === "import-runs" && write.data.status === "success");
   assert.ok(runWrite);
   assert.equal(typeof runWrite.data.finishedAt, "string");
   assert.equal(runWrite.data.createdCount, 1);

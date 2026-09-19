@@ -35,10 +35,10 @@ export const ImportRuns: CollectionConfig = {
       options: [
         { label: "Queued", value: "queued" },
         { label: "Running", value: "running" },
-        { label: "Completed", value: "completed" },
+        { label: "Success", value: "success" },
+        { label: "Unchanged", value: "unchanged" },
         { label: "Suspicious", value: "suspicious" },
         { label: "Failed", value: "failed" },
-        { label: "Skipped", value: "skipped" },
         { label: "Interrupted", value: "interrupted" },
       ],
       required: true,

@@ -1,9 +1,17 @@
 import { Buffer } from "node:buffer";
+import { createHash } from "node:crypto";
 
 import { SaxesParser, type SaxesTagPlain } from "saxes";
 
 import { chunkXmlInput, resolveFeedParserLimits } from "./limits.ts";
-import type { FeedParseIssue, FeedParserInput, FeedParserResult, ParsedFeedOffer } from "./types.ts";
+import type {
+  FeedParseIssue,
+  FeedParserInput,
+  FeedParserResult,
+  FeedParserStreamInput,
+  FeedParserStreamResult,
+  ParsedFeedOffer,
+} from "./types.ts";
 
 type MutableOffer = {
   attrs: Record<string, string>;
@@ -23,17 +31,6 @@ const offerFieldNames = new Set([
   "deal-type",
 ]);
 const forbiddenXmlDeclarationPattern = /<!\s*(?:DOCTYPE|ENTITY)\b/i;
-
-function createCriticalResult(code: string, message: string, details?: Record<string, unknown>): FeedParserResult {
-  return {
-    issues: [{ code, details, message, severity: "critical" }],
-    offeredCount: 0,
-    offers: [],
-    parser: "yrl",
-    skippedCount: 0,
-    suspicious: true,
-  };
-}
 
 function appendText(currentOffer: MutableOffer | null, text: string, maxTextLength: number): void {
   if (!currentOffer?.currentField) return;
@@ -83,7 +80,7 @@ function finalizeOffer(offer: MutableOffer): { issue?: FeedParseIssue; parsed?: 
   };
 }
 
-export function parseYrlFeed(input: FeedParserInput): FeedParserResult {
+function createYrlParserSession(input: Pick<FeedParserInput, "limits" | "nowMs">) {
   const limits = resolveFeedParserLimits(input.limits);
   const nowMs = input.nowMs ?? Date.now;
   const startedAt = nowMs();
@@ -96,6 +93,7 @@ export function parseYrlFeed(input: FeedParserInput): FeedParserResult {
   let offeredCount = 0;
   let skippedCount = 0;
   let critical: FeedParseIssue | null = null;
+  let declarationTail = "";
 
   const markCritical = (code: string, message: string, details?: Record<string, unknown>) => {
     critical ??= { code, details, message, severity: "critical" };
@@ -169,51 +167,83 @@ export function parseYrlFeed(input: FeedParserInput): FeedParserResult {
     depth -= 1;
   });
 
-  try {
-    for (const chunk of chunkXmlInput(input.xml, limits.chunkSize)) {
-      if (forbiddenXmlDeclarationPattern.test(chunk)) {
-        return createCriticalResult("xml-declarations-forbidden", "XML DTD/ENTITY declarations are forbidden for feed imports.");
+  const write = (chunk: string, rawByteLength = Buffer.byteLength(chunk, "utf8")) => {
+    try {
+      const declarationWindow = declarationTail + chunk;
+      declarationTail = declarationWindow.slice(-32);
+      if (forbiddenXmlDeclarationPattern.test(declarationWindow)) {
+        markCritical("xml-declarations-forbidden", "XML DTD/ENTITY declarations are forbidden for feed imports.");
       }
 
-      bytes += Buffer.byteLength(chunk, "utf8");
+      bytes += rawByteLength;
       if (bytes > limits.maxBytes) {
-        return createCriticalResult("xml-max-size-exceeded", "XML feed size limit was exceeded.", {
+        markCritical("xml-max-size-exceeded", "XML feed size limit was exceeded.", {
           bytes,
           maxBytes: limits.maxBytes,
         });
       }
 
       if (nowMs() - startedAt > limits.timeoutMs) {
-        return createCriticalResult("xml-parse-timeout", "XML parse timeout was exceeded.", { timeoutMs: limits.timeoutMs });
+        markCritical("xml-parse-timeout", "XML parse timeout was exceeded.", { timeoutMs: limits.timeoutMs });
       }
 
-      parser.write(chunk);
-      if (critical) break;
+      if (!critical && chunk.length > 0) parser.write(chunk);
+    } catch (error) {
+      markCritical("xml-parser-exception", "XML parser failed while reading the feed.", {
+        parserMessage: error instanceof Error ? error.message : String(error),
+      });
     }
-    parser.close();
-  } catch (error) {
-    return createCriticalResult("xml-parser-exception", "XML parser failed while reading the feed.", {
-      parserMessage: error instanceof Error ? error.message : String(error),
-    });
-  }
+  };
 
-  if (critical) {
-    return {
+  const finish = (): FeedParserResult => {
+    if (!critical) {
+      try {
+        parser.close();
+      } catch (error) {
+        markCritical("xml-parser-exception", "XML parser failed while reading the feed.", {
+          parserMessage: error instanceof Error ? error.message : String(error),
+        });
+      }
+    }
+
+    return critical ? {
       issues: [critical, ...issues],
       offeredCount,
       offers: [],
       parser: "yrl",
       skippedCount: offeredCount,
       suspicious: true,
+    } : {
+      issues,
+      offeredCount,
+      offers,
+      parser: "yrl",
+      skippedCount,
+      suspicious: false,
     };
-  }
-
-  return {
-    issues,
-    offeredCount,
-    offers,
-    parser: "yrl",
-    skippedCount,
-    suspicious: false,
   };
+
+  return { finish, write };
+}
+
+export function parseYrlFeed(input: FeedParserInput): FeedParserResult {
+  const session = createYrlParserSession(input);
+  for (const chunk of chunkXmlInput(input.xml, resolveFeedParserLimits(input.limits).chunkSize)) {
+    session.write(chunk);
+  }
+  return session.finish();
+}
+
+export async function parseYrlFeedStream(input: FeedParserStreamInput): Promise<FeedParserStreamResult> {
+  const session = createYrlParserSession(input);
+  const decoder = new TextDecoder("utf-8", { fatal: false });
+  const hash = createHash("sha256");
+
+  for await (const chunk of input.body) {
+    hash.update(chunk);
+    session.write(decoder.decode(chunk, { stream: true }), chunk.byteLength);
+  }
+  session.write(decoder.decode(), 0);
+
+  return { ...session.finish(), feedHash: hash.digest("hex") };
 }

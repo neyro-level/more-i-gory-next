@@ -74,10 +74,10 @@ test("import-runs tracks queue, job and counter state per feed source", () => {
   assert.deepEqual(optionValues(ImportRuns, "status"), [
     "queued",
     "running",
-    "completed",
+    "success",
+    "unchanged",
     "suspicious",
     "failed",
-    "skipped",
     "interrupted",
   ]);
   assert.deepEqual(optionValues(ImportRuns, "mode"), ["incremental", "full"]);

@@ -17,6 +17,10 @@ const validYrl = `<?xml version="1.0" encoding="UTF-8"?>
 
 const forbiddenXml = `<!DOCTYPE yml_catalog [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><yml_catalog>&xxe;</yml_catalog>`;
 
+async function* stream(text) {
+  yield new TextEncoder().encode(text);
+}
+
 test("System Gateway loads only the parser slug", async () => {
   const payload = {
     async findByID(args) {
@@ -35,10 +39,11 @@ test("parse stage uses the YRL registry and continues a healthy feed", async () 
   });
   const state = {
     fetch: {
-      body: new TextEncoder().encode(validYrl),
+      body: stream(validYrl),
       contentType: "application/xml",
       etag: null,
       lastModified: null,
+      previousFeedHash: null,
       status: 200,
     },
   };
@@ -56,16 +61,17 @@ test("critical or suspicious parse stops before normalize and upsert", async () 
   });
   const state = {
     fetch: {
-      body: new TextEncoder().encode(forbiddenXml),
+      body: stream(forbiddenXml),
       contentType: "application/xml",
       etag: null,
       lastModified: null,
+      previousFeedHash: null,
       status: 200,
     },
   };
 
   const result = await handler({ input: { feedSourceId: "101" }, state });
-  assert.deepEqual(result, { continue: false, status: "failed" });
+  assert.deepEqual(result, { continue: false, status: "suspicious" });
   assert.equal(state.parse.suspicious, true);
   assert.equal(state.parse.offers.length, 0);
 });

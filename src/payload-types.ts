@@ -658,7 +658,7 @@ export interface FeedSource {
 export interface ImportRun {
   id: number;
   feedSource: number | FeedSource;
-  status: 'queued' | 'running' | 'completed' | 'suspicious' | 'failed' | 'skipped' | 'interrupted';
+  status: 'queued' | 'running' | 'success' | 'unchanged' | 'suspicious' | 'failed' | 'interrupted';
   mode: 'incremental' | 'full';
   jobId?: string | null;
   startedAt?: string | null;

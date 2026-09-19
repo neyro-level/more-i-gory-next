@@ -60,9 +60,9 @@ test("importFeed schedules periodic heartbeat and clears it after the pipeline r
     input: { feedSourceId: "101", importRunId: "501" },
     lookupEnv: () => "https://feeds.example/primary.xml",
     outbound: {
-      async request() {
+      async requestStream() {
         return {
-          body: new Uint8Array(),
+          body: (async function* () {})(),
           contentType: null,
           etag: null,
           lastModified: null,
@@ -83,7 +83,7 @@ test("importFeed schedules periodic heartbeat and clears it after the pipeline r
   });
 
   assert.equal(intervalMs, importFeedHeartbeatIntervalMs);
-  assert.equal(result.status, "skipped");
+  assert.equal(result.status, "unchanged");
   await savedCallback();
   const heartbeatWrites = writes.filter((write) => write.data && Object.keys(write.data).join() === "heartbeatAt");
   assert.equal(heartbeatWrites.length, 1);

@@ -1,5 +1,13 @@
-import { parseYrlFeed } from "./yrl.ts";
-import type { FeedParserInput, FeedParserResult, FeedParserSlug } from "./types.ts";
+import { createHash } from "node:crypto";
+
+import { parseYrlFeed, parseYrlFeedStream } from "./yrl.ts";
+import type {
+  FeedParserInput,
+  FeedParserResult,
+  FeedParserSlug,
+  FeedParserStreamInput,
+  FeedParserStreamResult,
+} from "./types.ts";
 
 const parserAliases = new Map<string, FeedParserSlug>([
   ["yrl", "yrl"],
@@ -33,5 +41,18 @@ export function parseFeedByRegistry(input: FeedParserInput): FeedParserResult {
     parser: "unknown",
     skippedCount: 0,
     suspicious: true,
+  };
+}
+
+export async function parseFeedStreamByRegistry(input: FeedParserStreamInput): Promise<FeedParserStreamResult> {
+  const parser = resolveFeedParserSlug(input.parser);
+  if (parser === "yrl") return parseYrlFeedStream(input);
+
+  const hash = createHash("sha256");
+  for await (const chunk of input.body) hash.update(chunk);
+
+  return {
+    ...(parseFeedByRegistry({ parser: input.parser, xml: "" })),
+    feedHash: hash.digest("hex"),
   };
 }
