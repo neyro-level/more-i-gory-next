@@ -1,6 +1,7 @@
 import { lookup } from "node:dns/promises";
 import https from "node:https";
 import { isIP } from "node:net";
+import { Readable } from "node:stream";
 
 export type SafeOutboundRequest = Readonly<{
   body?: Uint8Array;
@@ -19,8 +20,17 @@ export type SafeOutboundResponse = Readonly<{
   status: number;
 }>;
 
+export type SafeOutboundStreamResponse = Readonly<{
+  body: AsyncIterable<Uint8Array>;
+  contentType: string | null;
+  etag: string | null;
+  lastModified: string | null;
+  status: number;
+}>;
+
 export interface SafeOutboundClient {
   request(request: SafeOutboundRequest): Promise<SafeOutboundResponse>;
+  requestStream(request: SafeOutboundRequest): Promise<SafeOutboundStreamResponse>;
 }
 
 export type SafeOutboundClientConfig = Readonly<{
@@ -143,19 +153,15 @@ function createPinnedHttpsFetch(lookupFn: ReturnType<typeof createPinnedLookup>)
           signal: init.signal ?? undefined,
         },
         (incoming) => {
-          const chunks: Buffer[] = [];
-          incoming.on("data", (chunk) => {
-            chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-          });
-          incoming.on("end", () => {
-            const headers = new Headers();
-            for (const [key, value] of Object.entries(incoming.headers)) {
-              if (value === undefined) continue;
-              headers.append(key, Array.isArray(value) ? value.join(", ") : value);
-            }
-            resolve(new Response(Buffer.concat(chunks), { headers, status: incoming.statusCode ?? 0 }));
-          });
-          incoming.on("error", reject);
+          const headers = new Headers();
+          for (const [key, value] of Object.entries(incoming.headers)) {
+            if (value === undefined) continue;
+            headers.append(key, Array.isArray(value) ? value.join(", ") : value);
+          }
+          resolve(new Response(Readable.toWeb(incoming) as ReadableStream<Uint8Array>, {
+            headers,
+            status: incoming.statusCode ?? 500,
+          }));
         },
       );
 
@@ -166,24 +172,83 @@ function createPinnedHttpsFetch(lookupFn: ReturnType<typeof createPinnedLookup>)
   }) as typeof fetch;
 }
 
-async function readLimitedBody(response: Response, maxBytes: number): Promise<Uint8Array> {
-  if (!response.body) return new Uint8Array();
+function contentLength(response: Response): number | null {
+  const value = response.headers.get("content-length");
+  if (value === null || !/^\d+$/.test(value)) return null;
+  return Number(value);
+}
 
-  const reader = response.body.getReader();
+async function readWithAbort(
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  signal: AbortSignal,
+): Promise<ReadableStreamReadResult<Uint8Array>> {
+  if (signal.aborted) throw new SafeOutboundRequestError("outbound_request_timeout");
+
+  return await new Promise((resolve, reject) => {
+    const onAbort = () => reject(new SafeOutboundRequestError("outbound_request_timeout"));
+    signal.addEventListener("abort", onAbort, { once: true });
+    reader.read().then(resolve, reject).finally(() => signal.removeEventListener("abort", onAbort));
+  });
+}
+
+function createLimitedBody(
+  response: Response,
+  maxBytes: number,
+  controller: AbortController,
+  clearRequestTimeout: () => void,
+): AsyncIterable<Uint8Array> {
+  return {
+    async *[Symbol.asyncIterator]() {
+      if (!response.body) {
+        clearRequestTimeout();
+        return;
+      }
+
+      const reader = response.body.getReader();
+      let completed = false;
+      let receivedBytes = 0;
+      try {
+        while (true) {
+          const { done, value } = await readWithAbort(reader, controller.signal);
+          if (done) {
+            completed = true;
+            return;
+          }
+          receivedBytes += value.byteLength;
+          if (receivedBytes > maxBytes) {
+            await reader.cancel("outbound_response_too_large");
+            controller.abort();
+            throw new SafeOutboundRequestError("outbound_response_too_large");
+          }
+          yield value;
+        }
+      } catch (error) {
+        if (error instanceof SafeOutboundRequestError) throw error;
+        throw new SafeOutboundRequestError(
+          controller.signal.aborted ? "outbound_request_timeout" : "outbound_request_failed",
+        );
+      } finally {
+        clearRequestTimeout();
+        if (!completed) {
+          try {
+            await reader.cancel();
+          } catch {
+            // The transport may already be destroyed by the abort signal.
+          }
+        }
+        reader.releaseLock();
+      }
+    },
+  };
+}
+
+async function collectBody(bodyStream: AsyncIterable<Uint8Array>): Promise<Uint8Array> {
   const chunks: Uint8Array[] = [];
   let total = 0;
-
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    total += value.byteLength;
-    if (total > maxBytes) {
-      await reader.cancel();
-      throw new SafeOutboundRequestError("outbound_response_too_large");
-    }
-    chunks.push(value);
+  for await (const chunk of bodyStream) {
+    chunks.push(chunk);
+    total += chunk.byteLength;
   }
-
   const body = new Uint8Array(total);
   let offset = 0;
   for (const chunk of chunks) {
@@ -253,8 +318,7 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
   const maxRedirects = config.maxRedirects ?? defaultMaxRedirects;
   const resolveHostAddresses = config.resolveHostAddresses ?? defaultResolveHostAddresses;
 
-  return {
-    async request(request) {
+  async function requestStream(request: SafeOutboundRequest): Promise<SafeOutboundStreamResponse> {
       let url = new URL(request.url);
       let method: OutboundMethod = request.method ?? "GET";
       let body = request.body;
@@ -267,6 +331,7 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
 
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), request.timeoutMs);
+        const clearRequestTimeout = () => clearTimeout(timeout);
 
         let response: Response;
         try {
@@ -278,13 +343,16 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
             signal: controller.signal,
           });
         } catch {
-          throw new SafeOutboundRequestError("outbound_request_failed");
-        } finally {
-          clearTimeout(timeout);
+          clearRequestTimeout();
+          throw new SafeOutboundRequestError(
+            controller.signal.aborted ? "outbound_request_timeout" : "outbound_request_failed",
+          );
         }
 
         const nextUrl = redirectLocation(response, url);
         if (nextUrl) {
+          clearRequestTimeout();
+          await response.body?.cancel();
           if (isCrossHostRedirect(url, nextUrl)) {
             headers = headersWithoutAuth(headers);
           }
@@ -295,8 +363,16 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
           continue;
         }
 
+        const declaredLength = contentLength(response);
+        if (declaredLength !== null && declaredLength > request.maxResponseBytes) {
+          clearRequestTimeout();
+          await response.body?.cancel("outbound_response_too_large");
+          controller.abort();
+          throw new SafeOutboundRequestError("outbound_response_too_large");
+        }
+
         return {
-          body: await readLimitedBody(response, request.maxResponseBytes),
+          body: createLimitedBody(response, request.maxResponseBytes, controller, clearRequestTimeout),
           contentType: response.headers.get("content-type"),
           etag: response.headers.get("etag"),
           lastModified: response.headers.get("last-modified"),
@@ -305,6 +381,13 @@ export function createSafeOutboundClient(config: SafeOutboundClientConfig): Safe
       }
 
       throw new SafeOutboundRequestError("outbound_too_many_redirects");
+  }
+
+  return {
+    async request(request) {
+      const response = await requestStream(request);
+      return { ...response, body: await collectBody(response.body) };
     },
+    requestStream,
   };
 }

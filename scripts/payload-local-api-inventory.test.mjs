@@ -12,6 +12,7 @@ import {
 } from "./lib/payload-local-api-inventory.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const normalizeLineEndings = (value) => value.replaceAll("\r\n", "\n");
 
 test("path classifier distinguishes System Gateway owners from orchestration", () => {
   assert.equal(classifyLocalApiPath("src/core/data-access/public/pages.ts"), "PUBLIC GATEWAY");
@@ -30,7 +31,10 @@ test("every live Payload Local API call has an allowed class and matches the inv
   const calls = assertLocalApiInventory(scanLocalApiCalls(projectRoot));
   assert.ok(calls.length > 0);
   const markdown = readFileSync(path.join(projectRoot, "docs/research/payload-local-api-inventory.md"), "utf8");
-  assert.equal(markdown, formatLocalApiInventoryMarkdown(calls));
+  assert.equal(
+    normalizeLineEndings(markdown),
+    normalizeLineEndings(formatLocalApiInventoryMarkdown(calls)),
+  );
 
   for (const required of ["PUBLIC GATEWAY", "SYSTEM GATEWAY", "CMS ADMIN", "ORCHESTRATION", "TEST"]) {
     assert.ok(

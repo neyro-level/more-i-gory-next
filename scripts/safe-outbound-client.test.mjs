@@ -220,6 +220,97 @@ test("safe outbound client enforces max response size", async () => {
   );
 });
 
+test("oversized Content-Length rejects before the response body is read", async () => {
+  let pulls = 0;
+  let cancelled = false;
+  const body = new ReadableStream({
+    cancel() {
+      cancelled = true;
+    },
+    pull(controller) {
+      pulls += 1;
+      controller.enqueue(encoder.encode("too-large"));
+      controller.close();
+    },
+  });
+  const outbound = client({
+    fetchImpl: async () => new Response(body, { headers: { "content-length": "9" } }),
+  });
+
+  await rejectsWithSafeCode(
+    () => outbound.requestStream({ ...baseRequest, maxResponseBytes: 4 }),
+    "outbound_response_too_large",
+  );
+  assert.equal(cancelled, true);
+  assert.equal(pulls <= 1, true);
+});
+
+test("chunked oversized bodies abort before the remaining body is produced", async () => {
+  let produced = 0;
+  let cancelled = false;
+  const chunks = [encoder.encode("abc"), encoder.encode("def"), encoder.encode("ghi")];
+  const body = new ReadableStream({
+    cancel() {
+      cancelled = true;
+    },
+    pull(controller) {
+      const chunk = chunks[produced];
+      produced += 1;
+      if (chunk) controller.enqueue(chunk);
+      else controller.close();
+    },
+  }, { highWaterMark: 0 });
+  const outbound = client({ fetchImpl: async () => new Response(body) });
+
+  await rejectsWithSafeCode(
+    () => outbound.request({ ...baseRequest, maxResponseBytes: 4 }),
+    "outbound_response_too_large",
+  );
+  assert.equal(cancelled, true);
+  assert.equal(produced, 2);
+});
+
+test("the exact response limit succeeds", async () => {
+  const outbound = client({ fetchImpl: async () => new Response(encoder.encode("four")) });
+  const response = await outbound.request({ ...baseRequest, maxResponseBytes: 4 });
+  assert.equal(new TextDecoder().decode(response.body), "four");
+});
+
+test("requestStream exposes bounded chunks without using the buffered helper", async () => {
+  const body = new ReadableStream({
+    start(controller) {
+      controller.enqueue(encoder.encode("ab"));
+      controller.enqueue(encoder.encode("cd"));
+      controller.close();
+    },
+  });
+  const response = await client({ fetchImpl: async () => new Response(body) })
+    .requestStream({ ...baseRequest, maxResponseBytes: 4 });
+  const chunks = [];
+  for await (const chunk of response.body) chunks.push(new TextDecoder().decode(chunk));
+  assert.deepEqual(chunks, ["ab", "cd"]);
+});
+
+test("timeout remains active while a response body is streaming", async () => {
+  let cancelled = false;
+  const body = new ReadableStream({
+    cancel() {
+      cancelled = true;
+    },
+    async pull(controller) {
+      await new Promise((resolve) => setTimeout(resolve, 80));
+      controller.enqueue(encoder.encode("late"));
+    },
+  }, { highWaterMark: 0 });
+  const outbound = client({ fetchImpl: async () => new Response(body) });
+
+  await rejectsWithSafeCode(
+    () => outbound.request({ ...baseRequest, timeoutMs: 20 }),
+    "outbound_request_timeout",
+  );
+  assert.equal(cancelled, true);
+});
+
 test("DNS lookup is pinned to the address already validated as public", async () => {
   assert.deepEqual(pickPinnedAddress(["149.154.167.220", "2a00:1450:4001:81b::200e"]), {
     address: "149.154.167.220",
