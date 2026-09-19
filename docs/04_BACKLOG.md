@@ -1,18 +1,20 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 3.3 After remediation 19–32 / 13 / 34
+**Версия:** 4.0 — Plan №3 closeout
 **Дата:** 2026-09-19
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
-В `origin/main` (`fbed2c11`) смержены EPIC 0–13, 15–17, 19–32 и 34.
+В `origin/main` (`842b0cce`) смержены Plan №3 EPIC 35–42 поверх предыдущей
+программы.
 Публичный сайт читает Payload через Public Gateway и DTO. Leads/ingest/jobs
 имеют код и TAP/proofs; live restore и production — нет.
 
-NOW: `docs/OWNER_QUEUE.md` (`BLOCKS_RELEASE`) и EPIC 33 только по отдельной
-команде владельца. Один эпик = одна ветка/PR, `MERGE_AFTER_GATE`.
+NOW: EPIC 43 conformance closeout. EPIC 44 и `docs/OWNER_QUEUE.md`
+(`BLOCKS_RELEASE`) — только по отдельной команде владельца. Один эпик = одна
+ветка/PR, `MERGE_AFTER_GATE`.
 
 Production не выпускался. Коммерческие и аналитические страницы остаются под
 content/trust/index gate, пока не пройден editorial gate.
@@ -61,6 +63,14 @@ content/trust/index gate, пока не пройден editorial gate.
 | PR-59 | EPIC 13 — Timeweb Runtime + Staging | DONE |
 | PR-60 | EPIC 32 — Integration Proof Matrix | DONE |
 | PR-61 | EPIC 34 — Owner Queue | DONE |
+| PR-65 | EPIC 35 — Plan №3 governance and baseline | DONE |
+| PR-66 | EPIC 36 — architecture boundary hardening | DONE |
+| PR-67 | EPIC 37 — UI and route conformance | DONE |
+| PR-68 | EPIC 38 — PostgreSQL/migration verification; historical-chain blocker recorded | DONE WITH OWNER GATE |
+| PR-69 | EPIC 39 — security and outbound hardening | DONE |
+| PR-70 | EPIC 40 — runtime and content contracts | DONE |
+| PR-71 | EPIC 41 — responsive/accessibility browser matrix | DONE WITH DEFERRED DB ROUTES |
+| PR-72 | EPIC 42 — final platform proof matrix | DONE |
 
 Git-история и SourceCraft PR являются доказательством отдельных merge, а не этот
 документ.
@@ -87,13 +97,13 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 
 ## 4. NOW / NEXT — Realty Platform remediation
 
-Код EPIC 0–13, 15–17, 19–32 и 34 в `main` — целевой Realty 5.5 контур без production.
+Код Plan №3 EPIC 35–42 в `main` — целевой Realty 5.5 контур без production.
 
 | Состояние | Эпик | Результат |
 |---|---|---|
-| DONE | EPIC 0–13, 15–17, 19–32, 34 | код и delivery в `main` `fbed2c11`; публичный read — Public Gateway |
-| NOW | OWNER_QUEUE / EPIC 33 | `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md`; production только по отдельной команде |
-| OUT OF STREAM | EPIC 14, 18 | analytics posts и content gates |
+| DONE | EPIC 35–42 | код и proofs в `main` `842b0cce`; публичный read — Public Gateway |
+| NOW | EPIC 43 | conformance closeout, канон и exact-main proof |
+| OWNER GATE | EPIC 44 | production только после закрытия `OWNER_QUEUE/BLOCKS_RELEASE` и отдельной команды |
 
 Контентные, legal и production решения остаются human gates и не подменяются
 технической готовностью.

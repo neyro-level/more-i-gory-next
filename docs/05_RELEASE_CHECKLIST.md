@@ -1,7 +1,7 @@
 # Release Checklist — «Море и Горы»
 
 **Статус:** Active — TECHNICAL PREVIEW RELEASE
-**Версия:** 2.0 Payload foundation
+**Версия:** 3.0 — Plan №3 technical closeout
 **Дата:** 2026-09-19
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
@@ -29,12 +29,15 @@
 
 - [x] `pnpm install --frozen-lockfile`;
 - [x] `pnpm audit --audit-level high`;
-- [x] `pnpm verify` after final form-runtime optimization;
+- [x] `pnpm verify:daily` и `pnpm verify:schema` на Plan №3 baseline;
+- [x] disposable PostgreSQL 18 proofs: lead migration 5/5 и heartbeat
+  visibility; recovery/retention подтверждены deterministic tests;
 - [x] rendered Title/Description/H1/canonical/robots contract;
 - [x] runtime routes и 404 проверяются через `next start`;
 - [x] browser console without hydration/runtime errors;
 - [x] mobile layout smoke;
-- [ ] full keyboard smoke on all representative routes;
+- [x] keyboard/touch/form smoke на доступных representative routes; DB-backed
+  detail routes отложены в EPIC 44 из-за historical migration-chain blocker;
 - [x] Lighthouse accessibility audit on `/`;
 - [x] SourceCraft RISKY exact-head gate PR-19.
 - [x] SourceCraft RISKY exact-head gate PR-20 (run 21).
@@ -103,7 +106,7 @@ SEO 69 объясняется единственным ожидаемым fail: 
 
 Production сейчас блокируют не фундамент Next.js, а:
 
-1. `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md` (staging/restore DB, enum drift,
-   ротация credentials, domain cutover);
+1. `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md` (staging/restore DB, historical
+   migration chain, enum drift, ротация credentials, domain cutover);
 2. неутверждённый контент и реальные project passports;
-3. отдельная команда владельца на EPIC 33.
+3. отдельная команда владельца на EPIC 44.

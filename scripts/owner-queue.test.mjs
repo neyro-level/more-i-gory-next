@@ -33,6 +33,7 @@ test("OWNER_QUEUE.md is a single BLOCKS_RELEASE / IMPROVEMENT inventory", () => 
 
   for (const source of [
     "TASK 13.9 / TASK 13.7",
+    "EPIC 38 / EPIC 41",
     "TASK 24.1b",
     "Domain cutover",
     "Credentials hygiene",

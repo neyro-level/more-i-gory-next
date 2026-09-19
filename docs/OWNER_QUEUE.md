@@ -1,8 +1,8 @@
 # Owner / deferred queue
 
-**План:** `more-i-gory-remediation-2026-09` v6  
-**Сводка:** TASK 34.1 + TASK 34.2 (EPIC 34)  
-**База:** `fbed2c11d6cf8c8ce5a19ec3482a72b97f5b00e4` (`origin/main` после EPIC 34)  
+**План:** `MORE_I_GORY_PLAN_№ 3` v1 APPROVED
+**Сводка:** EPIC 43 conformance closeout
+**База:** `842b0cce9585359d50c80e8ef464536a56332944` (`origin/main` после EPIC 42)
 **Правило:** стоп-фактор останавливает подшаг, не программу. Автономная часть
 делается сразу; остаток попадает сюда. Owner-решение «принимаем риск»
 в эту сводку не подставляется.
@@ -19,13 +19,14 @@
 
 ## BLOCKS_RELEASE
 
-Без этих пунктов production (EPIC 33) не включаем. Domain cutover — отдельная
+Без этих пунктов production (EPIC 44) не включаем. Domain cutover — отдельная
 команда владельца после программы, но без него публичный `moreigori.ru` не
 переключается.
 
 | Источник | Что требуется | Что уже сделано автономно | После решения | Блокирует release |
 |---|---|---|---|---|
 | TASK 13.9 / TASK 13.7 | Создать пустые БД `moreigory_staging` и disposable restore (`moreigory_restore_dst`) в Timeweb Managed PostgreSQL (роль приложения без `CREATEDB`) | Контракт backup/restore и `pnpm test:backup-restore` PASS; live restore на preview FAIL (`permission denied to create database`); dump production не выполнялся | Повторить restore proof в disposable DB; staging получит отдельную БД | да |
+| EPIC 38 / EPIC 41 | Дать disposable staging DB либо утвердить отдельный repair-план исторической migration chain | Чистая PostgreSQL 18 DB воспроизводимо останавливается на `20260916_063247_pages_drafts_redirects`; production не трогался; независимые кодовые и browser proofs продолжены | Исправить/валидировать полную цепочку на disposable DB, затем выполнить DB-backed browser proof detail routes | да |
 | TASK 24.1b | Применить Postgres enum conversion к живым `properties.category` / `deal_type` только после успешного drift-отчёта | Контракт, reject и draft SQL в 24.1a; `docs/research/property-enum-drift-report.md`: `queried: false` (пакет `postgres` недоступен в том прогоне) | Сначала живой SELECT; при 0 внеконтрактных строк — автономная миграция; иначе owner unlock | да, пока drift не измерен или найдены расхождения |
 | Domain cutover | Переключить `moreigori.ru` отдельной owner-командой после программы | Preview `more-previu.tw1.ru`; production не деплоился | Cutover DNS/TLS/nginx на канонический домен | да |
 | Credentials hygiene | Ротировать пароль Managed PostgreSQL после утечки `DATABASE_URI` в traceback агента (значения в репозиторий не записывать) | Runtime env на сервере собирается из Secret Master; секреты в git нет | Новый пароль в Timeweb + Secret Master + `/etc/moreigory/app.env` | да |

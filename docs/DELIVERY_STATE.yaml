@@ -1,13 +1,12 @@
 # Machine-readable pointer. Requirements live in 03/04 and OWNER_QUEUE.
-program: more-i-gory-remediation-2026-09
-plan_version: v6
-canonical_main: fbed2c11d6cf8c8ce5a19ec3482a72b97f5b00e4
-wave: owner-gates
-current_epic: EPIC-33
-current_status: blocked_owner
+program: more-i-gory-conformance-plan3-2026-09
+plan_version: v1
+code_baseline_sha: 842b0cce9585359d50c80e8ef464536a56332944
+last_verified_main_sha: 842b0cce9585359d50c80e8ef464536a56332944
+verification_date: 2026-09-19
+current_status: conformance_closeout
 last_merged:
-  - { epic: EPIC-32, pr: 60, sha: d5774f9d6b0b9e32a7ad065fd295a941a3863df3 }
-  - { epic: EPIC-13, pr: 59, sha: ef902dfc730f98b69d8900d80f75f486ee1e9244 }
-  - { epic: EPIC-34, pr: 61, sha: fbed2c11d6cf8c8ce5a19ec3482a72b97f5b00e4 }
-next_step: owner command for production after BLOCKS_RELEASE in docs/OWNER_QUEUE.md
+  - { epic: EPIC-41, pr: 71, sha: 754751f17aeaa5f1f65137fc7367874af4c368e3 }
+  - { epic: EPIC-42, pr: 72, sha: 842b0cce9585359d50c80e8ef464536a56332944 }
+next_step: merge EPIC 43, verify exact final main, then stop at owner-gated EPIC 44
 production: not_authorized

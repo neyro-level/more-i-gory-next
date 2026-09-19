@@ -172,7 +172,7 @@
     "test:section-rhythm-contract": "node --test scripts/section-rhythm-contract.test.mjs",
     "test:design-token-usage": "node --test scripts/design-token-usage.test.mjs",
     "test:final-public-boundary": "node --conditions=react-server --test scripts/final-public-boundary-proof.test.mjs",
-    "test:final-platform-proof-record": "node --test scripts/final-platform-proof-record.test.mjs"
+    "test:final-platform-proof-record": "node --test scripts/final-platform-proof-record.test.mjs && node --test scripts/final-conformance-closeout.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",

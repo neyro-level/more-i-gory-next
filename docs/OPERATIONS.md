@@ -143,7 +143,7 @@ Backup не считается доказанным без успешного re
 ## Jobs runtime
 
 Один jobs-capable runtime есть; `JOBS_AUTORUN=true` только у единственного
-jobs-active process после production jobs gate (EPIC 33). Machine-lock не
+jobs-active process после production jobs gate (EPIC 44). Machine-lock не
 вводится (TASK 25.8 вариант 3): проверка — runbook + deploy-шаг.
 
 Handover:

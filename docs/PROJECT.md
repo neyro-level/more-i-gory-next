@@ -62,7 +62,7 @@ Production и staging не используют общую БД, secrets или 
 | Retention | IMPLEMENTED + TAP | live clock не обязателен для 14.H |
 | Cache invalidation | IMPLEMENTED http + TAP | B2 proof в EPIC 27/32 |
 | Staging | PARTIAL | contour в коде; empty staging DB — owner |
-| Production | OWNER_GATE | EPIC 33 |
+| Production | OWNER_GATE | EPIC 44; только после `OWNER_QUEUE/BLOCKS_RELEASE` |
 
 ## 2. Включённые модули
 
@@ -101,10 +101,11 @@ Disabled module не требует env, jobs, коллекций или кли�
 - `/novostroyki/` — EPIC 17;
 - `/novostroyki/<complex-slug>/` — EPIC 17;
 - `/zastroyshchik/<slug>/` — EPIC 17;
+- `/analitika/` и `/analitika/<slug>/` — route реализован; публикация и index
+  остаются под editorial/content gate;
 
 Зарезервированы и не создаются раньше указанного эпика:
 
-- `/analitika/<slug>/` — EPIC 18;
 - `/komplex/<slug>/` — reserved only;
 - `/journal/*` — reserved only, аналитика остаётся в `/analitika/*`;
 - `/agenty/*` — reserved only.
@@ -195,13 +196,13 @@ CACHE_INVALIDATION_MODE=http
 | Proof | Статус | Владелец этапа |
 |---|---|---|
 | B1 — in-process cache invalidation | N/A | режим `http` запрещает B1 |
-| B2 — HTTP cache invalidation | landed in code EPIC 4; live proof EPIC 13 | EPIC 4 / 13 |
-| G — lead delivery | landed in code EPIC 11; live proof pending secrets | EPIC 11 |
-| E — lead recovery | landed in code EPIC 12; live proof pending | EPIC 12 |
-| F — retention/recovery | landed in code EPIC 12; live proof pending | EPIC 12 |
-| D — jobs janitor | landed in code EPIC 12; live proof pending | EPIC 12, расширение в EPIC 16 |
-| A — ingest | schema/jobs in `main`; N/A until configured feed | EPIC 16 |
-| C — safe deactivation | schema/jobs in `main`; N/A until configured feed | EPIC 16 |
+| B2 — HTTP cache invalidation | PASS: contract/TAP и integration proof | EPIC 42 |
+| G — lead delivery | PASS локально: retryable → delivered; внешний канал остаётся disabled | EPIC 42 |
+| E — lead recovery | PASS: deterministic recovery test | EPIC 42 |
+| F — retention/recovery | PASS: deterministic retention test | EPIC 42 |
+| D — jobs janitor | PASS: one-owner/jobs proof; production autorun остаётся gate | EPIC 42 |
+| A — ingest | PASS на fixture; живой feed заморожен | EPIC 42 |
+| C — safe deactivation | PASS на fixture; живой feed заморожен | EPIC 42 |
 
 Статус proof меняется только после фактического прогона с evidence. `CHECKED` или
 `GREEN` без выполненной проверки запрещены.
@@ -220,8 +221,6 @@ CACHE_INVALIDATION_MODE=http
 - новый лицензируемый map/media/integration provider;
 - production-scale модуль, отсутствующий в списке включённых выше.
 
-`NEEDS_OWNER`: мастер-план ссылается на §21/§22 Realty Platform 5.5, тогда как
-локальный канонический skill содержит Realty Platform Core Standard 3.0 и
-определяет `PROJECT.md` в разделе N.1. До появления канонического Standard 5.5
-этот документ следует точным решениям мастер-плана и совместимым инвариантам
-Standard 3.0; неизвестные значения не додумываются.
+Локальный канон проекта — `AMS Realty Platform Core 5.5` и `AMS UI Core 5.0`,
+оба хранятся в `docs/`. Отклонение допускается только как явное Approved
+Exception в `docs/README.md`/`docs/DESIGN.md` либо отдельный ADR.
