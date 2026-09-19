@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
+import { composeRegionPathFromSlugs, REGION_RESERVED_NAMESPACE } from "../src/content/regions/region-path-policy.ts";
 import { findRegionRouteBySegments, getRegionRoutePath, getRegionRoutePlan, regionRouteEntries } from "../src/content/regions/region-route-plan.ts";
+import { composePublicRegionPath } from "../src/core/data-access/public/regions-contract.ts";
 
 test("region routes are computed from slug plus parent chain", () => {
   const yalta = regionRouteEntries.find((entry) => entry.key === "yalta");
@@ -12,6 +14,22 @@ test("region routes are computed from slug plus parent chain", () => {
   assert.equal(getRegionRoutePath(novostroyki), "/investicionnaya-nedvizhimost/krym/novostroyki/");
   assert.equal(findRegionRouteBySegments(["krym", "yalta"])?.key, "yalta");
   assert.equal(findRegionRouteBySegments(["krym", "unknown"]), null);
+});
+
+test("public region path uses reserved namespace, slug and CMS parent relation", () => {
+  assert.equal(REGION_RESERVED_NAMESPACE, "/investicionnaya-nedvizhimost");
+  assert.equal(composeRegionPathFromSlugs(["krym", "yalta"]), "/investicionnaya-nedvizhimost/krym/yalta/");
+  assert.equal(
+    composePublicRegionPath(
+      { id: 2, investmentThesis: "t", kind: "locality", lead: "l", order: 2, riskSummary: "r", slug: "yalta", status: "hidden", title: "Ялта", parent: { id: 1, slug: "krym" } },
+      [
+        { id: 1, investmentThesis: "t", kind: "region", lead: "l", order: 1, riskSummary: "r", slug: "krym", status: "hidden", title: "Крым" },
+        { id: 2, investmentThesis: "t", kind: "locality", lead: "l", order: 2, riskSummary: "r", slug: "yalta", status: "hidden", title: "Ялта", parent: { id: 1, slug: "krym" } },
+      ],
+    ),
+    "/investicionnaya-nedvizhimost/krym/yalta/",
+  );
+  assert.throws(() => composeRegionPathFromSlugs(["Yalta"]));
 });
 
 test("catch-all route replaces explicit region route folders", () => {
@@ -28,6 +46,14 @@ test("catch-all route replaces explicit region route folders", () => {
   ]) {
     assert.equal(existsSync(route), false, `${route} should be handled by the catch-all route`);
   }
+});
+
+test("catch-all region route composes path from CMS records and reserved namespace", () => {
+  const page = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx", "utf8");
+  assert.match(page, /composeRegionPathFromSlugs/);
+  assert.match(page, /listPublicHubRegions/);
+  assert.match(page, /getPublicRegionByPath/);
+  assert.doesNotMatch(page, /export function generateStaticParams/);
 });
 
 test("region route plan does not store a third path field", () => {

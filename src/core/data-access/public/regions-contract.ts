@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import type { Media, Region } from "../../../payload-types.ts";
 import { getRegionRoutePlan } from "../../../content/regions/region-route-plan.ts";
+import { composeRegionPathFromSlugs } from "../../../content/regions/region-path-policy.ts";
 import { publicMediaSchema } from "./media-contract.ts";
 
 type PublicRegionRecord = Readonly<
@@ -87,7 +88,7 @@ export function composePublicRegionPath(record: PublicRegionRecord, records: rea
     if (slugs.length > 8) break;
   }
 
-  return `/investicionnaya-nedvizhimost/${slugs.join("/")}/`;
+  return composeRegionPathFromSlugs(slugs);
 }
 
 export function mapPublicRegion(

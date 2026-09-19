@@ -1,3 +1,5 @@
+import { composeRegionPathFromSlugs } from "./region-path-policy.ts";
+
 export type RegionRouteEntry = Readonly<{
   key: string;
   pageId: string;
@@ -10,8 +12,6 @@ export type RegionInternalLink = Readonly<{
   label: string;
   relation: "child" | "methodology" | "objects" | "parent" | "sibling";
 }>;
-
-const investmentBase = "/investicionnaya-nedvizhimost";
 
 export const regionRouteEntries = [
   { key: "krym", pageId: "PAGE-007", slug: "krym", parentKey: null },
@@ -38,7 +38,7 @@ export function getRegionRoutePath(entry: RegionRouteEntry, entries: readonly Re
     parentKey = parent.parentKey;
   }
 
-  return `${investmentBase}/${slugs.join("/")}/`;
+  return composeRegionPathFromSlugs(slugs);
 }
 
 export function getRegionRoutePlan() {
@@ -90,8 +90,12 @@ export function getRegionRelatedLinks(
 }
 
 export function findRegionRouteBySegments(segments: readonly string[]) {
-  const canonical = `${investmentBase}/${segments.join("/")}/`;
-  return getRegionRoutePlan().find((entry) => entry.path === canonical) ?? null;
+  try {
+    const canonical = composeRegionPathFromSlugs(segments);
+    return getRegionRoutePlan().find((entry) => entry.path === canonical) ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export function regionPageIdBySlug(slug: string, path: string): string | undefined {
