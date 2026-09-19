@@ -1,0 +1,4367 @@
+{
+  "schema_version": 2,
+  "beads_prefix": "mg3",
+  "source": {
+    "plan_id": "more-i-gory-conformance-plan3-2026-09",
+    "path": "docs/MORE_I_GORY_PLAN_№ 3.md",
+    "version": "v1",
+    "status": "APPROVED",
+    "approved_by": "owner",
+    "approved_at": "2026-09-19T12:01:40+03:00",
+    "sha256": "e745f1d160748e809f4d984ab6271e070244bbcbb720a5439e89f49e56390d13",
+    "epic_anchors": [
+      "EPIC 35",
+      "EPIC 36",
+      "EPIC 37",
+      "EPIC 38",
+      "EPIC 39",
+      "EPIC 40",
+      "EPIC 41",
+      "EPIC 42",
+      "EPIC 43",
+      "EPIC 44"
+    ]
+  },
+  "nodes": [
+    {
+      "key": "EPIC-35",
+      "title": "PUBLIC DATA / PUBLICATION BOUNDARY",
+      "type": "epic",
+      "source_anchor": "EPIC 35",
+      "goal": "Deliver PUBLIC DATA / PUBLICATION BOUNDARY according to Plan №3 v1 without entering production.",
+      "scope": [
+        "All requirements under EPIC 35 in Plan №3 v1"
+      ],
+      "acceptance_criteria": [
+        "All implementation tasks for EPIC 35 have factual evidence and the delivery task is complete"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
+        "docs/AMS_UI_CORE_v5.0_FINAL.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "new secret or paid irreversible external action",
+        "scope expansion",
+        "destructive surprise on live data"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-35-1",
+      "title": "Regions publication predicate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-35",
+      "source_anchor": "TASK 35.1",
+      "goal": "Complete Regions publication predicate exactly as specified in TASK 35.1.",
+      "scope": [
+        "All requirements and prohibitions in TASK 35.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 35.1 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 35",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.1"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-35-2",
+      "title": "Generic dynamic route",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-35",
+      "source_anchor": "TASK 35.2",
+      "goal": "Complete Generic dynamic route exactly as specified in TASK 35.2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 35.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 35.2 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 35",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-35-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.2"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-35-3",
+      "title": "Hub / static params / related links",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-35",
+      "source_anchor": "TASK 35.3",
+      "goal": "Complete Hub / static params / related links exactly as specified in TASK 35.3.",
+      "scope": [
+        "All requirements and prohibitions in TASK 35.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 35.3 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 35",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-35-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.3"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-35-4",
+      "title": "Sitemap только через Public Gateway",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-35",
+      "source_anchor": "TASK 35.4",
+      "goal": "Complete Sitemap только через Public Gateway exactly as specified in TASK 35.4.",
+      "scope": [
+        "All requirements and prohibitions in TASK 35.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 35.4 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 35",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.4"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-35-5",
+      "title": "Нормализовать DTO ownership",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-35",
+      "source_anchor": "TASK 35.5",
+      "goal": "Complete Нормализовать DTO ownership exactly as specified in TASK 35.5.",
+      "scope": [
+        "All requirements and prohibitions in TASK 35.5; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 35.5 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 35",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.5"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-35-6",
+      "title": "Architecture guards",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-35",
+      "source_anchor": "TASK 35.6",
+      "goal": "Complete Architecture guards exactly as specified in TASK 35.6.",
+      "scope": [
+        "All requirements and prohibitions in TASK 35.6; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 35.6 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 35",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-35-1",
+        "TASK-35-4"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.6"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-35-7",
+      "title": "Tests",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-35",
+      "source_anchor": "TASK 35.7",
+      "goal": "Complete Tests exactly as specified in TASK 35.7.",
+      "scope": [
+        "All requirements and prohibitions in TASK 35.7; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 35.7 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 35",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-35-1",
+        "TASK-35-2",
+        "TASK-35-3",
+        "TASK-35-4",
+        "TASK-35-5",
+        "TASK-35-6"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.7"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-35-DELIVERY",
+      "title": "Delivery EPIC 35: review, exact-head gate, merge",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-35",
+      "source_anchor": "EPIC 35",
+      "goal": "Close EPIC 35 through one PR and MERGE_AFTER_GATE.",
+      "scope": [
+        "Full EPIC 35 diff",
+        "Exact-head RISKY gate",
+        "Merge to main without direct push"
+      ],
+      "acceptance_criteria": [
+        "PR exists at exact epic head",
+        "Required SourceCraft gate PASS",
+        "Merge completed and main SHA recorded"
+      ],
+      "required_checks": [
+        "Full diff review",
+        "Project pnpm verify",
+        "Risk-specific exact-head gate"
+      ],
+      "depends_on": [
+        "TASK-35-1",
+        "TASK-35-2",
+        "TASK-35-3",
+        "TASK-35-4",
+        "TASK-35-5",
+        "TASK-35-6",
+        "TASK-35-7"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/05_RELEASE_CHECKLIST.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production",
+        "direct push to main",
+        "gate failure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "delivery:merge-after-gate",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "EPIC-36",
+      "title": "SYSTEM GATEWAY / PRIVILEGED OPERATIONS",
+      "type": "epic",
+      "source_anchor": "EPIC 36",
+      "goal": "Deliver SYSTEM GATEWAY / PRIVILEGED OPERATIONS according to Plan №3 v1 without entering production.",
+      "scope": [
+        "All requirements under EPIC 36 in Plan №3 v1"
+      ],
+      "acceptance_criteria": [
+        "All implementation tasks for EPIC 36 have factual evidence and the delivery task is complete"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
+        "docs/AMS_UI_CORE_v5.0_FINAL.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "new secret or paid irreversible external action",
+        "scope expansion",
+        "destructive surprise on live data"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-36-1",
+      "title": "Seed scripts",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-36",
+      "source_anchor": "TASK 36.1",
+      "goal": "Complete Seed scripts exactly as specified in TASK 36.1.",
+      "scope": [
+        "All requirements and prohibitions in TASK 36.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 36.1 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 36",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-36-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 36.1"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-36-2",
+      "title": "Narrow System Gateway operations",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-36",
+      "source_anchor": "TASK 36.2",
+      "goal": "Complete Narrow System Gateway operations exactly as specified in TASK 36.2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 36.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 36.2 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 36",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 36.2"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-36-3",
+      "title": "Guard coverage для scripts",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-36",
+      "source_anchor": "TASK 36.3",
+      "goal": "Complete Guard coverage для scripts exactly as specified in TASK 36.3.",
+      "scope": [
+        "All requirements and prohibitions in TASK 36.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 36.3 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 36",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-36-1",
+        "TASK-36-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 36.3"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-36-4",
+      "title": "Local API inventory",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-36",
+      "source_anchor": "TASK 36.4",
+      "goal": "Complete Local API inventory exactly as specified in TASK 36.4.",
+      "scope": [
+        "All requirements and prohibitions in TASK 36.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 36.4 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 36",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-36-1",
+        "TASK-36-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 36.4"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-36-5",
+      "title": "Tests",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-36",
+      "source_anchor": "TASK 36.5",
+      "goal": "Complete Tests exactly as specified in TASK 36.5.",
+      "scope": [
+        "All requirements and prohibitions in TASK 36.5; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 36.5 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 36",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-36-1",
+        "TASK-36-2",
+        "TASK-36-3",
+        "TASK-36-4"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 36.5"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-36-DELIVERY",
+      "title": "Delivery EPIC 36: review, exact-head gate, merge",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-36",
+      "source_anchor": "EPIC 36",
+      "goal": "Close EPIC 36 through one PR and MERGE_AFTER_GATE.",
+      "scope": [
+        "Full EPIC 36 diff",
+        "Exact-head RISKY gate",
+        "Merge to main without direct push"
+      ],
+      "acceptance_criteria": [
+        "PR exists at exact epic head",
+        "Required SourceCraft gate PASS",
+        "Merge completed and main SHA recorded"
+      ],
+      "required_checks": [
+        "Full diff review",
+        "Project pnpm verify",
+        "Risk-specific exact-head gate"
+      ],
+      "depends_on": [
+        "TASK-36-1",
+        "TASK-36-2",
+        "TASK-36-3",
+        "TASK-36-4",
+        "TASK-36-5"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/05_RELEASE_CHECKLIST.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production",
+        "direct push to main",
+        "gate failure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "delivery:merge-after-gate",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "EPIC-37",
+      "title": "SAFE OUTBOUND TRANSPORT BOUNDARIES",
+      "type": "epic",
+      "source_anchor": "EPIC 37",
+      "goal": "Deliver SAFE OUTBOUND TRANSPORT BOUNDARIES according to Plan №3 v1 without entering production.",
+      "scope": [
+        "All requirements under EPIC 37 in Plan №3 v1"
+      ],
+      "acceptance_criteria": [
+        "All implementation tasks for EPIC 37 have factual evidence and the delivery task is complete"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
+        "docs/AMS_UI_CORE_v5.0_FINAL.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "new secret or paid irreversible external action",
+        "scope expansion",
+        "destructive surprise on live data"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-37-1",
+      "title": "Early response size enforcement",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-37",
+      "source_anchor": "TASK 37.1",
+      "goal": "Complete Early response size enforcement exactly as specified in TASK 37.1.",
+      "scope": [
+        "All requirements and prohibitions in TASK 37.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 37.1 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 37",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 37.1"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-37-2",
+      "title": "Streaming response path",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-37",
+      "source_anchor": "TASK 37.2",
+      "goal": "Complete Streaming response path exactly as specified in TASK 37.2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 37.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 37.2 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 37",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-37-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 37.2"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-37-3",
+      "title": "Preserve security boundaries",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-37",
+      "source_anchor": "TASK 37.3",
+      "goal": "Complete Preserve security boundaries exactly as specified in TASK 37.3.",
+      "scope": [
+        "All requirements and prohibitions in TASK 37.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 37.3 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 37",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 37.3"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-37-4",
+      "title": "Mid-stream testability seam",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-37",
+      "source_anchor": "TASK 37.4",
+      "goal": "Complete Mid-stream testability seam exactly as specified in TASK 37.4.",
+      "scope": [
+        "All requirements and prohibitions in TASK 37.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 37.4 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 37",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-37-2",
+        "TASK-37-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 37.4"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-37-5",
+      "title": "Regression tests",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-37",
+      "source_anchor": "TASK 37.5",
+      "goal": "Complete Regression tests exactly as specified in TASK 37.5.",
+      "scope": [
+        "All requirements and prohibitions in TASK 37.5; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 37.5 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 37",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-37-1",
+        "TASK-37-2",
+        "TASK-37-3",
+        "TASK-37-4"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 37.5"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-37-DELIVERY",
+      "title": "Delivery EPIC 37: review, exact-head gate, merge",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-37",
+      "source_anchor": "EPIC 37",
+      "goal": "Close EPIC 37 through one PR and MERGE_AFTER_GATE.",
+      "scope": [
+        "Full EPIC 37 diff",
+        "Exact-head RISKY gate",
+        "Merge to main without direct push"
+      ],
+      "acceptance_criteria": [
+        "PR exists at exact epic head",
+        "Required SourceCraft gate PASS",
+        "Merge completed and main SHA recorded"
+      ],
+      "required_checks": [
+        "Full diff review",
+        "Project pnpm verify",
+        "Risk-specific exact-head gate"
+      ],
+      "depends_on": [
+        "TASK-37-1",
+        "TASK-37-2",
+        "TASK-37-3",
+        "TASK-37-4",
+        "TASK-37-5"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/05_RELEASE_CHECKLIST.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production",
+        "direct push to main",
+        "gate failure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "delivery:merge-after-gate",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "EPIC-38",
+      "title": "IMPORT SAFETY / STREAMING / BASELINE / LIFECYCLE",
+      "type": "epic",
+      "source_anchor": "EPIC 38",
+      "goal": "Deliver IMPORT SAFETY / STREAMING / BASELINE / LIFECYCLE according to Plan №3 v1 without entering production.",
+      "scope": [
+        "All requirements under EPIC 38 in Plan №3 v1"
+      ],
+      "acceptance_criteria": [
+        "All implementation tasks for EPIC 38 have factual evidence and the delivery task is complete"
+      ],
+      "depends_on": [
+        "EPIC-37"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
+        "docs/AMS_UI_CORE_v5.0_FINAL.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "new secret or paid irreversible external action",
+        "scope expansion",
+        "destructive surprise on live data"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:b",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-38-1",
+      "title": "End-to-end streaming XML",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.1",
+      "goal": "Complete End-to-end streaming XML exactly as specified in TASK 38.1.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.1 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.1"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-2",
+      "title": "Incremental feed hash",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.2",
+      "goal": "Complete Incremental feed hash exactly as specified in TASK 38.2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.2 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-38-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.2"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-3",
+      "title": "`HTTP 200 + same hash → unchanged`",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.3",
+      "goal": "Complete `HTTP 200 + same hash → unchanged` exactly as specified in TASK 38.3.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.3 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-38-1",
+        "TASK-38-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.3"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-4",
+      "title": "`HTTP 304 → unchanged`",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.4",
+      "goal": "Complete `HTTP 304 → unchanged` exactly as specified in TASK 38.4.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.4 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-38-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.4"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-5",
+      "title": "Suspicious baseline corruption",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.5",
+      "goal": "Complete Suspicious baseline corruption exactly as specified in TASK 38.5.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.5; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.5 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.5"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-6",
+      "title": "Canonical import-run lifecycle",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.6",
+      "goal": "Complete Canonical import-run lifecycle exactly as specified in TASK 38.6.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.6; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.6 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.6"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-7",
+      "title": "Migration preflight для historical statuses",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.7",
+      "goal": "Complete Migration preflight для historical statuses exactly as specified in TASK 38.7.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.7; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.7 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-38-6"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.7"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-8",
+      "title": "Migration mapping",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.8",
+      "goal": "Complete Migration mapping exactly as specified in TASK 38.8.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.8; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.8 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-38-7"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.8"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-9",
+      "title": "Structural anomaly semantics",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.9",
+      "goal": "Complete Structural anomaly semantics exactly as specified in TASK 38.9.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.9; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.9 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.9"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-10",
+      "title": "Heartbeat independent-read proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.10",
+      "goal": "Complete Heartbeat independent-read proof exactly as specified in TASK 38.10.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.10; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.10 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.10"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-11",
+      "title": "Preserve passed ingest guarantees",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.11",
+      "goal": "Complete Preserve passed ingest guarantees exactly as specified in TASK 38.11.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.11; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.11 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-38-1",
+        "TASK-38-3",
+        "TASK-38-4",
+        "TASK-38-5",
+        "TASK-38-6",
+        "TASK-38-9",
+        "TASK-38-10"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.11"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-12",
+      "title": "New tests",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-38",
+      "source_anchor": "TASK 38.12",
+      "goal": "Complete New tests exactly as specified in TASK 38.12.",
+      "scope": [
+        "All requirements and prohibitions in TASK 38.12; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 38.12 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 38",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-38-1",
+        "TASK-38-2",
+        "TASK-38-3",
+        "TASK-38-4",
+        "TASK-38-5",
+        "TASK-38-6",
+        "TASK-38-7",
+        "TASK-38-8",
+        "TASK-38-9",
+        "TASK-38-10",
+        "TASK-38-11"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.12"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-38-DELIVERY",
+      "title": "Delivery EPIC 38: review, exact-head gate, merge",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-38",
+      "source_anchor": "EPIC 38",
+      "goal": "Close EPIC 38 through one PR and MERGE_AFTER_GATE.",
+      "scope": [
+        "Full EPIC 38 diff",
+        "Exact-head RISKY gate",
+        "Merge to main without direct push"
+      ],
+      "acceptance_criteria": [
+        "PR exists at exact epic head",
+        "Required SourceCraft gate PASS",
+        "Merge completed and main SHA recorded"
+      ],
+      "required_checks": [
+        "Full diff review",
+        "Project pnpm verify",
+        "Risk-specific exact-head gate"
+      ],
+      "depends_on": [
+        "TASK-38-1",
+        "TASK-38-2",
+        "TASK-38-3",
+        "TASK-38-4",
+        "TASK-38-5",
+        "TASK-38-6",
+        "TASK-38-7",
+        "TASK-38-8",
+        "TASK-38-9",
+        "TASK-38-10",
+        "TASK-38-11",
+        "TASK-38-12"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/05_RELEASE_CHECKLIST.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production",
+        "direct push to main",
+        "gate failure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "delivery:merge-after-gate",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "EPIC-39",
+      "title": "LEAD DELIVERY CORE 5.5 ALIGNMENT",
+      "type": "epic",
+      "source_anchor": "EPIC 39",
+      "goal": "Deliver LEAD DELIVERY CORE 5.5 ALIGNMENT according to Plan №3 v1 without entering production.",
+      "scope": [
+        "All requirements under EPIC 39 in Plan №3 v1"
+      ],
+      "acceptance_criteria": [
+        "All implementation tasks for EPIC 39 have factual evidence and the delivery task is complete"
+      ],
+      "depends_on": [
+        "EPIC-38"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
+        "docs/AMS_UI_CORE_v5.0_FINAL.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "new secret or paid irreversible external action",
+        "scope expansion",
+        "destructive surprise on live data"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:c",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-39-1",
+      "title": "Canonical status",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-39",
+      "source_anchor": "TASK 39.1",
+      "goal": "Complete Canonical status exactly as specified in TASK 39.1.",
+      "scope": [
+        "All requirements and prohibitions in TASK 39.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 39.1 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 39",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.1"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-39-2",
+      "title": "`deliveredAt`",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-39",
+      "source_anchor": "TASK 39.2",
+      "goal": "Complete `deliveredAt` exactly as specified in TASK 39.2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 39.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 39.2 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 39",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-39-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.2"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-39-3",
+      "title": "Historical migration",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-39",
+      "source_anchor": "TASK 39.3",
+      "goal": "Complete Historical migration exactly as specified in TASK 39.3.",
+      "scope": [
+        "All requirements and prohibitions in TASK 39.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 39.3 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 39",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-39-1",
+        "TASK-39-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.3"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-39-4",
+      "title": "Retention regression",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-39",
+      "source_anchor": "TASK 39.4",
+      "goal": "Complete Retention regression exactly as specified in TASK 39.4.",
+      "scope": [
+        "All requirements and prohibitions in TASK 39.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 39.4 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 39",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.4"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-39-5",
+      "title": "State-machine update",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-39",
+      "source_anchor": "TASK 39.5",
+      "goal": "Complete State-machine update exactly as specified in TASK 39.5.",
+      "scope": [
+        "All requirements and prohibitions in TASK 39.5; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 39.5 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 39",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-39-1",
+        "TASK-39-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.5"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-39-6",
+      "title": "Retry contract `retries=0`",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-39",
+      "source_anchor": "TASK 39.6",
+      "goal": "Complete Retry contract `retries=0` exactly as specified in TASK 39.6.",
+      "scope": [
+        "All requirements and prohibitions in TASK 39.6; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 39.6 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 39",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.6"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-39-7",
+      "title": "Delivery certainty",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-39",
+      "source_anchor": "TASK 39.7",
+      "goal": "Complete Delivery certainty exactly as specified in TASK 39.7.",
+      "scope": [
+        "All requirements and prohibitions in TASK 39.7; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 39.7 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 39",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.7"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-39-8",
+      "title": "Migration fixture",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-39",
+      "source_anchor": "TASK 39.8",
+      "goal": "Complete Migration fixture exactly as specified in TASK 39.8.",
+      "scope": [
+        "All requirements and prohibitions in TASK 39.8; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 39.8 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 39",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-39-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.8"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-39-9",
+      "title": "Migration order",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-39",
+      "source_anchor": "TASK 39.9",
+      "goal": "Complete Migration order exactly as specified in TASK 39.9.",
+      "scope": [
+        "All requirements and prohibitions in TASK 39.9; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 39.9 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 39",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-39-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.9"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-39-DELIVERY",
+      "title": "Delivery EPIC 39: review, exact-head gate, merge",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-39",
+      "source_anchor": "EPIC 39",
+      "goal": "Close EPIC 39 through one PR and MERGE_AFTER_GATE.",
+      "scope": [
+        "Full EPIC 39 diff",
+        "Exact-head RISKY gate",
+        "Merge to main without direct push"
+      ],
+      "acceptance_criteria": [
+        "PR exists at exact epic head",
+        "Required SourceCraft gate PASS",
+        "Merge completed and main SHA recorded"
+      ],
+      "required_checks": [
+        "Full diff review",
+        "Project pnpm verify",
+        "Risk-specific exact-head gate"
+      ],
+      "depends_on": [
+        "TASK-39-1",
+        "TASK-39-2",
+        "TASK-39-3",
+        "TASK-39-4",
+        "TASK-39-5",
+        "TASK-39-6",
+        "TASK-39-7",
+        "TASK-39-8",
+        "TASK-39-9"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/05_RELEASE_CHECKLIST.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production",
+        "direct push to main",
+        "gate failure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "delivery:merge-after-gate",
+        "wave:c",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "EPIC-40",
+      "title": "UI CORE 5.0 FOUNDATION / GUARDS",
+      "type": "epic",
+      "source_anchor": "EPIC 40",
+      "goal": "Deliver UI CORE 5.0 FOUNDATION / GUARDS according to Plan №3 v1 without entering production.",
+      "scope": [
+        "All requirements under EPIC 40 in Plan №3 v1"
+      ],
+      "acceptance_criteria": [
+        "All implementation tasks for EPIC 40 have factual evidence and the delivery task is complete"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
+        "docs/AMS_UI_CORE_v5.0_FINAL.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "new secret or paid irreversible external action",
+        "scope expansion",
+        "destructive surprise on live data"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-40-1",
+      "title": "Class-based dark foundation",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-40",
+      "source_anchor": "TASK 40.1",
+      "goal": "Complete Class-based dark foundation exactly as specified in TASK 40.1.",
+      "scope": [
+        "All requirements and prohibitions in TASK 40.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 40.1 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 40",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.1"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-40-2",
+      "title": "Исправить Guard 10",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-40",
+      "source_anchor": "TASK 40.2",
+      "goal": "Complete Исправить Guard 10 exactly as specified in TASK 40.2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 40.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 40.2 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 40",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-40-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.2"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-40-3",
+      "title": "`verify-ui-drift`",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-40",
+      "source_anchor": "TASK 40.3",
+      "goal": "Complete `verify-ui-drift` exactly as specified in TASK 40.3.",
+      "scope": [
+        "All requirements and prohibitions in TASK 40.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 40.3 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 40",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-40-1",
+        "TASK-40-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.3"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-40-4",
+      "title": "Guard 11: two-tier exception model",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-40",
+      "source_anchor": "TASK 40.4",
+      "goal": "Complete Guard 11: two-tier exception model exactly as specified in TASK 40.4.",
+      "scope": [
+        "All requirements and prohibitions in TASK 40.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 40.4 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 40",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.4"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-40-5",
+      "title": "Inspect current primitive literals",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-40",
+      "source_anchor": "TASK 40.5",
+      "goal": "Complete Inspect current primitive literals exactly as specified in TASK 40.5.",
+      "scope": [
+        "All requirements and prohibitions in TASK 40.5; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 40.5 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 40",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.5"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-40-6",
+      "title": "Clarify single primitive owner",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-40",
+      "source_anchor": "TASK 40.6",
+      "goal": "Complete Clarify single primitive owner exactly as specified in TASK 40.6.",
+      "scope": [
+        "All requirements and prohibitions in TASK 40.6; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 40.6 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 40",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.6"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-40-7",
+      "title": "Base UI import guard",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-40",
+      "source_anchor": "TASK 40.7",
+      "goal": "Complete Base UI import guard exactly as specified in TASK 40.7.",
+      "scope": [
+        "All requirements and prohibitions in TASK 40.7; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 40.7 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 40",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.7"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-40-8",
+      "title": "Primitive drift coverage",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-40",
+      "source_anchor": "TASK 40.8",
+      "goal": "Complete Primitive drift coverage exactly as specified in TASK 40.8.",
+      "scope": [
+        "All requirements and prohibitions in TASK 40.8; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 40.8 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 40",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-40-4",
+        "TASK-40-5",
+        "TASK-40-6",
+        "TASK-40-7"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.8"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-40-9",
+      "title": "Tests",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-40",
+      "source_anchor": "TASK 40.9",
+      "goal": "Complete Tests exactly as specified in TASK 40.9.",
+      "scope": [
+        "All requirements and prohibitions in TASK 40.9; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 40.9 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 40",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-40-1",
+        "TASK-40-2",
+        "TASK-40-3",
+        "TASK-40-4",
+        "TASK-40-5",
+        "TASK-40-6",
+        "TASK-40-7",
+        "TASK-40-8"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.9"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-40-DELIVERY",
+      "title": "Delivery EPIC 40: review, exact-head gate, merge",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-40",
+      "source_anchor": "EPIC 40",
+      "goal": "Close EPIC 40 through one PR and MERGE_AFTER_GATE.",
+      "scope": [
+        "Full EPIC 40 diff",
+        "Exact-head RISKY gate",
+        "Merge to main without direct push"
+      ],
+      "acceptance_criteria": [
+        "PR exists at exact epic head",
+        "Required SourceCraft gate PASS",
+        "Merge completed and main SHA recorded"
+      ],
+      "required_checks": [
+        "Full diff review",
+        "Project pnpm verify",
+        "Risk-specific exact-head gate"
+      ],
+      "depends_on": [
+        "TASK-40-1",
+        "TASK-40-2",
+        "TASK-40-3",
+        "TASK-40-4",
+        "TASK-40-5",
+        "TASK-40-6",
+        "TASK-40-7",
+        "TASK-40-8",
+        "TASK-40-9"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/05_RELEASE_CHECKLIST.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production",
+        "direct push to main",
+        "gate failure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "delivery:merge-after-gate",
+        "wave:a",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "EPIC-41",
+      "title": "UI RHYTHM / DESIGN-SYSTEM DRIFT",
+      "type": "epic",
+      "source_anchor": "EPIC 41",
+      "goal": "Deliver UI RHYTHM / DESIGN-SYSTEM DRIFT according to Plan №3 v1 without entering production.",
+      "scope": [
+        "All requirements under EPIC 41 in Plan №3 v1"
+      ],
+      "acceptance_criteria": [
+        "All implementation tasks for EPIC 41 have factual evidence and the delivery task is complete"
+      ],
+      "depends_on": [
+        "EPIC-40"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
+        "docs/AMS_UI_CORE_v5.0_FINAL.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "new secret or paid irreversible external action",
+        "scope expansion",
+        "destructive surprise on live data"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:b",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-41-1",
+      "title": "Inventory SectionShell overrides",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-41",
+      "source_anchor": "TASK 41.1",
+      "goal": "Complete Inventory SectionShell overrides exactly as specified in TASK 41.1.",
+      "scope": [
+        "All requirements and prohibitions in TASK 41.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 41.1 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 41",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.1"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-41-2",
+      "title": "Устранить hidden rhythm API",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-41",
+      "source_anchor": "TASK 41.2",
+      "goal": "Complete Устранить hidden rhythm API exactly as specified in TASK 41.2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 41.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 41.2 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 41",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-41-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.2"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-41-3",
+      "title": "Drift guard",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-41",
+      "source_anchor": "TASK 41.3",
+      "goal": "Complete Drift guard exactly as specified in TASK 41.3.",
+      "scope": [
+        "All requirements and prohibitions in TASK 41.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 41.3 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 41",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-41-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.3"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-41-4",
+      "title": "Не делать file split ради правила, которого нет",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-41",
+      "source_anchor": "TASK 41.4",
+      "goal": "Complete Не делать file split ради правила, которого нет exactly as specified in TASK 41.4.",
+      "scope": [
+        "All requirements and prohibitions in TASK 41.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 41.4 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 41",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.4"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-41-5",
+      "title": "Dead token audit",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-41",
+      "source_anchor": "TASK 41.5",
+      "goal": "Complete Dead token audit exactly as specified in TASK 41.5.",
+      "scope": [
+        "All requirements and prohibitions in TASK 41.5; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 41.5 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 41",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.5"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-41-6",
+      "title": "Responsive / accessibility matrix",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-41",
+      "source_anchor": "TASK 41.6",
+      "goal": "Complete Responsive / accessibility matrix exactly as specified in TASK 41.6.",
+      "scope": [
+        "All requirements and prohibitions in TASK 41.6; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 41.6 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 41",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-41-2",
+        "TASK-41-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.6"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-41-7",
+      "title": "Reduced motion",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-41",
+      "source_anchor": "TASK 41.7",
+      "goal": "Complete Reduced motion exactly as specified in TASK 41.7.",
+      "scope": [
+        "All requirements and prohibitions in TASK 41.7; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 41.7 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 41",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-41-2",
+        "TASK-41-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.7"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-41-DELIVERY",
+      "title": "Delivery EPIC 41: review, exact-head gate, merge",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-41",
+      "source_anchor": "EPIC 41",
+      "goal": "Close EPIC 41 through one PR and MERGE_AFTER_GATE.",
+      "scope": [
+        "Full EPIC 41 diff",
+        "Exact-head RISKY gate",
+        "Merge to main without direct push"
+      ],
+      "acceptance_criteria": [
+        "PR exists at exact epic head",
+        "Required SourceCraft gate PASS",
+        "Merge completed and main SHA recorded"
+      ],
+      "required_checks": [
+        "Full diff review",
+        "Project pnpm verify",
+        "Risk-specific exact-head gate"
+      ],
+      "depends_on": [
+        "TASK-41-1",
+        "TASK-41-2",
+        "TASK-41-3",
+        "TASK-41-4",
+        "TASK-41-5",
+        "TASK-41-6",
+        "TASK-41-7"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/05_RELEASE_CHECKLIST.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production",
+        "direct push to main",
+        "gate failure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "delivery:merge-after-gate",
+        "wave:b",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "EPIC-42",
+      "title": "FINAL PLATFORM PROOFS / TECHNICAL VALIDATION",
+      "type": "epic",
+      "source_anchor": "EPIC 42",
+      "goal": "Deliver FINAL PLATFORM PROOFS / TECHNICAL VALIDATION according to Plan №3 v1 without entering production.",
+      "scope": [
+        "All requirements under EPIC 42 in Plan №3 v1"
+      ],
+      "acceptance_criteria": [
+        "All implementation tasks for EPIC 42 have factual evidence and the delivery task is complete"
+      ],
+      "depends_on": [
+        "EPIC-35",
+        "EPIC-36",
+        "EPIC-37",
+        "EPIC-38",
+        "EPIC-39",
+        "EPIC-40",
+        "EPIC-41"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
+        "docs/AMS_UI_CORE_v5.0_FINAL.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "new secret or paid irreversible external action",
+        "scope expansion",
+        "destructive surprise on live data"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:d",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-42-1",
+      "title": "Public boundary final proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-42",
+      "source_anchor": "TASK 42.1",
+      "goal": "Complete Public boundary final proof exactly as specified in TASK 42.1.",
+      "scope": [
+        "All requirements and prohibitions in TASK 42.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 42.1 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 42",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.1"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-42-2",
+      "title": "Safe Outbound mid-stream harness",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-42",
+      "source_anchor": "TASK 42.2",
+      "goal": "Complete Safe Outbound mid-stream harness exactly as specified in TASK 42.2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 42.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 42.2 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 42",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.2"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-42-3",
+      "title": "Same-hash proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-42",
+      "source_anchor": "TASK 42.3",
+      "goal": "Complete Same-hash proof exactly as specified in TASK 42.3.",
+      "scope": [
+        "All requirements and prohibitions in TASK 42.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 42.3 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 42",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.3"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-42-4",
+      "title": "Suspicious baseline proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-42",
+      "source_anchor": "TASK 42.4",
+      "goal": "Complete Suspicious baseline proof exactly as specified in TASK 42.4.",
+      "scope": [
+        "All requirements and prohibitions in TASK 42.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 42.4 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 42",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.4"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-42-5",
+      "title": "Heartbeat visibility proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-42",
+      "source_anchor": "TASK 42.5",
+      "goal": "Complete Heartbeat visibility proof exactly as specified in TASK 42.5.",
+      "scope": [
+        "All requirements and prohibitions in TASK 42.5; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 42.5 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 42",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.5"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-42-6",
+      "title": "Lead migration proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-42",
+      "source_anchor": "TASK 42.6",
+      "goal": "Complete Lead migration proof exactly as specified in TASK 42.6.",
+      "scope": [
+        "All requirements and prohibitions in TASK 42.6; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 42.6 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 42",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.6"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-42-7",
+      "title": "Retryable delivery proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-42",
+      "source_anchor": "TASK 42.7",
+      "goal": "Complete Retryable delivery proof exactly as specified in TASK 42.7.",
+      "scope": [
+        "All requirements and prohibitions in TASK 42.7; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 42.7 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 42",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.7"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-42-8",
+      "title": "Existing proofs",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-42",
+      "source_anchor": "TASK 42.8",
+      "goal": "Complete Existing proofs exactly as specified in TASK 42.8.",
+      "scope": [
+        "All requirements and prohibitions in TASK 42.8; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 42.8 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 42",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.8"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-42-9",
+      "title": "Jobs ownership",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-42",
+      "source_anchor": "TASK 42.9",
+      "goal": "Complete Jobs ownership exactly as specified in TASK 42.9.",
+      "scope": [
+        "All requirements and prohibitions in TASK 42.9; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 42.9 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 42",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.9"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-42-10",
+      "title": "Full verification",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-42",
+      "source_anchor": "TASK 42.10",
+      "goal": "Complete Full verification exactly as specified in TASK 42.10.",
+      "scope": [
+        "All requirements and prohibitions in TASK 42.10; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 42.10 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 42",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-42-1",
+        "TASK-42-2",
+        "TASK-42-3",
+        "TASK-42-4",
+        "TASK-42-5",
+        "TASK-42-6",
+        "TASK-42-7",
+        "TASK-42-8",
+        "TASK-42-9"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.10"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-42-DELIVERY",
+      "title": "Delivery EPIC 42: review, exact-head gate, merge",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-42",
+      "source_anchor": "EPIC 42",
+      "goal": "Close EPIC 42 through one PR and MERGE_AFTER_GATE.",
+      "scope": [
+        "Full EPIC 42 diff",
+        "Exact-head RISKY gate",
+        "Merge to main without direct push"
+      ],
+      "acceptance_criteria": [
+        "PR exists at exact epic head",
+        "Required SourceCraft gate PASS",
+        "Merge completed and main SHA recorded"
+      ],
+      "required_checks": [
+        "Full diff review",
+        "Project pnpm verify",
+        "Risk-specific exact-head gate"
+      ],
+      "depends_on": [
+        "TASK-42-1",
+        "TASK-42-2",
+        "TASK-42-3",
+        "TASK-42-4",
+        "TASK-42-5",
+        "TASK-42-6",
+        "TASK-42-7",
+        "TASK-42-8",
+        "TASK-42-9",
+        "TASK-42-10"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/05_RELEASE_CHECKLIST.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production",
+        "direct push to main",
+        "gate failure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "delivery:merge-after-gate",
+        "wave:d",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "EPIC-43",
+      "title": "SOURCE OF TRUTH / FINAL CONFORMANCE CLOSEOUT",
+      "type": "epic",
+      "source_anchor": "EPIC 43",
+      "goal": "Deliver SOURCE OF TRUTH / FINAL CONFORMANCE CLOSEOUT according to Plan №3 v1 without entering production.",
+      "scope": [
+        "All requirements under EPIC 43 in Plan №3 v1"
+      ],
+      "acceptance_criteria": [
+        "All implementation tasks for EPIC 43 have factual evidence and the delivery task is complete"
+      ],
+      "depends_on": [
+        "EPIC-42"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
+        "docs/AMS_UI_CORE_v5.0_FINAL.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "new secret or paid irreversible external action",
+        "scope expansion",
+        "destructive surprise on live data"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:e",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-43-1",
+      "title": "PROJECT.md",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-43",
+      "source_anchor": "TASK 43.1",
+      "goal": "Complete PROJECT.md exactly as specified in TASK 43.1.",
+      "scope": [
+        "All requirements and prohibitions in TASK 43.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 43.1 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 43",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.1"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-43-2",
+      "title": "DESIGN.md / Approved Exceptions",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-43",
+      "source_anchor": "TASK 43.2",
+      "goal": "Complete DESIGN.md / Approved Exceptions exactly as specified in TASK 43.2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 43.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 43.2 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 43",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.2"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-43-3",
+      "title": "DELIVERY_STATE semantics",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-43",
+      "source_anchor": "TASK 43.3",
+      "goal": "Complete DELIVERY_STATE semantics exactly as specified in TASK 43.3.",
+      "scope": [
+        "All requirements and prohibitions in TASK 43.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 43.3 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 43",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.3"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-43-4",
+      "title": "OWNER_QUEUE",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-43",
+      "source_anchor": "TASK 43.4",
+      "goal": "Complete OWNER_QUEUE exactly as specified in TASK 43.4.",
+      "scope": [
+        "All requirements and prohibitions in TASK 43.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 43.4 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 43",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.4"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-43-5",
+      "title": "Root machine artifacts",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-43",
+      "source_anchor": "TASK 43.5",
+      "goal": "Complete Root machine artifacts exactly as specified in TASK 43.5.",
+      "scope": [
+        "All requirements and prohibitions in TASK 43.5; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 43.5 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 43",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.5"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-43-6",
+      "title": "`experimental.globalNotFound`",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-43",
+      "source_anchor": "TASK 43.6",
+      "goal": "Complete `experimental.globalNotFound` exactly as specified in TASK 43.6.",
+      "scope": [
+        "All requirements and prohibitions in TASK 43.6; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 43.6 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 43",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.6"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-43-7",
+      "title": "Final architecture scan",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-43",
+      "source_anchor": "TASK 43.7",
+      "goal": "Complete Final architecture scan exactly as specified in TASK 43.7.",
+      "scope": [
+        "All requirements and prohibitions in TASK 43.7; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 43.7 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 43",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.7"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-43-8",
+      "title": "Docs / proof consistency",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-43",
+      "source_anchor": "TASK 43.8",
+      "goal": "Complete Docs / proof consistency exactly as specified in TASK 43.8.",
+      "scope": [
+        "All requirements and prohibitions in TASK 43.8; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 43.8 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 43",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-43-1",
+        "TASK-43-2",
+        "TASK-43-3",
+        "TASK-43-4",
+        "TASK-43-5",
+        "TASK-43-6",
+        "TASK-43-7"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.8"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-43-9",
+      "title": "Final main proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-43",
+      "source_anchor": "TASK 43.9",
+      "goal": "Complete Final main proof exactly as specified in TASK 43.9.",
+      "scope": [
+        "All requirements and prohibitions in TASK 43.9; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 43.9 is satisfied",
+        "Required targeted proof is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-named targeted tests/checks from EPIC 43",
+        "Run project-required pnpm verify before delivery merge"
+      ],
+      "depends_on": [
+        "TASK-43-1",
+        "TASK-43-2",
+        "TASK-43-3",
+        "TASK-43-4",
+        "TASK-43-5",
+        "TASK-43-6",
+        "TASK-43-7",
+        "TASK-43-8"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.9"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "new secret or irreversible external action"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "TASK-43-DELIVERY",
+      "title": "Delivery EPIC 43: review, exact-head gate, merge",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-43",
+      "source_anchor": "EPIC 43",
+      "goal": "Close EPIC 43 through one PR and MERGE_AFTER_GATE.",
+      "scope": [
+        "Full EPIC 43 diff",
+        "Exact-head STANDARD unless executable scope changed gate",
+        "Merge to main without direct push"
+      ],
+      "acceptance_criteria": [
+        "PR exists at exact epic head",
+        "Required SourceCraft gate PASS",
+        "Merge completed and main SHA recorded"
+      ],
+      "required_checks": [
+        "Full diff review",
+        "Project pnpm verify",
+        "Risk-specific exact-head gate"
+      ],
+      "depends_on": [
+        "TASK-43-1",
+        "TASK-43-2",
+        "TASK-43-3",
+        "TASK-43-4",
+        "TASK-43-5",
+        "TASK-43-6",
+        "TASK-43-7",
+        "TASK-43-8",
+        "TASK-43-9"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/05_RELEASE_CHECKLIST.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production",
+        "direct push to main",
+        "gate failure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "delivery:merge-after-gate",
+        "wave:e",
+        "plan:v1"
+      ]
+    },
+    {
+      "key": "EPIC-44",
+      "title": "OWNER / PRODUCTION GATES (DEFERRED)",
+      "type": "epic",
+      "source_anchor": "EPIC 44",
+      "goal": "Deliver OWNER / PRODUCTION GATES (DEFERRED) according to Plan №3 v1 without entering production.",
+      "scope": [
+        "Owner/production gates only; no autonomous implementation"
+      ],
+      "acceptance_criteria": [
+        "Remains owner-gated until a separate explicit production command"
+      ],
+      "depends_on": [
+        "EPIC-43"
+      ],
+      "delivery_mode": "PR_ONLY",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
+        "docs/AMS_UI_CORE_v5.0_FINAL.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "No explicit owner production command",
+        "Production is outside Plan №3 approval"
+      ],
+      "priority": 4,
+      "labels": [
+        "wave:f",
+        "plan:v1",
+        "needs-owner",
+        "production"
+      ]
+    }
+  ]
+}
