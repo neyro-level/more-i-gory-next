@@ -6,6 +6,7 @@ import { getPayload } from "payload";
 import config from "../../../../payload.config.ts";
 import { publicReadWithFallback } from "./read-fallback.ts";
 import {
+  listFallbackPublicRegions,
   mapPublicRegions,
   publicRegionSelect,
   type PublicRegionDTO,
@@ -16,7 +17,7 @@ export { composePublicRegionPath, getPublicRegionRelatedLinks, mapPublicRegion, 
 
 async function readPublicRegions(): Promise<readonly PublicRegionDTO[]> {
   return publicReadWithFallback({
-    fallback: [],
+    fallback: listFallbackPublicRegions(),
     reader: "public-regions",
     read: async () => {
       const payload = await getPayload({ config });

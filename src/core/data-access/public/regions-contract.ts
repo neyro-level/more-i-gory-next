@@ -2,6 +2,7 @@ import type { SelectType } from "payload";
 import { z } from "zod";
 
 import type { Media, Region } from "../../../payload-types.ts";
+import { regionSeedContent } from "../../../content/regions/region-seed-content.ts";
 import { getRegionRoutePlan } from "../../../content/regions/region-route-plan.ts";
 import type { RegionInternalLink } from "../../../content/regions/region-route-plan.ts";
 import { composeRegionPathFromSlugs } from "../../../content/regions/region-path-policy.ts";
@@ -119,6 +120,32 @@ export function mapPublicRegions(records: readonly PublicRegionRecord[]): readon
   return [...records]
     .sort((left, right) => left.order - right.order)
     .map((record) => mapPublicRegion(record, records));
+}
+
+export function listFallbackPublicRegions(): readonly PublicRegionDTO[] {
+  const plan = getRegionRoutePlan();
+  const byKey = new Map(plan.map((entry) => [entry.key, entry]));
+
+  return plan.map((entry) => {
+    const content = regionSeedContent[entry.key];
+    if (!content) throw new Error(`Missing CMS seed content for region "${entry.key}".`);
+    const parent = entry.parentKey ? byKey.get(entry.parentKey) : undefined;
+
+    return publicRegionSchema.parse({
+      id: `fallback:${entry.key}`,
+      image: fallbackImage,
+      investmentThesis: content.investmentThesis,
+      kind: content.kind,
+      lead: content.lead,
+      pageId: entry.pageId,
+      parentSlug: parent?.slug,
+      path: entry.path,
+      riskSummary: content.riskSummary,
+      slug: entry.slug,
+      status: content.status,
+      title: content.title,
+    });
+  });
 }
 
 const approvedRegionCrossLinks: readonly RegionInternalLink[] = [

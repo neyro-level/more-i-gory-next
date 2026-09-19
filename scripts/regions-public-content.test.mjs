@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { mapPublicRegions } from "../src/core/data-access/public/regions-contract.ts";
+import { mapPublicRegions, listFallbackPublicRegions } from "../src/core/data-access/public/regions-contract.ts";
 
 test("public region mapper uses CMS title, lead, thesis, risks, media, status and parent hierarchy", () => {
   const mapped = mapPublicRegions([
@@ -62,4 +62,11 @@ test("live region pages read Public Gateway instead of hardcoded domain copy", (
   assert.match(page, /getPublicRegionByPath/);
   assert.match(page, /region\.lead/);
   assert.match(page, /region\.investmentThesis/);
+});
+
+test("build without Payload still has reserved-namespace fallback regions for SSG", () => {
+  const fallback = listFallbackPublicRegions();
+  assert.equal(fallback.length, 10);
+  assert.equal(fallback.find((region) => region.slug === "yalta")?.path, "/investicionnaya-nedvizhimost/krym/yalta/");
+  assert.equal(fallback.find((region) => region.slug === "sochi")?.status, "stub");
 });
