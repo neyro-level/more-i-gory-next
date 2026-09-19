@@ -21,6 +21,17 @@ Production release uses an exact `main` SHA and a Linux-built Next.js
 standalone artifact. The server receives the already built artifact, not source
 that must resolve dependencies or build on the production host.
 
+Build happens off the runtime host. Pack with
+`node scripts/pack-release.mjs --from <linux-build> --sha <40-char> --out <dir>`,
+then install with `ops/runtime/install-release.sh`.
+
+Layout:
+
+```text
+/opt/moreigory/releases/<sha>/
+/opt/moreigory/current → /opt/moreigory/releases/<sha>
+```
+
 Artifact contents:
 
 - `.next/standalone/`;
@@ -35,15 +46,65 @@ HOSTNAME=127.0.0.1 PORT=3000 NODE_ENV=production node server.js
 ```
 
 The active release is selected by an atomic `current` symlink switch. Nginx
-proxies `more-previu.tw1.ru` to the local runtime. `moreigori.ru` is not pointed
-to this server until the owner approves the final domain cutover.
+is the only public listener: TLS, security headers, `/api` and `/admin`
+proxying, and `/_next/static/` cache live in
+`ops/nginx/more-previu.tw1.ru.conf`. Node binds `127.0.0.1:3000`. The static-export sample
+`ops/nginx/legacy/moreigori-static.example.conf` is not current.
+`moreigori.ru` is not pointed to this server until the owner approves the final
+domain cutover.
+
+## Target topology
+
+Preview/staging and later production use the same hop chain. Node is not a
+public listener: only Nginx terminates TLS and proxies to loopback.
+
+```text
+Internet
+→ Nginx TLS
+→ 127.0.0.1:<app-port>
+→ Next standalone + Payload
+→ Managed PostgreSQL
+→ S3
+```
+
+Pinned preview values:
+
+```text
+public host     : more-previu.tw1.ru
+TLS terminator  : Nginx (ops/nginx/more-previu.tw1.ru.conf)
+app bind        : HOSTNAME=127.0.0.1 PORT=3000
+process         : Next standalone + Payload in one Node runtime
+database        : Timeweb Managed PostgreSQL via DATABASE_URI in /etc/moreigory/app.env
+media           : Timeweb S3 bucket moreigory-media (not VPS disk)
+```
+
+## Runtime supervisor
+
+Chosen supervisor: `systemd` unit `moreigory.service`
+(`ops/systemd/moreigory.service`).
+
+```text
+Type=simple
+Restart=always
+RestartSec=3
+bind=127.0.0.1:3000
+```
+
+Container orchestration is not used for this host. The process is a single
+Node runtime behind Nginx.
 
 ## Rollback
 
-Rollback is an atomic switch of `current` to the previous successful release,
-then service restart and live smoke. It does not rebuild the application.
-Destructive migration requires a separate recovery plan and explicit owner
-decision.
+Rollback is `ops/runtime/rollback-release.sh`:
+
+```text
+current → previous release
+restart
+smoke
+```
+
+It does not rebuild the application. Destructive migration requires a separate
+recovery plan and explicit owner decision.
 
 ## Migrations
 
@@ -55,9 +116,18 @@ EPIC 13), RUNTIME NOT PROVEN, PRODUCTION NOT PROVEN.
 
 ## Backup and restore
 
-CODE EXISTS на стороне Timeweb Managed PostgreSQL (провайдер умеет backup).
-RUNTIME NOT PROVEN: фактический restore test ещё не выполнялся (EPIC 13).
-PRODUCTION NOT PROVEN.
+Timeweb Managed PostgreSQL keeps provider backups. The actual restore proof is:
+
+```text
+backup
+→ restore into disposable/staging DB
+→ app reads restored state
+```
+
+Run `ops/runtime/backup-restore.sh` with `PGHOST`/`PGUSER`/`PGPASSWORD` from Secret Master
+admin names `POSTGRESQL_*`, never from the application `DATABASE_URI` dump of
+production rows. The script restores only table `restore_probe` into
+`moreigory_restore_dst` (or `MOREIGORY_BACKUP_TARGET_DB`) and SELECTs the marker.
 
 S3 media (TASK 31.5):
 
@@ -90,8 +160,13 @@ new runtime JOBS_AUTORUN=false
 Deploy-шаг (обязателен перед тем как новый runtime станет jobs owner):
 
 ```bash
-node scripts/assert-one-jobs-owner.mjs --mode=handover-none --values=<old>,<new>
-node scripts/assert-one-jobs-owner.mjs --mode=steady --values=<old>,<new>
+ops/runtime/jobs-handover.sh assert-none false
+ops/runtime/jobs-handover.sh smoke
+# stop old owner, then:
+ops/runtime/jobs-handover.sh assert-none false,false
+# production contour only:
+ops/runtime/jobs-handover.sh assert-steady false,true
+ops/runtime/jobs-handover.sh smoke
 ```
 
 `--values` — фактические `JOBS_AUTORUN` всех Node runtime этого контура
@@ -166,9 +241,22 @@ VPS disk не является source of truth.
 
 ## Staging
 
-CODE EXISTS как контракт: `more-previu.tw1.ru`, отдельная database name, S3
-prefix, noindex, без production PII. RUNTIME NOT PROVEN до EPIC 13.
-PRODUCTION NOT PROVEN.
+This preview host **is** the staging contour (TASK 13.7). `moreigori.ru` cutover
+is later and is not this task.
+
+```text
+публичный хост     : more-previu.tw1.ru
+runtime            : тот же сервер, отдельный release-каталог / unit moreigory.service
+база               : moreigory_staging on the existing Managed PostgreSQL, empty, no production PII dump
+S3                 : bucket moreigory-media, prefix staging/media
+secrets            : MOREIGORY_STAGING_DATABASE_URL in more-i-gory-server/prod;
+                     do not copy TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID or LEAD_CHANNELS
+индексация         : X-Robots-Tag noindex, nofollow; robots.txt disallow
+jobs ingest        : JOBS_AUTORUN=false; feed catalog remains frozen
+```
+
+ops/runtime/ensure-staging-database.sh creates the empty database name without
+printing the connection string.
 
 ## Incident checklist
 

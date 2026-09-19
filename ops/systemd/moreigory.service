@@ -1,0 +1,25 @@
+[Unit]
+Description=More i Gory Node runtime
+After=network.target
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+WorkingDirectory=/opt/moreigory/current
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=3000
+Environment=NODE_ENV=production
+Environment=AMS_RUNTIME_CONTOUR=staging
+Environment=JOBS_AUTORUN=false
+Environment=NEXT_PUBLIC_LEADS_ENABLED=false
+EnvironmentFile=-/etc/moreigory/app.env
+ExecStart=/usr/local/bin/node /opt/moreigory/current/server.js
+Restart=always
+RestartSec=3
+TimeoutStopSec=30
+KillSignal=SIGTERM
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

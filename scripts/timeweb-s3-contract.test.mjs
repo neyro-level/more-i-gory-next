@@ -50,6 +50,12 @@ test("next/image remotePatterns match path-style Timeweb objects", () => {
         port: "",
         protocol: "https",
       },
+      {
+        hostname: TIMEWEB_S3_CONTRACT.hostname,
+        pathname: `/${TIMEWEB_S3_CONTRACT.bucket}/${TIMEWEB_S3_CONTRACT.stagingMediaPrefix}/**`,
+        port: "",
+        protocol: "https",
+      },
     ],
   );
 });

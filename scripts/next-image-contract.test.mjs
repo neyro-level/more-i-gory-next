@@ -17,6 +17,12 @@ test("next/image remotePatterns allow only the exact approved S3 host and media 
         port: "",
         protocol: "https",
       },
+      {
+        hostname: "s3.twcstorage.ru",
+        pathname: "/moreigory-media/staging/media/**",
+        port: "",
+        protocol: "https",
+      },
     ],
   );
 });

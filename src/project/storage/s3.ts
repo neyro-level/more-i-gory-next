@@ -2,6 +2,7 @@ import { s3Storage } from "@payloadcms/storage-s3";
 import type { Plugin } from "payload";
 
 import type { parseProjectEnv } from "../env";
+import { resolveS3MediaPrefix } from "../runtime-contour.ts";
 
 type ProjectEnv = ReturnType<typeof parseProjectEnv>;
 
@@ -11,6 +12,7 @@ export const TIMEWEB_S3_CONTRACT = {
   forcePathStyle: true,
   hostname: "s3.twcstorage.ru",
   mediaPrefix: "media",
+  stagingMediaPrefix: "staging/media",
   region: "ru-1",
 } as const;
 
@@ -53,12 +55,12 @@ export function createS3SdkConfig(env: ProjectEnv) {
   };
 }
 
-export function createPublicS3ObjectUrl(filename: string): string {
+export function createPublicS3ObjectUrl(filename: string, prefix = TIMEWEB_S3_CONTRACT.mediaPrefix): string {
   const name = filename.trim().replace(/^\/+/, "");
   if (!name || name.includes("..") || name.includes("\\")) {
     throw new Error("S3 object filename must be a safe relative object name.");
   }
-  return `${TIMEWEB_S3_CONTRACT.endpoint}/${TIMEWEB_S3_CONTRACT.bucket}/${TIMEWEB_S3_CONTRACT.mediaPrefix}/${name}`;
+  return `${TIMEWEB_S3_CONTRACT.endpoint}/${TIMEWEB_S3_CONTRACT.bucket}/${prefix}/${name}`;
 }
 
 export function isVpsDiskMediaSourceOfTruth(): false {
@@ -75,7 +77,7 @@ export function createStoragePlugins(env: ProjectEnv): Plugin[] {
       bucket: env.S3_BUCKET as string,
       collections: {
         media: {
-          prefix: TIMEWEB_S3_CONTRACT.mediaPrefix,
+          prefix: resolveS3MediaPrefix(env),
         },
       },
       config,

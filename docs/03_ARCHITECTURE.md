@@ -42,6 +42,17 @@ typed content / Markdown / media
 → Nginx reverse proxy (EPIC 13)
 ```
 
+Целевая runtime topology (TASK 13.2), одинаковая для preview и production:
+
+```text
+Internet
+→ Nginx TLS
+→ 127.0.0.1:<app-port>
+→ Next standalone + Payload
+→ Managed PostgreSQL
+→ S3
+```
+
 Формы идут отдельно:
 
 ```text
@@ -462,19 +473,18 @@ Production gate:
 
 ```text
 SourceCraft
+→ Linux builder (not the runtime host)
 → pnpm install --frozen-lockfile
-→ pnpm verify
-→ build content
-→ next build
-→ image optimize
-→ validate out/
-→ upload versioned release
-→ atomic switch
+→ next build (standalone)
+→ scripts/pack-release.mjs
+→ upload /opt/moreigory/releases/<sha>/
+→ atomic current symlink
+→ systemd restart
 → live smoke
 ```
 
 Production не выполняет `git pull` и build. Реальный upload/atomic-switch runbook
-остаётся human gate и не считается реализованным текущим примером Nginx.
+остаётся human gate until a packed Linux artifact is installed.
 
 ## 22. Backup / Recovery
 

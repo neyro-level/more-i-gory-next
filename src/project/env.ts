@@ -7,6 +7,7 @@ const rawEnvSchema = z
   .object({
     AMS_PROFILE: z.literal("REALTY_BASE"),
     TZ: z.literal("Europe/Moscow"),
+    AMS_RUNTIME_CONTOUR: z.enum(["staging", "production"]).optional(),
     JOBS_AUTORUN: z.enum(["true", "false"]).default("false"),
     DATABASE_URI: z
       .string()
@@ -25,6 +26,7 @@ const rawEnvSchema = z
     S3_BUCKET: optionalNonEmpty,
     S3_ACCESS_KEY: optionalNonEmpty,
     S3_SECRET_KEY: optionalNonEmpty,
+    S3_MEDIA_PREFIX: z.enum(["media", "staging/media"]).optional(),
     OUTBOUND_ALLOWED_HOSTS: optionalNonEmpty,
     LEAD_CHANNELS: optionalNonEmpty,
     LEAD_OUTBOUND_HOSTS: optionalNonEmpty,

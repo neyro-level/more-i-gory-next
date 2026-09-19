@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 type RemotePattern = NonNullable<NonNullable<NextConfig["images"]>["remotePatterns"]>[number];
 
-const S3_MEDIA_PREFIX = "media";
+const S3_MEDIA_PREFIXES = ["media", "staging/media"] as const;
 
 export function createS3MediaRemotePatterns(source: Partial<Record<"S3_BUCKET" | "S3_ENDPOINT", string | undefined>>): RemotePattern[] {
   const endpoint = source.S3_ENDPOINT?.trim();
@@ -30,12 +30,10 @@ export function createS3MediaRemotePatterns(source: Partial<Record<"S3_BUCKET" |
     throw new Error("S3_ENDPOINT must not include a path; media path is derived from S3_BUCKET and the media prefix.");
   }
 
-  return [
-    {
-      hostname: url.hostname,
-      pathname: `/${bucket}/${S3_MEDIA_PREFIX}/**`,
-      port: url.port,
-      protocol: url.protocol.slice(0, -1) as "http" | "https",
-    },
-  ];
+  return S3_MEDIA_PREFIXES.map((prefix) => ({
+    hostname: url.hostname,
+    pathname: `/${bucket}/${prefix}/**`,
+    port: url.port,
+    protocol: url.protocol.slice(0, -1) as "http" | "https",
+  }));
 }
