@@ -15,12 +15,12 @@
 | `scripts/lead-delivery-proof-g.test.mjs:109` | `jobs.queue` | TEST | `await memory.payload.jobs.queue({` |
 | `scripts/seed-media-assets.mjs:64` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/seed-regions.mjs:72` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
-| `scripts/verify-architecture-guards.test.mjs:66` | `find` | TEST | `files: [{ path: "src/core/data-access/public/pages.ts", content: 'payload.find({ collection: "pages" });' }],` |
-| `scripts/verify-architecture-guards.test.mjs:79` | `find` | TEST | `content: 'payload.find({ collection: "pages", overrideAccess: false });',` |
-| `scripts/verify-architecture-guards.test.mjs:128` | `find` | TEST | `files: [{ path: "src/core/data-access/system/jobs.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
-| `scripts/verify-architecture-guards.test.mjs:135` | `find` | TEST | `files: [{ path: "src/core/data-access/system/lead-delivery.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
-| `scripts/verify-architecture-guards.test.mjs:332` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { slug: { exists: true } } });',` |
-| `scripts/verify-architecture-guards.test.mjs:345` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { status: { equals: "published" } } });',` |
+| `scripts/verify-architecture-guards.test.mjs:65` | `find` | TEST | `files: [{ path: "src/core/data-access/public/pages.ts", content: 'payload.find({ collection: "pages" });' }],` |
+| `scripts/verify-architecture-guards.test.mjs:78` | `find` | TEST | `content: 'payload.find({ collection: "pages", overrideAccess: false });',` |
+| `scripts/verify-architecture-guards.test.mjs:127` | `find` | TEST | `files: [{ path: "src/core/data-access/system/jobs.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
+| `scripts/verify-architecture-guards.test.mjs:134` | `find` | TEST | `files: [{ path: "src/core/data-access/system/lead-delivery.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
+| `scripts/verify-architecture-guards.test.mjs:331` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { slug: { exists: true } } });',` |
+| `scripts/verify-architecture-guards.test.mjs:344` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { status: { equals: "published" } } });',` |
 | `src/core/data-access/public/newbuilds.ts:171` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/newbuilds.ts:172` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/newbuilds.ts:192` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |

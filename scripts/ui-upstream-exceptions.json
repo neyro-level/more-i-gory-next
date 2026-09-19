@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "consumerPath": "@/components/ui/*",
+  "shadcnVersion": "4.21.0",
+  "preset": "base-nova",
+  "primitiveOwnerRoots": ["src/components/ui/"],
+  "primitiveOwnerFiles": [
+    "src/lib/button-variants.ts",
+    "src/ui/interactive/checkbox.tsx",
+    "src/ui/interactive/field.tsx",
+    "src/ui/interactive/label.tsx",
+    "src/ui/interactive/separator.tsx",
+    "src/ui/interactive/sheet.tsx"
+  ],
+  "exceptions": [
+    {
+      "file": "src/components/ui/badge.tsx",
+      "literal": "focus-visible:ring-[3px]",
+      "pattern": "exact",
+      "component": "badge",
+      "shadcnVersion": "4.21.0",
+      "preset": "base-nova",
+      "verificationMethod": "pnpm exec shadcn add badge --diff",
+      "reason": "Exact focus-ring geometry from the pinned upstream primitive."
+    },
+    {
+      "file": "src/lib/button-variants.ts",
+      "literal": "rounded-[min(var(--radius-md),10px)]",
+      "pattern": "exact",
+      "component": "button",
+      "shadcnVersion": "4.21.0",
+      "preset": "base-nova",
+      "verificationMethod": "pnpm exec shadcn add button --diff",
+      "reason": "Exact compact-button radius from the pinned upstream primitive."
+    },
+    {
+      "file": "src/lib/button-variants.ts",
+      "literal": "rounded-[min(var(--radius-md),12px)]",
+      "pattern": "exact",
+      "component": "button",
+      "shadcnVersion": "4.21.0",
+      "preset": "base-nova",
+      "verificationMethod": "pnpm exec shadcn add button --diff",
+      "reason": "Exact compact-button radius from the pinned upstream primitive."
+    },
+    {
+      "file": "src/lib/button-variants.ts",
+      "literal": "text-[0.8rem]",
+      "pattern": "exact",
+      "component": "button",
+      "shadcnVersion": "4.21.0",
+      "preset": "base-nova",
+      "verificationMethod": "pnpm exec shadcn add button --diff",
+      "reason": "Exact small-button type size from the pinned upstream primitive."
+    },
+    {
+      "file": "src/ui/interactive/checkbox.tsx",
+      "literal": "rounded-[4px]",
+      "pattern": "exact",
+      "component": "checkbox",
+      "shadcnVersion": "4.21.0",
+      "preset": "base-nova",
+      "verificationMethod": "pnpm exec shadcn add checkbox --diff",
+      "reason": "Exact checkbox radius from the pinned upstream primitive."
+    },
+    {
+      "file": "src/ui/interactive/sheet.tsx",
+      "literal": "bg-black/10",
+      "pattern": "exact",
+      "component": "sheet",
+      "shadcnVersion": "4.21.0",
+      "preset": "base-nova",
+      "verificationMethod": "pnpm exec shadcn add sheet --diff",
+      "reason": "Exact backdrop opacity from the pinned upstream primitive."
+    }
+  ]
+}

@@ -1,10 +1,21 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
+import {
+  extractUiDesignLiterals,
+  isAllowedStructuralLiteral,
+  isPrimitiveOwner,
+  isVerifiedUpstreamException,
+} from "./lib/architecture-guards.mjs";
 import { evaluateUiDriftGate } from "./lib/ui-drift-policy.mjs";
 
 const root = process.cwd();
 const findings = [];
+const uiContractPath = join(root, "scripts", "ui-upstream-exceptions.json");
+const uiContract = JSON.parse(readFileSync(uiContractPath, "utf8"));
+const requiredDarkVariant = "@custom-variant dark (&:is(.dark *));";
+const runtimeDarkActivationPattern = /(?:className|class)\s*=\s*["'`]dark(?:\s|["'`])|classList\.(?:add|toggle|replace)\s*\([^)]*["']dark["']|setAttribute\s*\(\s*["']class["']\s*,[^)]*["']dark["']/;
+const baseUiImportPattern = /(?:from\s+|import\s*\(|require\s*\()\s*["']@base-ui\/react(?:\/[^"']*)?["']/;
 
 function walk(directory) {
   return readdirSync(directory).flatMap((entry) => {
@@ -51,7 +62,15 @@ const forbiddenPresentationImport =
 for (const file of sourceFiles) {
   const content = readFileSync(file, "utf8");
   const relativePath = relative(root, file).replaceAll("\\", "/");
-  if (/\bdark:/.test(content)) report("P1", file, "dark variant while dark mode is disabled");
+  const primitiveOwner = isPrimitiveOwner(relativePath, uiContract);
+  if (/\bdark:/.test(content) && !primitiveOwner) report("P1", file, "dark variant outside canonical primitive owner");
+  if (runtimeDarkActivationPattern.test(content)) report("P1", file, "runtime dark-mode activation while dark mode is disabled");
+  if (baseUiImportPattern.test(content) && !primitiveOwner) report("P1", file, "Base UI import outside canonical primitive owner");
+  for (const literal of extractUiDesignLiterals(content)) {
+    if (!isAllowedStructuralLiteral(literal) && !isVerifiedUpstreamException(relativePath, literal, uiContract)) {
+      report("P1", file, `unverified primitive or project design literal ${literal}`);
+    }
+  }
   if (/^[\"']use client[\"'];?/m.test(content) && !file.includes(join("src", "ui", "interactive"))) {
     report("P1", file, "client boundary outside approved interactive leaf");
   }
@@ -65,8 +84,11 @@ for (const file of sourceFiles) {
 
 const globalsPath = join(root, "src", "app", "(site)", "globals.css");
 const globalsCss = readFileSync(globalsPath, "utf8");
-if (/@custom-variant\s+dark|^\.dark\s*\{/m.test(globalsCss)) {
-  report("P1", globalsPath, "dark-mode foundation exists while project mode is disabled");
+if (!globalsCss.includes(requiredDarkVariant)) {
+  report("P1", globalsPath, "missing inert class-based dark variant foundation");
+}
+if (/^\.dark\s*\{/m.test(globalsCss)) {
+  report("P1", globalsPath, "runtime dark-mode selector exists while project mode is disabled");
 }
 if (!/@media\s*\(prefers-reduced-motion:\s*reduce\)/.test(globalsCss)) {
   report("P1", globalsPath, "missing reduced-motion foundation");

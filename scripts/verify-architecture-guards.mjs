@@ -35,5 +35,9 @@ const manifests = ["package.json", ...walk("packages").filter((filePath) => file
     path: filePath,
   }));
 
-assertArchitectureGuards({ files, manifests });
+const uiContract = JSON.parse(
+  readFileSync(path.join(projectRoot, "scripts", "ui-upstream-exceptions.json"), "utf8"),
+);
+
+assertArchitectureGuards({ files, manifests, uiContract });
 console.log("Architecture guards passed.");

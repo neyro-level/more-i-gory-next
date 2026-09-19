@@ -36,8 +36,7 @@ test("clean architecture fixture passes all guards", () => {
         { path: "next.config.ts", content: "export const bucket = process.env.S3_BUCKET; export const endpoint = process.env.S3_ENDPOINT;" },
         { path: "packages/contracts/src/index.ts", content: 'import { z } from "zod"; export { pageSchema } from "./schemas.ts";' },
         { path: "packages/ui/src/index.ts", content: 'import type { PageContent } from "@more-i-gory/contracts"; export type UiPage = PageContent;' },
-        { path: "src/components/marketing/layout.tsx", content: 'export const className = "grid grid-cols-[auto_1fr] focus-visible:ring-[3px]";' },
-        { path: "src/components/ui/button.tsx", content: 'export const className = "rounded-[min(var(--radius-md),10px)] rounded-[4px] text-[0.8rem]";' },
+        { path: "src/components/marketing/layout.tsx", content: 'export const className = "grid grid-cols-[auto_1fr]";' },
       ],
       manifests: [
         { path: "package.json", manifest: exactManifest },
@@ -289,7 +288,7 @@ test("Guard 10 rejects dark variants while dark mode is disabled", () => {
   });
 });
 
-test("Guard 10 rejects dark foundation while dark mode is disabled", () => {
+test("Guard 10 rejects a non-canonical dark foundation", () => {
   expectGuard(10, {
     files: [{ path: "src/app/(site)/globals.css", content: "@custom-variant dark (&:where(.dark, .dark *));" }],
     manifests: [],
@@ -308,7 +307,7 @@ test("Guard 11 allows structural arbitrary values", () => {
     assertArchitectureGuards({
       files: [
         { path: "src/components/marketing/grid.tsx", content: 'export const className = "grid lg:grid-cols-[0.85fr_1.15fr] has-[>svg]:grid-cols-[auto_1fr]";' },
-        { path: "src/components/ui/button.tsx", content: 'export const className = "rounded-[min(var(--radius-md),12px)] rounded-[4px] text-[0.8rem] focus-visible:ring-[3px]";' },
+        { path: "src/ui/interactive/sheet.tsx", content: 'export const className = "translate-x-[2.5rem] max-w-[42rem]";' },
       ],
       manifests: [],
     }),

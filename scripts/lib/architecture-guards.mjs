@@ -29,9 +29,13 @@ const localApiCallPattern =
 const moduleSpecifierPattern =
   /(?:import\s+(?:type\s+)?[^"'()]*?\s+from\s+|export\s+(?:type\s+)?[^"']*?\s+from\s+|import\s*\(\s*|require\s*\(\s*)["']([^"']+)["']/g;
 const darkVariantPattern = /(?:^|[\s"'`])(?:[\w!*\-[\]():/>&=.]+:)*dark:/;
+const requiredDarkVariant = "@custom-variant dark (&:is(.dark *));";
+const runtimeDarkActivationPattern = /(?:className|class)\s*=\s*["'`]dark(?:\s|["'`])|classList\.(?:add|toggle|replace)\s*\([^)]*["']dark["']|setAttribute\s*\(\s*["']class["']\s*,[^)]*["']dark["']/;
+const baseUiImportPattern = /(?:from\s+|import\s*\(|require\s*\()\s*["']@base-ui\/react(?:\/[^"']*)?["']/;
 const rawDesignColorPattern = /#[0-9a-f]{3,8}\b|\brgb\(|\bhsl\(|\boklch\(/i;
 const arbitraryDesignLiteralPattern =
-  /(?:^|[\s"'`])((?:[\w!*\-[\]():/>&=.]+:)*(?:aspect|bg|border|gap|grid-cols|max-w|min-h|px|py|ring|rounded|text)-\[[^\]\s]+\])/g;
+  /(?:^|[\s"'`])((?:[\w!*\-[\]():/>&=.]+:)*(?:aspect|bg|border|gap|grid-cols|grid-rows|max-w|min-w|max-h|min-h|w|h|inset|top|right|bottom|left|translate-x|translate-y|px|py|ring|rounded|text)-\[[^\]\s]+\])/g;
+const paletteLiteralPattern = /(?:^|[\s"'`])((?:[\w!*\-[\]():/>&=.]+:)*bg-(?:black|white)\/\d{1,3})(?=$|[\s"'`])/g;
 
 function normalizePath(filePath) {
   return filePath.replaceAll("\\", "/");
@@ -246,24 +250,57 @@ function isForbiddenUiDependency(name) {
   );
 }
 
-function arbitraryDesignLiterals(content) {
-  return [...content.matchAll(arbitraryDesignLiteralPattern)]
-    .map((match) => match[1])
-    .filter((token) => !isAllowedStructuralLiteral(token));
+export function extractUiDesignLiterals(content) {
+  return [
+    ...content.matchAll(arbitraryDesignLiteralPattern),
+    ...content.matchAll(paletteLiteralPattern),
+  ].map((match) => match[1]);
 }
 
-function isAllowedStructuralLiteral(token) {
+export function isAllowedStructuralLiteral(token) {
   return (
-    /grid-cols-\[(?:\d+(?:\.\d+)?fr|auto)(?:_(?:\d+(?:\.\d+)?fr|auto))*\]$/.test(token) ||
-    /rounded-\[min\(var\(--radius-md\),\d+px\)\]$/.test(token) ||
-    /rounded-\[4px\]$/.test(token) ||
-    /text-\[0\.8rem\]$/.test(token) ||
-    /ring-\[3px\]$/.test(token)
+    /(?:grid-cols|grid-rows)-\[(?:\d+(?:\.\d+)?fr|auto)(?:_(?:\d+(?:\.\d+)?fr|auto))*\]$/.test(token) ||
+    /(?:aspect)-\[(?:\d+(?:\.\d+)?(?:\/|_)?){1,2}\]$/.test(token) ||
+    /(?:w|h|min-w|max-w|min-h|max-h|inset|top|right|bottom|left|translate-x|translate-y)-\[-?(?:\d+(?:\.\d+)?(?:%|px|rem|em|vh|vw)|auto|min-content|max-content|fit-content)\]$/.test(token)
   );
 }
 
-export function findArchitectureGuardViolations({ files, manifests }) {
+export function isPrimitiveOwner(filePath, uiContract) {
+  const normalized = normalizePath(filePath);
+  return (
+    (uiContract?.primitiveOwnerRoots ?? []).some((root) => normalized.startsWith(root)) ||
+    (uiContract?.primitiveOwnerFiles ?? []).includes(normalized)
+  );
+}
+
+export function isVerifiedUpstreamException(filePath, literal, uiContract) {
+  const normalized = normalizePath(filePath);
+  return (uiContract?.exceptions ?? []).some(
+    (entry) => entry.file === normalized && entry.literal === literal && entry.pattern === "exact",
+  );
+}
+
+function uiContractViolations(uiContract) {
+  if (!uiContract) return [];
   const violations = [];
+  if (uiContract.shadcnVersion !== "4.21.0" || uiContract.preset !== "base-nova") {
+    violations.push("Guard 11: upstream exception manifest must pin shadcn 4.21.0 and base-nova");
+  }
+  for (const [index, entry] of (uiContract.exceptions ?? []).entries()) {
+    for (const field of ["file", "literal", "pattern", "component", "shadcnVersion", "preset", "verificationMethod", "reason"]) {
+      if (typeof entry[field] !== "string" || entry[field].trim() === "") {
+        violations.push(`Guard 11: upstream exception ${index} is missing ${field}`);
+      }
+    }
+    if (entry.shadcnVersion !== uiContract.shadcnVersion || entry.preset !== uiContract.preset || entry.pattern !== "exact") {
+      violations.push(`Guard 11: upstream exception ${index} does not match the pinned exact contract`);
+    }
+  }
+  return violations;
+}
+
+export function findArchitectureGuardViolations({ files, manifests, uiContract }) {
+  const violations = uiContractViolations(uiContract);
 
   for (const entry of files) {
     const filePath = normalizePath(entry.path);
@@ -396,17 +433,26 @@ export function findArchitectureGuardViolations({ files, manifests }) {
       addViolation(violations, 13, filePath, "public regions reader requires status=published at the query boundary");
     }
 
-    if (darkVariantPattern.test(content)) {
+    const primitiveOwner = isPrimitiveOwner(filePath, uiContract);
+    if (darkVariantPattern.test(content) && !primitiveOwner) {
       addViolation(violations, 10, filePath, "dark variant is forbidden while project dark mode is disabled");
     }
 
     const isGlobalsCss = filePath === "src/app/(site)/globals.css";
-    if (isGlobalsCss && /@custom-variant\s+dark|^\.dark\s*\{/m.test(content)) {
-      addViolation(violations, 10, filePath, "dark-mode foundation is forbidden while project dark mode is disabled");
+    if (isGlobalsCss && !content.includes(requiredDarkVariant)) {
+      addViolation(violations, 10, filePath, "required inert class-based dark variant is missing");
+    }
+    if (runtimeDarkActivationPattern.test(content) || (isGlobalsCss && /^\.dark\s*\{/m.test(content))) {
+      addViolation(violations, 10, filePath, "runtime dark-mode activation is forbidden");
+    }
+    if (baseUiImportPattern.test(content) && !primitiveOwner) {
+      addViolation(violations, 11, filePath, "Base UI imports are allowed only in approved primitive implementation owners");
     }
 
     if (!isGlobalsCss) {
-      const arbitraryLiterals = arbitraryDesignLiterals(content);
+      const arbitraryLiterals = extractUiDesignLiterals(content).filter(
+        (literal) => !isAllowedStructuralLiteral(literal) && !isVerifiedUpstreamException(filePath, literal, uiContract),
+      );
       if (rawDesignColorPattern.test(content) || arbitraryLiterals.length > 0) {
         addViolation(
           violations,
