@@ -11,8 +11,9 @@ export {
   propertyPublicationWhere,
   propertyRouteWhere,
   publicPropertySelect,
+  uniqueArchiveReplacementPath,
 } from "./properties-contract.ts";
-export type { ArchivedPropertyAction, PublicPropertyDTO } from "./properties-contract.ts";
+export type { ArchivedPropertyAction, ArchiveReplacementCandidate, PublicPropertyDTO } from "./properties-contract.ts";
 
 import {
   mapPublicProperty,

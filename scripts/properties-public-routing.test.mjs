@@ -9,6 +9,7 @@ import {
   propertyPublicationWhere,
   propertyRouteWhere,
   publicPropertySelect,
+  uniqueArchiveReplacementPath,
 } from "../src/core/data-access/public/properties-contract.ts";
 
 const privateFields = ["unitNumber", "cadastralNumber", "internalComment", "ownerContact"];
@@ -121,21 +122,65 @@ test("public property DTO mapper does not leak private inventory data", () => {
   }
 });
 
-test("archived lifecycle serves noindex during retention and never redirects to home", () => {
+test("archived lifecycle serves noindex during retention, unique replacement 301, otherwise 410", () => {
   assert.equal(archiveRetentionDays, 60);
+  const now = new Date("2026-09-17T00:00:00.000Z");
 
-  const recentArchived = getArchivedPropertyAction(
-    { deactivatedAt: "2026-09-01T00:00:00.000Z", status: "archived" },
-    new Date("2026-09-17T00:00:00.000Z"),
-  );
-  const expiredArchived = getArchivedPropertyAction(
-    { deactivatedAt: "2026-06-01T00:00:00.000Z", status: "archived" },
-    new Date("2026-09-17T00:00:00.000Z"),
+  assert.deepEqual(
+    getArchivedPropertyAction({ deactivatedAt: "2026-09-01T00:00:00.000Z", status: "archived" }, now),
+    { kind: "serve-noindex" },
   );
 
-  assert.deepEqual(recentArchived, { kind: "serve-noindex" });
-  assert.deepEqual(expiredArchived, { kind: "redirect", status: 301, target: "/obekty/" });
-  assert.notEqual(expiredArchived.target, "/");
+  const expired = {
+    complexId: "complex-1",
+    deactivatedAt: "2026-06-01T00:00:00.000Z",
+    market: "secondary",
+    path: "/obekty/expired-archive/",
+    regionLabel: "Ялта",
+    slug: "expired-archive",
+    status: "archived",
+  };
+
+  assert.deepEqual(getArchivedPropertyAction(expired, now, []), { kind: "gone", status: 410 });
+  assert.deepEqual(
+    getArchivedPropertyAction(expired, now, [
+      {
+        complexId: "complex-1",
+        market: "secondary",
+        path: "/obekty/yalta-passport/",
+        regionLabel: "Ялта",
+        slug: "yalta-passport",
+      },
+      {
+        complexId: "complex-2",
+        market: "secondary",
+        path: "/obekty/other/",
+        regionLabel: "Ялта",
+        slug: "other",
+      },
+    ]),
+    { kind: "redirect", status: 301, target: "/obekty/yalta-passport/" },
+  );
+  assert.deepEqual(
+    getArchivedPropertyAction(expired, now, [
+      {
+        complexId: "complex-1",
+        market: "secondary",
+        path: "/obekty/a/",
+        regionLabel: "Ялта",
+        slug: "a",
+      },
+      {
+        complexId: "complex-1",
+        market: "secondary",
+        path: "/obekty/b/",
+        regionLabel: "Ялта",
+        slug: "b",
+      },
+    ]),
+    { kind: "gone", status: 410 },
+  );
+  assert.equal(uniqueArchiveReplacementPath(expired, [{ ...expired, slug: "listing", path: "/obekty/" }]), null);
 });
 
 test("/obekty routes use Payload properties public gateway, not legacy project JSON service", async () => {
@@ -147,8 +192,13 @@ test("/obekty routes use Payload properties public gateway, not legacy project J
   assert.doesNotMatch(listPage, /contentService|listPublishedProjects/);
   assert.match(detailPage, /getManualPropertyRouteBySlug/);
   assert.match(detailPage, /getArchivedPropertyAction/);
-  assert.match(detailPage, /robots:[\s\S]*index:\s*false/);
+  assert.match(detailPage, /buildPassportPageMetadata/);
+  assert.match(detailPage, /passportStructuredData/);
+  assert.match(detailPage, /application\/ld\+json/);
   assert.match(detailPage, /permanentRedirect\(archivedAction\.target\)/);
+  assert.match(detailPage, /kind === "gone"/);
+  assert.match(detailPage, /data-archive-status="410"/);
+  assert.doesNotMatch(detailPage, /target: "\/obekty\/"/);
   assert.match(detailPage, /notFound/);
   assert.match(detailPage, /generateStaticParams/);
   assert.doesNotMatch(detailPage, /dynamicParams\s*=\s*false/);

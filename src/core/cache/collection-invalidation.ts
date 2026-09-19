@@ -49,20 +49,20 @@ export function cmsMutationCacheTargets(entity: CmsCacheEntity, doc: CmsDoc = {}
       return slug ? cacheTargets.pageDoc(slug) : [{ kind: "tag", tag: "page" }];
     case "properties":
       return slug
-        ? createCacheInvalidationBatch(cacheTargets.propertyPage(slug), [{ kind: "tag", tag: "properties" }])
-        : createCacheInvalidationBatch(cacheTargets.catalogGroup(), [{ kind: "tag", tag: "properties" }]);
+        ? createCacheInvalidationBatch(cacheTargets.propertyPage(slug), [{ kind: "tag", tag: "properties" }, { kind: "tag", tag: "sitemap" }])
+        : createCacheInvalidationBatch(cacheTargets.catalogGroup(), [{ kind: "tag", tag: "properties" }, { kind: "tag", tag: "sitemap" }]);
     case "regions": {
       const regionSlug = regionPathSlug(doc);
       return regionSlug ? cacheTargets.regionPage(regionSlug) : cacheTargets.navigation();
     }
     case "residential-complexes":
       return slug
-        ? createCacheInvalidationBatch(cacheTargets.complexPage(slug), [{ kind: "tag", tag: "complexes" }])
-        : createCacheInvalidationBatch(cacheTargets.catalogGroup(), [{ kind: "tag", tag: "complexes" }]);
+        ? createCacheInvalidationBatch(cacheTargets.complexPage(slug), [{ kind: "tag", tag: "complexes" }, { kind: "tag", tag: "sitemap" }])
+        : createCacheInvalidationBatch(cacheTargets.catalogGroup(), [{ kind: "tag", tag: "complexes" }, { kind: "tag", tag: "sitemap" }]);
     case "developers":
       return slug
-        ? cacheTargets.developerPage(slug)
-        : createCacheInvalidationBatch([{ kind: "tag", tag: "developers" }], cacheTargets.catalogGroup());
+        ? createCacheInvalidationBatch(cacheTargets.developerPage(slug), [{ kind: "tag", tag: "sitemap" }])
+        : createCacheInvalidationBatch([{ kind: "tag", tag: "developers" }, { kind: "tag", tag: "sitemap" }], cacheTargets.catalogGroup());
     case "redirects":
       return cacheTargets.redirects();
     case "site-settings":

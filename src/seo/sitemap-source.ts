@@ -3,12 +3,18 @@ import "server-only";
 import { unstable_cache } from "next/cache";
 import { getPayload } from "payload";
 
-import { listPublishedComplexes } from "@/core/data-access/public";
+import { listPublishedComplexes, listPublishedDevelopers, listPublishedManualProperties } from "@/core/data-access/public";
 import { publicReadWithFallback } from "@/core/data-access/public/read-fallback.ts";
 import config from "../../payload.config.ts";
-import { newbuildComplexSitemapEntries } from "./newbuild-indexing.ts";
+import { newbuildComplexSitemapEntries, rejectDisallowedSitemapEntries } from "./newbuild-indexing.ts";
 import { seoRegistry } from "./registry";
-import { cmsPageSitemapEntries, mergeSitemapEntries, normalizeSitemapCanonical } from "./sitemap-source-contract.ts";
+import {
+  articleSitemapEntries,
+  cmsPageSitemapEntries,
+  mergeSitemapEntries,
+  normalizeSitemapCanonical,
+  publishedCatalogSitemapEntries,
+} from "./sitemap-source-contract.ts";
 import type { SitemapSourceEntry } from "./sitemap-source-contract.ts";
 
 export { priorityMap } from "./sitemap-source-contract.ts";
@@ -24,10 +30,20 @@ export function staticRegistrySitemapEntries(): readonly SitemapSourceEntry[] {
 
 async function readSitemapEntries(): Promise<readonly SitemapSourceEntry[]> {
   const staticEntries = staticRegistrySitemapEntries();
-  const complexEntries = newbuildComplexSitemapEntries(await listPublishedComplexes());
+  const [complexes, developers, passports] = await Promise.all([
+    listPublishedComplexes(),
+    listPublishedDevelopers(),
+    listPublishedManualProperties(),
+  ]);
+  const catalogEntries = [
+    ...newbuildComplexSitemapEntries(complexes),
+    ...publishedCatalogSitemapEntries(developers),
+    ...publishedCatalogSitemapEntries(passports),
+    ...articleSitemapEntries(),
+  ];
 
   return publicReadWithFallback({
-    fallback: mergeSitemapEntries([...staticEntries, ...complexEntries]),
+    fallback: rejectDisallowedSitemapEntries(mergeSitemapEntries([...staticEntries, ...catalogEntries])),
     reader: "sitemap-cms-pages",
     read: async () => {
       const payload = await getPayload({ config });
@@ -47,11 +63,17 @@ async function readSitemapEntries(): Promise<readonly SitemapSourceEntry[]> {
         },
       });
 
-      return mergeSitemapEntries([...staticEntries, ...complexEntries, ...cmsPageSitemapEntries(pages.docs)]);
+      return rejectDisallowedSitemapEntries(
+        mergeSitemapEntries([
+          ...staticEntries,
+          ...cmsPageSitemapEntries(pages.docs),
+          ...catalogEntries,
+        ]),
+      );
     },
   });
 }
 
 export const getSitemapEntries = unstable_cache(readSitemapEntries, ["sitemap-entries"], {
-  tags: ["page", "site-settings"],
+  tags: ["sitemap", "page", "site-settings", "catalog", "developers", "properties"],
 });

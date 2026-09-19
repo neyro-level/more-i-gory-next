@@ -44,3 +44,38 @@ test("redirect validation accepts a direct redirect to a known target", () => {
     validateRedirectEntries([{ source: "/old/", destination: "/new/", permanent: true }], knownTargets),
   );
 });
+
+test("redirect validation rejects loops, chains, missing targets and generic home even if they exist", () => {
+  const withHome = new Set(["/", "/obekty/", "/obekty/live/", "/final/"]);
+
+  assert.throws(
+    () => validateRedirectEntries([{ source: "/old/", destination: "/old/", permanent: true }], withHome),
+    /Redirect loop/,
+  );
+  assert.throws(
+    () =>
+      validateRedirectEntries(
+        [
+          { source: "/old/", destination: "/obekty/live/", permanent: true },
+          { source: "/obekty/live/", destination: "/final/", permanent: true },
+        ],
+        withHome,
+      ),
+    /Redirect chain/,
+  );
+  assert.throws(
+    () => validateRedirectEntries([{ source: "/old/", destination: "/missing/", permanent: true }], withHome),
+    /not a known target/,
+  );
+  assert.throws(
+    () => validateRedirectEntries([{ source: "/old/", destination: "/", permanent: true }], withHome),
+    /generic home/,
+  );
+  assert.throws(
+    () => validateRedirectEntries([{ source: "/old/", destination: "/obekty/", permanent: true }], withHome),
+    /generic home/,
+  );
+  assert.doesNotThrow(() =>
+    validateRedirectEntries([{ source: "/old/", destination: "/obekty/live/", permanent: true }], withHome),
+  );
+});

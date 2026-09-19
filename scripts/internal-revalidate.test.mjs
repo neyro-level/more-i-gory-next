@@ -126,6 +126,7 @@ test("internal revalidate accepts developer, properties and zastroyshchik CMS ta
     { kind: "tag", tag: "developers" },
     { kind: "tag", tag: "developer:sample-developer" },
     { kind: "tag", tag: "properties" },
+    { kind: "tag", tag: "sitemap" },
     { kind: "tag", tag: "page" },
     { kind: "path", path: "/zastroyshchik/sample-developer/" },
   ];

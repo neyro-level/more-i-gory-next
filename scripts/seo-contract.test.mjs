@@ -40,6 +40,56 @@ test("buildPageMetadata supports CMS-style source and noindex robots", async () 
   assert.deepEqual(metadata.openGraph?.images, ["http://127.0.0.1:4311/images/og/default.webp"]);
 });
 
+test("manual passport metadata uses facts only: title, description, canonical, robots, OG and JSON-LD", async () => {
+  const { buildPassportPageMetadata, passportStructuredData } = await import("../src/seo/passport-metadata.ts");
+  const property = {
+    description: "Подтверждённый инвестиционный тезис по фактам паспорта.",
+    facts: [{ label: "Документы", value: "ЕГРН проверен." }],
+    image: { src: "/images/projects/sample-resort/cover.webp" },
+    path: "/obekty/yalta-passport/",
+    status: "active",
+    title: "Квартира в Ялте",
+    verdict: "Подходит для ручного разбора.",
+  };
+
+  const metadata = buildPassportPageMetadata(property);
+  assert.equal(metadata.title, "Квартира в Ялте");
+  assert.equal(metadata.description, "Подтверждённый инвестиционный тезис по фактам паспорта.");
+  assert.equal(metadata.alternates?.canonical, "/obekty/yalta-passport/");
+  assert.deepEqual(metadata.robots, { follow: true, index: true });
+  assert.equal(metadata.openGraph?.title, "Квартира в Ялте");
+  assert.deepEqual(metadata.openGraph?.images, ["http://127.0.0.1:4311/images/projects/sample-resort/cover.webp"]);
+
+  const jsonLd = passportStructuredData(property);
+  assert.equal(jsonLd["@type"], "RealEstateListing");
+  assert.equal(jsonLd.name, "Квартира в Ялте");
+  assert.equal(jsonLd.description, "Подтверждённый инвестиционный тезис по фактам паспорта.");
+  assert.deepEqual(jsonLd.additionalProperty, [{ "@type": "PropertyValue", name: "Документы", value: "ЕГРН проверен." }]);
+  assert.equal("offers" in jsonLd, false);
+  assert.equal(JSON.stringify(jsonLd).includes("15 000 000"), false);
+});
+
+test("archived passport metadata stays noindex and still uses only passport facts", async () => {
+  const { buildPassportPageMetadata, passportStructuredData } = await import("../src/seo/passport-metadata.ts");
+  const metadata = buildPassportPageMetadata({
+    facts: [{ label: "Статус", value: "Снят с подборки." }],
+    path: "/obekty/archived-passport/",
+    status: "archived",
+    title: "Архивный объект",
+    verdict: "Больше не актуален.",
+  });
+
+  assert.deepEqual(metadata.robots, { follow: true, index: false });
+  assert.equal(metadata.title, "Архивный объект");
+  assert.equal(passportStructuredData({
+    facts: [{ label: "Статус", value: "Снят с подборки." }],
+    path: "/obekty/archived-passport/",
+    status: "archived",
+    title: "Архивный объект",
+    verdict: "Больше не актуален.",
+  }).offers, undefined);
+});
+
 test("SEO validator no longer pins registry to exactly 23 entries", () => {
   const source = readFileSync("scripts/validate-seo.mjs", "utf8");
 

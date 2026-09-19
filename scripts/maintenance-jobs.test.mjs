@@ -159,8 +159,9 @@ test("catalogLifecycle maintenance task delegates to catalog lifecycle handler",
     await catalogLifecycleTask.handler?.({ input: {}, req: { payload } }),
     { output: { expired: 0, retained: 0 } },
   );
-  assert.equal(findCalls.length, 1);
+  assert.equal(findCalls.length, 2);
   assert.equal(findCalls[0].collection, "properties");
+  assert.equal(findCalls[1].collection, "properties");
 });
 
 test("leadRetentionCleanup maintenance task delegates to retention handler", async () => {

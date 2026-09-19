@@ -39,3 +39,17 @@ export function mergeSitemapEntries(entries: readonly SitemapSourceEntry[]): rea
 
   return merged;
 }
+
+export function publishedCatalogSitemapEntries(
+  records: readonly { path: string }[],
+  priority: SitemapPriority = "P1",
+): readonly SitemapSourceEntry[] {
+  return records.map((record) => ({
+    canonical: normalizeSitemapCanonical(record.path),
+    priority,
+  }));
+}
+
+export function articleSitemapEntries(): readonly SitemapSourceEntry[] {
+  return [];
+}

@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { cmsPageSitemapEntries, mergeSitemapEntries } from "../src/seo/sitemap-source-contract.ts";
+import { cmsPageSitemapEntries, mergeSitemapEntries, publishedCatalogSitemapEntries, articleSitemapEntries } from "../src/seo/sitemap-source-contract.ts";
+import { isAllowedSitemapCanonical, rejectDisallowedSitemapEntries } from "../src/seo/newbuild-indexing.ts";
 
 test("sitemap route is dynamic and wired to the DB-backed source", () => {
   const source = readFileSync("src/app/sitemap.ts", "utf8");
@@ -45,4 +46,105 @@ test("sitemap merge keeps first canonical occurrence", () => {
       { canonical: "/b/", priority: "P2" },
     ],
   );
+});
+
+test("unified sitemap sources cover registry, CMS pages, passports, complexes and developers", () => {
+  const source = readFileSync("src/seo/sitemap-source.ts", "utf8");
+  assert.match(source, /staticRegistrySitemapEntries\(/);
+  assert.match(source, /cmsPageSitemapEntries\(/);
+  assert.match(source, /listPublishedManualProperties\(/);
+  assert.match(source, /listPublishedComplexes\(/);
+  assert.match(source, /listPublishedDevelopers\(/);
+  assert.match(source, /articleSitemapEntries\(/);
+});
+
+test("published catalog paths become sitemap entries and articles stay empty until later", () => {
+  assert.deepEqual(publishedCatalogSitemapEntries([{ path: "/obekty/sample-resort" }, { path: "/zastroyshchik/sample-developer/" }]), [
+    { canonical: "/obekty/sample-resort/", priority: "P1" },
+    { canonical: "/zastroyshchik/sample-developer/", priority: "P1" },
+  ]);
+  assert.deepEqual(articleSitemapEntries(), []);
+});
+
+test("sitemap never includes filter states, unit routes or layout routes", () => {
+  const source = readFileSync("src/seo/sitemap-source.ts", "utf8");
+  assert.match(source, /rejectDisallowedSitemapEntries\(/);
+  assert.equal(isAllowedSitemapCanonical("/novostroyki/sample-complex/"), true);
+  assert.equal(isAllowedSitemapCanonical("/novostroyki/?rooms=2"), false);
+  assert.equal(isAllowedSitemapCanonical("/novostroyki/sample-complex/lot-1001/"), false);
+  assert.equal(isAllowedSitemapCanonical("/novostroyki/sample-complex/planirovki/evro-2/"), false);
+  assert.deepEqual(
+    rejectDisallowedSitemapEntries([
+      { canonical: "/novostroyki/sample-complex/", priority: "P1" },
+      { canonical: "/novostroyki/?rooms=2", priority: "P2" },
+      { canonical: "/novostroyki/sample-complex/lot-1001/", priority: "P3" },
+    ]),
+    [{ canonical: "/novostroyki/sample-complex/", priority: "P1" }],
+  );
+});
+
+test("published property, complex and developer appear in sitemap after CMS revalidate without rebuild", async () => {
+  const { newbuildComplexSitemapEntries } = await import("../src/seo/newbuild-indexing.ts");
+  const { createCmsMutationInvalidationHook } = await import("../src/core/cache/collection-invalidation.ts");
+
+  const published = {
+    complexes: [],
+    developers: [],
+    properties: [],
+  };
+  const sitemapCache = new Map();
+
+  function computeSitemap() {
+    return rejectDisallowedSitemapEntries(
+      mergeSitemapEntries([
+        ...publishedCatalogSitemapEntries(published.properties),
+        ...newbuildComplexSitemapEntries(published.complexes),
+        ...publishedCatalogSitemapEntries(published.developers),
+      ]),
+    );
+  }
+
+  function readSitemap() {
+    if (!sitemapCache.has("sitemap-entries")) {
+      sitemapCache.set("sitemap-entries", computeSitemap());
+    }
+    return sitemapCache.get("sitemap-entries");
+  }
+
+  sitemapCache.set("sitemap-entries", []);
+  assert.deepEqual(readSitemap(), []);
+
+  const invalidator = {
+    async invalidate(targets) {
+      if (targets.some((target) => target.kind === "tag" && target.tag === "sitemap")) {
+        sitemapCache.delete("sitemap-entries");
+      }
+    },
+  };
+  const logger = { error() {}, info() {} };
+
+  published.properties = [{ path: "/obekty/fresh-passport/" }];
+  published.complexes = [{ path: "/novostroyki/fresh-complex/" }];
+  published.developers = [{ path: "/zastroyshchik/fresh-developer/" }];
+
+  await createCmsMutationInvalidationHook("properties", { invalidator, logger })({
+    doc: { slug: "fresh-passport", status: "published" },
+  });
+  await createCmsMutationInvalidationHook("residential-complexes", { invalidator, logger })({
+    doc: { slug: "fresh-complex", status: "published" },
+  });
+  await createCmsMutationInvalidationHook("developers", { invalidator, logger })({
+    doc: { slug: "fresh-developer", status: "published" },
+  });
+
+  const entries = readSitemap();
+  assert.deepEqual(
+    entries.map((entry) => entry.canonical).sort(),
+    ["/novostroyki/fresh-complex/", "/obekty/fresh-passport/", "/zastroyshchik/fresh-developer/"],
+  );
+
+  const source = readFileSync("src/seo/sitemap-source.ts", "utf8");
+  assert.match(source, /tags:\s*\[[^\]]*["']sitemap["']/);
+  const route = readFileSync("src/app/sitemap.ts", "utf8");
+  assert.match(route, /force-dynamic/);
 });

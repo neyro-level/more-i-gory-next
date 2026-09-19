@@ -10,11 +10,13 @@ type PublicPropertyRecord = Readonly<
       Pick<
         Property,
         | "budgetNote"
+        | "complex"
         | "deactivatedAt"
         | "description"
         | "facts"
         | "images"
         | "locality"
+        | "market"
         | "publicAddress"
         | "region"
         | "riskSummary"
@@ -39,6 +41,8 @@ const publicPropertySchema = z.object({
   facts: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).min(1),
   id: z.string().min(1),
   image: publicMediaSchema,
+  market: z.enum(["secondary", "newbuild"]).optional(),
+  complexId: z.string().min(1).optional(),
   path: z.string().startsWith("/").endsWith("/"),
   publishedAt: z.string().min(1),
   regionLabel: z.string().min(1),
@@ -57,16 +61,27 @@ export const archiveRetentionDays = 60;
 
 export type ArchivedPropertyAction =
   | Readonly<{ kind: "serve-noindex" }>
-  | Readonly<{ kind: "redirect"; status: 301; target: "/obekty/" }>;
+  | Readonly<{ kind: "redirect"; status: 301; target: string }>
+  | Readonly<{ kind: "gone"; status: 410 }>;
+
+export type ArchiveReplacementCandidate = Readonly<{
+  complexId?: string;
+  market?: "secondary" | "newbuild";
+  path: string;
+  regionLabel: string;
+  slug: string;
+}>;
 
 export const publicPropertySelect = {
   budgetNote: true,
+  complex: true,
   deactivatedAt: true,
   description: true,
   facts: true,
   id: true,
   images: true,
   locality: true,
+  market: true,
   origin: true,
   publicAddress: true,
   publishedAt: true,
@@ -142,14 +157,26 @@ function getRegionLabel(property: PublicPropertyRecord): string {
   return property.locality ?? property.publicAddress ?? "Регион уточняется";
 }
 
+function relationId(value: unknown): string | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  if (typeof value === "string" && value.trim()) return value.trim();
+  if (typeof value === "object" && value !== null && "id" in value) {
+    const id = (value as { id: unknown }).id;
+    if (typeof id === "number" || typeof id === "string") return String(id);
+  }
+  return undefined;
+}
+
 export function mapPublicProperty(property: PublicPropertyRecord): PublicPropertyDTO {
   return publicPropertySchema.parse({
     budgetNote: property.budgetNote ?? undefined,
+    complexId: relationId(property.complex),
     deactivatedAt: property.deactivatedAt ?? undefined,
     description: property.description ?? undefined,
     facts: property.facts?.map((fact) => ({ label: fact.label, value: fact.value })) ?? [],
     id: String(property.id),
     image: getImage(property),
+    market: property.market,
     path: `/obekty/${property.slug}/`,
     publishedAt: property.publishedAt,
     regionLabel: getRegionLabel(property),
@@ -163,9 +190,33 @@ export function mapPublicProperty(property: PublicPropertyRecord): PublicPropert
   });
 }
 
+function isSameArchiveType(
+  archived: Pick<ArchiveReplacementCandidate, "market">,
+  candidate: Pick<ArchiveReplacementCandidate, "market">,
+): boolean {
+  if (!archived.market || !candidate.market) return true;
+  return archived.market === candidate.market;
+}
+
+export function uniqueArchiveReplacementPath(
+  archived: ArchiveReplacementCandidate,
+  published: readonly ArchiveReplacementCandidate[],
+): string | null {
+  const matches = published.filter((candidate) => {
+    if (candidate.slug === archived.slug) return false;
+    if (candidate.path === "/obekty/" || candidate.path === "/") return false;
+    if (!isSameArchiveType(archived, candidate)) return false;
+    if (archived.complexId) return candidate.complexId === archived.complexId;
+    return candidate.regionLabel === archived.regionLabel;
+  });
+
+  return matches.length === 1 ? matches[0]?.path ?? null : null;
+}
+
 export function getArchivedPropertyAction(
-  property: Pick<PublicPropertyDTO, "deactivatedAt" | "status">,
+  property: Pick<PublicPropertyDTO, "deactivatedAt" | "status"> & Partial<ArchiveReplacementCandidate>,
   now: Date = new Date(),
+  published: readonly ArchiveReplacementCandidate[] = [],
 ): ArchivedPropertyAction {
   if (property.status !== "archived") {
     return { kind: "serve-noindex" };
@@ -183,5 +234,20 @@ export function getArchivedPropertyAction(
     return { kind: "serve-noindex" };
   }
 
-  return { kind: "redirect", status: 301, target: "/obekty/" };
+  const target = uniqueArchiveReplacementPath(
+    {
+      complexId: property.complexId,
+      market: property.market,
+      path: property.path ?? `/obekty/${property.slug ?? ""}/`,
+      regionLabel: property.regionLabel ?? "",
+      slug: property.slug ?? "",
+    },
+    published,
+  );
+
+  if (target && target !== "/obekty/" && target !== "/") {
+    return { kind: "redirect", status: 301, target };
+  }
+
+  return { kind: "gone", status: 410 };
 }

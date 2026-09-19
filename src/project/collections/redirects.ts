@@ -13,7 +13,7 @@ const validateRedirects: CollectionBeforeValidateHook = async ({ data, operation
   const destination = normalizeRedirectPath(String(data.destination ?? ""));
   const currentId = originalDoc?.id;
 
-  const [existingRedirects, pages] = await Promise.all([
+  const [existingRedirects, pages, properties] = await Promise.all([
     req.payload.find({
       collection: "redirects",
       depth: 0,
@@ -31,11 +31,27 @@ const validateRedirects: CollectionBeforeValidateHook = async ({ data, operation
       select: { path: true },
       where: { status: { equals: "published" } },
     }),
+    req.payload.find({
+      collection: "properties",
+      depth: 0,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: { slug: true },
+      where: {
+        and: [
+          { origin: { equals: "manual" } },
+          { status: { equals: "active" } },
+          { publishedAt: { exists: true } },
+        ],
+      },
+    }),
   ]);
 
   const knownTargets = new Set<string>([
     ...seoRegistry.map((entry) => normalizeRedirectPath(entry.canonical)),
     ...pages.docs.map((page) => normalizeRedirectPath(page.path)),
+    ...properties.docs.map((property) => normalizeRedirectPath(`/obekty/${String(property.slug)}/`)),
   ]);
   const entries: RedirectEntry[] = [
     ...existingRedirects.docs.map((entry) => ({

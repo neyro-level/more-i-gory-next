@@ -13,6 +13,12 @@ export function normalizeRedirectPath(path: string): string {
   return trimmed === "/" ? "/" : `/${trimmed.replace(/^\/+/, "").replace(/\/+$/, "")}/`;
 }
 
+export const genericRedirectDestinations = new Set(["/", "/obekty/"]);
+
+export function isGenericRedirectDestination(path: string): boolean {
+  return genericRedirectDestinations.has(normalizeRedirectPath(path));
+}
+
 export function validateRedirectEntries(entries: readonly RedirectEntry[], knownTargets: ReadonlySet<string>): void {
   const bySource = new Map<string, RedirectEntry>();
 
@@ -21,6 +27,9 @@ export function validateRedirectEntries(entries: readonly RedirectEntry[], known
     const destination = normalizeRedirectPath(entry.destination);
 
     if (source === destination) throw new Error(`Redirect loop: ${source} redirects to itself.`);
+    if (isGenericRedirectDestination(destination)) {
+      throw new Error(`Redirect to generic home is not allowed: ${source} -> ${destination}`);
+    }
     if (bySource.has(source)) throw new Error(`Duplicate redirect source: ${source}`);
     bySource.set(source, { ...entry, destination, source });
   }

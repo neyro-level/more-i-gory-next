@@ -31,10 +31,10 @@
 | `src/core/data-access/public/newbuilds.ts:267` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/pages.ts:15` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/pages.ts:16` | `find` | PUBLIC GATEWAY | `const pages = await payload.find({` |
-| `src/core/data-access/public/properties.ts:31` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/properties.ts:32` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/public/properties.ts:52` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/properties.ts:53` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/properties.ts:32` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/properties.ts:33` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/properties.ts:53` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/properties.ts:54` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/site-chrome.ts:19` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/site-chrome.ts:21` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "site-settings", depth: 0, overrideAccess: false, select: publicSiteSettingsSelect }),` |
 | `src/core/data-access/public/site-chrome.ts:22` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "navigation", depth: 0, overrideAccess: false, select: publicNavigationSelect }),` |
@@ -49,7 +49,11 @@
 | `src/core/data-access/system/bootstrap-owner.ts:14` | `getPayload` | SYSTEM GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/system/bootstrap-owner.ts:16` | `find` | SYSTEM GATEWAY | `const owners = await payload.find({` |
 | `src/core/data-access/system/bootstrap-owner.ts:27` | `create` | SYSTEM GATEWAY | `await payload.create({` |
-| `src/core/data-access/system/catalog-lifecycle.ts:31` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
+| `src/core/data-access/system/catalog-lifecycle.ts:74` | `find` | SYSTEM GATEWAY | `const existing = await payload.find?.({` |
+| `src/core/data-access/system/catalog-lifecycle.ts:86` | `update` | SYSTEM GATEWAY | `await payload.update?.({` |
+| `src/core/data-access/system/catalog-lifecycle.ts:97` | `create` | SYSTEM GATEWAY | `await payload.create?.({` |
+| `src/core/data-access/system/catalog-lifecycle.ts:112` | `find` | SYSTEM GATEWAY | `const archivedResult = await payload.find?.({` |
+| `src/core/data-access/system/catalog-lifecycle.ts:127` | `find` | SYSTEM GATEWAY | `const publishedResult = await payload.find?.({` |
 | `src/core/data-access/system/create-import-issue.ts:13` | `create` | SYSTEM GATEWAY | `return payload.create({` |
 | `src/core/data-access/system/create-lead.ts:39` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs.queue({` |
 | `src/core/data-access/system/create-lead.ts:61` | `getPayload` | SYSTEM GATEWAY | `const payload = await getPayload({ config });` |
@@ -96,6 +100,7 @@
 | `src/project/collections/properties.ts:43` | `req.payload` | CMS ADMIN | `(feedSourceId == null ? null : await loadFeedSourceMarket(req.payload, feedSourceId));` |
 | `src/project/collections/redirects.ts:17` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/collections/redirects.ts:25` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
+| `src/project/collections/redirects.ts:34` | `req.payload.find` | CMS ADMIN | `req.payload.find({` |
 | `src/project/jobs/imports/dispatch-due-feeds.ts:25` | `req.payload` | SYSTEM GATEWAY | `const result = await dispatchDueFeeds(req.payload as unknown as Parameters<typeof dispatchDueFeeds>[0]);` |
 | `src/project/jobs/imports/import-feed.ts:236` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as ImportFeedPayload,` |
 | `src/project/jobs/leads/deliver-lead.ts:189` | `req.payload` | SYSTEM GATEWAY | `payload: req.payload as unknown as PayloadLike,` |
@@ -104,5 +109,5 @@
 | `src/project/jobs/maintenance/scheduled-tasks.ts:148` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof catalogLifecycle>[0],` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:175` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof leadRetentionCleanup>[0],` |
 | `src/project/leads/owner-retry.ts:39` | `req.payload` | SYSTEM GATEWAY | `req.payload as Parameters<typeof retryAbandonedLeadDelivery>[0],` |
-| `src/seo/sitemap-source.ts:33` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/seo/sitemap-source.ts:34` | `find` | PUBLIC GATEWAY | `const pages = await payload.find({` |
+| `src/seo/sitemap-source.ts:49` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/seo/sitemap-source.ts:50` | `find` | PUBLIC GATEWAY | `const pages = await payload.find({` |
