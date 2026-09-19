@@ -44,7 +44,7 @@ export default function MethodPage() {
         <NumberedSteps columns={5} items={checks.map((title) => ({ title }))} />
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <ScenarioTable
           rows={[
             {
@@ -66,13 +66,13 @@ export default function MethodPage() {
         />
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <ActionLink href="/podbor/">
           Получить разбор по методике
         </ActionLink>
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <LeadFormSection title="Разобрать объект по методике" />
       </SectionShell>
     </main>

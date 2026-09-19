@@ -67,7 +67,7 @@ export default async function DeveloperPage({ params }: DeveloperPageProps) {
       </SectionShell>
 
       <SectionShell
-        className="pt-0"
+        rhythm="sm"
         eyebrow="Связанные разделы"
         title="Смотреть застройщика в контексте каталога"
         lead="Карточка застройщика не живёт отдельно от проекта: сравните ЖК, региональный сегмент и материалы по рискам перед заявкой."
@@ -79,7 +79,7 @@ export default async function DeveloperPage({ params }: DeveloperPageProps) {
         </div>
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <LeadFormSection title={`Проверить проекты ${developer.title}`} />
       </SectionShell>
     </main>

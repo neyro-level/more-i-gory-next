@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "reservations": [
+    {
+      "token": "--color-accent",
+      "classification": "shadcn-required",
+      "reason": "Canonical shadcn semantic color slot retained for primitive compatibility."
+    },
+    {
+      "token": "--color-accent-foreground",
+      "classification": "shadcn-required",
+      "reason": "Canonical shadcn foreground pair retained with the accent slot."
+    },
+    {
+      "token": "--radius-sm",
+      "classification": "shadcn-required",
+      "reason": "Canonical shadcn radius scale retained for upstream primitive compatibility."
+    },
+    {
+      "token": "--radius-2xl",
+      "classification": "shadcn-required",
+      "reason": "Canonical shadcn radius scale retained for upstream primitive compatibility."
+    },
+    {
+      "token": "--radius-3xl",
+      "classification": "shadcn-required",
+      "reason": "Canonical shadcn radius scale retained for upstream primitive compatibility."
+    }
+  ]
+}

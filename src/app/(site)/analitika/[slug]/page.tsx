@@ -77,7 +77,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       </SectionShell>
 
       <SectionShell
-        className="pt-0"
+        rhythm="sm"
         eyebrow="Коммерческая связка"
         title="Перейти от материала к проверке рынка"
         lead="Материал должен вести к региону, каталогу новостроек или персональному подбору, а не оставаться изолированной публикацией."
@@ -89,7 +89,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </div>
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <LeadFormSection title="Задать вопрос по теме статьи" />
       </SectionShell>
     </main>

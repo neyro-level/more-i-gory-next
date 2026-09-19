@@ -65,11 +65,11 @@ export function ProjectPassportTemplate({ alternatives = [], property }: Project
         <SourceList items={property.facts.map((fact) => ({ title: fact.label, description: fact.value }))} />
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <RiskBlock title="Ключевой риск" text={property.riskSummary} />
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <LeadFormSection title="Получить разбор этого проекта" />
       </SectionShell>
     </main>

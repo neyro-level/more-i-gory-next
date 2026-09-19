@@ -87,7 +87,7 @@ export default async function NewbuildComplexPage({ params }: NewbuildComplexPag
       </SectionShell>
 
       <SectionShell
-        className="pt-0"
+        rhythm="sm"
         eyebrow="Связанные разделы"
         title="Проверить ЖК в контексте рынка"
         lead="Карточка ЖК связана с застройщиком, общим каталогом, региональным сегментом и аналитикой по инвестиционным рискам."
@@ -100,7 +100,7 @@ export default async function NewbuildComplexPage({ params }: NewbuildComplexPag
         </div>
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <LeadFormSection title={`Получить разбор ${complex.title}`} />
       </SectionShell>
     </main>

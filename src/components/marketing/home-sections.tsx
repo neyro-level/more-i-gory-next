@@ -128,7 +128,7 @@ export function MethodologySection() {
       >
         <NumberedSteps columns={5} items={decisionSteps.map((title) => ({ title }))} />
       </SectionShell>
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <ProofBlock
           items={[
             { title: "Факты отдельно от прогнозов", text: "Цены, документы, оператор и ограничения фиксируются как факты; будущая доходность описывается только как сценарий." },
@@ -144,7 +144,7 @@ export function MethodologySection() {
 export function RegionsSection({ regions }: { regions: HomeRegionCardModel[] }) {
   return (
     <SectionShell
-      className="py-section-lg"
+      rhythm="lg"
       eyebrow="Регионы"
       title="Сравниваем море и горы как разные инвестиционные рынки"
       lead="На старте фокус — Сочи, Крым, Архыз и Алтай. Расширение регионов пойдёт только после отдельного SEO и content gate."
@@ -219,7 +219,7 @@ export function ResponsibilitySection() {
           { title: "Human gate", description: "Сильные заявления о компании, команда, реальные проекты, SLA и legal-тексты подтверждаются отдельно." },
         ]} />
       </SectionShell>
-      <SectionShell className="pt-0"><LeadFormSection /></SectionShell>
+      <SectionShell rhythm="sm"><LeadFormSection /></SectionShell>
     </>
   );
 }

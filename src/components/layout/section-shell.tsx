@@ -10,8 +10,16 @@ type SectionShellProps = ComponentPropsWithoutRef<"section"> & {
   contained?: boolean;
   containerSize?: "site" | "narrow";
   headingLevel?: 1 | 2;
+  rhythm?: "sm" | "md" | "lg" | "hero";
   tone?: "default" | "dark";
 };
+
+const rhythmClassName = {
+  sm: "py-section-sm",
+  md: "py-section-md",
+  lg: "py-section-lg",
+  hero: "py-section-hero",
+} as const;
 
 export function SectionShell({
   actions,
@@ -22,6 +30,7 @@ export function SectionShell({
   eyebrow,
   headingLevel = 2,
   lead,
+  rhythm = "md",
   title,
   tone = "default",
   ...props
@@ -44,7 +53,7 @@ export function SectionShell({
   );
 
   return (
-    <section className={cn("py-section-md", className)} {...props}>
+    <section className={cn(rhythmClassName[rhythm], className)} {...props}>
       {contained ? <Container size={containerSize}>{content}</Container> : content}
     </section>
   );

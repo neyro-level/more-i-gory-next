@@ -8,11 +8,14 @@ import {
   isVerifiedUpstreamException,
 } from "./lib/architecture-guards.mjs";
 import { evaluateUiDriftGate } from "./lib/ui-drift-policy.mjs";
+import { findDeadThemeTokens } from "./lib/ui-token-policy.mjs";
 
 const root = process.cwd();
 const findings = [];
 const uiContractPath = join(root, "scripts", "ui-upstream-exceptions.json");
 const uiContract = JSON.parse(readFileSync(uiContractPath, "utf8"));
+const rhythmExceptions = JSON.parse(readFileSync(join(root, "scripts", "ui-section-rhythm-exceptions.json"), "utf8"));
+const tokenReservations = JSON.parse(readFileSync(join(root, "scripts", "ui-token-reservations.json"), "utf8"));
 const requiredDarkVariant = "@custom-variant dark (&:is(.dark *));";
 const runtimeDarkActivationPattern = /(?:className|class)\s*=\s*["'`]dark(?:\s|["'`])|classList\.(?:add|toggle|replace)\s*\([^)]*["']dark["']|setAttribute\s*\(\s*["']class["']\s*,[^)]*["']dark["']/;
 const baseUiImportPattern = /(?:from\s+|import\s*\(|require\s*\()\s*["']@base-ui\/react(?:\/[^"']*)?["']/;
@@ -63,6 +66,13 @@ for (const file of sourceFiles) {
   const content = readFileSync(file, "utf8");
   const relativePath = relative(root, file).replaceAll("\\", "/");
   const primitiveOwner = isPrimitiveOwner(relativePath, uiContract);
+  const directRhythmOverrides = [...content.matchAll(/<SectionShell\b[^>]*\bclassName\s*=\s*["']([^"']*\b(?:pt|pb|py)-[^"']*)["']/gs)];
+  for (const match of directRhythmOverrides) {
+    const approved = (rhythmExceptions.exceptions ?? []).some(
+      (entry) => entry.file === relativePath && entry.className === match[1],
+    );
+    if (!approved) report("P1", file, "SectionShell vertical padding bypasses canonical rhythm API");
+  }
   if (/\bdark:/.test(content) && !primitiveOwner) report("P1", file, "dark variant outside canonical primitive owner");
   if (runtimeDarkActivationPattern.test(content)) report("P1", file, "runtime dark-mode activation while dark mode is disabled");
   if (baseUiImportPattern.test(content) && !primitiveOwner) report("P1", file, "Base UI import outside canonical primitive owner");
@@ -130,6 +140,9 @@ for (const token of requiredTokens) {
 }
 
 const combinedSource = sourceFiles.map((file) => readFileSync(file, "utf8")).join("\n");
+for (const token of findDeadThemeTokens({ globalsCss, source: combinedSource, reservations: tokenReservations })) {
+  report("P1", globalsPath, `dead project theme token ${token}`);
+}
 const requiredUtilities = [
   "text-h1",
   "text-h2",

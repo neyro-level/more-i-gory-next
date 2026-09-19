@@ -47,7 +47,7 @@ export default function CompanyPage() {
         />
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <LeadFormSection title="Понять, подходит ли наш подход" />
       </SectionShell>
     </main>

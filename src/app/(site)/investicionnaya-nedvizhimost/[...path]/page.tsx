@@ -87,7 +87,7 @@ export default async function RegionRoutePage({ params }: RegionRoutePageProps) 
         </div>
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {relatedLinks.map((link) => (
             <Card key={`${link.relation}-${link.href}`} className="rounded-card bg-card">
@@ -104,7 +104,7 @@ export default async function RegionRoutePage({ params }: RegionRoutePageProps) 
         </div>
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <LeadFormSection title={`Получить разбор: ${region.title}`} />
       </SectionShell>
     </main>

@@ -2,7 +2,18 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-const VIEWPORTS = [390, 768, 1024, 1440];
+const VIEWPORTS = [390, 768, 1024, 1440, 1920];
+const REPRESENTATIVE_ROUTES = [
+  "/",
+  "/investicionnaya-nedvizhimost/",
+  "/investicionnaya-nedvizhimost/[...path]/",
+  "/novostroyki/",
+  "/novostroyki/[slug]/",
+  "/obekty/",
+  "/podbor/",
+  "/kontakty/",
+  "/analitika/[slug]/",
+];
 
 const globals = readFileSync("src/app/(site)/globals.css", "utf8");
 const header = readFileSync("src/components/layout/site-header.tsx", "utf8");
@@ -12,7 +23,8 @@ const buttonVariants = readFileSync("src/lib/button-variants.ts", "utf8");
 const leadForm = readFileSync("src/ui/interactive/lead-form-client.tsx", "utf8");
 
 test("representative widths keep overflow, CTA, keyboard, labels and reduced motion contracts", () => {
-  assert.deepEqual(VIEWPORTS, [390, 768, 1024, 1440]);
+  assert.deepEqual(VIEWPORTS, [390, 768, 1024, 1440, 1920]);
+  assert.equal(REPRESENTATIVE_ROUTES.length, 9);
 
   assert.match(container, /w-full/);
   assert.match(container, /px-page-inline/);

@@ -49,7 +49,7 @@ export default async function ObjectsPage() {
       </SectionShell>
 
       <SectionShell
-        className="pt-0"
+        rhythm="sm"
         eyebrow="Первые карточки"
         title={properties.length > 0 ? "Опубликованные инвестиционные паспорта" : "Паспорта готовятся к публикации"}
         lead={
@@ -91,7 +91,7 @@ export default async function ObjectsPage() {
         )}
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <LeadFormSection title="Получить подборку объектов под задачу" />
       </SectionShell>
     </main>

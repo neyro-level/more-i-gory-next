@@ -55,7 +55,7 @@ export default async function FederalInvestmentHubPage() {
         </div>
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <ProofBlock
           title="Что будет в полном хабе после content gate"
           items={[
@@ -75,7 +75,7 @@ export default async function FederalInvestmentHubPage() {
         />
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <LeadFormSection title="Сравнить регионы под вашу задачу" />
       </SectionShell>
     </main>

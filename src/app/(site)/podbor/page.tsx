@@ -39,7 +39,7 @@ export default function SelectionPage() {
         <NumberedSteps columns={4} items={steps.map((title) => ({ title }))} />
       </SectionShell>
 
-      <SectionShell id="form" className="pt-0" eyebrow="Форма" title="Опишите инвестиционную задачу" lead="Форма уже проверяет поля на клиенте, но реальная отправка отключена до согласования юридических текстов и production Leads API.">
+      <SectionShell id="form" rhythm="sm" eyebrow="Форма" title="Опишите инвестиционную задачу" lead="Форма уже проверяет поля на клиенте, но реальная отправка отключена до согласования юридических текстов и production Leads API.">
         <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
           <Card className="rounded-large bg-surface-dark text-surface-dark-foreground">
             <CardHeader>

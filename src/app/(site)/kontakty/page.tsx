@@ -42,7 +42,7 @@ export default function ContactsPage() {
         </div>
       </SectionShell>
 
-      <SectionShell id="form" className="pt-0" eyebrow="Обращение" title="Опишите задачу">
+      <SectionShell id="form" rhythm="sm" eyebrow="Обращение" title="Опишите задачу">
         <LeadForm sourcePath="/kontakty/" />
       </SectionShell>
     </main>

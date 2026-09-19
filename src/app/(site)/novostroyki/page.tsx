@@ -70,7 +70,7 @@ export default async function NewbuildCatalogPage() {
       </SectionShell>
 
       <SectionShell
-        className="pt-0"
+        rhythm="sm"
         eyebrow="Связанные разделы"
         title="От рынка к конкретному ЖК"
         lead="Региональный сегмент объясняет спрос и риски Крыма, аналитика помогает проверить экономику, а карточки ЖК ведут к застройщику и активным предложениям."
@@ -98,7 +98,7 @@ export default async function NewbuildCatalogPage() {
         </div>
       </SectionShell>
 
-      <SectionShell className="pt-0">
+      <SectionShell rhythm="sm">
         <LeadFormSection title="Получить shortlist новостроек под задачу" />
       </SectionShell>
     </main>
