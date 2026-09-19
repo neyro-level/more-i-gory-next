@@ -35,3 +35,13 @@ test("UI drift audit blocks forbidden presentation data imports", () => {
     );
   }
 });
+
+test("project DTO barrel owns public DTOs without re-exporting data-access contracts", () => {
+  const dtoBarrel = readFileSync("src/core/dto/index.ts", "utf8");
+
+  assert.doesNotMatch(dtoBarrel, /data-access/);
+  assert.match(dtoBarrel, /\.\/cms-page\.ts/);
+  assert.match(dtoBarrel, /\.\/property\.ts/);
+  assert.match(dtoBarrel, /\.\/site-chrome\.ts/);
+  assert.match(dtoBarrel, /\.\/region\.ts/);
+});

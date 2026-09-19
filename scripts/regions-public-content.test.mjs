@@ -64,9 +64,14 @@ test("live region pages read Public Gateway instead of hardcoded domain copy", (
   assert.match(page, /region\.investmentThesis/);
 });
 
-test("build without Payload still has reserved-namespace fallback regions for SSG", () => {
+test("generic fallback exposes only published regions", () => {
   const fallback = listFallbackPublicRegions();
-  assert.equal(fallback.length, 10);
-  assert.equal(fallback.find((region) => region.slug === "yalta")?.path, "/investicionnaya-nedvizhimost/krym/yalta/");
-  assert.equal(fallback.find((region) => region.slug === "sochi")?.status, "stub");
+  assert.equal(fallback.every((region) => region.status === "published"), true);
+  assert.equal(fallback.some((region) => region.status === "hidden"), false);
+  assert.equal(fallback.some((region) => region.status === "stub"), false);
+});
+
+test("regions Public Gateway applies the publication predicate in the Payload query", () => {
+  const gateway = readFileSync("src/core/data-access/public/regions.ts", "utf8");
+  assert.match(gateway, /where:\s*\{\s*status:\s*\{\s*equals:\s*"published"\s*\},?\s*\}/);
 });

@@ -23,6 +23,8 @@
 | `scripts/verify-architecture-guards.test.mjs:79` | `find` | TEST | `content: 'payload.find({ collection: "pages", overrideAccess: false });',` |
 | `scripts/verify-architecture-guards.test.mjs:128` | `find` | TEST | `files: [{ path: "src/core/data-access/system/jobs.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
 | `scripts/verify-architecture-guards.test.mjs:135` | `find` | TEST | `files: [{ path: "src/core/data-access/system/lead-delivery.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
+| `scripts/verify-architecture-guards.test.mjs:299` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { slug: { exists: true } } });',` |
+| `scripts/verify-architecture-guards.test.mjs:312` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { status: { equals: "published" } } });',` |
 | `src/core/data-access/public/newbuilds.ts:171` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/newbuilds.ts:172` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/newbuilds.ts:192` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
@@ -35,11 +37,13 @@
 | `src/core/data-access/public/properties.ts:33` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/properties.ts:53` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/properties.ts:54` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/public/regions.ts:23` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/regions.ts:24` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/regions.ts:30` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/regions.ts:31` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/site-chrome.ts:19` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/site-chrome.ts:21` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "site-settings", depth: 0, overrideAccess: false, select: publicSiteSettingsSelect }),` |
 | `src/core/data-access/public/site-chrome.ts:22` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "navigation", depth: 0, overrideAccess: false, select: publicNavigationSelect }),` |
+| `src/core/data-access/public/sitemap-pages.ts:21` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/sitemap-pages.ts:22` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/system/apply-feed-upsert.ts:51` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/system/apply-feed-upsert.ts:89` | `create` | SYSTEM GATEWAY | `return payload.create({` |
 | `src/core/data-access/system/apply-feed-upsert.ts:101` | `update` | SYSTEM GATEWAY | `await payload.update({` |
@@ -111,5 +115,3 @@
 | `src/project/jobs/maintenance/scheduled-tasks.ts:148` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof catalogLifecycle>[0],` |
 | `src/project/jobs/maintenance/scheduled-tasks.ts:175` | `req.payload` | SYSTEM GATEWAY | `req.payload as unknown as Parameters<typeof leadRetentionCleanup>[0],` |
 | `src/project/leads/owner-retry.ts:39` | `req.payload` | SYSTEM GATEWAY | `req.payload as Parameters<typeof retryAbandonedLeadDelivery>[0],` |
-| `src/seo/sitemap-source.ts:49` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/seo/sitemap-source.ts:50` | `find` | PUBLIC GATEWAY | `const pages = await payload.find({` |

@@ -6,7 +6,14 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { RiskBlock } from "@/components/marketing/risk-block";
 import { ActionLink } from "@/components/navigation/action-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getPublicRegionByPath, getPublicRegionRelatedLinks, listPublicHubRegions, listPublicRegions } from "@/core/data-access/public";
+import {
+  getPublicRegionByPath,
+  getPublicRegionRelatedLinks,
+  getPublicRegionStaticParams,
+  isGenericPublicRegion,
+  listPublicHubRegions,
+  listPublicRegions,
+} from "@/core/data-access/public";
 import { composeRegionPathFromSlugs } from "@/content/regions/region-path-policy";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
@@ -29,20 +36,18 @@ async function getRegionPageModel(params: RegionRoutePageProps["params"]) {
 
 export async function generateStaticParams() {
   const regions = await listPublicHubRegions();
-  return regions.map((region) => ({
-    path: region.path.replace(/^\/investicionnaya-nedvizhimost\//, "").replace(/\/$/, "").split("/"),
-  }));
+  return getPublicRegionStaticParams(regions);
 }
 
 export async function generateMetadata({ params }: RegionRoutePageProps) {
   const { region } = await getRegionPageModel(params);
-  if (!region || region.status === "stub") return {};
+  if (!isGenericPublicRegion(region)) return {};
   return getStaticMetadata(region.pageId);
 }
 
 export default async function RegionRoutePage({ params }: RegionRoutePageProps) {
   const { region } = await getRegionPageModel(params);
-  if (!region || region.status === "stub") notFound();
+  if (!isGenericPublicRegion(region)) notFound();
 
   const seo = getSeoEntry(region.pageId);
   const published = await listPublicRegions();

@@ -170,7 +170,7 @@ test("public catalog readers wrap Payload outage with publicReadWithFallback", (
     "src/core/data-access/public/properties.ts",
     "src/core/data-access/public/site-chrome.ts",
     "src/core/data-access/public/newbuilds.ts",
-    "src/seo/sitemap-source.ts",
+    "src/core/data-access/public/sitemap-pages.ts",
   ];
 
   for (const file of sources) {

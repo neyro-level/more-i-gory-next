@@ -8,6 +8,8 @@ export {
   composePublicRegionPath,
   getPublicRegionByPath,
   getPublicRegionRelatedLinks,
+  getPublicRegionStaticParams,
+  isGenericPublicRegion,
   listPublicHubRegions,
   listPublicRegions,
   mapPublicRegion,
@@ -47,6 +49,7 @@ export type {
 } from "./gateway.ts";
 export type { ArchivedPropertyAction, PublicPropertyDTO } from "./properties.ts";
 export type { PublicComplexDTO, PublicDeveloperDTO, PublicNewbuildInventoryDTO } from "./newbuilds.ts";
+export { listPublishedSitemapPages } from "./sitemap-pages.ts";
 export type { SiteChrome, SiteNavigationLink } from "./site-chrome.ts";
 export type { PublicQueryContract } from "@/core/query";
 export type {

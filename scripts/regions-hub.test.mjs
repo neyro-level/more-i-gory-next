@@ -35,3 +35,9 @@ test("investment hub page reads CMS-backed public regions", () => {
   assert.doesNotMatch(source, /heroMediaId/);
   assert.doesNotMatch(source, /mediaSourceLabel/);
 });
+
+test("public hub reader keeps an explicit published-only boundary", () => {
+  const source = readFileSync("src/core/data-access/public/regions.ts", "utf8");
+
+  assert.match(source, /region\.status === "published"/);
+});

@@ -1,11 +1,13 @@
 import "server-only";
 
 import { unstable_cache } from "next/cache";
-import { getPayload } from "payload";
-
-import { listPublishedComplexes, listPublishedDevelopers, listPublishedManualProperties } from "@/core/data-access/public";
-import { publicReadWithFallback } from "@/core/data-access/public/read-fallback.ts";
-import config from "../../payload.config.ts";
+import {
+  listPublishedComplexes,
+  listPublishedDevelopers,
+  listPublishedManualProperties,
+  listPublishedSitemapPages,
+  listPublicRegions,
+} from "@/core/data-access/public";
 import { newbuildComplexSitemapEntries, rejectDisallowedSitemapEntries } from "./newbuild-indexing.ts";
 import { seoRegistry } from "./registry";
 import {
@@ -13,6 +15,7 @@ import {
   cmsPageSitemapEntries,
   mergeSitemapEntries,
   normalizeSitemapCanonical,
+  publicRegionSitemapEntries,
   publishedCatalogSitemapEntries,
 } from "./sitemap-source-contract.ts";
 import type { SitemapSourceEntry } from "./sitemap-source-contract.ts";
@@ -30,48 +33,28 @@ export function staticRegistrySitemapEntries(): readonly SitemapSourceEntry[] {
 
 async function readSitemapEntries(): Promise<readonly SitemapSourceEntry[]> {
   const staticEntries = staticRegistrySitemapEntries();
-  const [complexes, developers, passports] = await Promise.all([
+  const [complexes, developers, pages, passports, regions] = await Promise.all([
     listPublishedComplexes(),
     listPublishedDevelopers(),
+    listPublishedSitemapPages(),
     listPublishedManualProperties(),
+    listPublicRegions(),
   ]);
   const catalogEntries = [
     ...newbuildComplexSitemapEntries(complexes),
     ...publishedCatalogSitemapEntries(developers),
     ...publishedCatalogSitemapEntries(passports),
+    ...publicRegionSitemapEntries(regions),
     ...articleSitemapEntries(),
   ];
 
-  return publicReadWithFallback({
-    fallback: rejectDisallowedSitemapEntries(mergeSitemapEntries([...staticEntries, ...catalogEntries])),
-    reader: "sitemap-cms-pages",
-    read: async () => {
-      const payload = await getPayload({ config });
-      const pages = await payload.find({
-        collection: "pages",
-        depth: 0,
-        limit: 1000,
-        overrideAccess: false,
-        pagination: false,
-        select: {
-          path: true,
-          seo: true,
-          status: true,
-        },
-        where: {
-          status: { equals: "published" },
-        },
-      });
-
-      return rejectDisallowedSitemapEntries(
-        mergeSitemapEntries([
-          ...staticEntries,
-          ...cmsPageSitemapEntries(pages.docs),
-          ...catalogEntries,
-        ]),
-      );
-    },
-  });
+  return rejectDisallowedSitemapEntries(
+    mergeSitemapEntries([
+      ...staticEntries,
+      ...cmsPageSitemapEntries(pages),
+      ...catalogEntries,
+    ]),
+  );
 }
 
 export const getSitemapEntries = unstable_cache(readSitemapEntries, ["sitemap-entries"], {

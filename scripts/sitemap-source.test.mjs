@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { cmsPageSitemapEntries, mergeSitemapEntries, publishedCatalogSitemapEntries, articleSitemapEntries } from "../src/seo/sitemap-source-contract.ts";
+import { cmsPageSitemapEntries, mergeSitemapEntries, publicRegionSitemapEntries, publishedCatalogSitemapEntries, articleSitemapEntries } from "../src/seo/sitemap-source-contract.ts";
 import { isAllowedSitemapCanonical, rejectDisallowedSitemapEntries } from "../src/seo/newbuild-indexing.ts";
 
 test("sitemap route is dynamic and wired to the DB-backed source", () => {
@@ -29,8 +29,16 @@ test("CMS sitemap excludes drafts, archived and noindex pages", () => {
 
 test("CMS sitemap read logs infrastructure failure instead of silent merge-only fallback", () => {
   const source = readFileSync("src/seo/sitemap-source.ts", "utf8");
-  assert.match(source, /publicReadWithFallback\(/);
-  assert.match(source, /reader:\s*"sitemap-cms-pages"/);
+  const reader = readFileSync("src/core/data-access/public/sitemap-pages.ts", "utf8");
+
+  assert.match(source, /listPublishedSitemapPages\(/);
+  assert.doesNotMatch(source, /(?:from\s+["']payload["']|@payloadcms|payload\.config|publicReadWithFallback)/);
+  assert.match(reader, /publicReadWithFallback\(/);
+  assert.match(reader, /reader:\s*"sitemap-cms-pages"/);
+  assert.match(reader, /overrideAccess:\s*false/);
+  assert.match(reader, /depth:\s*0/);
+  assert.match(reader, /limit:\s*1000/);
+  assert.match(reader, /status:\s*\{\s*equals:\s*"published"/s);
   assert.doesNotMatch(source, /catch \{\s*return mergeSitemapEntries/s);
 });
 
@@ -64,6 +72,27 @@ test("published catalog paths become sitemap entries and articles stay empty unt
     { canonical: "/zastroyshchik/sample-developer/", priority: "P1" },
   ]);
   assert.deepEqual(articleSitemapEntries(), []);
+});
+
+test("published region enters sitemap while hidden and stub regions stay absent", () => {
+  const base = {
+    image: { alt: "Test", height: 1, src: "/images/fallback.svg", width: 1 },
+    investmentThesis: "t",
+    kind: "region",
+    lead: "l",
+    pageId: "region:test",
+    riskSummary: "r",
+    title: "Test",
+  };
+
+  assert.deepEqual(
+    publicRegionSitemapEntries([
+      { ...base, id: "published", path: "/investicionnaya-nedvizhimost/published/", slug: "published", status: "published" },
+      { ...base, id: "hidden", path: "/investicionnaya-nedvizhimost/hidden/", slug: "hidden", status: "hidden" },
+      { ...base, id: "stub", path: "/investicionnaya-nedvizhimost/stub/", slug: "stub", status: "stub" },
+    ]),
+    [{ canonical: "/investicionnaya-nedvizhimost/published/", priority: "P1" }],
+  );
 });
 
 test("sitemap never includes filter states, unit routes or layout routes", () => {

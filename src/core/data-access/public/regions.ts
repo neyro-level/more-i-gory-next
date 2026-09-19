@@ -13,7 +13,14 @@ import {
 } from "./regions-contract.ts";
 
 export type { PublicRegionDTO } from "./regions-contract.ts";
-export { composePublicRegionPath, getPublicRegionRelatedLinks, mapPublicRegion, mapPublicRegions } from "./regions-contract.ts";
+export {
+  composePublicRegionPath,
+  getPublicRegionStaticParams,
+  getPublicRegionRelatedLinks,
+  isGenericPublicRegion,
+  mapPublicRegion,
+  mapPublicRegions,
+} from "./regions-contract.ts";
 
 async function readPublicRegions(): Promise<readonly PublicRegionDTO[]> {
   return publicReadWithFallback({
@@ -28,6 +35,9 @@ async function readPublicRegions(): Promise<readonly PublicRegionDTO[]> {
         overrideAccess: false,
         pagination: false,
         select: publicRegionSelect,
+        where: {
+          status: { equals: "published" },
+        },
       });
 
       return mapPublicRegions(result.docs);
@@ -46,5 +56,5 @@ export async function getPublicRegionByPath(path: string): Promise<PublicRegionD
 
 export async function listPublicHubRegions(): Promise<readonly PublicRegionDTO[]> {
   const regions = await listPublicRegions();
-  return regions.filter((region) => region.status !== "stub" && region.slug !== "sochi");
+  return regions.filter((region) => region.status === "published" && region.slug !== "sochi");
 }

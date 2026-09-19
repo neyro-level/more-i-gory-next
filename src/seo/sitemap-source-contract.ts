@@ -1,4 +1,4 @@
-import type { Page } from "../payload-types.ts";
+import type { PublicRegionDTO, SitemapPageDTO } from "@/core/dto";
 
 export type SitemapPriority = "P1" | "P2" | "P3";
 
@@ -17,7 +17,7 @@ export function normalizeSitemapCanonical(canonical: string): string {
   return canonical === "/" ? "/" : `/${canonical.replace(/^\/+/, "").replace(/\/+$/, "")}/`;
 }
 
-export function cmsPageSitemapEntries(pages: readonly Pick<Page, "path" | "seo" | "status">[]): readonly SitemapSourceEntry[] {
+export function cmsPageSitemapEntries(pages: readonly SitemapPageDTO[]): readonly SitemapSourceEntry[] {
   return pages
     .filter((page) => page.status === "published")
     .filter((page) => page.seo?.robots !== "noindex-follow")
@@ -48,6 +48,15 @@ export function publishedCatalogSitemapEntries(
     canonical: normalizeSitemapCanonical(record.path),
     priority,
   }));
+}
+
+export function publicRegionSitemapEntries(regions: readonly PublicRegionDTO[]): readonly SitemapSourceEntry[] {
+  return regions
+    .filter((region) => region.status === "published")
+    .map((region) => ({
+      canonical: normalizeSitemapCanonical(region.path),
+      priority: "P1",
+    }));
 }
 
 export function articleSitemapEntries(): readonly SitemapSourceEntry[] {

@@ -155,6 +155,16 @@ function isForbiddenPresentationSpecifier(specifier) {
   );
 }
 
+function isForbiddenSeoSpecifier(specifier) {
+  return (
+    specifier === "@payload-config" ||
+    specifier === "payload" ||
+    specifier.startsWith("payload/") ||
+    specifier.startsWith("@payloadcms/") ||
+    /(?:^|\/)payload\.config(?:\.[cm]?[jt]s)?$/.test(specifier)
+  );
+}
+
 function isForbiddenUiDependency(name) {
   return (
     name === "payload" ||
@@ -295,6 +305,22 @@ export function findArchitectureGuardViolations({ files, manifests }) {
           );
         }
       }
+    }
+
+    if (filePath.startsWith("src/seo/")) {
+      for (const specifier of moduleSpecifiers(content)) {
+        if (isForbiddenSeoSpecifier(specifier)) {
+          addViolation(violations, 12, filePath, `SEO layer must read CMS data through Public Gateway, got ${specifier}`);
+        }
+      }
+    }
+
+    const isPublicRegionsReader =
+      filePath.startsWith("src/core/data-access/public/") &&
+      /\bcollection\s*:\s*["']regions["']/.test(content) &&
+      /\bpayload(?:\?\.|\.)find\s*(?:\?\.)?\s*\(/.test(content);
+    if (isPublicRegionsReader && !/\bstatus\s*:\s*\{\s*equals\s*:\s*["']published["']\s*\}/s.test(content)) {
+      addViolation(violations, 13, filePath, "public regions reader requires status=published at the query boundary");
     }
 
     if (darkVariantPattern.test(content)) {

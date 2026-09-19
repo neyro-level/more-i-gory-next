@@ -15,8 +15,15 @@ const largestChunkBudgetGzipKb = 300;
 
 const seoRegistry = readJson("src/seo/registry.json");
 const { articles } = await import("../src/content/articles/articles.ts");
+const { regionSeedContent } = await import("../src/content/regions/region-seed-content.ts");
+const { getRegionRoutePlan } = await import("../src/content/regions/region-route-plan.ts");
+const unpublishedGenericRegionPaths = new Set(
+  getRegionRoutePlan()
+    .filter((entry) => entry.key !== "sochi" && regionSeedContent[entry.key]?.status !== "published")
+    .map((entry) => entry.path),
+);
 const concreteSeoEntries = [
-  ...seoRegistry.filter((entry) => entry.kind === "static"),
+  ...seoRegistry.filter((entry) => entry.kind === "static" && !unpublishedGenericRegionPaths.has(entry.canonical)),
   ...articles.map((article) => ({
     canonical: article.path,
     description: article.description,
@@ -93,7 +100,10 @@ function manifestKeyForRoute(route, appPathRoutesManifest) {
 
 async function fetchRoute(pathname, expectedStatus = 200) {
   const response = await fetch(new URL(pathname, baseUrl), { redirect: "manual" });
-  assert(response.status === expectedStatus, `${pathname} returned ${response.status}, expected ${expectedStatus}`);
+  assert(
+    response.status === expectedStatus,
+    `${pathname} returned ${response.status}, expected ${expectedStatus}.\n${serverLogs.join("")}`,
+  );
   return { body: await response.text(), response };
 }
 
@@ -139,6 +149,10 @@ try {
   assert(robots.body.includes(`${siteUrl}/sitemap.xml`), "robots.txt must reference the canonical sitemap.");
   const sitemap = await fetchRoute("/sitemap.xml");
   assert(sitemap.body.includes("<urlset"), "sitemap.xml must contain a URL set.");
+  for (const pathname of unpublishedGenericRegionPaths) {
+    await fetchRoute(pathname, 404);
+    assert(!sitemap.body.includes(`<loc>${new URL(pathname, siteUrl).toString()}</loc>`), `Hidden region leaked into sitemap: ${pathname}`);
+  }
 
   const cssFiles = walk(path.join(nextDir, "static")).filter((file) => file.endsWith(".css"));
   const compiledCss = cssFiles.map((file) => readFileSync(file, "utf8")).join("\n");

@@ -6,12 +6,15 @@ import { cmsPageBlockSchema, cmsPageSchema, cmsSeoSchema } from "../src/core/dat
 import { pageBlockTypes } from "../src/project/blocks/page-blocks.ts";
 
 test("CMS page contracts are named CmsPageDTO, CmsPageBlockDTO and CmsSeoDTO", () => {
-  const source = readFileSync("src/core/data-access/public/cms-page-contract.ts", "utf8");
+  const source = readFileSync("src/core/dto/cms-page.ts", "utf8");
+  const mapper = readFileSync("src/core/data-access/public/cms-page-contract.ts", "utf8");
 
   assert.match(source, /export type CmsPageDTO/);
   assert.match(source, /export type CmsPageBlockDTO/);
   assert.match(source, /export type CmsSeoDTO/);
   assert.equal(source.includes('from "../../../payload-types.ts"'), false);
+  assert.match(mapper, /mapCmsPage/);
+  assert.match(mapper, /publicCmsPageSelect/);
 });
 
 test("CmsSeoDTO covers published CMS seo fields without Payload document leftovers", () => {

@@ -4,7 +4,7 @@ import test from "node:test";
 
 import { composeRegionPathFromSlugs, REGION_RESERVED_NAMESPACE } from "../src/content/regions/region-path-policy.ts";
 import { findRegionRouteBySegments, getRegionRoutePath, getRegionRoutePlan, regionRouteEntries } from "../src/content/regions/region-route-plan.ts";
-import { composePublicRegionPath } from "../src/core/data-access/public/regions-contract.ts";
+import { composePublicRegionPath, getPublicRegionStaticParams, isGenericPublicRegion } from "../src/core/data-access/public/regions-contract.ts";
 
 test("region routes are computed from slug plus parent chain", () => {
   const yalta = regionRouteEntries.find((entry) => entry.key === "yalta");
@@ -32,6 +32,48 @@ test("public region path uses reserved namespace, slug and CMS parent relation",
   assert.throws(() => composeRegionPathFromSlugs(["Yalta"]));
 });
 
+test("generic region route accepts only published entities", () => {
+  const baseRegion = {
+    id: "region:test",
+    image: { alt: "", height: 1, src: "/images/fallback.svg", width: 1 },
+    investmentThesis: "t",
+    kind: "region",
+    lead: "l",
+    pageId: "region:test",
+    path: "/investicionnaya-nedvizhimost/test/",
+    riskSummary: "r",
+    slug: "test",
+    title: "Test",
+  };
+
+  assert.equal(isGenericPublicRegion({ ...baseRegion, status: "published" }), true);
+  assert.equal(isGenericPublicRegion({ ...baseRegion, status: "hidden" }), false);
+  assert.equal(isGenericPublicRegion({ ...baseRegion, status: "stub" }), false);
+  assert.equal(isGenericPublicRegion(null), false);
+});
+
+test("static params contain published regions only", () => {
+  const region = {
+    id: "region:test",
+    image: { alt: "Test", height: 1, src: "/images/fallback.svg", width: 1 },
+    investmentThesis: "t",
+    kind: "region",
+    lead: "l",
+    pageId: "region:test",
+    path: "/investicionnaya-nedvizhimost/test/",
+    riskSummary: "r",
+    slug: "test",
+    title: "Test",
+  };
+  const params = getPublicRegionStaticParams([
+    { ...region, status: "published" },
+    { ...region, id: "hidden", path: "/investicionnaya-nedvizhimost/hidden/", slug: "hidden", status: "hidden" },
+    { ...region, id: "stub", path: "/investicionnaya-nedvizhimost/stub/", slug: "stub", status: "stub" },
+  ]);
+
+  assert.deepEqual(params, [{ path: ["test"] }]);
+});
+
 test("catch-all route replaces explicit region route folders", () => {
   assert.equal(existsSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx"), true);
 
@@ -54,6 +96,14 @@ test("catch-all region route composes path from CMS records and reserved namespa
   assert.match(page, /listPublicHubRegions/);
   assert.match(page, /getPublicRegionByPath/);
   assert.doesNotMatch(page, /export function generateStaticParams/);
+});
+
+test("runtime verification expects unpublished generic regions to return 404", () => {
+  const source = readFileSync("scripts/verify-runtime.mjs", "utf8");
+
+  assert.match(source, /unpublishedGenericRegionPaths/);
+  assert.match(source, /fetchRoute\(pathname, 404\)/);
+  assert.match(source, /Hidden region leaked into sitemap/);
 });
 
 test("region route plan does not store a third path field", () => {

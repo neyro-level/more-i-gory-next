@@ -281,3 +281,38 @@ test("Guard 11 allows structural arbitrary values", () => {
     }),
   );
 });
+
+test("Guard 12 rejects Payload imports from the SEO layer", () => {
+  expectGuard(12, {
+    files: [
+      { path: "src/seo/sitemap-source.ts", content: 'import { getPayload } from "payload"; import config from "../../payload.config";' },
+    ],
+    manifests: [],
+  });
+});
+
+test("Guard 13 rejects a public regions reader without a published predicate", () => {
+  expectGuard(13, {
+    files: [
+      {
+        path: "src/core/data-access/public/regions.ts",
+        content: 'payload.find({ collection: "regions", overrideAccess: false, where: { slug: { exists: true } } });',
+      },
+    ],
+    manifests: [],
+  });
+});
+
+test("Guard 13 allows a public regions reader with a published predicate", () => {
+  assert.doesNotThrow(() =>
+    assertArchitectureGuards({
+      files: [
+        {
+          path: "src/core/data-access/public/regions.ts",
+          content: 'payload.find({ collection: "regions", overrideAccess: false, where: { status: { equals: "published" } } });',
+        },
+      ],
+      manifests: [],
+    }),
+  );
+});

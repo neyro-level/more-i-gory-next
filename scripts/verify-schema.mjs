@@ -34,6 +34,10 @@ function snapshot(directory) {
     .sort(([left], [right]) => left.localeCompare(right));
 }
 
+function normalizeLineEndings(content) {
+  return content.replaceAll("\r\n", "\n");
+}
+
 try {
   cpSync(path.join(root, "migrations"), path.join(verificationRoot, "migrations"), { recursive: true });
 
@@ -42,7 +46,10 @@ try {
   process.stderr.write(types.stderr ?? "");
   if (types.error) throw types.error;
   if (types.status !== 0) throw new Error("Payload type generation failed.");
-  if (readFileSync(path.join(verificationRoot, "payload-types.ts"), "utf8") !== readFileSync(path.join(root, "src", "payload-types.ts"), "utf8")) {
+  if (
+    normalizeLineEndings(readFileSync(path.join(verificationRoot, "payload-types.ts"), "utf8")) !==
+    normalizeLineEndings(readFileSync(path.join(root, "src", "payload-types.ts"), "utf8"))
+  ) {
     throw new Error("Payload generated types drift from the committed src/payload-types.ts.");
   }
 

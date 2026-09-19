@@ -1,5 +1,4 @@
 import type { SelectType } from "payload";
-import { z } from "zod";
 
 import type { Media, Region } from "../../../payload-types.ts";
 import { regionSeedContent } from "../../../content/regions/region-seed-content.ts";
@@ -7,8 +6,11 @@ import { getRegionRoutePlan } from "../../../content/regions/region-route-plan.t
 import type { RegionInternalLink } from "../../../content/regions/region-route-plan.ts";
 import { composeRegionPathFromSlugs } from "../../../content/regions/region-path-policy.ts";
 import { getMediaAsset } from "../../../content/media/media-assets.ts";
-import { publicMediaSchema } from "./media-contract.ts";
+import { publicRegionSchema, type PublicRegionDTO } from "../../dto/region.ts";
 import { CANONICAL_MISSING_IMAGE, publicMediaOrFallback } from "./missing-image.ts";
+
+export { publicRegionSchema } from "../../dto/region.ts";
+export type { PublicRegionDTO } from "../../dto/region.ts";
 
 type PublicRegionRecord = Readonly<
   Pick<Region, "id" | "investmentThesis" | "kind" | "lead" | "order" | "riskSummary" | "slug" | "status" | "title"> & {
@@ -29,22 +31,18 @@ function mapImage(value: PublicRegionRecord["heroMedia"]) {
   return CANONICAL_MISSING_IMAGE;
 }
 
-export const publicRegionSchema = z.object({
-  id: z.string().min(1),
-  image: publicMediaSchema,
-  investmentThesis: z.string().min(1),
-  kind: z.enum(["region", "locality", "segment"]),
-  lead: z.string().min(1),
-  pageId: z.string().min(1),
-  parentSlug: z.string().min(1).optional(),
-  path: z.string().startsWith("/").endsWith("/"),
-  riskSummary: z.string().min(1),
-  slug: z.string().min(1),
-  status: z.enum(["published", "hidden", "stub"]),
-  title: z.string().min(1),
-});
+export function isGenericPublicRegion(region: PublicRegionDTO | null): region is PublicRegionDTO {
+  return region?.status === "published";
+}
 
-export type PublicRegionDTO = z.infer<typeof publicRegionSchema>;
+export function getPublicRegionStaticParams(regions: readonly PublicRegionDTO[]) {
+  return regions
+    .filter(isGenericPublicRegion)
+    .filter((region) => region.slug !== "sochi")
+    .map((region) => ({
+      path: region.path.replace(/^\/investicionnaya-nedvizhimost\//, "").replace(/\/$/, "").split("/"),
+    }));
+}
 
 export const publicRegionSelect = {
   heroMedia: true,
@@ -121,26 +119,28 @@ export function listFallbackPublicRegions(): readonly PublicRegionDTO[] {
   const plan = getRegionRoutePlan();
   const byKey = new Map(plan.map((entry) => [entry.key, entry]));
 
-  return plan.map((entry) => {
-    const content = regionSeedContent[entry.key];
-    if (!content) throw new Error(`Missing CMS seed content for region "${entry.key}".`);
-    const parent = entry.parentKey ? byKey.get(entry.parentKey) : undefined;
+  return plan
+    .map((entry) => {
+      const content = regionSeedContent[entry.key];
+      if (!content) throw new Error(`Missing CMS seed content for region "${entry.key}".`);
+      const parent = entry.parentKey ? byKey.get(entry.parentKey) : undefined;
 
-    return publicRegionSchema.parse({
-      id: `fallback:${entry.key}`,
-      image: publicMediaOrFallback(getMediaAsset(content.mediaSourceLabel) ?? CANONICAL_MISSING_IMAGE),
-      investmentThesis: content.investmentThesis,
-      kind: content.kind,
-      lead: content.lead,
-      pageId: entry.pageId,
-      parentSlug: parent?.slug,
-      path: entry.path,
-      riskSummary: content.riskSummary,
-      slug: entry.slug,
-      status: content.status,
-      title: content.title,
-    });
-  });
+      return publicRegionSchema.parse({
+        id: `fallback:${entry.key}`,
+        image: publicMediaOrFallback(getMediaAsset(content.mediaSourceLabel) ?? CANONICAL_MISSING_IMAGE),
+        investmentThesis: content.investmentThesis,
+        kind: content.kind,
+        lead: content.lead,
+        pageId: entry.pageId,
+        parentSlug: parent?.slug,
+        path: entry.path,
+        riskSummary: content.riskSummary,
+        slug: entry.slug,
+        status: content.status,
+        title: content.title,
+      });
+    })
+    .filter((region) => region.status === "published");
 }
 
 const approvedRegionCrossLinks: readonly RegionInternalLink[] = [
@@ -149,7 +149,7 @@ const approvedRegionCrossLinks: readonly RegionInternalLink[] = [
 ];
 
 function visiblePublicRegions(regions: readonly PublicRegionDTO[]): readonly PublicRegionDTO[] {
-  return regions.filter((region) => region.status !== "stub" && region.slug !== "sochi");
+  return regions.filter((region) => region.status === "published" && region.slug !== "sochi");
 }
 
 export function getPublicRegionRelatedLinks(
