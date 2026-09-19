@@ -63,6 +63,7 @@ test("lead-deliveries collection exposes the approved transactional outbox field
     "nextAttemptAt",
     "idempotencyKey",
     "externalRef",
+    "deliveredAt",
     "lastErrorRedacted",
     "claimedAt",
     "heartbeatAt",
@@ -73,7 +74,7 @@ test("lead-deliveries collection exposes the approved transactional outbox field
   assert.deepEqual(optionValues(LeadDeliveries, "status"), [
     "pending",
     "sending",
-    "sent",
+    "delivered",
     "failed",
     "abandoned",
   ]);
@@ -82,6 +83,7 @@ test("lead-deliveries collection exposes the approved transactional outbox field
   assert.match(field(LeadDeliveries, "attempts").validate(1.5), /integer/);
   assert.deepEqual(field(LeadDeliveries, "attemptLog").fields.map((candidate) => candidate.name), [
     "attemptedAt",
+    "deliveryCertainty",
     "outcome",
     "safeCode",
     "redactedMessage",

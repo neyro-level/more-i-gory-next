@@ -11,12 +11,22 @@ const validateInteger = (value: unknown) =>
 const attemptLogFields = [
   { name: "attemptedAt", type: "date", required: true },
   {
+    name: "deliveryCertainty",
+    type: "select",
+    options: [
+      { label: "Not delivered", value: "not-delivered" },
+      { label: "Unknown", value: "unknown" },
+      { label: "Delivered", value: "delivered" },
+    ],
+    required: true,
+  },
+  {
     name: "outcome",
     type: "select",
     options: [
       { label: "Pending", value: "pending" },
       { label: "Sending", value: "sending" },
-      { label: "Sent", value: "sent" },
+      { label: "Delivered", value: "delivered" },
       { label: "Failed", value: "failed" },
       { label: "Abandoned", value: "abandoned" },
     ],
@@ -66,7 +76,7 @@ export const LeadDeliveries: CollectionConfig = {
       options: [
         { label: "Pending", value: "pending" },
         { label: "Sending", value: "sending" },
-        { label: "Sent", value: "sent" },
+        { label: "Delivered", value: "delivered" },
         { label: "Failed", value: "failed" },
         { label: "Abandoned", value: "abandoned" },
       ],
@@ -76,6 +86,14 @@ export const LeadDeliveries: CollectionConfig = {
     { name: "nextAttemptAt", type: "date", index: true },
     { name: "idempotencyKey", type: "text", index: true, required: true, unique: true },
     { name: "externalRef", type: "text", index: true },
+    {
+      name: "deliveredAt",
+      type: "date",
+      admin: {
+        description: "May be empty for historical deliveries whose exact delivery time is unknown.",
+        readOnly: true,
+      },
+    },
     { name: "lastErrorRedacted", type: "textarea" },
     { name: "claimedAt", type: "date", index: true },
     { name: "heartbeatAt", type: "date", index: true },

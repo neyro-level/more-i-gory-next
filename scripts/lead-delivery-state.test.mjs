@@ -63,7 +63,7 @@ test("non-retryable delivery failure plans failed status without enqueue", () =>
     attempts: 1,
     backoffMs: leadDeliveryBackoffMs,
     failure: new LeadDeliveryFailure({
-      deliveryCertainty: "not_delivered",
+      deliveryCertainty: "not-delivered",
       redactedMessage: "Telegram lead delivery failed.",
       retryable: false,
       safeCode: "telegram_rejected",
@@ -194,7 +194,7 @@ test("non-retryable failure updates delivery state without enqueueing another jo
     attempts: 0,
     backoffMs: leadDeliveryBackoffMs,
     failure: new LeadDeliveryFailure({
-      deliveryCertainty: "not_delivered",
+      deliveryCertainty: "not-delivered",
       redactedMessage: "Telegram lead delivery failed.",
       retryable: false,
       safeCode: "telegram_rejected",

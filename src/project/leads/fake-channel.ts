@@ -14,10 +14,10 @@ export function createFakeLeadDeliveryChannel(mode: FakeLeadTransportMode): Lead
     async deliver() {
       switch (mode) {
         case "success":
-          return { classification: "sent", deliveryCertainty: "confirmed", externalRef: "fake:1" };
+          return { classification: "sent", deliveryCertainty: "delivered", externalRef: "fake:1" };
         case "400":
           throw new LeadDeliveryFailure({
-            deliveryCertainty: "not_delivered",
+            deliveryCertainty: "not-delivered",
             redactedMessage: "Fake channel rejected the payload.",
             retryable: false,
             safeCode: "fake_rejected",

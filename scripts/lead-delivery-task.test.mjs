@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { markLeadDeliverySent, touchLeadDeliveryHeartbeat, transitionLeadDeliveryToSending } from "../src/core/data-access/system/lead-delivery.ts";
+import { markLeadDeliveryDelivered, touchLeadDeliveryHeartbeat, transitionLeadDeliveryToSending } from "../src/core/data-access/system/lead-delivery.ts";
 import { calculateLeadDeliveryRecoveryThresholdMs } from "../src/core/leads/delivery-recovery.ts";
 import { LeadDeliveryFailure } from "../src/core/leads/delivery.ts";
 import { deliverLead, deliverLeadTask, leadDeliveryBackoffMs, leadDeliveryHeartbeatIntervalMs } from "../src/project/jobs/leads/deliver-lead.ts";
@@ -109,7 +109,7 @@ test("deliverLead handler exits without outbound work when pending claim fails",
   assert.equal(updateCalls, 1);
 });
 
-test("confirmed remote delivery stores externalRef while row is sending", async () => {
+test("confirmed remote delivery stores deliveredAt and externalRef while row is sending", async () => {
   const calls = [];
   const payload = {
     async update(args) {
@@ -120,16 +120,17 @@ test("confirmed remote delivery stores externalRef while row is sending", async 
   const now = new Date("2026-09-17T12:05:00.000Z");
 
   assert.equal(
-    await markLeadDeliverySent(payload, { externalRef: "telegram:42", leadDeliveryId: "501" }, now),
+    await markLeadDeliveryDelivered(payload, { externalRef: "telegram:42", leadDeliveryId: "501" }, now),
     true,
   );
   assert.deepEqual(calls[0], {
     collection: "lead-deliveries",
     data: {
       externalRef: "telegram:42",
+      deliveredAt: "2026-09-17T12:05:00.000Z",
       heartbeatAt: "2026-09-17T12:05:00.000Z",
       lastErrorRedacted: null,
-      status: "sent",
+      status: "delivered",
     },
     overrideAccess: true,
     where: {
@@ -146,7 +147,7 @@ const loadedDelivery = {
   attemptLog: [
     {
       attemptedAt: "2026-09-17T11:00:00.000Z",
-      deliveryCertainty: "not_delivered",
+      deliveryCertainty: "not-delivered",
       outcome: "failed",
       redactedMessage: "previous",
       safeCode: "previous",
@@ -192,7 +193,7 @@ function deliveryPayload() {
   };
 }
 
-test("deliverLead loads retry state, resolves the channel, then stores sent", async () => {
+test("deliverLead loads retry state, resolves the channel, then stores delivered", async () => {
   const runtime = deliveryPayload();
   const logs = [];
   const status = await deliverLead({
@@ -211,20 +212,22 @@ test("deliverLead loads retry state, resolves the channel, then stores sent", as
       async deliver(payload) {
         assert.equal(payload.idempotencyKey, "lead:9:channel:probe");
         assert.equal(payload.lead.phone, "+7 900 000-00-00");
-        return { classification: "sent", deliveryCertainty: "confirmed", externalRef: "probe:7" };
+        return { classification: "sent", deliveryCertainty: "delivered", externalRef: "probe:7" };
       },
     }),
   });
 
-  assert.equal(status, "sent");
+  assert.equal(status, "delivered");
   assert.deepEqual(runtime.updates[1].data, { heartbeatAt: "2026-09-17T12:00:00.000Z" });
-  assert.equal(runtime.updates[2].data.status, "sent");
+  assert.equal(runtime.updates[2].data.status, "delivered");
+  assert.equal(runtime.updates[2].data.deliveredAt, "2026-09-17T12:00:00.000Z");
   assert.equal(runtime.updates[2].data.externalRef, "probe:7");
   assert.equal(runtime.queued.length, 0);
 });
 
-test("retryable channel failure plans the next attempt before returning", async () => {
+test("retries=0 handler records retryable failure and schedules the next attempt without throwing", async () => {
   const runtime = deliveryPayload();
+  assert.equal(deliverLeadTask.retries, 0);
   const status = await deliverLead({
     leadDeliveryId: "501",
     now: new Date("2026-09-17T12:00:00.000Z"),
@@ -245,8 +248,10 @@ test("retryable channel failure plans the next attempt before returning", async 
   assert.equal(status, "retry_scheduled");
   assert.equal(runtime.updates[2].data.status, "pending");
   assert.equal(runtime.updates[2].data.attempts, 2);
+  assert.equal(runtime.updates[2].data.nextAttemptAt, "2026-09-17T12:05:00.000Z");
   assert.ok(Array.isArray(runtime.updates[2].data.attemptLog));
   assert.equal(runtime.queued.length, 1);
+  assert.equal(runtime.queued[0].waitUntil.toISOString(), "2026-09-17T12:05:00.000Z");
 });
 
 test("exhausted retryable attempts abandon the delivery", async () => {
@@ -317,7 +322,7 @@ test("heartbeat interval stays below the stale-sending recovery threshold and ca
       id: "probe",
       async deliver() {
         tick?.();
-        return { classification: "sent", deliveryCertainty: "confirmed", externalRef: "probe:1" };
+        return { classification: "sent", deliveryCertainty: "delivered", externalRef: "probe:1" };
       },
     }),
     setHeartbeatInterval: (callback) => {

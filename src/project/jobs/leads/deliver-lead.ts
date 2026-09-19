@@ -1,7 +1,7 @@
 import type { TaskConfig } from "payload";
 
 import {
-  markLeadDeliverySent,
+  markLeadDeliveryDelivered,
   recordLeadDeliveryFailureAndMaybeRetry,
   touchLeadDeliveryHeartbeat,
   transitionLeadDeliveryToSending,
@@ -20,13 +20,13 @@ type DeliverLeadTask = {
     leadDeliveryId: string;
   };
   output: {
-    status: "abandoned" | "failed" | "missing" | "retry_scheduled" | "sent" | "skipped";
+    status: "abandoned" | "delivered" | "failed" | "missing" | "retry_scheduled" | "skipped";
   };
 };
 
 type PayloadLike = Parameters<typeof transitionLeadDeliveryToSending>[0] &
   Parameters<typeof loadLeadDeliveryForSend>[0] &
-  Parameters<typeof markLeadDeliverySent>[0] &
+  Parameters<typeof markLeadDeliveryDelivered>[0] &
   Parameters<typeof recordLeadDeliveryFailureAndMaybeRetry>[0] &
   Parameters<typeof touchLeadDeliveryHeartbeat>[0];
 
@@ -62,7 +62,7 @@ function silentLogger(): Pick<StructuredLogger, "info" | "warn" | "error"> {
 
 function unknownChannelFailure(channelId: string): LeadDeliveryFailure {
   return new LeadDeliveryFailure({
-    deliveryCertainty: "not_delivered",
+    deliveryCertainty: "not-delivered",
     redactedMessage: `Lead channel is not registered: ${channelId}`,
     retryable: false,
     safeCode: "lead_channel_missing",
@@ -118,7 +118,7 @@ export async function deliverLead(runtime: DeliverLeadRuntime): Promise<DeliverL
       attemptLog: [],
       attempts: 0,
       failure: new LeadDeliveryFailure({
-        deliveryCertainty: "not_delivered",
+        deliveryCertainty: "not-delivered",
         redactedMessage: "Lead delivery row disappeared after claim.",
         retryable: false,
         safeCode: "lead_delivery_missing",
@@ -154,13 +154,13 @@ export async function deliverLead(runtime: DeliverLeadRuntime): Promise<DeliverL
     } finally {
       clearInterval(heartbeat);
     }
-    const marked = await markLeadDeliverySent(
+    const marked = await markLeadDeliveryDelivered(
       runtime.payload,
       { externalRef: result.externalRef, leadDeliveryId: runtime.leadDeliveryId },
       now,
     );
     if (!marked) return "skipped";
-    return "sent";
+    return "delivered";
   } catch (error) {
     const failure = error instanceof LeadDeliveryFailure ? error : unexpectedFailure();
     return recordFailure(runtime, {

@@ -95,7 +95,7 @@ test("admin delivery summary emits aggregate alerts only", () => {
       failed: 7,
       pending: 31,
       sending: 1,
-      sent: 20,
+      delivered: 20,
     },
     {
       abandoned: 1,
@@ -111,7 +111,7 @@ test("admin delivery summary emits aggregate alerts only", () => {
     failed: 7,
     pending: 31,
     sending: 1,
-    sent: 20,
+    delivered: 20,
   });
   assert.deepEqual(summary.alerts.map((alert) => alert.kind), [
     "failure_ratio",
@@ -161,4 +161,12 @@ test("owner retry endpoint is registered and owner-only", async () => {
   assert.equal(ok.status, 200);
   assert.deepEqual(await ok.json(), { ok: true, status: "pending" });
   assert.equal(retried, true);
+});
+
+test("admin schema represents historical delivered rows without inventing a delivery timestamp", async () => {
+  const { LeadDeliveries } = await import("../src/project/collections/lead-deliveries.ts");
+  const deliveredAt = LeadDeliveries.fields.find((candidate) => "name" in candidate && candidate.name === "deliveredAt");
+  assert.equal(deliveredAt?.type, "date");
+  assert.equal(deliveredAt?.required, undefined);
+  assert.match(deliveredAt?.admin?.description ?? "", /historical deliveries.*unknown/i);
 });

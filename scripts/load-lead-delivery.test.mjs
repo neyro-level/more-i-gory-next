@@ -32,7 +32,7 @@ test("loader returns payload plus retry state without raw Payload documents", as
           attemptLog: [
             {
               attemptedAt: "2026-09-17T11:00:00.000Z",
-              deliveryCertainty: "not_delivered",
+              deliveryCertainty: "not-delivered",
               outcome: "failed",
               redactedMessage: "telegram_timeout",
               safeCode: "telegram_timeout",
@@ -69,7 +69,7 @@ test("loader returns payload plus retry state without raw Payload documents", as
     attemptLog: [
       {
         attemptedAt: "2026-09-17T11:00:00.000Z",
-        deliveryCertainty: "not_delivered",
+        deliveryCertainty: "not-delivered",
         outcome: "failed",
         redactedMessage: "telegram_timeout",
         safeCode: "telegram_timeout",

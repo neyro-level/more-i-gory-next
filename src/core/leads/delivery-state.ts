@@ -1,6 +1,6 @@
 import type { DeliveryCertainty, LeadDeliveryFailure } from "./delivery.ts";
 
-export type LeadDeliveryStatus = "pending" | "sending" | "sent" | "failed" | "abandoned";
+export type LeadDeliveryStatus = "pending" | "sending" | "delivered" | "failed" | "abandoned";
 
 export type LeadDeliveryAttemptLogEntry = Readonly<{
   attemptedAt: string;

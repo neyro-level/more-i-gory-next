@@ -22,6 +22,7 @@ import * as migration_20260918_183258_property_enums from './20260918_183258_pro
 import * as migration_20260918_184114_property_numeric from './20260918_184114_property_numeric';
 import * as migration_20260918_190215_deactivation_approval from './20260918_190215_deactivation_approval';
 import * as migration_20260919_114121_import_run_canonical_status from './20260919_114121_import_run_canonical_status';
+import * as migration_20260919_123428 from './20260919_123428';
 
 export const migrations = [
   {
@@ -142,6 +143,11 @@ export const migrations = [
   {
     up: migration_20260919_114121_import_run_canonical_status.up,
     down: migration_20260919_114121_import_run_canonical_status.down,
-    name: '20260919_114121_import_run_canonical_status'
+    name: '20260919_114121_import_run_canonical_status',
+  },
+  {
+    up: migration_20260919_123428.up,
+    down: migration_20260919_123428.down,
+    name: '20260919_123428'
   },
 ];

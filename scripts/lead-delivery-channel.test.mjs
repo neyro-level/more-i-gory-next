@@ -59,7 +59,7 @@ test("telegram delivery channel sends through Safe Outbound Client", async () =>
 
   assert.deepEqual(result, {
     classification: "sent",
-    deliveryCertainty: "confirmed",
+    deliveryCertainty: "delivered",
     externalRef: "telegram:42",
   });
   assert.equal(outbound.requests.length, 1);
@@ -98,7 +98,7 @@ test("telegram delivery failures expose only redacted operational details", asyn
       assert.ok(error instanceof LeadDeliveryFailure);
       assert.equal(error.retryable, false);
       assert.equal(error.safeCode, "telegram_rejected");
-      assert.equal(error.deliveryCertainty, "not_delivered");
+      assert.equal(error.deliveryCertainty, "not-delivered");
       assert.equal(error.classification, "permanent");
       assert.equal(error.redactedMessage.includes("secret-token"), false);
       assert.equal(error.redactedMessage.includes("-100123456"), false);
@@ -143,7 +143,7 @@ test("unknown timeout stays retryable and is never treated as sent", async () =>
       assert.equal(error.deliveryCertainty, "unknown");
       assert.equal(error.retryable, true);
       assert.equal(error.possibleDuplicate, true);
-      assert.notEqual(error.deliveryCertainty, "confirmed");
+      assert.notEqual(error.deliveryCertainty, "delivered");
       return true;
     },
   );

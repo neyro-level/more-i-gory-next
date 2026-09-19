@@ -14,7 +14,7 @@ export type LeadDeliveryAlertSnapshot = Readonly<{
   failed: number;
   pending: number;
   sending: number;
-  sent: number;
+  delivered: number;
 }>;
 
 export type LeadDeliveryAlertThresholds = Readonly<{
@@ -42,7 +42,7 @@ export function summarizeLeadDeliveryAdminState(
   thresholds: LeadDeliveryAlertThresholds = {},
 ): LeadDeliveryAdminSummary {
   const limits = { ...defaultThresholds, ...thresholds };
-  const attempted = snapshot.sent + snapshot.failed + snapshot.abandoned;
+  const attempted = snapshot.delivered + snapshot.failed + snapshot.abandoned;
   const failureRatio = attempted === 0 ? 0 : (snapshot.failed + snapshot.abandoned) / attempted;
   const alerts: LeadDeliveryAlert[] = [];
 
@@ -70,7 +70,7 @@ export function summarizeLeadDeliveryAdminState(
       failed: snapshot.failed,
       pending: snapshot.pending,
       sending: snapshot.sending,
-      sent: snapshot.sent,
+      delivered: snapshot.delivered,
     },
   };
 }

@@ -9,7 +9,7 @@ type LeadDeliveryTransitionInput = {
   leadDeliveryId: string;
 };
 
-type LeadDeliverySentInput = LeadDeliveryTransitionInput & {
+type LeadDeliveryDeliveredInput = LeadDeliveryTransitionInput & {
   externalRef?: string;
 };
 
@@ -195,18 +195,19 @@ export async function touchLeadDeliveryHeartbeat(
   return Array.isArray(result.docs) && result.docs.length > 0;
 }
 
-export async function markLeadDeliverySent(
+export async function markLeadDeliveryDelivered(
   payload: PayloadLike,
-  input: LeadDeliverySentInput,
+  input: LeadDeliveryDeliveredInput,
   now = new Date(),
 ): Promise<boolean> {
   const update = await payload.update({
     collection: "lead-deliveries",
     data: {
       externalRef: input.externalRef,
+      deliveredAt: now.toISOString(),
       heartbeatAt: now.toISOString(),
       lastErrorRedacted: null,
-      status: "sent",
+      status: "delivered",
     },
     overrideAccess: true,
     where: {

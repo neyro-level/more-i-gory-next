@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { leadRetentionCleanup } from "../src/core/data-access/system/lead-retention.ts";
@@ -10,6 +11,7 @@ import {
 } from "../src/core/leads/retention.ts";
 
 const now = new Date("2026-09-17T12:00:00.000Z");
+const retentionSource = readFileSync(new URL("../src/core/leads/retention.ts", import.meta.url), "utf8");
 
 test("lead retention policy keeps PII for 100 days and recoverable history for 300 total days", () => {
   assert.equal(leadRetentionDays, 100);
@@ -20,6 +22,7 @@ test("lead retention policy keeps PII for 100 days and recoverable history for 3
     [
       {
         createdAt: "2026-06-10T12:00:00.000Z",
+        deliveredAt: "2026-01-01T00:00:00.000Z",
         id: "fresh",
         retentionStatus: "active",
       },
@@ -63,6 +66,7 @@ test("lead retention policy keeps PII for 100 days and recoverable history for 3
   });
   assert.equal(JSON.stringify(plan).includes("+7 900"), false);
   assert.equal(JSON.stringify(plan).includes("client@example.com"), false);
+  assert.doesNotMatch(retentionSource, /deliveredAt/);
 });
 
 test("lead retention cleanup anonymizes PII first, then purges lead and deliveries after total retention", async () => {

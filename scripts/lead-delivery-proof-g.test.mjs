@@ -60,7 +60,7 @@ test("route POST /api/public/leads is the public intake entry", () => {
   assert.match(routeSource, /export async function POST/);
 });
 
-test("Proof G: POST /api/public/leads creates lead, delivery, job and fake sent+externalRef", async () => {
+test("Proof G: POST /api/public/leads creates lead, delivery, job and fake delivered+externalRef", async () => {
   const memory = createMemoryPayload();
   let nextLeadId = 9;
   let nextDeliveryId = 501;
@@ -136,7 +136,8 @@ test("Proof G: POST /api/public/leads creates lead, delivery, job and fake sent+
   });
 
   const delivery = memory.deliveries.get(501);
-  assert.equal(status, "sent");
-  assert.equal(delivery.status, "sent");
+  assert.equal(status, "delivered");
+  assert.equal(delivery.status, "delivered");
+  assert.equal(delivery.deliveredAt, "2026-09-17T12:00:00.000Z");
   assert.equal(delivery.externalRef, "fake:1");
 });

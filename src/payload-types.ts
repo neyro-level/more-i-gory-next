@@ -754,11 +754,15 @@ export interface LeadDelivery {
   id: number;
   lead: number | Lead;
   channelId: string;
-  status: 'pending' | 'sending' | 'sent' | 'failed' | 'abandoned';
+  status: 'pending' | 'sending' | 'delivered' | 'failed' | 'abandoned';
   attempts: number;
   nextAttemptAt?: string | null;
   idempotencyKey: string;
   externalRef?: string | null;
+  /**
+   * May be empty for historical deliveries whose exact delivery time is unknown.
+   */
+  deliveredAt?: string | null;
   lastErrorRedacted?: string | null;
   claimedAt?: string | null;
   heartbeatAt?: string | null;
@@ -773,7 +777,8 @@ export interface LeadDelivery {
   attemptLog?:
     | {
         attemptedAt: string;
-        outcome: 'pending' | 'sending' | 'sent' | 'failed' | 'abandoned';
+        deliveryCertainty: 'not-delivered' | 'unknown' | 'delivered';
+        outcome: 'pending' | 'sending' | 'delivered' | 'failed' | 'abandoned';
         safeCode?: string | null;
         redactedMessage?: string | null;
         id?: string | null;
@@ -1922,6 +1927,7 @@ export interface LeadDeliveriesSelect<T extends boolean = true> {
   nextAttemptAt?: T;
   idempotencyKey?: T;
   externalRef?: T;
+  deliveredAt?: T;
   lastErrorRedacted?: T;
   claimedAt?: T;
   heartbeatAt?: T;
@@ -1937,6 +1943,7 @@ export interface LeadDeliveriesSelect<T extends boolean = true> {
     | T
     | {
         attemptedAt?: T;
+        deliveryCertainty?: T;
         outcome?: T;
         safeCode?: T;
         redactedMessage?: T;

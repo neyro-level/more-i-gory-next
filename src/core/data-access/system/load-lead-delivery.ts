@@ -65,7 +65,7 @@ function asAttempts(value: unknown): number {
 }
 
 function asDeliveryCertainty(value: unknown): LeadDeliveryAttemptLogEntry["deliveryCertainty"] {
-  if (value === "confirmed" || value === "not_delivered" || value === "unknown") return value;
+  if (value === "delivered" || value === "not-delivered" || value === "unknown") return value;
   return "unknown";
 }
 
@@ -73,7 +73,7 @@ function asOutcome(value: unknown): LeadDeliveryAttemptLogEntry["outcome"] {
   if (
     value === "pending" ||
     value === "sending" ||
-    value === "sent" ||
+    value === "delivered" ||
     value === "failed" ||
     value === "abandoned"
   ) {

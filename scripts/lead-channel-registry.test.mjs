@@ -58,7 +58,7 @@ test("a new channel registers only in the composition root", async () => {
   registerLeadChannelFactory("probe", () => ({
     id: "probe",
     async deliver() {
-      return { classification: "sent", deliveryCertainty: "confirmed", externalRef: "probe:1" };
+      return { classification: "sent", deliveryCertainty: "delivered", externalRef: "probe:1" };
     },
   }));
 
@@ -73,7 +73,7 @@ test("a new channel registers only in the composition root", async () => {
       leadId: 1,
     }), {
       classification: "sent",
-      deliveryCertainty: "confirmed",
+      deliveryCertainty: "delivered",
       externalRef: "probe:1",
     });
   } finally {

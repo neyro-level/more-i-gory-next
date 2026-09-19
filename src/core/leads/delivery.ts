@@ -1,6 +1,6 @@
 import type { SafeOutboundClient } from "@/core/security/outbound-http";
 
-export type DeliveryCertainty = "confirmed" | "not_delivered" | "unknown";
+export type DeliveryCertainty = "delivered" | "not-delivered" | "unknown";
 export type LeadDeliveryClassification = "sent" | "retryable" | "permanent";
 
 export type LeadDeliveryPayload = Readonly<{
@@ -22,12 +22,12 @@ export type LeadDeliveryPayload = Readonly<{
 
 export type LeadDeliveryResult = Readonly<{
   classification: "sent";
-  deliveryCertainty: "confirmed";
+  deliveryCertainty: "delivered";
   externalRef?: string;
 }>;
 
 export type LeadDeliveryFailureInput = Readonly<{
-  deliveryCertainty: Exclude<DeliveryCertainty, "confirmed">;
+  deliveryCertainty: Exclude<DeliveryCertainty, "delivered">;
   possibleDuplicate?: boolean;
   redactedMessage: string;
   retryable: boolean;
@@ -35,7 +35,7 @@ export type LeadDeliveryFailureInput = Readonly<{
 }>;
 
 export class LeadDeliveryFailure extends Error {
-  readonly deliveryCertainty: Exclude<DeliveryCertainty, "confirmed">;
+  readonly deliveryCertainty: Exclude<DeliveryCertainty, "delivered">;
   readonly possibleDuplicate: boolean;
   readonly redactedMessage: string;
   readonly retryable: boolean;
@@ -93,7 +93,7 @@ const decoder = new TextDecoder();
 function assertTelegramSecretShape(botToken: string, chatId: string) {
   if (!/^[A-Za-z0-9:_-]+$/.test(botToken) || !/^-?[A-Za-z0-9:_-]+$/.test(chatId)) {
     throw new LeadDeliveryFailure({
-      deliveryCertainty: "not_delivered",
+      deliveryCertainty: "not-delivered",
       redactedMessage: "Telegram delivery credentials are invalid.",
       retryable: false,
       safeCode: "telegram_invalid_config",
@@ -162,7 +162,7 @@ export function createTelegramLeadDeliveryChannel(config: TelegramLeadDeliveryCo
           const messageId = parsed.result?.message_id;
           return {
             classification: "sent",
-            deliveryCertainty: "confirmed",
+            deliveryCertainty: "delivered",
             externalRef: messageId == null ? undefined : `telegram:${messageId}`,
           };
         }
@@ -172,7 +172,7 @@ export function createTelegramLeadDeliveryChannel(config: TelegramLeadDeliveryCo
         }
 
         throw new LeadDeliveryFailure({
-          deliveryCertainty: "not_delivered",
+          deliveryCertainty: "not-delivered",
           redactedMessage: "Telegram lead delivery failed.",
           retryable: false,
           safeCode: "telegram_rejected",

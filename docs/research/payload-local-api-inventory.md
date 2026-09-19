@@ -86,11 +86,11 @@
 | `src/core/data-access/system/lead-delivery.ts:164` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
 | `src/core/data-access/system/lead-delivery.ts:181` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
 | `src/core/data-access/system/lead-delivery.ts:203` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:227` | `update` | SYSTEM GATEWAY | `await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:248` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
-| `src/core/data-access/system/lead-delivery.ts:272` | `find` | SYSTEM GATEWAY | `(await payload.find?.({` |
-| `src/core/data-access/system/lead-delivery.ts:307` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
-| `src/core/data-access/system/lead-delivery.ts:320` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
+| `src/core/data-access/system/lead-delivery.ts:228` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:249` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
+| `src/core/data-access/system/lead-delivery.ts:273` | `find` | SYSTEM GATEWAY | `(await payload.find?.({` |
+| `src/core/data-access/system/lead-delivery.ts:308` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
+| `src/core/data-access/system/lead-delivery.ts:321` | `jobs.queue` | SYSTEM GATEWAY | `await payload.jobs?.queue({` |
 | `src/core/data-access/system/lead-retention.ts:47` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
 | `src/core/data-access/system/lead-retention.ts:75` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |
 | `src/core/data-access/system/lead-retention.ts:98` | `delete` | SYSTEM GATEWAY | `await payload.delete({` |

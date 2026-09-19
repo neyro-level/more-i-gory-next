@@ -66,10 +66,11 @@ async function runFake(mode) {
   return { runtime, status };
 }
 
-test("fake transport success stores sent and externalRef", async () => {
+test("fake transport success stores delivered, deliveredAt and externalRef", async () => {
   const { status, runtime } = await runFake("success");
-  assert.equal(status, "sent");
-  assert.equal(runtime.updates.at(-1).data.status, "sent");
+  assert.equal(status, "delivered");
+  assert.equal(runtime.updates.at(-1).data.status, "delivered");
+  assert.equal(runtime.updates.at(-1).data.deliveredAt, "2026-09-17T12:00:00.000Z");
   assert.equal(runtime.updates.at(-1).data.externalRef, "fake:1");
 });
 
