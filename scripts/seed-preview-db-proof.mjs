@@ -43,7 +43,7 @@ export function assertPreviewContour(source) {
   }
 }
 
-async function seed(argv = process.argv.slice(2), source = process.env) {
+export async function seedPreviewDbProof(argv = process.argv.slice(2), source = process.env) {
   const { expectedSha } = parseSeedArguments(argv);
   assertPreviewContour(source);
   assertGitState({
@@ -72,7 +72,7 @@ async function seed(argv = process.argv.slice(2), source = process.env) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    await seed();
+    await seedPreviewDbProof();
   } catch (error) {
     process.stderr.write(`seed-preview-db-proof: ${error instanceof Error ? error.message : "unknown failure"}\n`);
     process.exitCode = 1;

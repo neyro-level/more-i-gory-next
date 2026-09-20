@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { SEED_CONFIRMATION, assertPreviewContour, parseSeedArguments } from "./seed-preview-db-proof.mjs";
@@ -20,6 +21,12 @@ test("preview proof seed is pinned to exact SHA, confirmation and staging origin
     NEXT_PUBLIC_SERVER_URL: "https://more-previu.tw1.ru",
   }));
   assert.throws(() => assertPreviewContour({ AMS_RUNTIME_CONTOUR: "production" }), /staging/);
+});
+
+test("Payload CLI wrapper invokes the exported seed operator", () => {
+  const wrapper = readFileSync("scripts/run-preview-db-proof.mjs", "utf8");
+  assert.match(wrapper, /import \{ seedPreviewDbProof \}/);
+  assert.match(wrapper, /await seedPreviewDbProof\(\)/);
 });
 
 test("proof records are explicitly technical and keep the unpublished boundary", () => {

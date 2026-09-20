@@ -32,8 +32,9 @@ test("package aliases expose only the approved migrate, seed and smoke operators
   assert.equal(scripts["db:single:apply"], "node ops/runtime/single-db-migration.mjs apply");
   assert.equal(
     scripts["db:single:seed-proof"],
-    "node --conditions=react-server scripts/seed-preview-db-proof.mjs",
+    "payload run scripts/run-preview-db-proof.mjs",
   );
+  assert.equal(scripts["bootstrap:owner"], "payload run scripts/bootstrap-owner.mjs");
   for (const name of Object.keys(scripts)) {
     assert.equal(/migrate:(?:fresh|down)|db:(?:drop|reset)|restore/i.test(name), false, `Forbidden DB alias: ${name}`);
   }
