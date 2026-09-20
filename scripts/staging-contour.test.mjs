@@ -7,12 +7,12 @@ import { TIMEWEB_S3_CONTRACT, createStoragePlugins } from "../src/project/storag
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("staging contour pins host, empty DB name, S3 prefix, secret names, noindex and frozen ingest", () => {
+test("preview contour pins host, single DB, S3 prefix, secret names, noindex and frozen ingest", () => {
   assert.equal(STAGING_CONTOUR.publicHost, "more-previu.tw1.ru");
-  assert.equal(STAGING_CONTOUR.databaseName, "moreigory_staging");
+  assert.equal(STAGING_CONTOUR.databaseName, "default_db");
   assert.equal(STAGING_CONTOUR.s3Prefix, "staging/media");
   assert.equal(STAGING_CONTOUR.s3Bucket, TIMEWEB_S3_CONTRACT.bucket);
-  assert.equal(STAGING_CONTOUR.databaseSecretName, "MOREIGORY_STAGING_DATABASE_URL");
+  assert.equal(STAGING_CONTOUR.databaseSecretName, "MOREIGORY_DATABASE_URL");
   assert.equal(STAGING_CONTOUR.forbiddenLeadSecretNames.includes("TELEGRAM_BOT_TOKEN"), true);
   assert.equal(STAGING_CONTOUR.jobsAutorun, "false");
   assert.equal(STAGING_CONTOUR.ingest, "frozen");
@@ -20,9 +20,8 @@ test("staging contour pins host, empty DB name, S3 prefix, secret names, noindex
   assert.equal(resolveS3MediaPrefix({ AMS_RUNTIME_CONTOUR: "production" }), "media");
 
   const operations = read("docs/OPERATIONS.md");
-  assert.match(operations, /moreigory_staging/);
+  assert.match(operations, /default_db/);
   assert.match(operations, /prefix staging\/media/);
-  assert.match(operations, /do not copy TELEGRAM_BOT_TOKEN/);
   assert.match(operations, /JOBS_AUTORUN=false/);
 
   const unit = read("ops/systemd/moreigory.service");
@@ -33,12 +32,7 @@ test("staging contour pins host, empty DB name, S3 prefix, secret names, noindex
   const nginx = read("ops/nginx/more-previu.tw1.ru.conf");
   assert.match(nginx, /X-Robots-Tag "noindex, nofollow"/);
 
-  const ensure = read("ops/runtime/ensure-staging-database.sh");
-  assert.match(ensure, /moreigory_staging/);
-  assert.match(ensure, /Never dump production data/);
-  assert.match(ensure, /Never put the URI on argv/);
-  assert.doesNotMatch(ensure, /pg_dump/);
-  assert.doesNotMatch(ensure, /urlunparse/);
+  assert.doesNotMatch(operations, /ensure-staging-database/);
 });
 
 test("staging robots.txt disallows crawlers and does not advertise sitemap", () => {
@@ -51,7 +45,7 @@ test("staging S3 plugin writes under staging/media, not the production media pre
   const plugins = createStoragePlugins({
     AMS_PROFILE: "REALTY_BASE",
     AMS_RUNTIME_CONTOUR: "staging",
-    DATABASE_URI: "postgresql://user:pass@127.0.0.1:5432/moreigory_staging",
+    DATABASE_URI: "postgresql://user:pass@127.0.0.1:5432/default_db",
     JOBS_AUTORUN: "false",
     NEXT_PUBLIC_LEADS_ENABLED: "false",
     NEXT_PUBLIC_SERVER_URL: "https://more-previu.tw1.ru",

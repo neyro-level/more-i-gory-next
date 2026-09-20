@@ -31,14 +31,14 @@
 - [x] `pnpm install --frozen-lockfile`;
 - [x] `pnpm audit --audit-level high`;
 - [x] `pnpm verify:daily` и `pnpm verify:schema` на Plan №3 baseline;
-- [x] disposable PostgreSQL 18 proofs: lead migration 5/5 и heartbeat
+- [x] local disposable PostgreSQL 18 proofs: lead migration 5/5 и heartbeat
   visibility; recovery/retention подтверждены deterministic tests;
 - [x] rendered Title/Description/H1/canonical/robots contract;
 - [x] runtime routes и 404 проверяются через `next start`;
 - [x] browser console without hydration/runtime errors;
 - [x] mobile layout smoke;
 - [x] keyboard/touch/form smoke на доступных representative routes; DB-backed
-  detail routes ожидают project-owned staging DB и preview EPIC 49;
+  detail routes ожидают migration/runtime proof EPIC 48–49 на существующей DB;
 - [x] Lighthouse accessibility audit on `/`;
 - [x] SourceCraft RISKY exact-head gate PR-19.
 - [x] SourceCraft RISKY exact-head gate PR-20 (run 21).
@@ -108,7 +108,7 @@ SEO 69 объясняется единственным ожидаемым fail: 
 
 Production сейчас блокируют не фундамент Next.js, а:
 
-1. `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md` (staging/restore DB, enum drift,
-   Turnstile, content facts, ротация credentials и domain cutover);
+1. `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md` (enum drift, content facts,
+   ротация credentials и domain cutover);
 2. неутверждённый контент и реальные project passports;
 3. отдельная команда владельца на release EPIC 55–56.

@@ -21,13 +21,13 @@ Source of Truth проекта.
 | Production server | Timeweb `Moregory`, регион `ru-1`, Ubuntu 26.04; SSH aliases `moreigory` (deploy, sudo) и `moreigory-root` |
 | Secret Master | project `more-i-gory-server`, env `prod` — единственный source of truth для server и DB credentials |
 | Production database | отдельная Timeweb Managed PostgreSQL, регион `ru-1`, достижима с сервера (проверено 2026-09-18) |
-| Staging database | project-owned PostgreSQL 18 требуется; общий production contour запрещён, доступный Timeweb tier выше согласованного лимита |
+| Preview database | существующая `default_db` на cluster `4210557`; это единственный project-owned data contour v3 |
 | Manual media | Timeweb S3 bucket `moreigory-media`, endpoint `s3.twcstorage.ru`, region `ru-1`, path-style, публичное чтение; создан и проверен 2026-09-18 |
 | Repository | SourceCraft `integrator-p/more-i-gory-next` |
 | Plan №3 v2 execution baseline before EPIC 45 | `c824e9fa02ecfe370c859a851e3c0e0cedd48667` |
 
-Production и staging не используют общую БД, secrets или пользовательские
-данные. Production build на сервере запрещён.
+Preview и будущий release используют одну утверждённую БД; сейчас она пуста и
+не содержит production user data. Production build на сервере запрещён.
 
 ### Operational and legal summary
 
@@ -35,11 +35,11 @@ Production и staging не используют общую БД, secrets или 
 |---|---|
 | Active feeds/parsers | pipeline настраивается в EPIC 26 и сразу замораживается; живой XML-фид и каталог объектов не активируются 3–4 месяца |
 | Non-secret integrations | Payload Admin, Timeweb Managed PostgreSQL и Timeweb S3 подтверждены; внешний канал оповещений о заявках решением владельца не подключается |
-| Backup | PostgreSQL: Timeweb Managed automatic backup. S3 versioning + TAP; live disposable restore FAIL — `OWNER_QUEUE` |
-| Restore proof | live FAIL: app role cannot `CREATE DATABASE`; owner creates empty staging/restore DBs |
+| Backup | PostgreSQL: Timeweb Managed automatic backup. S3 versioning + TAP |
+| Restore proof | не входит в v3; отдельная restore DB и rehearsal запрещены текущим plan |
 | Legal | оператор ПДн и публичные реквизиты утверждены владельцем; privacy/consent опубликованы как `privacy-2026-09-17` и `pdn-consent-2026-09-17`; банковские реквизиты не публикуются |
 | Core version | нормативная база — локальные конституции `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md` и `docs/AMS_UI_CORE_v5.0_FINAL.md` |
-| Server state | Nginx/systemd/pack реализованы; project-owned preview rollout ожидает staging DB и EPIC 49 |
+| Server state | Nginx/systemd/pack реализованы; preview rollout ожидает EPIC 48–49 на существующей DB |
 
 Эта таблица фиксирует статусы, а не доказательство готовности. Planned integration
 не включается и не требует secrets до своего эпика.
@@ -53,7 +53,7 @@ Production и staging не используют общую БД, secrets или 
 | Подсистема | Статус | Комментарий |
 |---|---|---|
 | Payload CMS / Admin / schema | IMPLEMENTED | Admin и public pages через Public Gateway; fallback при недоступности Payload |
-| PostgreSQL | IMPLEMENTED managed + local | clean chain 26/26 и upgrade fixture PASS; staging/restore resource — owner gate |
+| PostgreSQL | IMPLEMENTED managed + local | clean chain 26/26 и upgrade fixture PASS; одна managed `default_db` утверждена v3 |
 | S3 | IMPLEMENTED bucket + app contract | `moreigory-media` path-style; SM write of keys — IMPROVEMENT |
 | Leads intake | IMPLEMENTED + TAP | POST `/api/public/leads`; PII logs proof 14.K |
 | Lead delivery | IMPLEMENTED pipeline; channel DISABLED | внешний канал не подключается |
@@ -62,7 +62,7 @@ Production и staging не используют общую БД, secrets или 
 | Jobs | IMPLEMENTED one-owner runbook | preview не jobs owner |
 | Retention | IMPLEMENTED + TAP | live clock не обязателен для 14.H |
 | Cache invalidation | IMPLEMENTED http + TAP | B2 proof в EPIC 27/32 |
-| Staging | PARTIAL | contour в коде; empty staging DB — owner |
+| Preview | PARTIAL | contour в коде; migration/runtime proof выполняют EPIC 48–49 |
 | Production | OWNER_GATE | только EPIC 55–56 после `OWNER_QUEUE/BLOCKS_RELEASE` и отдельной команды |
 
 ## 2. Включённые модули
@@ -174,7 +174,7 @@ CACHE_INVALIDATION_MODE=http
 |---|---|---|
 | Profile | `AMS_PROFILE` | фиксированное значение `REALTY_BASE` |
 | Timezone | `TZ` | `Europe/Moscow` |
-| Database | `DATABASE_URI` | проектное имя роли `DATABASE_URL` из Core 3.0; runtime alias не вводится |
+| Database | `DATABASE_URI` | Secret Master source: `MOREIGORY_DATABASE_URL`; generic `DATABASE_URL` is legacy and not consumed |
 | Payload secret | `PAYLOAD_SECRET` | secret |
 | Public canonical server URL | `NEXT_PUBLIC_SERVER_URL` | проектное имя роли `NEXT_PUBLIC_SITE_URL` из Core 3.0 |
 | Jobs ownership | `JOBS_AUTORUN` | `true` только у одного jobs-active runtime |

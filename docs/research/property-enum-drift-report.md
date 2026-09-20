@@ -34,4 +34,4 @@ SELECT to_regclass('public.properties') AS properties_table;
 
 _no sample rows_
 
-The live database is empty and unmigrated, so this is not evidence of a zero-row enum drift result. Apply the repaired migration chain to a disposable staging/restore database first. Re-run the row query immediately before any production enum conversion; conversion is allowed only when the table exists and the out-of-contract count is zero.
+The live database is empty and unmigrated, so this is not evidence of a zero-row enum drift result. Apply the repaired migration chain in place only through EPIC 48 after its preflight and recovery gate. Re-run the row query immediately before any enum conversion; conversion is allowed only when the table exists and the out-of-contract count is zero.

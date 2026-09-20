@@ -56,8 +56,6 @@ test("all known release blockers remain explicit and stale root inventory is gon
   const queue = read("docs/OWNER_QUEUE.md");
 
   for (const marker of [
-    "mg4-epic-46.2",
-    "mg4-epic-50.1",
     "mg4-epic-52.1",
     "TASK 24.1b",
     "Credentials hygiene",

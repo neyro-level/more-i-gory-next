@@ -91,7 +91,7 @@ Exact toolchain первого релиза:
 | pnpm | `11.5.1` | `packageManager`, lockfile |
 | Next.js | `16.3.4` | App Router, Node.js runtime |
 | Payload / `@payloadcms/*` | `3.89.0` | CMS, Admin, auth, jobs, schema/migrations owner |
-| PostgreSQL | `18.6` local / `18` target | clean 26-migration proof; Managed target reachable, isolated staging resource pending |
+| PostgreSQL | `18.6` local / `18.6` managed | one approved cluster `4210557` / database `default_db`; no second staging/restore resource |
 | React / React DOM | `19.3.0` | Server First |
 | TypeScript | `6.0.3` | strict; TypeScript 7 не используется |
 | Tailwind CSS | `4.3.3` | CSS variables, global tokens |
@@ -512,8 +512,9 @@ Rollback:
 - Timeweb Managed PostgreSQL с автоматическими backup provider;
 - schema изменяется только committed Payload migrations (`push:false`);
 - чистая PostgreSQL 18 прошла полную цепочку 26/26 и upgrade fixture в EPIC 44;
-- disposable restore и live drift proof требуют отдельной staging/restore DB
-  из `OWNER_QUEUE.md`; production data не использовались.
+- отдельная restore DB и backup/restore rehearsal исключены из v3;
+- production disaster-recovery rehearsal требует нового отдельного решения;
+  текущий technical preview не заявляет restore readiness.
 
 ## 23. Testing Strategy
 

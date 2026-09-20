@@ -78,6 +78,18 @@ database        : Timeweb Managed PostgreSQL via DATABASE_URI in /etc/moreigory/
 media           : Timeweb S3 bucket moreigory-media (not VPS disk)
 ```
 
+Canonical database secret route:
+
+```text
+Secret Master more-i-gory-server/prod/MOREIGORY_DATABASE_URL
+→ /etc/moreigory/app.env:DATABASE_URI
+→ Next.js + Payload
+```
+
+`DATABASE_URL` is a legacy duplicate pending controlled cleanup in EPIC 47;
+project code does not consume it. `MOREIGORY_STAGING_DATABASE_URL` must not be
+created.
+
 ## Runtime supervisor
 
 Chosen supervisor: `systemd` unit `moreigory.service`
@@ -111,23 +123,15 @@ recovery plan and explicit owner decision.
 Payload является единственным schema owner; `push:false`, schema меняется только
 committed migrations. `pnpm verify:schema` генерирует types и проверяет drift во
 временной директории, не загрязняя checkout. Clean local PostgreSQL 18 proof
-выполнен в EPIC 2. Staging/production migration: CODE EXISTS (EPIC 13), live
-restore FAIL без owner DB, PRODUCTION NOT PROVEN.
+выполнен в EPIC 2. In-place preview migration/runtime proof выполняет EPIC 48;
+production rollout не разрешён.
 
-## Backup and restore
+## Backup and recovery boundary
 
-Timeweb Managed PostgreSQL keeps provider backups. The actual restore proof is:
-
-```text
-backup
-→ restore into disposable/staging DB
-→ app reads restored state
-```
-
-Run `ops/runtime/backup-restore.sh` with `PGHOST`/`PGUSER`/`PGPASSWORD` from Secret Master
-admin names `POSTGRESQL_*`, never from the application `DATABASE_URI` dump of
-production rows. The script restores only table `restore_probe` into
-`moreigory_restore_dst` (or `MOREIGORY_BACKUP_TARGET_DB`) and SELECTs the marker.
+Timeweb Managed PostgreSQL keeps provider backups. A separate restore database,
+backup/restore rehearsal and production disaster-recovery proof are explicitly
+outside approved plan v3 and do not block the technical preview. No project
+script provisions a restore target or dumps application data.
 
 S3 media (TASK 31.5):
 
@@ -138,7 +142,7 @@ independent    : required — ru-1 is a single region; copy media/ off Timeweb �
 restore        : restore VersionId onto the same key; do not pull files from the VPS disk
 ```
 
-Backup не считается доказанным без успешного restore evidence.
+Provider backup availability is recorded, but restore readiness is not claimed.
 
 ## Jobs runtime
 
@@ -247,16 +251,17 @@ is later and is not this task.
 ```text
 публичный хост     : more-previu.tw1.ru
 runtime            : тот же сервер, отдельный release-каталог / unit moreigory.service
-база               : moreigory_staging on the existing Managed PostgreSQL, empty, no production PII dump
+база               : единственная существующая default_db на cluster 4210557; сейчас 0 public tables
 S3                 : bucket moreigory-media, prefix staging/media
-secrets            : MOREIGORY_STAGING_DATABASE_URL in more-i-gory-server/prod;
-                     do not copy TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID or LEAD_CHANNELS
+secrets            : MOREIGORY_DATABASE_URL renders runtime DATABASE_URI;
+                     отдельный staging/restore secret запрещён
 индексация         : X-Robots-Tag noindex, nofollow; robots.txt disallow
 jobs ingest        : JOBS_AUTORUN=false; feed catalog remains frozen
 ```
 
-ops/runtime/ensure-staging-database.sh creates the empty database name without
-printing the connection string.
+Preview использует ту же единственную project-owned database identity. Создание
+второй database/user и restore rehearsal исключены утверждённым v3; отдельного
+provisioning script нет.
 
 ## Incident checklist
 
