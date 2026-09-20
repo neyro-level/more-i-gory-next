@@ -189,6 +189,8 @@ test("/obekty routes use Payload properties public gateway, not legacy project J
   const template = await readFile("src/components/templates/project-passport-template.tsx", "utf8");
 
   assert.match(listPage, /listPublishedManualProperties/);
+  assert.match(listPage, /const properties = await listPublishedManualProperties\(\)/);
+  assert.doesNotMatch(listPage, /editorialPreview \? \[\] : await listPublishedManualProperties/);
   assert.doesNotMatch(listPage, /contentService|listPublishedProjects/);
   assert.match(detailPage, /getManualPropertyRouteBySlug/);
   assert.match(detailPage, /getArchivedPropertyAction/);

@@ -159,6 +159,53 @@ committed migrations. `pnpm verify:schema` генерирует types и про�
 выполнен в EPIC 2. In-place preview migration/runtime proof выполняет EPIC 48;
 production rollout не разрешён.
 
+### EPIC 48 single-database operation
+
+This procedure is allowed only by TASK 48.O from the exact merged TASK 48.P
+`main` SHA. It runs from a clean exact checkout on the preview server; installing
+the locked production dependencies for this migration runner is not an
+application build or release. Never use `migrate:fresh`, `migrate:down`, schema
+push, reset, dump or restore.
+
+```text
+load /etc/moreigory/app.env without printing values
+→ confirm exact merged SHA and clean checkout
+→ db:single:preflight (default_db, PostgreSQL 18, 0 public tables, no ledger)
+→ db:single:apply with explicit confirmation
+→ bootstrap:owner with ephemeral Secret Master credentials
+→ db:single:seed-proof with explicit confirmation
+→ deploy/restart the matching preview artifact
+→ single-db-application-smoke before-restart and after-restart
+→ verify 26 migration rows, 148 public tables and two technical proof records
+```
+
+Commands use the exact merged SHA as `<sha>`:
+
+```text
+pnpm db:single:preflight -- --expected-sha=<sha>
+pnpm db:single:apply -- --expected-sha=<sha> --confirm=APPLY_SINGLE_DB_MIGRATIONS
+pnpm bootstrap:owner
+pnpm db:single:seed-proof -- --expected-sha=<sha> --confirm=SEED_TECHNICAL_PREVIEW_DB_PROOF
+node ops/runtime/single-db-application-smoke.mjs \
+  --base-url=https://more-previu.tw1.ru \
+  --published-slug=db-proof-published \
+  --draft-slug=db-proof-draft \
+  --expected-title="Техническая проверка DB" \
+  --phase=before-restart
+# controlled restart of moreigory.service, then repeat with --phase=after-restart
+```
+
+`BOOTSTRAP_OWNER_EMAIL`, `BOOTSTRAP_OWNER_PASSWORD`, `DB_SMOKE_OWNER_EMAIL` and
+`DB_SMOKE_OWNER_PASSWORD` are ephemeral process variables sourced from Secret
+Master. They are never written to `/etc/moreigory/app.env`, repository files or
+evidence. The seed is idempotent and creates only two clearly technical preview
+records: one published proof and one unpublished boundary proof.
+
+Stop before DDL on any identity/history/table mismatch. After successful DDL,
+recovery is forward-fix only: keep preview in maintenance, diagnose the exact
+failed step and finish the committed migration/seed/smoke chain. Do not create a
+second database and do not restore over `default_db`.
+
 ## Backup and recovery boundary
 
 Timeweb Managed PostgreSQL keeps provider backups. A separate restore database,

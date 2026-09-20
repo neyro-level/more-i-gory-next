@@ -14,6 +14,7 @@
 |---|---|---|---|
 | `scripts/lead-delivery-proof-g.test.mjs:109` | `jobs.queue` | TEST | `await memory.payload.jobs.queue({` |
 | `scripts/seed-media-assets.mjs:64` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
+| `scripts/seed-preview-db-proof.mjs:60` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/seed-regions.mjs:72` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/verify-architecture-guards.test.mjs:65` | `find` | TEST | `files: [{ path: "src/core/data-access/public/pages.ts", content: 'payload.find({ collection: "pages" });' }],` |
 | `scripts/verify-architecture-guards.test.mjs:78` | `find` | TEST | `content: 'payload.find({ collection: "pages", overrideAccess: false });',` |
@@ -104,6 +105,9 @@
 | `src/core/data-access/system/seed-media.ts:13` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/system/seed-media.ts:26` | `update` | SYSTEM GATEWAY | `await payload.update({` |
 | `src/core/data-access/system/seed-media.ts:37` | `create` | SYSTEM GATEWAY | `await payload.create({` |
+| `src/core/data-access/system/seed-preview-proof.ts:44` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/system/seed-preview-proof.ts:53` | `update` | SYSTEM GATEWAY | `? await payload.update({` |
+| `src/core/data-access/system/seed-preview-proof.ts:59` | `create` | SYSTEM GATEWAY | `: await payload.create({` |
 | `src/core/data-access/system/seed-regions.ts:6` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/system/seed-regions.ts:23` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/system/seed-regions.ts:33` | `update` | SYSTEM GATEWAY | `? await payload.update({` |

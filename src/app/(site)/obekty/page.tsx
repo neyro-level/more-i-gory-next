@@ -23,7 +23,7 @@ const criteria = [
 export default async function ObjectsPage() {
   const seo = getSeoEntry("PAGE-014");
   const editorialPreview = isEditorialPreviewEnabled();
-  const properties = editorialPreview ? [] : await listPublishedManualProperties();
+  const properties = await listPublishedManualProperties();
 
   return (
     <main>

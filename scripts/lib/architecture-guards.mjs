@@ -20,6 +20,7 @@ const privilegedSystemFiles = new Set([
   "src/core/data-access/system/apply-safe-deactivation.ts",
   "src/core/data-access/system/seed-media.ts",
   "src/core/data-access/system/seed-regions.ts",
+  "src/core/data-access/system/seed-preview-proof.ts",
 ]);
 const privateFieldPattern = /\b(?:apartmentNumber|cadastralNumber|internalComment|ownerContact|credentials|diagnosticRawData)\b/;
 const lowLevelDbImportPattern = /(?:from\s+|import\s*\(|require\s*\()\s*["'](?:@payloadcms\/db-postgres|drizzle-orm(?:\/[^"']*)?|pg|postgres)["']/;

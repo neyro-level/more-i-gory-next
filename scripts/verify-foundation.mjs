@@ -364,7 +364,8 @@ const overrideAccessConsumers = sourceFiles.filter((file) => {
     !normalized.endsWith("/src/core/data-access/system/create-import-issue.ts") &&
     !normalized.endsWith("/src/core/data-access/system/apply-safe-deactivation.ts") &&
     !normalized.endsWith("/src/core/data-access/system/seed-media.ts") &&
-    !normalized.endsWith("/src/core/data-access/system/seed-regions.ts")
+    !normalized.endsWith("/src/core/data-access/system/seed-regions.ts") &&
+    !normalized.endsWith("/src/core/data-access/system/seed-preview-proof.ts")
   );
 });
 if (overrideAccessConsumers.length > 0) {
