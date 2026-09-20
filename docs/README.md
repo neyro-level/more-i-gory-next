@@ -87,6 +87,11 @@ Research объясняет причины решений, но не являе�
 Встроенные статусы старых файлов внутри `research/legacy/` являются историческими
 и отменены общим статусом каталога.
 
+Текущий входящий пакет недостающих business facts —
+[`CONTENT_FACT_PACKET.md`](CONTENT_FACT_PACKET.md). Это рабочий evidence intake,
+а не Source of Truth; подтверждённые сведения переносятся в канон или Payload
+entity.
+
 ## Approved exceptions
 
 Активные исключения и их владельцы перечислены в [`DESIGN.md`](DESIGN.md).
