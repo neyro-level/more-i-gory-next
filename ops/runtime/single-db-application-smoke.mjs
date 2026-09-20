@@ -44,20 +44,22 @@ export function resolveTransportBaseUrl(source = process.env) {
   return value;
 }
 
-function assertNoindex(response, label) {
+function assertNoindex(response, label, required) {
+  if (!required) return;
   const value = response.headers.get("x-robots-tag") ?? "";
   if (!value.toLowerCase().includes(NOINDEX)) fail(`${label} is missing the preview noindex header.`);
 }
 
-async function responseText(response, label) {
+async function responseText(response, label, requireNoindex) {
   if (response.status !== 200) fail(`${label} returned HTTP ${response.status}.`);
-  assertNoindex(response, label);
+  assertNoindex(response, label, requireNoindex);
   return response.text();
 }
 
 export async function runApplicationSmoke(options, dependencies = {}) {
   const fetchImpl = dependencies.fetchImpl ?? fetch;
   const transportBaseUrl = dependencies.transportBaseUrl ?? resolveTransportBaseUrl();
+  const requireNoindex = transportBaseUrl === PREVIEW_ORIGIN;
   const ownerEmail = dependencies.ownerEmail ?? process.env.DB_SMOKE_OWNER_EMAIL;
   const ownerPassword = dependencies.ownerPassword ?? process.env.DB_SMOKE_OWNER_PASSWORD;
   if (!ownerEmail || !ownerPassword) fail("DB_SMOKE_OWNER_EMAIL and DB_SMOKE_OWNER_PASSWORD are required.");
@@ -69,7 +71,7 @@ export async function runApplicationSmoke(options, dependencies = {}) {
   });
 
   const health = await request("/api/health/");
-  const healthBody = await responseText(health, "health");
+  const healthBody = await responseText(health, "health", requireNoindex);
   let healthPayload;
   try {
     healthPayload = JSON.parse(healthBody);
@@ -79,7 +81,7 @@ export async function runApplicationSmoke(options, dependencies = {}) {
   if (healthPayload?.ok !== true) fail("health payload is not ok.");
 
   const admin = await request("/admin/");
-  await responseText(admin, "admin");
+  await responseText(admin, "admin", requireNoindex);
 
   const login = await request("/api/users/login/", {
     body: JSON.stringify({ email: ownerEmail, password: ownerPassword }),
@@ -87,21 +89,21 @@ export async function runApplicationSmoke(options, dependencies = {}) {
     method: "POST",
   });
   if (login.status !== 200) fail(`owner login returned HTTP ${login.status}.`);
-  assertNoindex(login, "owner login");
+  assertNoindex(login, "owner login", requireNoindex);
 
   const list = await request("/obekty/");
-  const listHtml = await responseText(list, "public property list");
+  const listHtml = await responseText(list, "public property list", requireNoindex);
   if (!listHtml.includes(options.expectedTitle) || !listHtml.includes(`/obekty/${options.publishedSlug}/`)) {
     fail("Published proof record is absent from the public list.");
   }
 
   const detail = await request(`/obekty/${options.publishedSlug}/`);
-  const detailHtml = await responseText(detail, "published property detail");
+  const detailHtml = await responseText(detail, "published property detail", requireNoindex);
   if (!detailHtml.includes(options.expectedTitle)) fail("Published proof record is absent from its detail route.");
 
   const draft = await request(`/obekty/${options.draftSlug}/`);
   if (draft.status !== 404) fail(`Unpublished property route returned HTTP ${draft.status}, expected 404.`);
-  assertNoindex(draft, "unpublished property route");
+  assertNoindex(draft, "unpublished property route", requireNoindex);
 
   return {
     admin: "PASS",
@@ -109,6 +111,7 @@ export async function runApplicationSmoke(options, dependencies = {}) {
     health: "PASS",
     ownerLogin: "PASS",
     phase: options.phase,
+    previewNoindex: requireNoindex ? "PASS" : "NOT_APPLICABLE_LOOPBACK",
     publishedDetail: "PASS",
     publishedList: "PASS",
   };

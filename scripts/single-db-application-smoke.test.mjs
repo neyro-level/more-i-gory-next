@@ -89,9 +89,24 @@ test("smoke proves owner login, Admin, public list/detail and unpublished 404", 
     health: "PASS",
     ownerLogin: "PASS",
     phase: "before-restart",
+    previewNoindex: "PASS",
     publishedDetail: "PASS",
     publishedList: "PASS",
   });
+});
+
+test("loopback rehearsal isolates application proof from the Nginx noindex proof", async () => {
+  const noHeaderFetch = async (url, init) => {
+    const result = await passingFetch()(url, init);
+    return new Response(await result.text(), { status: result.status });
+  };
+  const result = await runApplicationSmoke(options, {
+    fetchImpl: noHeaderFetch,
+    ownerEmail: "owner@example.invalid",
+    ownerPassword: "fixture-password",
+    transportBaseUrl: "http://127.0.0.1:3101",
+  });
+  assert.equal(result.previewNoindex, "NOT_APPLICABLE_LOOPBACK");
 });
 
 test("smoke fails closed on login, publication boundary and noindex drift", async () => {
