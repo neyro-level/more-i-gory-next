@@ -2,12 +2,12 @@
 
 Plan ID: more-i-gory-production-readiness-2026-09
 Previous Task Manager Plan ID: more-i-gory-conformance-plan3-2026-09 (v1, historical)
-Future Task Manager prefix: mg4
-Version: v2
+Task Manager prefix: mg4 (stable)
+Version: v3
 Status: APPROVED
 Readiness: READY_WITH_LIMITS
 Approved by: owner
-Approved at: 2026-09-20T12:17:11+03:00
+Approved at: 2026-09-20T20:59:13+03:00
 Previous approved snapshot: v1, approved 2026-09-19T12:01:40+03:00
 
 **Canonical repository:** SourceCraft `integrator-p/more-i-gory-next`
@@ -22,8 +22,11 @@ Previous approved snapshot: v1, approved 2026-09-19T12:01:40+03:00
 **Project mode:** `BUILD`
 **UX scope:** `PUBLIC_COMMERCIAL`
 **Назначение:** v1 сохраняет завершённый conformance baseline EPIC 35–43; v2
-собирает весь остаток до production-ready состояния и изолирует сам release.
-**Default delivery mode:** `MERGE_AFTER_GATE` для EPIC 44–54 после approval exact v2.
+сохраняет approved history EPIC 44–54; v3 упрощает только незавершённый остаток
+по прямым решениям владельца: одна существующая project-owned PostgreSQL-база,
+без restore-контура и без CAPTCHA/Turnstile.
+**Default delivery mode:** `MERGE_AFTER_GATE` для оставшихся EPIC 46–50, 53–54
+после approval exact v3.
 **Production release:** только EPIC 55–56 и только после отдельной устойчивой
 команды владельца `Выпускаем production`.
 
@@ -34,10 +37,12 @@ Previous approved snapshot: v1, approved 2026-09-19T12:01:40+03:00
 | v0 | DRAFT | Исходный owner-аудит на SHA `2a3b2f5` | Принят как содержательная основа; импорт запрещён |
 | v1 | APPROVED | Architect normalization + four-pass final audit + owner approval 2026-09-19 | Устранены collisions EPIC 33/34, построены автономные waves, owner/production gates вынесены в EPIC 44, добавлены contracts и Task Manager isolation; blocker/major findings закрыты; владелец утвердил exact v1 |
 | v2 | APPROVED | Owner confirmation 2026-09-20 после final four-pass audit exact commit `9c4b287` | EPIC 44 placeholder разложен на EPIC 44–56; blockers/majors/cycles = 0; Night Run `READY_WITH_LIMITS`; mg4 import и Developer handoff разрешены |
+| v3 | APPROVED | Owner simplification 2026-09-20: одна существующая БД, restore исключён, Cloudflare/Turnstile исключён, закрыть только обязательный остаток; exact owner approval 2026-09-20T20:59:13+03:00 | Сохранить выполненные evidence EPIC 44/45/51/52; выполнить незавершённый graph без покупки второй БД, backup/restore rehearsal и CAPTCHA-account gate; production по-прежнему запрещён |
 
-Snapshot v1 был утверждён и выполнен по EPIC 35–43. Текущий v2 утверждён после
-финального четырёхпроходного аудита и owner confirmation; mg4 inventory,
-Task Manager import/reconcile и Developer handoff разрешены.
+Snapshot v1 был утверждён и выполнен по EPIC 35–43. Snapshot v2 утверждён и
+частично выполнен. Любая незавершённая v2 task, затронутая v3 owner decisions,
+не закрывается по старому acceptance. До exact v3 approval разрешены только
+Architect audit и plan checkpoint; implementation/import заблокированы.
 
 # V1 HISTORICAL SNAPSHOT — NON-IMPORTABLE IN V2
 
@@ -3099,3 +3104,415 @@ Expected after approval: `READY_WITH_LIMITS`. Неизбежные поздни�
 ```
 
 **Конец документа — План №3 v2 REVIEW.**
+
+---
+
+# V3 — OWNER SIMPLIFICATION / CURRENT EXECUTION CONTRACT
+
+Этот раздел является единственным current contract для незавершённого остатка.
+V1 и V2 выше сохраняются как immutable history/evidence и повторно не
+импортируются. Plan ID и Beads prefix остаются прежними; закрытые evidence и
+merge SHAs не переписываются.
+
+## V3 revision packet
+
+```text
+Revision input ID: V3-OWNER-SIMPLIFY-2026-09-20
+Source: owner
+Targets: EPIC 46–50, 53–54; release prerequisites 55–56
+Accepted:
+- одна уже существующая project-owned PostgreSQL 18 database;
+- минимальный текущий тариф; новый DB resource не покупается;
+- отдельная restore DB и backup/restore rehearsal исключены;
+- Cloudflare, Turnstile, CAPTCHA account и CAPTCHA secrets исключены;
+- форма остаётся рабочей через server validation, trusted client boundary,
+  Nginx/application rate limit, honeypot и minimum-fill protection;
+- production rollout, DNS/TLS cutover и public indexing не разрешены.
+Rejected:
+- повышение тарифа ради второй DB;
+- создание managed/local disposable restore target;
+- disabled form только из-за отсутствия CAPTCHA keys;
+- новые внешние anti-bot accounts.
+Deferred outside current plan:
+- production disaster-recovery rehearsal;
+- production release/cutover EPIC 55–56.
+```
+
+## V3 owner decisions
+
+| ID | Decision | Status |
+|---|---|---|
+| V3-OD-01 | Cluster `4210557`, database `default_db` становится единственной project-owned DB для preview и будущего release; сейчас production rollout/data отсутствуют. Не создавать второй cluster/database/user | DECIDED |
+| V3-OD-02 | Restore rehearsal и отдельная временная база не входят в текущий plan и не блокируют technical preview completion | DECIDED |
+| V3-OD-03 | Cloudflare/Turnstile/CAPTCHA полностью исключены. Форма не должна зависеть от CAPTCHA env или внешнего widget | DECIDED |
+| V3-OD-04 | Anti-abuse minimum: trusted Nginx client identity, effective 5 req/min/client burst 5, application limiter, honeypot, minimum-fill и server validation | DECIDED |
+| V3-OD-05 | EPIC 54 закрывает `TECHNICAL_PREVIEW_CANDIDATE`, а не production-ready release candidate | DECIDED |
+| V3-OD-06 | EPIC 55–56 остаются вне graph; production и domain cutover требуют нового recovery/release plan и отдельной команды | DECIDED |
+
+Before-approval owner decisions: `0`.
+
+## V3 carried-forward evidence
+
+Следующие результаты v2 принимаются без повторного исполнения:
+
+- EPIC 44 — migration baseline repair, PR 74;
+- EPIC 45 — canonical state / Task Manager hygiene, PR 76;
+- EPIC 51 — content fact foundation, PR 75;
+- EPIC 52 — полный noindex editorial preview surface, PR 77;
+- technical preview `more-previu.tw1.ru`: 29/29 planned routes, меню
+  `Все страницы`, `/api/health`, noindex и три technical templates;
+- EPIC 50 TASK 50.1–50.3: canonical Payload intake, trusted client/rate-limit,
+  privacy/retention/honeypot contracts. Turnstile-specific код не считается
+  финальным v3 evidence и удаляется отдельной task.
+
+## V3 dependency model
+
+| Wave | Work | Dependency | Fallback |
+|---|---|---|---|
+| A | EPIC 46 single-DB truth; EPIC 50 CAPTCHA removal/code contract | exact v3 APPROVED | независимы |
+| B | EPIC 47 in-place credential/env hardening | EPIC 46 | controlled preview maintenance; production domain untouched |
+| C | EPIC 48 single-DB migration/runtime proof | EPIC 47 | stop on unknown data/destructive anomaly |
+| D | EPIC 49 preview runtime completion; EPIC 50 live form E2E | EPIC 48; form E2E after preview DB works | code work может идти раньше, mutation только по merged runbook |
+| E | EPIC 53 preview SEO/browser/performance proof | EPIC 49 + carried EPIC 52 | all routes remain noindex |
+| F | EPIC 54 technical preview candidate | EPIC 45 + 49 + 50 + 53 | no production promotion |
+
+Cycles: `0`. EPIC 55–56 не входят в v3 inventory.
+
+# EPIC 46 — SINGLE DATABASE CONTROL PLANE
+
+**Outcome:** одна существующая project-owned PostgreSQL 18 DB является
+единственным data contour проекта; identity, Secret Master route и consumer
+доступ доказаны без покупки/создания второго DB resource.
+
+**Entry:** exact v3 APPROVED. **Risk:** RISKY. **Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 46.2 — Existing database truth
+
+- read-only подтвердить cluster `4210557`, database `default_db`, PostgreSQL version,
+  current preset/price и отсутствие production user data;
+- если обнаружены реальные production rows или ambiguous identity — stop;
+- не создавать cluster, database, restore target или второго user;
+- зафиксировать, что тариф 496 RUB/month и one database/one user являются
+  утверждённым owner topology.
+
+## TASK 46.3 — Single secret route
+
+Определить один canonical `DATABASE_URI` route в Secret Master и runtime env.
+Не создавать `MOREIGORY_STAGING_DATABASE_URL` и не дублировать credentials.
+
+## TASK 46.P — Runbook/code delivery
+
+Удалить provisioning/restore assumptions из runbook и tests, выполнить RISKY
+gate и merge до external mutation.
+
+## TASK 46.O — Operational proof
+
+Из exact merged SHA выполнить только read-only DB connectivity/identity smoke.
+Никакого provisioning, restore или production row mutation.
+
+## TASK 46.D — Evidence closeout
+
+Проверить exact identity, Secret Master consumer и cost/topology ledger.
+
+**Acceptance:** одна DB существует; identity однозначна; consumer connection
+PASS; отдельные staging/restore resources отсутствуют и не требуются.
+**Recovery:** никаких созданных ресурсов нет; при identity ambiguity — stop.
+
+# EPIC 47 — SINGLE DATABASE CREDENTIAL / ENV HARDENING
+
+**Outcome:** единственная DB identity и runtime env актуальны, секрет не
+раскрывается, preview после controlled update имеет health + DB smoke.
+**Entry:** EPIC 46. **Risk:** RISKY. **Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 47.1 — Rotation preflight
+
+Подтвердить, что минимальный preset разрешает только одного user. Вместо
+dual-credential схемы подготовить in-place password rotation с точным порядком:
+provider → Secret Master → app env → controlled restart → health/DB smoke.
+
+## TASK 47.2 — Controlled in-place rotation
+
+Выполнить операцию только из merged runbook. Краткий preview maintenance
+допустим; `moreigori.ru`, DNS/TLS и production rollout не затрагиваются.
+
+## TASK 47.3 — Runtime env completeness
+
+Проверить `PAYLOAD_SECRET`, canonical preview URL, revalidation, S3 и contour
+flags. Turnstile keys и отдельный staging DB URL запрещены как stale env.
+
+## TASK 47.P — Runbook/code delivery
+
+Зафиксировать in-place rotation/env runbook и affected tests, выполнить RISKY
+gate и merge до изменения provider password/runtime env.
+
+## TASK 47.O — Operational execution
+
+Из exact merged SHA выполнить controlled in-place rotation и consumer smoke.
+
+## TASK 47.D — Evidence closeout
+
+Записать redacted rotation/env ledger; docs-only PR только при реальном drift.
+
+**Acceptance:** новый пароль работает, предыдущий отклоняется, app health/DB
+PASS, env не содержит CAPTCHA или second-DB requirements.
+
+# EPIC 48 — SINGLE DATABASE MIGRATION / APPLICATION PROOF
+
+**Outcome:** единственная DB имеет полную migration chain и минимальные seeded
+application records; Payload Admin и public DB-backed routes работают.
+**Entry:** EPIC 44 + 47. **Risk:** RISKY. **Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 48.1 — Migration application
+
+Если DB действительно empty/unmigrated, применить committed migration chain из
+exact merged SHA. Если обнаружена неизвестная history/data — stop без DDL.
+
+## TASK 48.2 — Enum and data preflight
+
+Для пустых коллекций зафиксировать `not applicable before seed`; при данных —
+только read-only drift query, без speculative DDL.
+
+## TASK 48.3 — Restore proof
+
+`DEFERRED_BY_OWNER_DECISION`. Не создавать dump, restore database или local
+restore target. Эта task получает terminal evidence со ссылкой на V3-OD-02 и
+не заявляется как PASS restore proof.
+
+## TASK 48.4 — DB-backed routes
+
+Проверить owner login/Admin, public list/detail, unpublished boundary,
+migrations-only adapter и restart persistence на одной DB.
+
+## TASK 48.P — Runbook/code delivery
+
+Зафиксировать single-DB preflight/migration/seed/smoke runbook, выполнить RISKY
+gate и merge до managed DB mutation.
+
+## TASK 48.O — Operational execution
+
+Из exact merged SHA выполнить только approved single-DB migration, minimal seed
+и DB-backed proofs. Restore и second DB запрещены.
+
+## TASK 48.D — Evidence closeout
+
+Проверить migration ledger, application reads и explicit restore deferral.
+
+**Acceptance:** migrations/application/Admin/public read PASS на одной DB;
+restore proof явно deferred и не подменяется симуляцией.
+
+# EPIC 49 — TECHNICAL PREVIEW RUNTIME COMPLETION
+
+**Outcome:** `more-previu.tw1.ru` работает из immutable exact-main artifact с
+единственной DB, S3/media contract, noindex и executable artifact rollback.
+**Entry:** EPIC 48. **Risk:** RISKY. **Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 49.1 — Immutable staging artifact
+
+Исправить portable pnpm standalone packaging, обнаруженный при PR 77 staging;
+собрать artifact вне runtime host, checksum и manifest.
+
+## TASK 49.2 — Runtime surface
+
+Установить exact artifact на preview; проверить health, planned HTML, Admin,
+static/media/S3, logs, noindex и `JOBS_AUTORUN=false`.
+
+## TASK 49.3 — Rollback and monitoring
+
+Выполнить artifact/symlink rollback proof без DB down/restore; сохранить
+previous release и минимальный server-side health/log contract.
+
+## TASK 49.P — Runbook/code delivery
+
+Зафиксировать packaging/install/rollback fixes, выполнить RISKY gate и merge.
+
+## TASK 49.O — Operational execution
+
+Из exact merged SHA выполнить preview install, smoke и artifact rollback.
+
+## TASK 49.D — Evidence closeout
+
+Сохранить runtime identity/digest/rollback ledger; production не входить.
+
+**Acceptance:** planned routes и Admin доступны; DB-backed smoke PASS; S3/media
+contract PASS; noindex PASS; artifact rollback PASS; production domain untouched.
+
+# EPIC 50 — LEADS WITHOUT EXTERNAL CAPTCHA
+
+**Outcome:** canonical `POST /api/public/leads` принимает валидную заявку в
+Payload без Cloudflare/Turnstile и без внешнего channel; abuse/PII contract
+обеспечивается project-owned слоями.
+**Entry:** exact v3 APPROVED; live E2E зависит от EPIC 49. **Risk:** RISKY.
+**Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 50.3A — Remove Turnstile dependency
+
+- удалить Turnstile verifier/widget/module и env requirements;
+- форма и endpoint не должны иметь terminal state `DISABLED_NO_CAPTCHA`;
+- сохранить trusted client boundary, Nginx + application rate limit,
+  honeypot, minimum-fill, consent, privacy/retention и zero-PII logs;
+- обновить tests/docs без ослабления 429/validation behavior.
+
+## TASK 50.4 — Preview E2E
+
+На preview с одной project DB проверить allowed submit, invalid/honeypot/rate
+limit reject, Payload row/Admin visibility, consent/delivery state и отсутствие
+PII в logs. Внешний notification channel остаётся disabled.
+
+## TASK 50.D — Delivery
+
+Full EPIC diff review, exact-head RISKY gate, merge и leads evidence ledger.
+
+**Acceptance:** рабочая форма без CAPTCHA сохраняет ровно одну валидную заявку;
+abuse/invalid flows не создают rows; оператор видит заявку в Admin.
+
+# EPIC 53 — PREVIEW SEO / BROWSER / PERFORMANCE
+
+**Outcome:** все planned preview pages доступны владельцу и остаются noindex;
+browser/schema/performance evidence не активирует production indexing.
+**Entry:** EPIC 49 + carried EPIC 52. **Risk:** STANDARD.
+**Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 53.1 — Preview index boundary
+
+Подтвердить 29/29 planned routes, navigation, honest scaffolds,
+robots/X-Robots-Tag/meta noindex и sitemap exclusion gated/fixture URLs.
+
+## TASK 53.2 — Schema and browser matrix
+
+Проверить representative desktop/mobile pages, navigation, 404, hydration,
+accessibility и structured data только там, где facts/source позволяют.
+
+## TASK 53.3 — Preview performance
+
+Проверить content-complete representative routes против project budgets без
+активации production analytics/indexing.
+
+## TASK 53.D — Delivery
+
+Full diff review, exact-head STANDARD gate, merge и preview evidence ledger.
+
+**Acceptance:** preview surface PASS, noindex PASS, representative browser and
+performance budgets PASS; production indexing не изменён.
+
+# EPIC 54 — TECHNICAL PREVIEW CANDIDATE CLOSEOUT
+
+**Outcome:** exact main имеет один immutable technical-preview artifact и
+полный evidence index текущего упрощённого scope; production promotion не
+разрешена.
+**Entry:** EPIC 45 + 49 + 50 + 53. **Risk:** RISKY.
+**Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 54.1 — Evidence aggregation
+
+Агрегировать exact merged SHAs EPIC 44–53 без повторения valid suites.
+
+## TASK 54.2 — Final verification and artifact
+
+Собрать один exact-main artifact и подтвердить тот же digest на preview;
+повторить только invalidated runtime scenarios.
+
+## TASK 54.3 — Preview docs closeout
+
+Обновить delivery state/release checklist на
+`TECHNICAL_PREVIEW_CANDIDATE`, не `PRODUCTION_READY`.
+
+## TASK 54.D — Delivery
+
+Final review, один RISKY exact-head gate, merge и exact-main candidate proof.
+
+**Acceptance:** candidate SHA/digest совпадают; single DB, env, preview runtime,
+working no-CAPTCHA lead form, noindex и artifact rollback имеют evidence;
+restore rehearsal, production release и cutover явно excluded/deferred.
+
+## V3 Definition of Done
+
+```text
+[x] EPIC 44 migration baseline repair merged
+[x] EPIC 45 canonical state / Task Manager hygiene merged
+[x] EPIC 51–52 facts and complete noindex editorial preview surface merged
+[ ] v3 exact snapshot approved and Beads reconciliation CLEAN
+[ ] EPIC 46 one existing DB identity/consumer proof PASS; no new DB purchased
+[ ] EPIC 47 single credential/env hardening PASS
+[ ] EPIC 48 migrations/Admin/public DB-backed proof PASS; restore explicitly deferred
+[ ] EPIC 49 preview runtime, media and artifact rollback PASS
+[ ] EPIC 50 working leads E2E PASS without Turnstile/CAPTCHA
+[ ] EPIC 53 preview noindex/browser/performance PASS
+[ ] EPIC 54 exact-main technical-preview candidate/digest PASS
+[ ] EPIC 55–56 absent; production/DNS/TLS/public indexing untouched
+```
+
+## V3 stop conditions
+
+- existing DB identity ambiguous or contains unknown/production user data;
+- destructive migration anomaly;
+- secret exposure;
+- repeated preview 5xx or DB errors;
+- request to change production domain/DNS/TLS without separate release plan.
+
+## V3 final four-pass audit
+
+### Pass 1 — Logic / Completeness
+
+- Primary goal сведен к завершённому technical preview на одной DB без
+  второстепенных restore/CAPTCHA-контуров.
+- Выполненные EPIC 44/45/51/52 не повторяются; остаток 46–50/53–54 покрывает
+  DB, env, migrations, runtime, leads, browser/SEO и evidence closeout.
+- Production, cutover и public indexing изолированы за пределами graph.
+
+Verdict: `PASS`, blockers `0`, major `0`.
+
+### Pass 2 — Architecture / Data / Security
+
+- DB owner однозначен: Payload + committed migrations, один exact cluster/DB.
+- In-place credential rotation соответствует ограничению one user и имеет
+  controlled maintenance/recovery sequence.
+- Отказ от CAPTCHA компенсирован project-owned rate limit, trusted client,
+  honeypot, minimum-fill, consent/PII/retention checks; owner принял остаточный
+  abuse-риск.
+- Restore proof честно deferred и не объявляется выполненным.
+
+Verdict: `PASS`, blockers `0`, major `0`, accepted owner risk `2`.
+
+### Pass 3 — Dependencies / Autonomy
+
+- Cycles: `0`.
+- Critical path: `46 → 47 → 48 → 49 → 50 live E2E → 53 → 54`.
+- TASK 50.3A code contract parallel-safe с 46–48; live E2E ждёт только runtime.
+- Единственный DB contour делает operational path намеренно последовательным;
+  это owner-approved limit, а не скрытая dependency.
+
+Verdict: `PASS`, Night Run `READY_WITH_LIMITS`.
+
+### Pass 4 — Executability / Evidence / Delivery
+
+- Каждый current epic имеет outcome, entry, risk, delivery, acceptance и stop.
+- EPIC 46–50 используют runbook/code gate до mutation; каждый epic завершает
+  delivery/evidence task и exact-head `MERGE_AFTER_GATE`.
+- EPIC 54 обещает только `TECHNICAL_PREVIEW_CANDIDATE`; evidence не превышает
+  фактическую поверхность.
+
+Verdict: `PASS`, blockers `0`, major `0`.
+
+## V3 finding register
+
+| ID | Severity | Finding | Resolution | Status |
+|---|---|---|---|---|
+| V3-F-01 | BLOCKER | v2 требовал вторую restore DB сверх owner intent/cap | single exact DB; restore deferred outside current plan | RESOLVED |
+| V3-F-02 | BLOCKER | v2 делал Cloudflare keys внешним stop | Turnstile удаляется; project-owned abuse controls остаются | RESOLVED |
+| V3-F-03 | MAJOR | `production-ready` обещание невозможно без restore rehearsal | EPIC 54 переименован в technical preview candidate; release 55–56 excluded | RESOLVED |
+| V3-F-04 | MAJOR | one-user preset несовместим с dual-credential rotation | deterministic in-place rotation + controlled preview maintenance | RESOLVED |
+
+## V3 Night Run Readiness
+
+```text
+Independent ready waves: EPIC 46; TASK 50.3A after approval
+Critical path: 46 → 47 → 48 → 49 → 50 E2E → 53 → 54
+Cycles: 0
+Before-approval owner decisions open: 0
+Unknown critical prerequisites: 0
+Production-only stops: EPIC 55–56, DNS/TLS/cutover/public indexing
+Accepted limits: one DB/no restore; no external CAPTCHA
+Result: READY_WITH_LIMITS
+```
+
+**Конец current contract — Plan №3 v3 APPROVED.**
