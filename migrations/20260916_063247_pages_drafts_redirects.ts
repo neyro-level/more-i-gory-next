@@ -216,14 +216,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   
   ALTER TABLE "pages" ALTER COLUMN "status" SET DATA TYPE text;
   ALTER TABLE "pages" ALTER COLUMN "status" SET DEFAULT 'draft'::text;
-  ALTER TABLE "pages" ALTER COLUMN "_status" SET DATA TYPE text;
-  ALTER TABLE "pages" ALTER COLUMN "_status" SET DEFAULT 'draft'::text;
   DROP TYPE "public"."enum_pages_status";
   CREATE TYPE "public"."enum_pages_status" AS ENUM('draft', 'published');
   ALTER TABLE "pages" ALTER COLUMN "status" SET DEFAULT 'draft'::"public"."enum_pages_status";
   ALTER TABLE "pages" ALTER COLUMN "status" SET DATA TYPE "public"."enum_pages_status" USING "status"::"public"."enum_pages_status";
-  ALTER TABLE "pages" ALTER COLUMN "_status" SET DEFAULT 'draft'::"public"."enum_pages_status";
-  ALTER TABLE "pages" ALTER COLUMN "_status" SET DATA TYPE "public"."enum_pages_status" USING "_status"::"public"."enum_pages_status";
   ALTER TABLE "pages_blocks_hero" ALTER COLUMN "title" DROP NOT NULL;
   ALTER TABLE "pages_blocks_hero" ALTER COLUMN "lead" DROP NOT NULL;
   ALTER TABLE "pages_blocks_lead" ALTER COLUMN "title" DROP NOT NULL;

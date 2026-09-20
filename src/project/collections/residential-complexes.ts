@@ -82,6 +82,7 @@ export const ResidentialComplexes: CollectionConfig = {
       name: "status",
       type: "select",
       defaultValue: "hidden",
+      enumName: "enum_complexes_publication_status",
       index: true,
       options: [
         { label: "Hidden", value: "hidden" },

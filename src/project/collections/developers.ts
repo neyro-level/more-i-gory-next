@@ -38,6 +38,7 @@ export const Developers: CollectionConfig = {
       name: "status",
       type: "select",
       defaultValue: "hidden",
+      enumName: "enum_developers_publication_status",
       index: true,
       options: [
         { label: "Hidden", value: "hidden" },

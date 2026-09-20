@@ -17,12 +17,21 @@ WHERE (category IS NOT NULL AND category <> '' AND category NOT IN ('apartment',
 ORDER BY id;
 ```
 
+## Live schema preflight
+
+```sql
+SELECT to_regclass('public.properties') AS properties_table;
+```
+
 ## Result
 
-- queried: false
-- out-of-contract rows: not queried
-- query error: Cannot find package 'postgres' imported from C:\ams-worktrees\moreigory-epic-24\scripts\report-property-enum-drift.mjs
+- checked against: Timeweb managed PostgreSQL 18 bootstrap database
+- checked at: 2026-09-19
+- schema preflight queried: true
+- `properties` table exists: false
+- out-of-contract rows: not applicable until the migration chain is applied
+- query error: none
 
 _no sample rows_
 
-TASK 24.1b applies the Postgres enum conversion to existing rows only when this count is 0 or the owner unblocks EPIC 34.
+The live database is empty and unmigrated, so this is not evidence of a zero-row enum drift result. Apply the repaired migration chain to a disposable staging/restore database first. Re-run the row query immediately before any production enum conversion; conversion is allowed only when the table exists and the out-of-contract count is zero.

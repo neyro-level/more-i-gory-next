@@ -23,6 +23,7 @@ import * as migration_20260918_184114_property_numeric from './20260918_184114_p
 import * as migration_20260918_190215_deactivation_approval from './20260918_190215_deactivation_approval';
 import * as migration_20260919_114121_import_run_canonical_status from './20260919_114121_import_run_canonical_status';
 import * as migration_20260919_123428 from './20260919_123428';
+import * as migration_20260919_202220_epic44_status_enum_collision from './20260919_202220_epic44_status_enum_collision';
 
 export const migrations = [
   {
@@ -148,6 +149,11 @@ export const migrations = [
   {
     up: migration_20260919_123428.up,
     down: migration_20260919_123428.down,
-    name: '20260919_123428'
+    name: '20260919_123428',
+  },
+  {
+    up: migration_20260919_202220_epic44_status_enum_collision.up,
+    down: migration_20260919_202220_epic44_status_enum_collision.down,
+    name: '20260919_202220_epic44_status_enum_collision'
   },
 ];

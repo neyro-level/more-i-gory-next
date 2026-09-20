@@ -4,16 +4,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_developers_seo_robots" AS ENUM('index-follow', 'noindex-follow');
   CREATE TYPE "public"."enum_developers_seo_priority" AS ENUM('P1', 'P2', 'P3');
-  CREATE TYPE "public"."enum_developers_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum_developers_status" AS ENUM('draft', 'published', 'hidden', 'archived');
   CREATE TYPE "public"."enum__developers_v_version_seo_robots" AS ENUM('index-follow', 'noindex-follow');
   CREATE TYPE "public"."enum__developers_v_version_seo_priority" AS ENUM('P1', 'P2', 'P3');
-  CREATE TYPE "public"."enum__developers_v_version_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum__developers_v_version_status" AS ENUM('draft', 'published', 'hidden', 'archived');
   CREATE TYPE "public"."enum_complexes_seo_robots" AS ENUM('index-follow', 'noindex-follow');
   CREATE TYPE "public"."enum_complexes_seo_priority" AS ENUM('P1', 'P2', 'P3');
-  CREATE TYPE "public"."enum_complexes_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum_complexes_status" AS ENUM('draft', 'published', 'hidden', 'archived');
   CREATE TYPE "public"."enum__complexes_v_version_seo_robots" AS ENUM('index-follow', 'noindex-follow');
   CREATE TYPE "public"."enum__complexes_v_version_seo_priority" AS ENUM('P1', 'P2', 'P3');
-  CREATE TYPE "public"."enum__complexes_v_version_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum__complexes_v_version_status" AS ENUM('draft', 'published', 'hidden', 'archived');
   CREATE TYPE "public"."enum_buildings_status" AS ENUM('hidden', 'published', 'archived');
   CREATE TYPE "public"."enum_layouts_status" AS ENUM('hidden', 'published', 'archived');
   CREATE TABLE "developers" (
