@@ -53,6 +53,7 @@
     "test:install-release": "node --test scripts/install-release.test.mjs",
     "test:rollback-release": "node --test scripts/rollback-release.test.mjs",
     "test:staging-contour": "node --conditions=react-server --test scripts/staging-contour.test.mjs",
+    "check:preview-env-contract": "node --test scripts/preview-env-contract.test.mjs",
     "test:jobs-handover": "node --test scripts/jobs-handover.test.mjs",
     "test:next-image": "node --conditions=react-server --test scripts/next-image-contract.test.mjs",
     "test:storage-s3": "node --conditions=react-server --test scripts/storage-s3.test.mjs",

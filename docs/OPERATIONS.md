@@ -90,6 +90,39 @@ Secret Master more-i-gory-server/prod/MOREIGORY_DATABASE_URL
 project code does not consume it. `MOREIGORY_STAGING_DATABASE_URL` must not be
 created.
 
+### In-place database credential rotation
+
+The minimum Timeweb PostgreSQL preset permits one database and one user. The
+credential is therefore rotated on the existing administrator; a parallel user,
+second database or tariff increase is not part of this project.
+
+The operation is allowed only by TASK 47.O from the exact merged EPIC 47 SHA:
+
+```text
+verify cluster 4210557 + one administrator + current consumer smoke
+→ generate replacement password in process
+→ change the existing administrator password in Timeweb
+→ update Secret Master MOREIGORY_DATABASE_URL and password component
+→ atomically render /etc/moreigory/app.env with LF endings
+→ remove legacy DATABASE_URL and stale CAPTCHA/second-DB variables
+→ validate env names without printing values
+→ controlled restart of preview moreigory.service
+→ /api/health + database consumer smoke
+→ prove the previous password is rejected
+→ record redacted evidence
+```
+
+The preview maintenance window starts when Timeweb accepts the new password and
+ends after the health and database smoke pass. `moreigori.ru`, DNS, TLS and
+production rollout are outside this operation.
+
+Before the provider change, any ambiguous cluster, administrator or permission
+is a hard stop with no mutation. After the provider change, recovery is a
+forward-fix: finish propagation of the new credential or assign another new
+password to the same exact administrator and repeat Secret Master/env delivery.
+Never restore an unrecorded old password. If health or database smoke fails,
+retain preview maintenance and diagnose before any further rollout.
+
 ## Runtime supervisor
 
 Chosen supervisor: `systemd` unit `moreigory.service`
