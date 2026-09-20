@@ -176,10 +176,10 @@
     "description": "Каталог опубликованных жилых комплексов Крыма: застройщик, корпуса, планировки, доступный inventory, риски и следующий шаг.",
     "h1": "Новостройки Крыма для инвестиционного разбора",
     "canonical": "/novostroyki/",
-    "index": "yes",
-    "sitemap": "yes",
+    "index": "gate",
+    "sitemap": "gate",
     "priority": "P1",
-    "contentGate": "Публикуется как feed-каталог EPIC 17; карточки ЖК индексируются, unit/filter/layout URL не индексируются без отдельного whitelist."
+    "contentGate": "Route-контракт активен с EPIC 17; корень каталога и карточки ЖК индексируются только при наличии опубликованного inventory, unit/filter/layout URL — только по отдельному whitelist."
   },
   {
     "pageId": "PAGE-014",

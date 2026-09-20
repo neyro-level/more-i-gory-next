@@ -6,11 +6,13 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { listPublishedComplexes } from "@/core/data-access/public";
 import { getStaticMetadata } from "@/seo/metadata";
+import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
 
 export const metadata = getStaticMetadata("PAGE-026");
 
 export default async function NewbuildCatalogPage() {
-  const complexes = await listPublishedComplexes();
+  const editorialPreview = isEditorialPreviewEnabled();
+  const complexes = editorialPreview ? [] : await listPublishedComplexes();
 
   return (
     <main>
@@ -64,6 +66,11 @@ export default async function NewbuildCatalogPage() {
                 а не SEO-списком без фактических данных.
               </p>
               <ActionLink href="/podbor/">Запросить подборку вручную</ActionLink>
+              {editorialPreview ? (
+                <ActionLink href="/novostroyki/preview-complex/" variant="outline">
+                  Открыть шаблон карточки ЖК
+                </ActionLink>
+              ) : null}
             </CardContent>
           </Card>
         )}

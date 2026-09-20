@@ -11,12 +11,15 @@ import {
   type HomeRegionCardModel,
 } from "@/components/marketing/home-sections";
 import { listPublicHubRegions } from "@/core/data-access/public";
+import { isEditorialPreviewEnabled, listEditorialPreviewRegions } from "@/core/data-access/preview/editorial-preview";
 import { getStaticMetadata } from "@/seo/metadata";
 
 export const metadata = getStaticMetadata("PAGE-001");
 
 export default async function HomePage() {
-  const regions = (await listPublicHubRegions()).filter((region) => region.kind === "region");
+  const regions = (
+    isEditorialPreviewEnabled() ? listEditorialPreviewRegions() : await listPublicHubRegions()
+  ).filter((region) => region.kind === "region");
   const regionCards: HomeRegionCardModel[] = regions.map((region) => ({
     href: region.path,
     id: region.slug,

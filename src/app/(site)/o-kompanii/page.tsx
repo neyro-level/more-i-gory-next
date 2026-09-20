@@ -4,6 +4,7 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { ProofBlock } from "@/components/marketing/proof-block";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata = getStaticMetadata("PAGE-020");
 
@@ -24,8 +25,31 @@ export default function CompanyPage() {
           src: "/images/og/default.webp",
           width: 2560,
         }}
-        proof="Команда, опыт, реквизиты и сильные claims добавляются только после подтверждения владельцем."
+        proof="Подтверждены юридический оператор и имя основателя. Биографии, стаж, количество сделок, кейсы и показатели результата без источников не публикуются."
       />
+
+      <SectionShell eyebrow="Подтверждённые сведения" title="Кто отвечает за работу бюро">
+        <div className="grid gap-5 md:grid-cols-2">
+          <Card className="rounded-card bg-card">
+            <CardHeader>
+              <CardTitle className="text-h3">Основатель и директор</CardTitle>
+            </CardHeader>
+            <CardContent className="text-body-sm text-muted-foreground">
+              Колобова Ольга Викторовна. Профессиональная биография и количественные показатели опыта не публикуются без отдельного подтверждения.
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-card bg-card">
+            <CardHeader>
+              <CardTitle className="text-h3">Юридический оператор</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-2 text-body-sm text-muted-foreground">
+              <p>Индивидуальный предприниматель Колобова Ольга Викторовна.</p>
+              <p>ОГРНИП 326237500327180, ИНН 352816594112.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </SectionShell>
 
       <SectionShell eyebrow="Принципы" title="На чём строится подход бюро">
         <ProofBlock

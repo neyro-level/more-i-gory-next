@@ -28,12 +28,12 @@ async function listRouteFiles(dir) {
   return files;
 }
 
-test("newbuild catalog root is an explicitly indexable SEO registry entry", () => {
+test("newbuild catalog root stays gated until published inventory exists", () => {
   const entry = registry.find((item) => item.pageId === "PAGE-026");
 
   assert.equal(entry?.canonical, "/novostroyki/");
-  assert.equal(entry?.index, "yes");
-  assert.equal(entry?.sitemap, "yes");
+  assert.equal(entry?.index, "gate");
+  assert.equal(entry?.sitemap, "gate");
 });
 
 test("published residential complexes produce indexable sitemap entries", () => {

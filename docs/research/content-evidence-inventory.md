@@ -112,7 +112,7 @@
 | PAGE-020 / company | `UNPUBLISHED_NO_FACT` для trust claims | Команда/опыт/кейсы отсутствуют | `trust_gate`; допустимы позиционирование и редакционные принципы |
 | PAGE-021 / contacts | `UNPUBLISHED_NO_FACT` для channel readiness | Route содержит placeholders, каналы не протестированы | `trust_gate`; не заявлять operational readiness |
 | PAGE-022, PAGE-023 | `FACT_PASS` для текущих legal versions | `LEGAL_DETAILS.md` + реализованные privacy/consent texts | Всегда `noindex`, вне sitemap; перед release сверить с фактической формой |
-| PAGE-026 / newbuild catalog shell | `FACT_PASS` только для route contract | Registry и Public Gateway | Индексируемый shell не создаёт фактов о ЖК; только `published` entity попадают в выдачу |
+| PAGE-026 / newbuild catalog shell | `FACT_PASS` только для route contract; `UNPUBLISHED_NO_FACT` для content gate | Registry и Public Gateway | Route остаётся активным, но пустой shell не индексируется и не входит в sitemap; только `published` entity попадают в выдачу |
 | Developer, operator, project, case entity not listed above | `UNPUBLISHED_NO_FACT` | Подтверждённые записи/источники отсутствуют | Не создавать public route, sitemap entry или marketing claim |
 
 Runtime enforcement уже fail-closed: metadata считает любое значение, кроме

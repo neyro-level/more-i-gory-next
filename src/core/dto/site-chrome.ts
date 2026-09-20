@@ -24,3 +24,7 @@ export const siteChromeSchema = z.object({
 
 export type SiteNavigationLink = z.infer<typeof siteNavigationLinkSchema>;
 export type SiteChrome = z.infer<typeof siteChromeSchema>;
+export type EditorialPreviewNavigationGroup = Readonly<{
+  label: string;
+  links: readonly SiteNavigationLink[];
+}>;

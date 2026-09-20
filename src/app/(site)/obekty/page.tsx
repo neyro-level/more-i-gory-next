@@ -8,6 +8,7 @@ import { ObjectCard } from "@/components/marketing/object-card";
 import { NumberedSteps } from "@/components/marketing/numbered-steps";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { listPublishedManualProperties } from "@/core/data-access/public";
+import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
 
 export const metadata = getStaticMetadata("PAGE-014");
 
@@ -21,7 +22,8 @@ const criteria = [
 
 export default async function ObjectsPage() {
   const seo = getSeoEntry("PAGE-014");
-  const properties = await listPublishedManualProperties();
+  const editorialPreview = isEditorialPreviewEnabled();
+  const properties = editorialPreview ? [] : await listPublishedManualProperties();
 
   return (
     <main>
@@ -86,6 +88,11 @@ export default async function ObjectsPage() {
               <ActionLink href="/podbor/">
                 Запросить подборку вручную
               </ActionLink>
+              {editorialPreview ? (
+                <ActionLink href="/obekty/preview-project/" variant="outline">
+                  Открыть шаблон паспорта
+                </ActionLink>
+              ) : null}
             </CardContent>
           </Card>
         )}

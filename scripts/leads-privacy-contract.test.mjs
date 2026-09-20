@@ -8,6 +8,8 @@ const leadFormClient = read("src/ui/interactive/lead-form-client.tsx");
 const intakeEndpoint = read("src/core/leads/intake-endpoint.ts");
 const privacyPage = read("src/app/(site)/privacy/page.tsx");
 const consentPage = read("src/app/(site)/consent/page.tsx");
+const companyPage = read("src/app/(site)/o-kompanii/page.tsx");
+const contactsPage = read("src/app/(site)/kontakty/page.tsx");
 
 const analyticsSinks = [
   "gtag(",
@@ -73,4 +75,17 @@ test("lead form references active legal documents and consent version", () => {
     false,
     "lead form must not claim legal texts are still pending",
   );
+});
+
+test("company and contacts publish only sourced legal and contact facts", () => {
+  assert.match(companyPage, /Колобова Ольга Викторовна/);
+  assert.match(companyPage, /ОГРНИП 326237500327180/);
+  assert.match(companyPage, /ИНН 352816594112/);
+  assert.match(contactsPage, /\+7 964 668-66-81/);
+  assert.match(contactsPage, /moregory-info@yandex\.com/);
+  assert.match(contactsPage, /Набережная им\. В\. И\. Ленина, 13/);
+  assert.match(contactsPage, /Пн–Пт 9:00–18:00, Сб 9:00–14:00/);
+  assert.equal(contactsPage.includes("TODO после human gate"), false);
+  assert.match(companyPage, /стаж, количество сделок, кейсы и показатели результата без источников не публикуются/);
+  assert.match(contactsPage, /срок первого ответа заранее не обещаются/);
 });

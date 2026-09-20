@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { getSiteChrome } from "@/core/data-access/public";
+import { fallbackSiteChrome, getSiteChrome } from "@/core/data-access/public";
 import { siteUrl } from "@/seo/metadata";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { getEditorialPreviewNavigation } from "@/core/data-access/preview/editorial-preview";
 
 const montserrat = Montserrat({
   display: "swap",
@@ -29,12 +30,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const siteChromePromise = getSiteChrome();
+  const previewNavigation = getEditorialPreviewNavigation();
+  const siteChromePromise = previewNavigation.length > 0
+    ? Promise.resolve(fallbackSiteChrome)
+    : getSiteChrome();
 
   return (
     <html lang="ru" className={cn("font-sans", montserrat.variable)}>
       <body>
-        <SiteChromeLayout siteChromePromise={siteChromePromise}>{children}</SiteChromeLayout>
+        <SiteChromeLayout previewNavigation={previewNavigation} siteChromePromise={siteChromePromise}>{children}</SiteChromeLayout>
       </body>
     </html>
   );
@@ -42,16 +46,23 @@ export default function RootLayout({
 
 async function SiteChromeLayout({
   children,
+  previewNavigation,
   siteChromePromise,
 }: Readonly<{
   children: React.ReactNode;
+  previewNavigation: ReturnType<typeof getEditorialPreviewNavigation>;
   siteChromePromise: ReturnType<typeof getSiteChrome>;
 }>) {
   const siteChrome = await siteChromePromise;
 
   return (
     <>
-      <SiteHeader brand={siteChrome.brand} cta={siteChrome.navigation.headerCta} navigation={siteChrome.navigation.header} />
+      <SiteHeader
+        brand={siteChrome.brand}
+        cta={siteChrome.navigation.headerCta}
+        navigation={siteChrome.navigation.header}
+        previewNavigation={previewNavigation}
+      />
         {children}
       <SiteFooter brand={siteChrome.brand} legal={siteChrome.navigation.legal} legalNotice={siteChrome.legalNotice} navigation={siteChrome.navigation.footer} />
     </>

@@ -14,6 +14,12 @@ import {
   listPublicHubRegions,
   listPublicRegions,
 } from "@/core/data-access/public";
+import {
+  getEditorialPreviewRegionByPath,
+  getEditorialPreviewRegionRelatedLinks,
+  getEditorialPreviewRegionStaticParams,
+  isEditorialPreviewRegion,
+} from "@/core/data-access/preview/editorial-preview";
 import { composeRegionPathFromSlugs } from "@/content/regions/region-path-policy";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
@@ -30,28 +36,33 @@ async function getRegionPageModel(params: RegionRoutePageProps["params"]) {
   } catch {
     notFound();
   }
-  const region = await getPublicRegionByPath(href);
+  const region = getEditorialPreviewRegionByPath(href) ?? await getPublicRegionByPath(href);
   return { href, region };
 }
 
 export async function generateStaticParams() {
-  const regions = await listPublicHubRegions();
-  return getPublicRegionStaticParams(regions);
+  const previewParams = getEditorialPreviewRegionStaticParams();
+  const publicParams = previewParams.length > 0
+    ? []
+    : getPublicRegionStaticParams(await listPublicHubRegions());
+  const params = [...publicParams, ...previewParams];
+  return [...new Map(params.map((item) => [item.path.join("/"), item])).values()];
 }
 
 export async function generateMetadata({ params }: RegionRoutePageProps) {
   const { region } = await getRegionPageModel(params);
-  if (!isGenericPublicRegion(region)) return {};
+  if (!isGenericPublicRegion(region) && !isEditorialPreviewRegion(region)) return {};
   return getStaticMetadata(region.pageId);
 }
 
 export default async function RegionRoutePage({ params }: RegionRoutePageProps) {
   const { region } = await getRegionPageModel(params);
-  if (!isGenericPublicRegion(region)) notFound();
+  if (!isGenericPublicRegion(region) && !isEditorialPreviewRegion(region)) notFound();
 
   const seo = getSeoEntry(region.pageId);
-  const published = await listPublicRegions();
-  const relatedLinks = getPublicRegionRelatedLinks(region, published);
+  const relatedLinks = isEditorialPreviewRegion(region)
+    ? getEditorialPreviewRegionRelatedLinks(region)
+    : getPublicRegionRelatedLinks(region, await listPublicRegions());
 
   return (
     <main>

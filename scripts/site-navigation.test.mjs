@@ -21,7 +21,8 @@ test("header and footer render from site chrome props, not local navigation arra
 
   assert.equal(/const\s+navigation\s*=/.test(headerSource), false);
   assert.equal(/const\s+footerLinks\s*=/.test(footerSource), false);
-  assert.match(headerSource, /SiteHeader\(\{\s*brand,\s*cta,\s*navigation\s*\}/);
+  assert.match(headerSource, /SiteHeader\(\{\s*brand,\s*cta,\s*navigation,\s*previewNavigation\s*=\s*\[\]\s*\}/);
+  assert.match(headerSource, /Все страницы/);
   assert.match(footerSource, /SiteFooter\(\{\s*brand,\s*legal,\s*legalNotice,\s*navigation\s*\}/);
   assert.match(footerSource, /moregory-info@yandex\.com/);
   assert.match(footerSource, /Колобова Ольга Викторовна/);

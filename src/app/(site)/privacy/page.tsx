@@ -5,12 +5,13 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { CmsPage } from "@/components/page-blocks/cms-page";
 import { getCmsPageByPath } from "@/core/data-access/public";
+import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
 
 const pagePath = "/privacy/";
 const policyVersion = "privacy-2026-09-17";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getCmsPageByPath(pagePath);
+  const page = isEditorialPreviewEnabled() ? null : await getCmsPageByPath(pagePath);
   if (page?.seo?.title && page.seo.description) {
     return buildPageMetadata({
       canonical: page.seo.canonicalOverride || page.path,
@@ -25,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PrivacyPage() {
-  const page = await getCmsPageByPath(pagePath);
+  const page = isEditorialPreviewEnabled() ? null : await getCmsPageByPath(pagePath);
   if (page) return <CmsPage page={page} />;
 
   const seo = getSeoEntry("PAGE-022");

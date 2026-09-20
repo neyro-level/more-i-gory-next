@@ -8,11 +8,12 @@ import { ArticleCard } from "@/components/marketing/article-card";
 import { CmsPage } from "@/components/page-blocks/cms-page";
 import { getCmsPageByPath } from "@/core/data-access/public";
 import { ActionLink } from "@/components/navigation/action-link";
+import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
 
 const pagePath = "/analitika/";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getCmsPageByPath(pagePath);
+  const page = isEditorialPreviewEnabled() ? null : await getCmsPageByPath(pagePath);
   if (page?.seo?.title && page.seo.description) {
     return buildPageMetadata({
       canonical: page.seo.canonicalOverride || page.path,
@@ -27,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AnalyticsPage() {
-  const page = await getCmsPageByPath(pagePath);
+  const page = isEditorialPreviewEnabled() ? null : await getCmsPageByPath(pagePath);
   if (page) return <CmsPage page={page} />;
 
   const seo = getSeoEntry("PAGE-016");

@@ -7,12 +7,14 @@ import { RegionCard } from "@/components/marketing/region-card";
 import { ProofBlock } from "@/components/marketing/proof-block";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { listPublicHubRegions } from "@/core/data-access/public";
+import { listEditorialPreviewRegions } from "@/core/data-access/preview/editorial-preview";
 
 export const metadata = getStaticMetadata("PAGE-002");
 
 export default async function FederalInvestmentHubPage() {
   const seo = getSeoEntry("PAGE-002");
-  const regions = await listPublicHubRegions();
+  const previewRegions = listEditorialPreviewRegions();
+  const regions = previewRegions.length > 0 ? previewRegions : await listPublicHubRegions();
 
   return (
     <main>
@@ -34,7 +36,9 @@ export default async function FederalInvestmentHubPage() {
       <SectionShell
         eyebrow="Сравнение рынков"
         title="Карта регионов и сегментов для проверки"
-        lead="Показываем только те направления, которые входят в текущий regions-план. Заглушки не попадают в карту до отдельного решения по содержанию."
+        lead={previewRegions.length > 0
+          ? "В техническом preview показываем весь запланированный regions-контур, чтобы владелец видел страницы и мог последовательно их наполнить. Все черновики остаются noindex."
+          : "Показываем только опубликованные направления, прошедшие content gate."}
         actions={
           <ActionLink href="/metodika/" variant="outline">
             Как мы сравниваем
