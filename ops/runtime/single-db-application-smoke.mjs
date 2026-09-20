@@ -35,6 +35,15 @@ export function parseArguments(argv) {
   return { baseUrl, publishedSlug, draftSlug, expectedTitle, phase };
 }
 
+export function resolveTransportBaseUrl(source = process.env) {
+  const value = source.DB_SMOKE_TRANSPORT_BASE_URL;
+  if (!value) return PREVIEW_ORIGIN;
+  if (!/^http:\/\/127\.0\.0\.1:\d{2,5}$/u.test(value)) {
+    fail("DB_SMOKE_TRANSPORT_BASE_URL must use loopback HTTP with an explicit port.");
+  }
+  return value;
+}
+
 function assertNoindex(response, label) {
   const value = response.headers.get("x-robots-tag") ?? "";
   if (!value.toLowerCase().includes(NOINDEX)) fail(`${label} is missing the preview noindex header.`);
@@ -48,17 +57,18 @@ async function responseText(response, label) {
 
 export async function runApplicationSmoke(options, dependencies = {}) {
   const fetchImpl = dependencies.fetchImpl ?? fetch;
+  const transportBaseUrl = dependencies.transportBaseUrl ?? resolveTransportBaseUrl();
   const ownerEmail = dependencies.ownerEmail ?? process.env.DB_SMOKE_OWNER_EMAIL;
   const ownerPassword = dependencies.ownerPassword ?? process.env.DB_SMOKE_OWNER_PASSWORD;
   if (!ownerEmail || !ownerPassword) fail("DB_SMOKE_OWNER_EMAIL and DB_SMOKE_OWNER_PASSWORD are required.");
 
-  const request = (pathname, init) => fetchImpl(new URL(pathname, `${options.baseUrl}/`), {
+  const request = (pathname, init) => fetchImpl(new URL(pathname, `${transportBaseUrl}/`), {
     cache: "no-store",
     redirect: "manual",
     ...init,
   });
 
-  const health = await request("/api/health");
+  const health = await request("/api/health/");
   const healthBody = await responseText(health, "health");
   let healthPayload;
   try {
@@ -68,10 +78,10 @@ export async function runApplicationSmoke(options, dependencies = {}) {
   }
   if (healthPayload?.ok !== true) fail("health payload is not ok.");
 
-  const admin = await request("/admin");
+  const admin = await request("/admin/");
   await responseText(admin, "admin");
 
-  const login = await request("/api/users/login", {
+  const login = await request("/api/users/login/", {
     body: JSON.stringify({ email: ownerEmail, password: ownerPassword }),
     headers: { "content-type": "application/json" },
     method: "POST",
