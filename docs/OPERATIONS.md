@@ -86,9 +86,9 @@ Secret Master more-i-gory-server/prod/MOREIGORY_DATABASE_URL
 → Next.js + Payload
 ```
 
-`DATABASE_URL` is a legacy duplicate pending controlled cleanup in EPIC 47;
-project code does not consume it. `MOREIGORY_STAGING_DATABASE_URL` must not be
-created.
+The legacy `DATABASE_URL` and `POSTGRESQL_*` duplicates were removed during
+TASK 47.O. Project code consumes only the `DATABASE_URI` value rendered from
+`MOREIGORY_DATABASE_URL`; `MOREIGORY_STAGING_DATABASE_URL` must not be created.
 
 ### In-place database credential rotation
 
