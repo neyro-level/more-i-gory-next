@@ -2128,7 +2128,7 @@
         "All requirements and prohibitions in TASK 50.3A; no unrelated cleanup"
       ],
       "acceptance_criteria": [
-        "Every observable requirement in TASK 50.4 is satisfied",
+        "Every observable requirement in TASK 50.3A is satisfied",
         "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
       ],
       "required_checks": [
