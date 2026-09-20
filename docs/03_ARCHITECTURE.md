@@ -1,8 +1,8 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.4 After remediation 19–32 / 13 / 34
-**Дата:** 2026-09-19
+**Версия:** 2.5 Plan №3 v2 exact-main alignment
+**Дата:** 2026-09-20
 **Engineering baseline:** AMS Realty Platform Core 5.5 (норматив стека)
 **Важно:** этот документ фиксирует только проектную конкретику. Стек, границы
 данных и jobs сверяются с
@@ -12,7 +12,8 @@
 ## 0. Transition contract
 
 EPIC 1 перевёл публичный сайт со static export на production Node.js runtime.
-EPIC 2–13, 15–17, 19–32 и 34 в `main` (`fbed2c11`): Payload 3.89, PostgreSQL
+EPIC 2–13, 15–17, 19–44 и 51 в `main`
+(`c824e9fa02ecfe370c859a851e3c0e0cedd48667`): Payload 3.89, PostgreSQL
 migrations, Public Gateway, media/S3, regions, properties, newbuild/ingest,
 leads, jobs, preview Nginx/systemd и proof matrix. Публичный read идёт через
 `src/core/data-access/public/**` (Payload Local API + DTO); при недоступности
@@ -21,11 +22,14 @@ Payload действует безопасный fallback.
 Принятая цель — `AMS_PROFILE=REALTY_BASE`: Next.js + Payload в одном Node.js
 runtime, Managed PostgreSQL, S3 и один jobs owner. Решение принято в
 [`ADR-004`](adr/ADR-004-realty-platform-runtime.md), project-specific профиль —
-в [`PROJECT.md`](PROJECT.md). Следующий шаг — [`OWNER_QUEUE.md`](OWNER_QUEUE.md)
-и EPIC 33 только по отдельной команде владельца.
+в [`PROJECT.md`](PROJECT.md). Текущая readiness-программа — Plan №3 v2
+EPIC 45–54; release EPIC 55–56 требует отдельной команды владельца.
 
-Remediation baseline (TASK 19.1) был `27ea4c2` (после EPIC 12). Актуальный
-canonical SHA — `fbed2c11`. Карта — в [`README.md`](README.md).
+Remediation baseline (TASK 19.1) был `27ea4c2` (после EPIC 12). Exact main,
+от которого начато исполнение Plan №3 v2 и EPIC 45, —
+`c824e9fa02ecfe370c859a851e3c0e0cedd48667`. Итоговый merge SHA каждого эпика
+фиксируется его delivery ledger, а не предсказывается в feature-ветке. Карта —
+в [`README.md`](README.md).
 
 ## 1. Architecture Summary
 
@@ -52,15 +56,19 @@ Internet
 → S3
 ```
 
-Формы идут отдельно:
+Формы используют локальный Payload intake:
 
 ```text
 Browser
 → POST /api/public/leads
 → Nginx
-→ AMS Leads API
-→ downstream CRM/routing
+→ Next.js server validation / consent / rate limit / CAPTCHA
+→ Payload transaction: lead + pending delivery records
+→ Payload Admin
 ```
+
+Внешний CRM/notification adapter в этой программе выключен и не является
+условием первого release.
 
 ## 1.1. Delivery Profile
 
@@ -69,7 +77,7 @@ DELIVERY_PROFILE = COMMERCIAL
 ```
 
 Основание: публичный клиентский сайт с заявками, SEO-трафиком, репутационным
-риском и будущей интеграцией AMS Leads API. Merge в `main` выполняется через
+риском и локальным хранением обращений в Payload. Merge в `main` выполняется через
 SourceCraft PR и exact-head `STANDARD`/`RISKY` gate. Production release остаётся
 только отдельной командой владельца.
 
@@ -83,7 +91,7 @@ Exact toolchain первого релиза:
 | pnpm | `11.5.1` | `packageManager`, lockfile |
 | Next.js | `16.3.4` | App Router, Node.js runtime |
 | Payload / `@payloadcms/*` | `3.89.0` | CMS, Admin, auth, jobs, schema/migrations owner |
-| PostgreSQL | `18.6` local / `18` target | local proof; Managed staging/production pending |
+| PostgreSQL | `18.6` local / `18` target | clean 26-migration proof; Managed target reachable, isolated staging resource pending |
 | React / React DOM | `19.3.0` | Server First |
 | TypeScript | `6.0.3` | strict; TypeScript 7 не используется |
 | Tailwind CSS | `4.3.3` | CSS variables, global tokens |
@@ -159,7 +167,8 @@ Backend:
 - Next.js + Payload Node runtime для public render, Admin и штатного REST;
 - Payload — единственный owner auth/schema/migrations; Prisma отсутствует;
 - PostgreSQL adapter работает только через committed migrations (`push:false`);
-- отдельный AMS Leads API пока остаётся будущим контуром заявок.
+- внешний CRM/notification adapter остаётся отключённым optional-контуром и не
+  входит в первый release.
 
 Границы, сохранённые после remediation:
 
@@ -390,34 +399,48 @@ Project:
 
 ## 13. API / Integration Architecture
 
-Единственный public integration contract первого релиза:
+Единственный public write contract первого релиза:
 
 `POST /api/public/leads`
 
-Frontend:
-- UX validation only.
+```text
+Browser
+→ Next.js `POST /api/public/leads`
+→ server validation + consent + rate limit + CAPTCHA verification
+→ Payload transaction: lead + pending delivery records
+→ Payload Jobs delivery/recovery when an approved channel is enabled
+```
 
-AMS Leads API:
-- server validation;
-- consent;
-- rate limit;
-- anti-spam/captcha secret;
-- routing.
+Внешний канал сейчас выключен: заявки остаются в Payload Admin. Новый adapter,
+token, recipient и outbound host разрешаются только через отдельный integration
+gate; браузер никогда не пишет напрямую во внешний CRM/channel.
 
 Consent payload обязательно содержит `consentVersion`, `accepted` и `acceptedAt`.
-Production endpoint, SLA и routing остаются human gate. До него форма работает
-только против явно заданного test/stub контура и не имитирует доставку лида.
+Production activation, CAPTCHA keys, SLA и routing остаются human gate. До него
+intake закрыт feature flag и не имитирует внешнюю доставку лида.
 
 PII запрещено отправлять в web analytics.
 
 ## 14. Authentication
-N/A.
+
+Payload владеет CMS authentication. Коллекция `users` поддерживает роли
+`owner` и `editor`; Payload Admin использует штатную server-side сессию.
+Анонимный REST-доступ к users закрыт, GraphQL отключён. Пользовательского
+кабинета и отдельного public auth в текущем профиле нет.
 
 ## 15. Authorization
-N/A.
+
+Доступ к CMS задаётся collection/global access rules. Public Gateway выдаёт
+только `published` DTO и не раскрывает Payload types; privileged maintenance,
+ingest и cache operations идут через System Gateway. Изменение ролей или
+появление customer auth требует отдельного security решения.
 
 ## 16. Background Jobs
-N/A.
+
+Payload Jobs реализуют lead delivery, ingest и maintenance-задачи. В каждом
+окружении разрешён ровно один jobs owner; запуск управляется `JOBS_AUTORUN`.
+Preview и production остаются с autorun выключенным до отдельного operational
+gate, а повторный запуск и recovery покрыты task-specific контрактами.
 
 ## 17. Caching
 HTML получает `no-cache`; versioned CSS/JS/images — длительное кеширование на Nginx.
@@ -437,7 +460,7 @@ HTML получает `no-cache`; versioned CSS/JS/images — длительно
 
 Production gate:
 - Nginx access/error logs;
-- AMS Leads API logs;
+- Payload intake/job logs без ПДн в application log payload;
 - deployment logs;
 - frontend runtime monitoring — отдельное решение перед production, если нужен внешний сервис;
 - post-deploy smoke.
@@ -486,7 +509,11 @@ Rollback:
 - atomic switch to previous successful release.
 
 БД:
-- N/A.
+- Timeweb Managed PostgreSQL с автоматическими backup provider;
+- schema изменяется только committed Payload migrations (`push:false`);
+- чистая PostgreSQL 18 прошла полную цепочку 26/26 и upgrade fixture в EPIC 44;
+- disposable restore и live drift proof требуют отдельной staging/restore DB
+  из `OWNER_QUEUE.md`; production data не использовались.
 
 ## 23. Testing Strategy
 
@@ -503,7 +530,8 @@ Rollback:
 - browser smoke и hydration console;
 - keyboard/mobile/accessibility smoke;
 - redirect/404 HTTP status;
-- form E2E против утверждённого Leads API.
+- form E2E через локальный Payload intake; внешний delivery проверяется только
+  если отдельным решением включён конкретный adapter.
 
 Этот gate нельзя объявлять пройденным без реально запущенного браузера и
 production-like HTTP/Nginx контура.

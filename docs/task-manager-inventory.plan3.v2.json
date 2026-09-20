@@ -1,0 +1,3199 @@
+{
+  "schema_version": 2,
+  "beads_prefix": "mg4",
+  "source": {
+    "plan_id": "more-i-gory-production-readiness-2026-09",
+    "path": "docs/MORE_I_GORY_PLAN_№ 3.md",
+    "version": "v2",
+    "status": "APPROVED",
+    "approved_by": "owner",
+    "approved_at": "2026-09-20T12:17:11+03:00",
+    "sha256": "9d50f44290adf59b3516fab137d9e0522d1bc40ce7f16180d227aede8f59e0d1",
+    "epic_anchors": [
+      "EPIC 44",
+      "EPIC 45",
+      "EPIC 46",
+      "EPIC 47",
+      "EPIC 48",
+      "EPIC 49",
+      "EPIC 50",
+      "EPIC 51",
+      "EPIC 52",
+      "EPIC 53",
+      "EPIC 54"
+    ]
+  },
+  "nodes": [
+    {
+      "key": "EPIC-44",
+      "title": "MIGRATION BASELINE REPAIR / PR 74",
+      "type": "epic",
+      "source_anchor": "EPIC 44",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 44 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 44 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-44-1",
+      "title": "Target migration history inventory",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-44",
+      "source_anchor": "TASK 44.1 — Target migration history inventory",
+      "goal": "Complete TASK 44.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 44.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 44.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 44",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 44.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-44-2",
+      "title": "Historical-file decision",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-44",
+      "source_anchor": "TASK 44.2 — Historical-file decision",
+      "goal": "Complete TASK 44.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 44.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 44.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 44",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-44-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 44.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-44-3",
+      "title": "Verification and delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-44",
+      "source_anchor": "TASK 44.3 — Verification and delivery",
+      "goal": "Complete TASK 44.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 44.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 44.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 44",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-44-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 44.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-44-D",
+      "title": "Delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-44",
+      "source_anchor": "TASK 44.D — Delivery",
+      "goal": "Deliver EPIC 44 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 44.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-44-1",
+        "TASK-44-2",
+        "TASK-44-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 44.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "EPIC-45",
+      "title": "CANONICAL STATE / TASK MANAGER HYGIENE",
+      "type": "epic",
+      "source_anchor": "EPIC 45",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 45 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 45 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-44"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:b",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-45-1",
+      "title": "Docs truth",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-45",
+      "source_anchor": "TASK 45.1 — Docs truth",
+      "goal": "Complete TASK 45.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 45.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 45.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 45",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 45.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-45-2",
+      "title": "Task Manager carry-forward",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-45",
+      "source_anchor": "TASK 45.2 — Task Manager carry-forward",
+      "goal": "Complete TASK 45.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 45.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 45.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 45",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-45-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 45.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-45-3",
+      "title": "Worktree hygiene",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-45",
+      "source_anchor": "TASK 45.3 — Worktree hygiene",
+      "goal": "Complete TASK 45.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 45.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 45.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 45",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-45-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 45.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-45-D",
+      "title": "Delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-45",
+      "source_anchor": "TASK 45.D — Delivery",
+      "goal": "Deliver EPIC 45 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 45.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-45-1",
+        "TASK-45-2",
+        "TASK-45-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 45.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "EPIC-46",
+      "title": "INFRASTRUCTURE CONTROL PLANE",
+      "type": "epic",
+      "source_anchor": "EPIC 46",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 46 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 46 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-46-1",
+      "title": "Redacted access matrix",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-46",
+      "source_anchor": "TASK 46.1 — Redacted access matrix",
+      "goal": "Complete TASK 46.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 46.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 46.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 46",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 46.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-46-2",
+      "title": "Staging/restore resource",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-46",
+      "source_anchor": "TASK 46.2 — Staging/restore resource",
+      "goal": "Complete TASK 46.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 46.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 46.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 46",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-46-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 46.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-46-3",
+      "title": "Secret routing",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-46",
+      "source_anchor": "TASK 46.3 — Secret routing",
+      "goal": "Complete TASK 46.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 46.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 46.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 46",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-46-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 46.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-46-P",
+      "title": "Runbook/code delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-46",
+      "source_anchor": "TASK 46.P — Runbook/code delivery",
+      "goal": "Complete TASK 46.P exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 46.P; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 46.P is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 46",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-46-3",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 46.P",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-46-O",
+      "title": "Operational execution",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-46",
+      "source_anchor": "TASK 46.O — Operational execution",
+      "goal": "Complete TASK 46.O exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 46.O; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 46.O is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 46",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-46-P",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 46.O",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-46-D",
+      "title": "Evidence closeout",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-46",
+      "source_anchor": "TASK 46.D — Evidence closeout",
+      "goal": "Deliver EPIC 46 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 46.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-46-1",
+        "TASK-46-2",
+        "TASK-46-3",
+        "TASK-46-P",
+        "TASK-46-O"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 46.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "EPIC-47",
+      "title": "CREDENTIAL / ENV HARDENING",
+      "type": "epic",
+      "source_anchor": "EPIC 47",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 47 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 47 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-46"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:b",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-47-1",
+      "title": "Replacement identity and grants",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-47",
+      "source_anchor": "TASK 47.1 — Replacement identity and grants",
+      "goal": "Complete TASK 47.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 47.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 47.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 47",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 47.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-47-2",
+      "title": "Zero-downtime rotation",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-47",
+      "source_anchor": "TASK 47.2 — Zero-downtime rotation",
+      "goal": "Complete TASK 47.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 47.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 47.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 47",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-47-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 47.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-47-3",
+      "title": "Runtime env completeness",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-47",
+      "source_anchor": "TASK 47.3 — Runtime env completeness",
+      "goal": "Complete TASK 47.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 47.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 47.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 47",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-47-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 47.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-47-P",
+      "title": "Runbook/code delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-47",
+      "source_anchor": "TASK 47.P — Runbook/code delivery",
+      "goal": "Complete TASK 47.P exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 47.P; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 47.P is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 47",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-47-3",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 47.P",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-47-O",
+      "title": "Operational execution",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-47",
+      "source_anchor": "TASK 47.O — Operational execution",
+      "goal": "Complete TASK 47.O exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 47.O; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 47.O is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 47",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-47-P",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 47.O",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-47-D",
+      "title": "Evidence closeout",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-47",
+      "source_anchor": "TASK 47.D — Evidence closeout",
+      "goal": "Deliver EPIC 47 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 47.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-47-1",
+        "TASK-47-2",
+        "TASK-47-3",
+        "TASK-47-P",
+        "TASK-47-O"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 47.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "EPIC-48",
+      "title": "DB REHEARSAL / BACKUP / RESTORE",
+      "type": "epic",
+      "source_anchor": "EPIC 48",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 48 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 48 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-44",
+        "EPIC-47"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "wave:c",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-48-1",
+      "title": "Clean and upgrade rehearsal",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-48",
+      "source_anchor": "TASK 48.1 — Clean and upgrade rehearsal",
+      "goal": "Complete TASK 48.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 48.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 48.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 48",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 48.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-48-2",
+      "title": "Enum and data preflight",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-48",
+      "source_anchor": "TASK 48.2 — Enum and data preflight",
+      "goal": "Complete TASK 48.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 48.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 48.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 48",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-48-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 48.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-48-3",
+      "title": "Restore proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-48",
+      "source_anchor": "TASK 48.3 — Restore proof",
+      "goal": "Complete TASK 48.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 48.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 48.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 48",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-48-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 48.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-48-4",
+      "title": "DB-backed routes",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-48",
+      "source_anchor": "TASK 48.4 — DB-backed routes",
+      "goal": "Complete TASK 48.4 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 48.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 48.4 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 48",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-48-3",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 48.4",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-48-P",
+      "title": "Runbook/code delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-48",
+      "source_anchor": "TASK 48.P — Runbook/code delivery",
+      "goal": "Complete TASK 48.P exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 48.P; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 48.P is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 48",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-48-4",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 48.P",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-48-O",
+      "title": "Operational execution",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-48",
+      "source_anchor": "TASK 48.O — Operational execution",
+      "goal": "Complete TASK 48.O exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 48.O; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 48.O is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 48",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-48-P",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 48.O",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-48-D",
+      "title": "Evidence closeout",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-48",
+      "source_anchor": "TASK 48.D — Evidence closeout",
+      "goal": "Deliver EPIC 48 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 48.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-48-1",
+        "TASK-48-2",
+        "TASK-48-3",
+        "TASK-48-4",
+        "TASK-48-P",
+        "TASK-48-O"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 48.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "EPIC-49",
+      "title": "PREVIEW RUNTIME",
+      "type": "epic",
+      "source_anchor": "EPIC 49",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 49 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 49 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-48"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "wave:c",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-49-1",
+      "title": "Immutable staging artifact",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-49",
+      "source_anchor": "TASK 49.1 — Immutable staging artifact",
+      "goal": "Complete TASK 49.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 49.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 49.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 49",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 49.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-49-2",
+      "title": "Runtime surface",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-49",
+      "source_anchor": "TASK 49.2 — Runtime surface",
+      "goal": "Complete TASK 49.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 49.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 49.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 49",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-49-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 49.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-49-3",
+      "title": "Rollback and monitoring",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-49",
+      "source_anchor": "TASK 49.3 — Rollback and monitoring",
+      "goal": "Complete TASK 49.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 49.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 49.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 49",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-49-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 49.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-49-P",
+      "title": "Runbook/code delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-49",
+      "source_anchor": "TASK 49.P — Runbook/code delivery",
+      "goal": "Complete TASK 49.P exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 49.P; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 49.P is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 49",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-49-3",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 49.P",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-49-O",
+      "title": "Operational execution",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-49",
+      "source_anchor": "TASK 49.O — Operational execution",
+      "goal": "Complete TASK 49.O exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 49.O; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 49.O is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 49",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-49-P",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 49.O",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-49-D",
+      "title": "Evidence closeout",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-49",
+      "source_anchor": "TASK 49.D — Evidence closeout",
+      "goal": "Deliver EPIC 49 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 49.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-49-1",
+        "TASK-49-2",
+        "TASK-49-3",
+        "TASK-49-P",
+        "TASK-49-O"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 49.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "EPIC-50",
+      "title": "LEADS PRODUCTION READINESS",
+      "type": "epic",
+      "source_anchor": "EPIC 50",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 50 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 50 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-50-1",
+      "title": "Canonical intake decision",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-50",
+      "source_anchor": "TASK 50.1 — Canonical intake decision",
+      "goal": "Complete TASK 50.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 50.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 50.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 50",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 50.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-50-2",
+      "title": "Trusted client and rate limit",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-50",
+      "source_anchor": "TASK 50.2 — Trusted client and rate limit",
+      "goal": "Complete TASK 50.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 50.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 50.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 50",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-50-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 50.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-50-3",
+      "title": "Anti-bot and privacy",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-50",
+      "source_anchor": "TASK 50.3 — Anti-bot and privacy",
+      "goal": "Complete TASK 50.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 50.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 50.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 50",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-50-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 50.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-50-4",
+      "title": "E2E",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-50",
+      "source_anchor": "TASK 50.4 — E2E",
+      "goal": "Complete TASK 50.4 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 50.4; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 50.4 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 50",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-50-3",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 50.4",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-50-D",
+      "title": "Delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-50",
+      "source_anchor": "TASK 50.D — Delivery",
+      "goal": "Deliver EPIC 50 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 50.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-50-1",
+        "TASK-50-2",
+        "TASK-50-3",
+        "TASK-50-4"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 50.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "EPIC-51",
+      "title": "CONTENT FACT FOUNDATION",
+      "type": "epic",
+      "source_anchor": "EPIC 51",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 51 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 51 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-51-1",
+      "title": "Autonomous evidence inventory",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-51",
+      "source_anchor": "TASK 51.1 — Autonomous evidence inventory",
+      "goal": "Complete TASK 51.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 51.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 51.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 51",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 51.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-51-2",
+      "title": "CONTENT_FACT_PACKET",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-51",
+      "source_anchor": "TASK 51.2 — CONTENT_FACT_PACKET",
+      "goal": "Complete TASK 51.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 51.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 51.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 51",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-51-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 51.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-51-3",
+      "title": "Fail-closed mapping",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-51",
+      "source_anchor": "TASK 51.3 — Fail-closed mapping",
+      "goal": "Complete TASK 51.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 51.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 51.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 51",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-51-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 51.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-51-D",
+      "title": "Delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-51",
+      "source_anchor": "TASK 51.D — Delivery",
+      "goal": "Deliver EPIC 51 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 51.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-51-1",
+        "TASK-51-2",
+        "TASK-51-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 51.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:a",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "EPIC-52",
+      "title": "CONTENT / TRUST / EDITORIAL COMPLETION",
+      "type": "epic",
+      "source_anchor": "EPIC 52",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 52 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 52 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-51"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:b",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-52-1",
+      "title": "Content matrix and launch cohort",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-52",
+      "source_anchor": "TASK 52.1 — Content matrix and launch cohort",
+      "goal": "Complete TASK 52.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 52.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 52.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 52",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 52.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-52-2",
+      "title": "Sourced content implementation",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-52",
+      "source_anchor": "TASK 52.2 — Sourced content implementation",
+      "goal": "Complete TASK 52.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 52.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 52.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 52",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-52-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 52.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-52-3",
+      "title": "Editorial / legal / redirect QA",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-52",
+      "source_anchor": "TASK 52.3 — Editorial / legal / redirect QA",
+      "goal": "Complete TASK 52.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 52.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 52.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 52",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-52-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 52.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-52-D",
+      "title": "Delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-52",
+      "source_anchor": "TASK 52.D — Delivery",
+      "goal": "Deliver EPIC 52 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 52.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-52-1",
+        "TASK-52-2",
+        "TASK-52-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 52.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:b",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "EPIC-53",
+      "title": "INDEX / STRUCTURED DATA / PERFORMANCE GATE",
+      "type": "epic",
+      "source_anchor": "EPIC 53",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 53 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 53 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-49",
+        "EPIC-52"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "wave:c",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-53-1",
+      "title": "Index and sitemap activation",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-53",
+      "source_anchor": "TASK 53.1 — Index and sitemap activation",
+      "goal": "Complete TASK 53.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 53.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 53.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 53",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 53.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-53-2",
+      "title": "Structured data and browser matrix",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-53",
+      "source_anchor": "TASK 53.2 — Structured data and browser matrix",
+      "goal": "Complete TASK 53.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 53.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 53.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 53",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-53-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 53.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-53-3",
+      "title": "Content-complete performance",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-53",
+      "source_anchor": "TASK 53.3 — Content-complete performance",
+      "goal": "Complete TASK 53.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 53.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 53.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 53",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-53-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 53.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-53-D",
+      "title": "Delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-53",
+      "source_anchor": "TASK 53.D — Delivery",
+      "goal": "Deliver EPIC 53 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 53.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-53-1",
+        "TASK-53-2",
+        "TASK-53-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 53.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 2,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:c",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "EPIC-54",
+      "title": "RELEASE CANDIDATE",
+      "type": "epic",
+      "source_anchor": "EPIC 54",
+      "goal": "Deliver the observable outcome and acceptance contract of EPIC 54 in approved Plan №3 v2 without entering production.",
+      "scope": [
+        "All requirements, prohibitions, recovery and evidence under the exact EPIC 54 section"
+      ],
+      "acceptance_criteria": [
+        "All child tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-45",
+        "EPIC-48",
+        "EPIC-49",
+        "EPIC-50",
+        "EPIC-53"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "destructive live-data surprise",
+        "external mutation outside the exact approved task contract"
+      ],
+      "priority": 3,
+      "labels": [
+        "wave:d",
+        "plan:v2",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-54-1",
+      "title": "Evidence aggregation",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-54",
+      "source_anchor": "TASK 54.1 — Evidence aggregation",
+      "goal": "Complete TASK 54.1 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 54.1; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 54.1 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 54",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": null,
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 54.1",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 3,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-54-2",
+      "title": "Final verification and artifact",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-54",
+      "source_anchor": "TASK 54.2 — Final verification and artifact",
+      "goal": "Complete TASK 54.2 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 54.2; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 54.2 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 54",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-54-1",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 54.2",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 3,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-54-3",
+      "title": "Release docs closeout",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-54",
+      "source_anchor": "TASK 54.3 — Release docs closeout",
+      "goal": "Complete TASK 54.3 exactly as specified in approved Plan №3 v2.",
+      "scope": [
+        "All requirements and prohibitions in TASK 54.3; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Every observable requirement in TASK 54.3 is satisfied",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run task-named checks/evidence from EPIC 54",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": "TASK-54-2",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 54.3",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 3,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v2"
+      ]
+    },
+    {
+      "key": "TASK-54-D",
+      "title": "Delivery",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-54",
+      "source_anchor": "TASK 54.D — Delivery",
+      "goal": "Deliver EPIC 54 through exact-head MERGE_AFTER_GATE and record the delivery ledger.",
+      "scope": [
+        "All requirements and prohibitions in TASK 54.D; no unrelated cleanup"
+      ],
+      "acceptance_criteria": [
+        "Pull Request exists at exact epic head",
+        "Required review and exact-head gate PASS",
+        "Merge and evidence ledger are recorded; production is not entered"
+      ],
+      "required_checks": [
+        "Full epic diff review",
+        "Risk-based exact-head SourceCraft gate",
+        "Verify PR source, target, head and merge SHA"
+      ],
+      "depends_on": [
+        "TASK-54-1",
+        "TASK-54-2",
+        "TASK-54-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 54.D",
+        "docs/03_ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production",
+        "scope expansion",
+        "secret exposure",
+        "destructive action outside the exact approved contract"
+      ],
+      "priority": 3,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:d",
+        "plan:v2"
+      ]
+    }
+  ]
+}

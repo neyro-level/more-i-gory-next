@@ -1,12 +1,13 @@
 # Machine-readable pointer. Requirements live in 03/04 and OWNER_QUEUE.
-program: more-i-gory-conformance-plan3-2026-09
-plan_version: v1
-code_baseline_sha: 842b0cce9585359d50c80e8ef464536a56332944
-last_verified_main_sha: 842b0cce9585359d50c80e8ef464536a56332944
-verification_date: 2026-09-19
-current_status: conformance_closeout
+program: more-i-gory-production-readiness-2026-09
+plan_version: v2
+code_baseline_sha: c824e9fa02ecfe370c859a851e3c0e0cedd48667
+last_verified_main_sha: c824e9fa02ecfe370c859a851e3c0e0cedd48667
+verification_date: 2026-09-20
+current_status: production_readiness_execution
 last_merged:
-  - { epic: EPIC-41, pr: 71, sha: 754751f17aeaa5f1f65137fc7367874af4c368e3 }
-  - { epic: EPIC-42, pr: 72, sha: 842b0cce9585359d50c80e8ef464536a56332944 }
-next_step: merge EPIC 43, verify exact final main, then stop at owner-gated EPIC 44
+  - { epic: EPIC-43, pr: 73, sha: 78c2753efc48fb2abafd0527b8949e85af199762 }
+  - { epic: EPIC-51, pr: 75, sha: dcd51ed2700e88492c32309725cf8754b442f016 }
+  - { epic: EPIC-44, pr: 74, sha: c824e9fa02ecfe370c859a851e3c0e0cedd48667 }
+next_step: execute independent READY work in EPIC 45-54; EPIC 55-56 require a separate owner release command
 production: not_authorized

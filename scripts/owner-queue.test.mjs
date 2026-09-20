@@ -32,9 +32,10 @@ test("OWNER_QUEUE.md is a single BLOCKS_RELEASE / IMPROVEMENT inventory", () => 
   const improvements = tableSources(section(markdown, "## IMPROVEMENT"));
 
   for (const source of [
-    "TASK 13.9 / TASK 13.7",
-    "EPIC 38 / EPIC 41",
+    "`mg4-epic-46.2` / TASK 46.2",
     "TASK 24.1b",
+    "`mg4-epic-50.1` / TASK 50.3",
+    "`mg4-epic-52.1` / EPIC 52",
     "Domain cutover",
     "Credentials hygiene",
   ]) {

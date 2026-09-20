@@ -1,20 +1,21 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 4.0 — Plan №3 closeout
-**Дата:** 2026-09-19
+**Версия:** 4.1 — Plan №3 v2 execution
+**Дата:** 2026-09-20
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
-В `origin/main` (`842b0cce`) смержены Plan №3 EPIC 35–42 поверх предыдущей
-программы.
+Execution baseline Plan №3 v2 — exact `origin/main`
+`c824e9fa02ecfe370c859a851e3c0e0cedd48667` перед EPIC 45; в него смержены
+EPIC 43, EPIC 51 и repair исторической migration chain EPIC 44.
 Публичный сайт читает Payload через Public Gateway и DTO. Leads/ingest/jobs
 имеют код и TAP/proofs; live restore и production — нет.
 
-NOW: EPIC 43 conformance closeout. EPIC 44 и `docs/OWNER_QUEUE.md`
-(`BLOCKS_RELEASE`) — только по отдельной команде владельца. Один эпик = одна
-ветка/PR, `MERGE_AFTER_GATE`.
+NOW: Plan №3 v2 EPIC 45–54. Независимые задачи продолжаются при локальном
+owner-blocker; один эпик = одна ветка/PR, `MERGE_AFTER_GATE`. EPIC 55–56 и
+production требуют отдельной команды владельца.
 
 Production не выпускался. Коммерческие и аналитические страницы остаются под
 content/trust/index gate, пока не пройден editorial gate.
@@ -71,6 +72,9 @@ content/trust/index gate, пока не пройден editorial gate.
 | PR-70 | EPIC 40 — runtime and content contracts | DONE |
 | PR-71 | EPIC 41 — responsive/accessibility browser matrix | DONE WITH DEFERRED DB ROUTES |
 | PR-72 | EPIC 42 — final platform proof matrix | DONE |
+| PR-73 | EPIC 43 — Source of Truth / final conformance closeout | DONE |
+| PR-75 | EPIC 51 — content fact foundation | DONE |
+| PR-74 | EPIC 44 — historical PostgreSQL migration-chain repair | DONE |
 
 Git-история и SourceCraft PR являются доказательством отдельных merge, а не этот
 документ.
@@ -97,13 +101,14 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 
 ## 4. NOW / NEXT — Realty Platform remediation
 
-Код Plan №3 EPIC 35–42 в `main` — целевой Realty 5.5 контур без production.
+Код в `main` — целевой Realty 5.5 контур без production; Plan №3 v2 является
+активной программой завершения readiness.
 
 | Состояние | Эпик | Результат |
 |---|---|---|
-| DONE | EPIC 35–42 | код и proofs в `main` `842b0cce`; публичный read — Public Gateway |
-| NOW | EPIC 43 | conformance closeout, канон и exact-main proof |
-| OWNER GATE | EPIC 44 | production только после закрытия `OWNER_QUEUE/BLOCKS_RELEASE` и отдельной команды |
+| DONE | EPIC 35–44, 51 | код и proofs в `main` `c824e9fa02ecfe370c859a851e3c0e0cedd48667`; migration chain 26/26 PASS |
+| NOW | EPIC 45–54 | docs/task-manager hygiene, staging/security, preview, observability, content и RC evidence |
+| OWNER GATE | EPIC 55–56 | production/cutover только после readiness и отдельной release-команды |
 
 Контентные, legal и production решения остаются human gates и не подменяются
 технической готовностью.
@@ -191,7 +196,8 @@ Merge, SourceCraft Gate и production не выполнялись.
 
 Отдельный release stream и явная команда владельца:
 
-1. Утвердить production Leads API, rate limit, CAPTCHA и SLA.
+1. Утвердить production activation локального Payload intake, rate limit,
+   CAPTCHA и SLA; внешний CRM/notification channel остаётся выключенным.
 2. Подготовить versioned artifact upload, atomic switch и rollback runbook.
 3. Провести Nginx/TLS validation на production-like host.
 4. Выполнить exact-main release, live smoke, form E2E, logs и rollback proof.

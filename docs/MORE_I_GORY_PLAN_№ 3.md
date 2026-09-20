@@ -1,24 +1,31 @@
 # ПЛАН №3 — ИСПРАВЛЕНИЯ И ФИНАЛЬНОЕ ПРИВЕДЕНИЕ «МОРЕ И ГОРЫ»
 
-Plan ID: more-i-gory-conformance-plan3-2026-09
-Version: v1
+Plan ID: more-i-gory-production-readiness-2026-09
+Previous Task Manager Plan ID: more-i-gory-conformance-plan3-2026-09 (v1, historical)
+Future Task Manager prefix: mg4
+Version: v2
 Status: APPROVED
-Readiness: APPROVED
+Readiness: READY_WITH_LIMITS
 Approved by: owner
-Approved at: 2026-09-19T12:01:40+03:00
+Approved at: 2026-09-20T12:17:11+03:00
+Previous approved snapshot: v1, approved 2026-09-19T12:01:40+03:00
 
-**Canonical repository:** SourceCraft `integrator-p/more-i-gory-next`  
-**GitHub mirror:** `neyro-level/more-i-gory-next` — не primary  
-**Базовый audit SHA:** `2a3b2f5416094dfb3ad1be28732c7925bb121cea`  
-**Target Core:** AMS REALTY PLATFORM CORE STANDARD 5.5 — SOLO + AI  
-**Target UI:** AMS UI CORE v5.0  
-**Profile:** `AMS_PROFILE=REALTY_BASE`  
-**Delivery profile:** `COMMERCIAL`  
-**Project mode:** `BUILD`  
-**UX scope:** `PUBLIC_COMMERCIAL`  
-**Назначение:** автономное выполнение Codex по утверждённому Beads-графу; локальный blocker не останавливает независимую ready work.  
-**Default delivery mode:** `MERGE_AFTER_GATE` после owner approval exact версии.  
-**Production release:** OUT OF SCOPE; только отдельная команда владельца.
+**Canonical repository:** SourceCraft `integrator-p/more-i-gory-next`
+**GitHub mirror:** `neyro-level/more-i-gory-next` — не primary
+**Historical v1 audit SHA:** `2a3b2f5416094dfb3ad1be28732c7925bb121cea` — evidence only
+**V2 implementation base:** SourceCraft `main` @ `78c2753efc48fb2abafd0527b8949e85af199762`
+**V2 plan snapshot:** exact approved Markdown SHA-256 фиксируется в mg4 inventory после approval
+**Target Core:** AMS REALTY PLATFORM CORE STANDARD 5.5 — SOLO + AI
+**Target UI:** AMS UI CORE v5.0
+**Profile:** `AMS_PROFILE=REALTY_BASE`
+**Delivery profile:** `COMMERCIAL`
+**Project mode:** `BUILD`
+**UX scope:** `PUBLIC_COMMERCIAL`
+**Назначение:** v1 сохраняет завершённый conformance baseline EPIC 35–43; v2
+собирает весь остаток до production-ready состояния и изолирует сам release.
+**Default delivery mode:** `MERGE_AFTER_GATE` для EPIC 44–54 после approval exact v2.
+**Production release:** только EPIC 55–56 и только после отдельной устойчивой
+команды владельца `Выпускаем production`.
 
 ## Lifecycle и revision history
 
@@ -26,9 +33,18 @@ Approved at: 2026-09-19T12:01:40+03:00
 |---|---|---|---|
 | v0 | DRAFT | Исходный owner-аудит на SHA `2a3b2f5` | Принят как содержательная основа; импорт запрещён |
 | v1 | APPROVED | Architect normalization + four-pass final audit + owner approval 2026-09-19 | Устранены collisions EPIC 33/34, построены автономные waves, owner/production gates вынесены в EPIC 44, добавлены contracts и Task Manager isolation; blocker/major findings закрыты; владелец утвердил exact v1 |
+| v2 | APPROVED | Owner confirmation 2026-09-20 после final four-pass audit exact commit `9c4b287` | EPIC 44 placeholder разложен на EPIC 44–56; blockers/majors/cycles = 0; Night Run `READY_WITH_LIMITS`; mg4 import и Developer handoff разрешены |
 
-`APPROVED` назначен после финального четырёхпроходного аудита exact v1 и точной
-команды владельца `План утвержден`. Импорт этого snapshot в Beads разрешён.
+Snapshot v1 был утверждён и выполнен по EPIC 35–43. Текущий v2 утверждён после
+финального четырёхпроходного аудита и owner confirmation; mg4 inventory,
+Task Manager import/reconcile и Developer handoff разрешены.
+
+# V1 HISTORICAL SNAPSHOT — NON-IMPORTABLE IN V2
+
+Всё от этого заголовка до `# V2 — ОСТАВШАЯСЯ ПРОГРАММА ДО PRODUCTION` ниже
+является историческим approved/executed контрактом v1. Он сохраняется как
+evidence, но не управляет v2, не импортируется повторно и не является current
+ready queue. Current execution contract, decisions и DoD заданы только в v2.
 
 ## Решения, зафиксированные до approval
 
@@ -85,7 +101,7 @@ dependencies между независимыми эпиками Wave A.
 - **Stop whole autonomous run:** только когда implementation graph EPIC 35–43
   завершён либо во всём Plan №3 не осталось safe ready work.
 
-## Task Manager isolation
+## V1 historical Task Manager isolation
 
 - будущий Beads prefix: `mg3`;
 - source graph: только Plan ID `more-i-gory-conformance-plan3-2026-09` exact version/hash;
@@ -201,10 +217,10 @@ SEO / PAGE CONTRACT:
 
 ---
 
-# EPIC 35 — PUBLIC DATA / PUBLICATION BOUNDARY
+# V1 HISTORICAL EPIC 35 — PUBLIC DATA / PUBLICATION BOUNDARY
 
-**Risk:** RISKY  
-**Branch:** `codex/plan3-epic-35-public-boundary`  
+**Risk:** RISKY
+**Branch:** `codex/plan3-epic-35-public-boundary`
 **Dependencies:** none
 
 ## Цель
@@ -407,10 +423,10 @@ exact PR HEAD
 
 ---
 
-# EPIC 36 — SYSTEM GATEWAY / PRIVILEGED OPERATIONS
+# V1 HISTORICAL EPIC 36 — SYSTEM GATEWAY / PRIVILEGED OPERATIONS
 
-**Risk:** RISKY  
-**Branch:** `codex/plan3-epic-36-system-gateway`  
+**Risk:** RISKY
+**Branch:** `codex/plan3-epic-36-system-gateway`
 **Dependencies:** none
 
 ## Цель
@@ -532,10 +548,10 @@ merge-risky
 
 ---
 
-# EPIC 37 — SAFE OUTBOUND TRANSPORT BOUNDARIES
+# V1 HISTORICAL EPIC 37 — SAFE OUTBOUND TRANSPORT BOUNDARIES
 
-**Risk:** RISKY  
-**Branch:** `codex/plan3-epic-37-safe-outbound`  
+**Risk:** RISKY
+**Branch:** `codex/plan3-epic-37-safe-outbound`
 **Dependencies:** none
 
 ## Цель
@@ -663,10 +679,10 @@ merge-risky
 
 ---
 
-# EPIC 38 — IMPORT SAFETY / STREAMING / BASELINE / LIFECYCLE
+# V1 HISTORICAL EPIC 38 — IMPORT SAFETY / STREAMING / BASELINE / LIFECYCLE
 
-**Risk:** RISKY — critical data surface  
-**Branch:** `codex/plan3-epic-38-import-contract`  
+**Risk:** RISKY — critical data surface
+**Branch:** `codex/plan3-epic-38-import-contract`
 **Dependencies:** EPIC 37 merged
 
 ## Цель
@@ -1009,10 +1025,10 @@ pnpm verify:schema
 
 ---
 
-# EPIC 39 — LEAD DELIVERY CORE 5.5 ALIGNMENT
+# V1 HISTORICAL EPIC 39 — LEAD DELIVERY CORE 5.5 ALIGNMENT
 
-**Risk:** RISKY  
-**Branch:** `codex/plan3-epic-39-lead-delivery-contract`  
+**Risk:** RISKY
+**Branch:** `codex/plan3-epic-39-lead-delivery-contract`
 **Dependencies:** EPIC 38 merged — только для неизменяемого migration order
 
 ## Цель
@@ -1233,10 +1249,10 @@ pnpm verify:schema
 
 ---
 
-# EPIC 40 — UI CORE 5.0 FOUNDATION / GUARDS
+# V1 HISTORICAL EPIC 40 — UI CORE 5.0 FOUNDATION / GUARDS
 
-**Risk:** RISKY — UI foundation contract  
-**Branch:** `codex/plan3-epic-40-ui-core-5`  
+**Risk:** RISKY — UI foundation contract
+**Branch:** `codex/plan3-epic-40-ui-core-5`
 **Dependencies:** none
 
 ## Цель
@@ -1495,10 +1511,10 @@ merge-risky
 
 ---
 
-# EPIC 41 — UI RHYTHM / DESIGN-SYSTEM DRIFT
+# V1 HISTORICAL EPIC 41 — UI RHYTHM / DESIGN-SYSTEM DRIFT
 
-**Risk:** RISKY — UI foundation contract  
-**Branch:** `codex/plan3-epic-41-ui-rhythm`  
+**Risk:** RISKY — UI foundation contract
+**Branch:** `codex/plan3-epic-41-ui-rhythm`
 **Dependencies:** EPIC 40 merged
 
 ## Цель
@@ -1695,11 +1711,11 @@ merge-risky
 
 ---
 
-# EPIC 42 — FINAL PLATFORM PROOFS / TECHNICAL VALIDATION
+# V1 HISTORICAL EPIC 42 — FINAL PLATFORM PROOFS / TECHNICAL VALIDATION
 
-**Risk:** RISKY  
-**Branch:** `codex/plan3-epic-42-platform-proofs`  
-**Dependencies:** EPIC 35–41 merged  
+**Risk:** RISKY
+**Branch:** `codex/plan3-epic-42-platform-proofs`
+**Dependencies:** EPIC 35–41 merged
 **Production deployment:** запрещён в этом EPIC
 
 ## Цель
@@ -1940,10 +1956,10 @@ merge-risky
 
 ---
 
-# EPIC 43 — SOURCE OF TRUTH / FINAL CONFORMANCE CLOSEOUT
+# V1 HISTORICAL EPIC 43 — SOURCE OF TRUTH / FINAL CONFORMANCE CLOSEOUT
 
-**Risk:** STANDARD  
-**Branch:** `codex/plan3-epic-43-conformance-closeout`  
+**Risk:** STANDARD
+**Branch:** `codex/plan3-epic-43-conformance-closeout`
 **Dependencies:** EPIC 42 merged
 
 ## Цель
@@ -2221,11 +2237,11 @@ WAVE F — естественная owner/production stop:
 
 ---
 
-# EPIC 44 — OWNER / PRODUCTION GATES (DEFERRED)
+# V1 HISTORICAL OWNER / PRODUCTION GATE — EPIC 44 PLACEHOLDER
 
-**Risk:** OWNER / PRODUCTION  
-**Branch:** не создаётся без отдельной release-команды владельца  
-**Dependencies:** EPIC 43 merged  
+**Risk:** OWNER / PRODUCTION
+**Branch:** не создаётся без отдельной release-команды владельца
+**Dependencies:** EPIC 43 merged
 **Delivery mode:** `PR_ONLY` placeholder в Task Manager; не является production authorization
 
 Этот EPIC намеренно остаётся последним owner gate. Он не выдаётся роли
@@ -2406,4 +2422,680 @@ Task Manager import: ALLOWED for exact APPROVED v1 by owner phrase "План у�
 [ ] production остаётся OWNER_GATE до отдельной команды
 ```
 
-**Конец документа — План №3.**
+# V2 — ОСТАВШАЯСЯ ПРОГРАММА ДО PRODUCTION
+
+Этот раздел является единственным новым planning scope. Выполненные EPIC 35–43
+и их evidence не переоткрываются. Старый EPIC 44 выше сохраняется как
+историческая v1-заглушка и после approval v2 заменяется графом ниже.
+
+## V2 фактический baseline
+
+```text
+main / origin/main  : 78c2753efc48fb2abafd0527b8949e85af199762
+preview host        : more-previu.tw1.ru
+server              : moregory1; SSH moreigory; deploy + sudo PASS
+runtime             : nginx active; moreigory.service active; Node 24.20.0
+public preview      : /api/health 200; /, robots.txt, sitemap.xml = 503
+managed PostgreSQL  : 18.6; default_db; gen_user; CREATEDB=false
+database schema     : payload_migrations/properties/users absent
+Secret Master       : more-i-gory-server/prod readable
+PR 74 head          : d9eb2e4df85d79d6085318656a86122299c46076
+Task Manager        : v1 reconciliation CLEAN; no scoped ready implementation
+```
+
+## V2 решения по умолчанию — без повторных запросов
+
+| ID | Решение | Статус |
+|---|---|---|
+| V2-OD-01 | SourceCraft остаётся primary; все code/docs EPIC 44–54 используют `MERGE_AFTER_GATE` | PROPOSED |
+| V2-OD-02 | Project-scoped Secret Master, SSH, Timeweb API и DB operations в утверждённых non-production контурах выполняются автономно по task contract | PROPOSED |
+| V2-OD-03 | Production-target cluster `4210557` не повышается ради staging. Создаётся отдельный минимальный PostgreSQL 18 staging cluster с API quote ≤600 RUB/month including tax; если read-only quote выше cap или billing semantics не подтверждены — external stop | PROPOSED |
+| V2-OD-04 | Внешний lead channel, live feed и карты остаются выключены; Payload Admin — операционная поверхность заявок до отдельного business decision | PROPOSED |
+| V2-OD-05 | Любая страница без доказанных фактов остаётся unpublished/noindex и не блокирует независимую infrastructure work | PROPOSED |
+| V2-OD-06 | Legacy Task Manager records не удаляются: carry-forward → `supersede`, дубли → `ALREADY_COVERED` с evidence | PROPOSED |
+| V2-OD-07 | Один final release intent разрешает непрерывный EPIC 55→56; automatic rollback ограничен artifact/symlink и DNS/Nginx при schema compatibility. DB migration anomaly всегда stop + recovery/forward-fix, auto-down запрещён | PROPOSED |
+| V2-OD-08 | Первый release стартует с `JOBS_AUTORUN=false`; feed, ingest schedule и outbound delivery channel выключены. Jobs owner включается отдельной post-release task после готовности queue/channel contracts | PROPOSED |
+| V2-OD-09 | Разрешена zero-downtime rotation exact More i Gory production-target DB identity и `/etc/moreigory/app.env`: replacement → grants → Secret Master/env → smoke → revoke; schema/data mutation в эту авторизацию не входит | PROPOSED |
+| V2-OD-10 | Leads anti-bot default — Cloudflare Turnstile для `moreigori.ru` и preview hostname; существующий Cloudflare/API access ищется автоматически, иначе один consolidated owner action до RC; до ключей форма disabled | PROPOSED |
+
+До approval эти решения являются рекомендацией Architect, а не разрешением на
+исполнение. После approval они входят в durable authorization exact v2.
+
+## V2 execution contract
+
+- EPIC 44–54 выполняются автономно после approval exact v2 через scoped Plan ID
+  `more-i-gory-production-readiness-2026-09`; blocked task освобождает claim, а
+  Developer продолжает другую ready work.
+- Каждый code/docs epic завершается `TASK <id>.D — Delivery`, полным diff review,
+  одним risk-based exact-head gate и merge; повторные gates запрещены.
+- EPIC 46–49 используют две стадии: `TASK xx.P` делает review/gate/merge
+  runbook/code; только затем `TASK xx.O` выполняет mutation из exact merged SHA
+  и пишет evidence в Beads ledger. `TASK xx.D` закрывает epic; отдельный
+  docs-only evidence PR создаётся лишь если repository evidence действительно
+  изменилось. Mutation из feature branch запрещена.
+- EPIC 55–56 не импортируются в implementation graph. После команды
+  `Выпускаем production` создаётся отдельный release graph/goal на exact EPIC 54
+  main SHA; дополнительных owner-вопросов внутри 55→56 нет, если stop condition
+  не сработал.
+- Safe retries для внешнего API: максимум 3 попытки с паузами 2/5/10 секунд;
+  после 401/403, неоднозначного target или превышения spend cap повтор запрещён.
+
+## V2 delivery matrix
+
+| Epics | Git delivery | Operational mutation | Gate |
+|---|---|---|---|
+| 44–45, 50–54 | PR + merge | none либо test/staging evidence | exact-head STANDARD/RISKY |
+| 46–49 | PR + merge | Timeweb/Secret Master/staging/server по merged runbook | exact-head RISKY |
+| 55–56 | отдельный release graph | production rollout/cutover | exact-main release evidence |
+
+## V2 dependency model
+
+| Wave | Epics | Dependency | Safe fallback |
+|---|---|---|---|
+| A | 44, 46, 50, 51 | после approval; независимы | при blocker перейти к другому epic Wave A |
+| B | 45 после 44; 47 после 46; 52 после 51 | минимальные HARD связи | content blocker не останавливает infra |
+| C | 48 после 44+47; 49 после 48; 53 после 49+52 | DB/runtime/content contracts | DB blocker не останавливает content и наоборот |
+| D | 54 после 45+48+49+50+53 | release-candidate aggregation | не начинать с неполным evidence |
+| E | 55 после 54 + release command | PRODUCTION | stop без release intent |
+| F | 56 после 55 | PRODUCTION | rollback на previous known-good |
+
+Cycles: `0`. Shared schema/migrations идут последовательно. Research, content
+inventory и infrastructure discovery могут идти параллельно в отдельных
+read-only потоках; writing worker остаётся один.
+
+# EPIC 44 — MIGRATION BASELINE REPAIR / PR 74
+
+**Outcome:** historical Payload migration chain имеет один доказанно безопасный
+путь для clean install и upgrade без переписывания уже применённых migrations.
+
+**Entry:** v2 APPROVED; PR !74 exact head известен; production DDL запрещён.
+**Dependencies:** none. **Wave:** A. **Risk:** RISKY.
+**Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 44.1 — Target migration history inventory
+
+- read-only получить `payload_migrations` для каждого известного managed,
+  preview и staging контура;
+- если таблица отсутствует, записать `unmigrated`, не симулировать history;
+- не выводить credentials или row data.
+
+## TASK 44.2 — Historical-file decision
+
+- если изменённые PR !74 historical files нигде не применялись — разрешить
+  repair с exact evidence;
+- если хотя бы один старый checksum применён — historical files не менять,
+  заменить решение forward-only migration.
+
+## TASK 44.3 — Verification and delivery
+
+- clean PostgreSQL 18 install;
+- upgrade fixture всех 26 migrations;
+- regression исторического pages/status collision;
+- `verify:schema`, typecheck, lint и affected migration tests;
+- full diff review + один exact-head SourceCraft `RISKY` gate + merge.
+
+## TASK 44.D — Delivery
+
+Проверить exact PR head, выполнить единственный RISKY gate, merge и записать
+merge SHA; новый push инвалидирует gate.
+
+**Acceptance:** clean/upgrade PASS; target-history decision доказан; PR head не
+изменился после gate; `mg3-discovered-38-migration-chain` имеет replacement/evidence.
+**Recovery:** до merge — revert/fix только в feature branch; после merge —
+отдельный revert/fix PR. Уже применённая migration никогда не auto-down и не
+переписывается; recovery только forward-only либо exact restore plan.
+**Stop:** только неоднозначная/непроверяемая history. Известная применённая старая
+migration автоматически выбирает forward-only repair и не является owner-вопросом.
+
+# EPIC 45 — CANONICAL STATE / TASK MANAGER HYGIENE
+
+**Outcome:** документы, Git и Task Manager рассказывают одну историю exact main;
+legacy-граф не попадает в ready-loop.
+
+**Entry:** EPIC 44 merged. **Wave:** B. **Risk:** STANDARD.
+**Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 45.1 — Docs truth
+
+Обновить `README`, Backlog, `DELIVERY_STATE`, `OWNER_QUEUE`, `PROJECT`,
+Architecture и Release Checklist: убрать stale `842b0cce`/EPIC 43, противоречия
+`N/A` для реализованных Payload/auth/jobs/PostgreSQL и записать exact main.
+
+## TASK 45.2 — Task Manager carry-forward
+
+- составить mapping всех 32 legacy open records и v1 EPIC 44/discovered task;
+- import v2 использует новый Plan ID/prefix `more-i-gory-production-readiness-2026-09` / `mg4`; v1 graph и metadata не переписываются;
+- carry-forward records закрывать только `bd supersede <old> --with=<mg4-id>`;
+  дубли закрывать `bd close --reason="ALREADY_COVERED: <evidence>; replacement: <id>"`;
+- `mg3-discovered-38-migration-chain` → TASK 44.2; historical
+  `mg3-epic-44` остаётся blocked до появления отдельного release graph 55–56;
+- закрытые 392 записи не изменять и не удалять;
+- generic ready и scoped helper не должны выдавать legacy implementation.
+
+## TASK 45.3 — Worktree hygiene
+
+После доказанного merge/ancestry удалить только clean completed worktrees
+EPIC 37–42; PR !74 worktree убрать после merge. Пользовательский
+`_root_utf8.txt` не удалять без отдельной идентификации.
+
+## TASK 45.D — Delivery
+
+Docs diff review, STANDARD gate, merge, затем scoped/global Task Manager smoke.
+
+**Acceptance:** docs exact; reconcile CLEAN; lint/orphans PASS; ready queue без
+legacy work; active/dirty worktrees перечислены.
+**Recovery:** перед supersede/close сохранить exact mapping/status snapshot;
+ошибочную запись reopen/reverse только по mapping evidence. Branch удаляется
+только после merge ancestry proof; clean worktree восстанавливается через
+`git worktree add` из сохранённой branch/SHA. Bulk delete/force cleanup запрещены.
+**Stop:** отсутствует точный replacement ID или найден unknown dirty state.
+
+# EPIC 46 — INFRASTRUCTURE CONTROL PLANE
+
+**Outcome:** сервер, Secret Master, Timeweb API и изолированные DB-контуры
+доступны через документированный least-privilege маршрут.
+
+**Entry:** v2 APPROVED. **Wave:** A. **Risk:** RISKY.
+**Delivery:** `MERGE_AFTER_GATE`; operational checkpoint входит в evidence, production deploy запрещён.
+
+## TASK 46.1 — Redacted access matrix
+
+Подтвердить `moreigory`, deploy+sudo, server identity, Timeweb server/DB resource,
+Secret Master names, API permissions и отсутствие необходимости root SSH.
+
+## TASK 46.2 — Staging/restore resource
+
+- не пытаться `CREATE DATABASE` под `gen_user`;
+- read-only получить exact quote/currency/billing period минимального отдельного
+  PostgreSQL 18 cluster; разрешённый cap после approval v2 — 600 RUB/month
+  including tax;
+- подготовить exact API request для изолированного long-lived staging cluster,
+  не меняя production-target cluster `4210557`; фактическое создание cluster,
+  `moreigory_staging`, disposable `moreigory_restore_dst` и least-privilege
+  identities выполняет только TASK 46.O из merged SHA;
+- если quote выше cap, currency/period не доказаны или API mutation запрещена —
+  оформить один external blocker без попытки upgrade production-target cluster;
+- production PII не копировать.
+
+## TASK 46.3 — Secret routing
+
+Определить отдельные staging credentials и names для `PAYLOAD_SECRET`, public
+server URL, revalidation и S3. Значения никогда не писать в git/log/chat.
+
+## TASK 46.P — Runbook/code delivery
+
+Зафиксировать runbook/preflight в PR, выполнить RISKY gate и merge.
+
+## TASK 46.O — Operational execution
+
+Из exact merged SHA выполнить API provisioning и записать redacted ledger evidence.
+
+## TASK 46.D — Evidence closeout
+
+Проверить consumer smoke, resource identity и ledger; docs-only PR только при
+фактическом изменении canonical docs.
+
+**Acceptance:** SSH/API/DB smoke PASS; staging/restore identity существует;
+runtime и staging secrets разделены; cost/resource recorded.
+**Recovery:** production-target cluster `4210557` никогда не изменять. При
+partial/wrong provisioning удалить только новый пустой resource по exact ID
+после проверки отсутствия данных/consumers; если безопасное удаление не доказано
+— retain+label incident и выполнить forward-fix. Удалить только созданные этой
+task Secret Master entries либо заменить их forward-fix; чужие secrets не трогать.
+**Stop:** API не имеет нужной mutation permission после safe retries или target
+resource identity неоднозначна.
+
+# EPIC 47 — CREDENTIAL / ENV HARDENING
+
+**Outcome:** утёкшая DB identity отозвана после безопасного переключения, а
+runtime env полон, LF-normalized и проверен потребителем.
+
+**Entry:** EPIC 46. **Wave:** B. **Risk:** RISKY.
+**Delivery:** `MERGE_AFTER_GATE`; operational checkpoint входит в evidence.
+
+## TASK 47.1 — Replacement identity and grants
+
+Создать replacement DB identity, выдать только необходимые права, проверить
+connect/schema permissions; старую identity пока не отзывать.
+
+## TASK 47.2 — Zero-downtime rotation
+
+Обновить Secret Master и `/etc/moreigory/app.env`, нормализовать LF, выполнить
+controlled restart + health/DB smoke, затем отозвать старый credential.
+
+## TASK 47.3 — Runtime env completeness
+
+Проверить `PAYLOAD_SECRET`, canonical server URL, revalidation, S3 и contour
+flags; staging/prod values не смешивать.
+
+## TASK 47.P — Runbook/code delivery
+
+Зафиксировать rotation runbook/tests, RISKY gate и merge до mutation.
+
+## TASK 47.O — Operational execution
+
+Из exact merged SHA выполнить dual-credential rotation и consumer smoke.
+
+## TASK 47.D — Evidence closeout
+
+Записать redacted ledger, доказать revoke старой identity; docs-only PR по факту.
+
+**Acceptance:** новый credential работает; старый отклоняется; секреты не
+раскрыты; service health PASS; env contract complete.
+**Rollback:** до revoke вернуть previous env; после revoke — forward-fix новой identity.
+**Stop:** replacement identity/grants неоднозначны, consumer smoke FAIL,
+Secret Master/env target не exact или revoke может оставить runtime без доступа.
+
+# EPIC 48 — DB REHEARSAL / BACKUP / RESTORE
+
+**Outcome:** полный migration и recovery contract доказан на изолированном
+PostgreSQL 18 без записи в production data.
+
+**Entry:** EPIC 44 + 47. **Wave:** C. **Risk:** RISKY.
+**Delivery:** `MERGE_AFTER_GATE`; operational evidence обязательно.
+
+## TASK 48.1 — Clean and upgrade rehearsal
+
+Применить полную chain на clean staging и upgrade fixture; записать exact
+migration ledger, owner bootstrap и schema state.
+
+## TASK 48.2 — Enum and data preflight
+
+Если `properties` отсутствует/пуст — зафиксировать `not applicable before seed`.
+Если данные есть — read-only drift query; DDL только при zero unsupported rows.
+
+## TASK 48.3 — Restore proof
+
+Полный logical dump staging с migration ledger и минимальными seeded application
+records → disposable restore DB → boot application → read seeded records;
+teardown disposable target после evidence. Никогда не restore поверх production DB.
+
+## TASK 48.4 — DB-backed routes
+
+Проверить Admin/auth, public list/detail, unpublished boundary и migrations-only
+adapter через staging runtime.
+
+## TASK 48.P — Runbook/code delivery
+
+Зафиксировать rehearsal code/runbook, выполнить RISKY gate и merge до DB operation.
+
+## TASK 48.O — Operational execution
+
+Из exact merged SHA выполнить clean/upgrade/full restore/DB-backed proofs.
+
+## TASK 48.D — Evidence closeout
+
+Проверить migration ledger и recovery evidence; docs-only PR по факту.
+
+**Acceptance:** clean/upgrade/restore/app-read PASS; rollback/forward-fix описан;
+никакой production row mutation.
+**Stop:** destructive anomaly, unsupported live enum value или source history mismatch.
+
+# EPIC 49 — PREVIEW RUNTIME
+
+**Outcome:** `more-previu.tw1.ru` является полноценным noindex staging runtime,
+а не health-only bootstrap с публичным `503`.
+
+**Entry:** EPIC 48 PASS. **Wave:** C. **Risk:** RISKY.
+**Delivery:** `MERGE_AFTER_GATE`; staging rehearsal обязательно, production запрещён.
+
+## TASK 49.1 — Immutable staging artifact
+
+Собрать artifact вне runtime host из exact main; checksum, release manifest,
+atomic install и previous release сохранить.
+
+## TASK 49.2 — Runtime surface
+
+`nginx -t`, TLS, `/api/health`, `/`, Admin, HTML, robots, sitemap, static/media,
+S3 upload/head, logs; `JOBS_AUTORUN=false`, noindex/nofollow.
+
+## TASK 49.3 — Rollback and monitoring
+
+Выполнить atomic rollback proof; зафиксировать systemd/Nginx health, log path и
+минимальный server-side monitoring без обязательного внешнего SaaS.
+
+## TASK 49.P — Runbook/code delivery
+
+Зафиксировать artifact/install/runbook, выполнить RISKY gate и merge до deploy.
+
+## TASK 49.O — Operational execution
+
+Из exact merged SHA выполнить staging deploy, smoke и rollback proof.
+
+## TASK 49.D — Evidence closeout
+
+Сохранить staging identity/runtime ledger; docs-only PR по факту.
+
+**Acceptance:** публичные preview routes не 503; health/runtime identity PASS;
+noindex доказан; rollback PASS; S3 persistence PASS.
+
+**Rollback:** atomic switch на previous release; schema не down-ить.
+**Stop:** TLS/Nginx ambiguity, artifact SHA mismatch, DB migration not PASS,
+повторяемый 5xx или service restart.
+
+# EPIC 50 — LEADS PRODUCTION READINESS
+
+**Outcome:** canonical `POST /api/public/leads` безопасно сохраняет заявки в
+Payload, оператор видит их в Admin, а production abuse/PII contract доказан.
+
+**Entry:** v2 APPROVED. **Wave:** A. **Risk:** RISKY.
+**Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 50.1 — Canonical intake decision
+
+Зафиксировать локальный Payload endpoint как production intake. Внешний AMS
+Leads API и notification channel выключены до отдельной интеграции.
+
+## TASK 50.2 — Trusted client and rate limit
+
+Не доверять произвольным forwarded headers; определить trusted proxy boundary.
+Default: Nginx `limit_req` на canonical leads route + application limiter;
+effective policy `5 requests/minute/client`, burst `5`, excess → HTTP 429.
+Client IP принимается только от локального trusted Nginx proxy; spoofed external
+forwarded headers игнорируются. Добавить детерминированный denied-path proof.
+
+## TASK 50.3 — Anti-bot and privacy
+
+Default provider: Cloudflare Turnstile. Site/secret keys живут только в Secret
+Master. Сначала read-only обнаружить existing Cloudflare project/API access;
+при наличии автономно создать widget exact hostnames `moreigori.ru` и
+`more-previu.tw1.ru`; при отсутствии сформировать один consolidated owner action
+до RC. Rotation/rollback: новый widget/secret → consumer smoke → revoke old;
+при fail форма disabled. До появления account/keys публичная форма остаётся disabled и не
+блокирует read-only launch; сохранить honeypot/minimum-fill, выполнить
+PII-log/analytics scan и retention proof.
+
+## TASK 50.4 — E2E
+
+Browser submit → transactional save → Admin visibility → duplicate/retry/error
+behavior. Реальный outbound channel не требуется.
+
+## TASK 50.D — Delivery
+
+Security/data diff review, RISKY gate, merge; enabled/disabled form state записать.
+
+**Acceptance:** форма получает terminal state `ENABLED_PASS` либо
+`DISABLED_NO_CAPTCHA`; для enabled allowed/denied E2E PASS, spoof закрыт, PII не
+попадает в logs/analytics, заявка доступна оператору.
+**Stop:** запрещено включать форму без Turnstile keys; остальная программа продолжается.
+**Rollback:** disable public form, вернуть previous trusted-proxy/Nginx config;
+уже принятые leads сохраняются и не удаляются.
+
+# EPIC 51 — CONTENT FACT FOUNDATION
+
+**Outcome:** все публикуемые business claims имеют единый доказательный пакет;
+неизвестные факты не выдумываются.
+
+**Entry:** v2 APPROVED. **Wave:** A. **Risk:** STANDARD.
+**Delivery:** `MERGE_AFTER_GATE`.
+
+## TASK 51.1 — Autonomous evidence inventory
+
+Собрать существующие sources, claims, routes, projects, team/methodology gaps и
+легальные placeholders; research не становится Source of Truth автоматически.
+
+## TASK 51.2 — CONTENT_FACT_PACKET
+
+Один консолидированный owner packet вместо серии вопросов: юридические/public
+contacts, команда, модель вознаграждения/disclosure, методика/stop factors,
+география, реальные проекты/кейсы и допустимые claims.
+
+## TASK 51.3 — Fail-closed mapping
+
+До получения факта соответствующая entity остаётся draft/unpublished/noindex;
+остальная программа продолжается.
+
+## TASK 51.D — Delivery
+
+Claim/fact ledger review, STANDARD gate и merge без публикации unknown entities.
+
+**Acceptance:** claim ledger содержит source/status/owner; один пакет вопросов;
+каждая entity имеет terminal state `FACT_PASS`, `UNPUBLISHED_NO_FACT` либо
+`DEFERRED_OUT_OF_RELEASE`; нулевые unsupported published claims.
+**Late owner gate:** только факты, которые невозможно доказать из project evidence.
+**Rollback:** entity возвращается в draft/unpublished; source ledger сохраняется.
+**Stop:** конфликт источников останавливает только соответствующую row; unknown
+fact переводит row в `UNPUBLISHED_NO_FACT`, независимая работа продолжается.
+
+# EPIC 52 — CONTENT / TRUST / EDITORIAL COMPLETION
+
+**Outcome:** коммерческие, региональные и аналитические страницы содержательно
+уникальны, доказательны и готовы к page-level index gate.
+
+**Entry:** EPIC 51 для конкретного факта; независимый sourced content может идти
+раньше. **Wave:** B. **Risk:** STANDARD. **Delivery:** `MERGE_AFTER_GATE`.
+
+Scope: launch cohort из доказанных регионов/страниц, методика, команда/trust/legal,
+статьи, реальные паспорта и media,
+sources/`verifiedAt`, legacy URL inventory/direct redirects, editorial/legal QA.
+
+Minimum non-empty launch cohort, non-waivable:
+
+```text
+/
+/investicionnaya-nedvizhimost/
+/metodika/
+/podbor/
+/o-kompanii/
+/kontakty/
+/privacy/
+/consent/
+```
+
+Региональные/объектные/аналитические rows входят только при `FACT_PASS`.
+Если любая страница minimum cohort не достигает PASS, EPIC 52/RC не закрывается.
+
+## TASK 52.1 — Content matrix and launch cohort
+
+Создать row для каждого route/entity, собрать source/fact status и определить
+terminal launch state без выдумывания данных.
+
+## TASK 52.2 — Sourced content implementation
+
+Завершить только доказанные регионы, trust/legal, methodology, articles,
+passports и media; неизвестные entity оставить unpublished.
+
+## TASK 52.3 — Editorial / legal / redirect QA
+
+Проверить уникальность, claims, disclosures, dates, legacy redirects и visible sources.
+
+## TASK 52.D — Delivery
+
+Content diff review, STANDARD gate, merge; приложить terminal matrix.
+
+**Acceptance:** каждая content row terminal: `PASS`, `UNPUBLISHED_NO_FACT` или
+`DEFERRED_OUT_OF_RELEASE`; release cohort состоит только из `PASS`; нет template
+duplicates и фиктивных проектов/доходности; sources видимы; dates factual.
+**Stop:** неполученный факт блокирует только зависимую entity.
+
+**Rollback:** снять entity с publication/index; не удалять factual source history.
+
+# EPIC 53 — INDEX / STRUCTURED DATA / PERFORMANCE GATE
+
+**Outcome:** индексируются только доказанные content-complete pages; видимая
+страница, metadata, sitemap и structured data согласованы.
+
+**Entry:** EPIC 49 + 52. **Wave:** C. **Risk:** STANDARD.
+**Delivery:** `MERGE_AFTER_GATE`.
+
+Scope: page matrix только для `PASS` launch cohort; index/sitemap activation;
+canonical/robots; structured data;
+390/768/1024/1440/1920 browser/a11y; Project Passport first screen ≤1.5 MB;
+TBT ≤200 ms; post-launch INP target measured separately.
+
+## TASK 53.1 — Index and sitemap activation
+
+Включить index/sitemap только для terminal `PASS` rows; остальные остаются noindex.
+
+## TASK 53.2 — Structured data and browser matrix
+
+Сверить visible content/schema и выполнить responsive/accessibility proof.
+
+## TASK 53.3 — Content-complete performance
+
+Измерить asset/page budgets на итоговом launch cohort; failure возвращает row
+в noindex либо требует scoped optimization.
+
+## TASK 53.D — Delivery
+
+SEO/UI diff review, STANDARD gate, merge; приложить page-level evidence matrix.
+
+**Acceptance:** каждая indexed page имеет PASS row; failed rows остаются
+noindex; весь minimum launch cohort PASS; schema соответствует visible content;
+budgets доказаны на content-complete build.
+
+**Rollback:** вернуть конкретную failed row в noindex/sitemap exclusion.
+**Stop:** metadata/schema mismatch, budget failure или browser/a11y regression.
+
+# EPIC 54 — RELEASE CANDIDATE
+
+**Outcome:** один exact main SHA и immutable artifact готовы к production без
+повторного изменения кода между staging и rollout.
+
+**Entry:** EPIC 45, 48, 49, 50, 53. **Wave:** D. **Risk:** RISKY.
+**Delivery:** `MERGE_AFTER_GATE`; production запрещён.
+
+Scope: final diff review; `pnpm verify`; schema; production-like browser,
+Nginx, leads, restore evidence; exact-head SourceCraft RISKY gate; artifact,
+checksum/manifest и rollback candidate; docs exact-main closeout.
+
+## TASK 54.1 — Evidence aggregation
+
+Проверить non-waivable prerequisites и exact merged SHAs без повторения valid suites.
+
+## TASK 54.2 — Final verification and artifact
+
+Собрать один immutable artifact exact EPIC 54 candidate, установить тот же
+digest на staging, повторить только invalidated production-like proofs после
+EPIC 50–53, затем freeze digest для production promotion без rebuild.
+
+## TASK 54.3 — Release docs closeout
+
+Обновить delivery state/release checklist на exact main и candidate digest.
+
+## TASK 54.D — Delivery
+
+Final review, один RISKY exact-head gate, merge; затем exact-main candidate proof.
+
+**Acceptance:** gate PASS exact SHA; staging digest и candidate digest один.
+Non-waivable PASS: minimum launch cohort, migration chain, credential rotation,
+full restore, preview runtime, production env, exact artifact и enabled leads.
+Excludable only:
+feed/outbound notification/maps disabled и entities terminal
+`UNPUBLISHED_NO_FACT`/`DEFERRED_OUT_OF_RELEASE`.
+
+**Rollback:** candidate не продвигается; исправление только новым PR/SHA.
+**Stop:** digest/SHA drift, missing non-waivable evidence или gate не PASS.
+
+# RELEASE 55 — PRODUCTION ROLLOUT
+
+**Outcome:** exact EPIC 54 artifact работает на production contour с применённой
+migration chain и готовым rollback.
+
+**Entry:** EPIC 54 + явная команда `Выпускаем production`. **Wave:** E.
+**Risk:** PRODUCTION/RISKY. **Delivery:** release runbook, не feature PR.
+
+Scope: preflight, recovery point, backward-compatible expand/contract migrations
+либо exact per-migration recovery plan, inactive install,
+Host-header smoke, atomic switch, health, controlled jobs-owner decision;
+`JOBS_AUTORUN=false`, feed/outbound channel disabled по V2-OD-04/V2-OD-08.
+
+## TASK 55.1 — Release preflight
+
+Подтвердить exact main/gate/artifact, recovery point, migration plan и inactive target.
+
+## TASK 55.2 — Migration and inactive rollout
+
+Применить reviewed migration plan, установить тот же digest, выполнить local
+Host-header/health smoke до public switch.
+
+## TASK 55.3 — Atomic switch and observation
+
+Переключить symlink/service; golden routes обязаны вернуть ожидаемые 2xx/3xx,
+любой 5xx или health fail запускает допустимый rollback. Наблюдение 15 минут;
+rollback trigger: любой повторяемый 5xx golden route, service restart либо DB error.
+
+**Acceptance:** release identity/SHA/digest доказаны; health + changed scenarios
+PASS; previous release сохранён; error spike отсутствует.
+**Automatic rollback:** только artifact/symlink при доказанной schema
+compatibility. Production migration никогда автоматически не down-ится; DDL
+anomaly = stop + restore/forward-fix по exact recovery plan.
+
+**Stop:** backup/recovery point отсутствует, migration anomaly, health fail,
+повторяемый 5xx, DB error или artifact identity mismatch.
+
+# RELEASE 56 — DNS / TLS CUTOVER / LIVE PROOF
+
+**Outcome:** `moreigori.ru` обслуживает проверенный release, а полный live
+contract и rollback window зафиксированы.
+
+**Entry:** EPIC 55 PASS. **Wave:** F. **Risk:** PRODUCTION/RISKY.
+
+Scope: DNS, TLS, Nginx canonical host; 200/404/redirect/sitemap/robots/form;
+mobile/visual/log smoke; canonical/index validation; rollback observation
+window; final `DELIVERY_STATE` и Release Checklist closeout.
+
+## TASK 56.1 — DNS/TLS preflight and cutover
+
+Снизить TTL заранее, проверить certificate readiness и переключить canonical host.
+
+## TASK 56.2 — Live proof
+
+Проверить golden routes, form state, mobile/visual, logs, canonical/robots/sitemap.
+
+## TASK 56.3 — Observation and closeout
+
+Наблюдать 30 минут. Rollback trigger: TLS/canonical failure, повторяемый 5xx,
+форма теряет данные, DB error или service restart. При trigger вернуть DNS/Nginx
+и previous release по runbook; затем обновить final state/evidence.
+
+**Acceptance:** domain/TLS/canonical PASS; form persists; no PII/error spike;
+rollback remains executable; Task Manager release nodes have evidence.
+
+**Rollback:** DNS/Nginx возвращаются на previous known-good target; previous
+artifact сохраняется до окончания 30-minute window.
+**Stop:** TLS/canonical failure, DNS target ambiguity, repeated 5xx, DB error,
+data-loss symptom или inability to execute rollback.
+
+## V2 preliminary Architect audit
+
+Это assembly finding register, не финальный readiness verdict.
+
+| Pass | Результат |
+|---|---|
+| Logic / completeness | v1 EPIC 44 placeholder недостаточен; EPIC 44–56 покрывают весь обнаруженный остаток |
+| Architecture / data / security | Критичные области изолированы: historical migrations, DB control plane, credential rotation, trusted leads boundary, content facts |
+| Dependencies / autonomy | Cycles 0; четыре независимых старта Wave A; локальный content/DB blocker не останавливает другие ветки |
+| Executability / evidence | Для каждого epic заданы observable outcome, acceptance, risk, delivery и stop; production вынесен в 55–56 |
+
+Current Night Run Readiness: `NOT_READY` до законченного assembly round,
+ValidateDraft, явного перехода к финальному audit и approval exact v2.
+
+Expected after approval: `READY_WITH_LIMITS`. Неизбежные поздние gates:
+
+1. единый `CONTENT_FACT_PACKET` только для недоказуемых business facts;
+2. CAPTCHA account/secret, если безопасный self-contained вариант отсутствует;
+3. external control-plane failure после safe retries;
+4. destructive live-data anomaly;
+5. одна явная production-команда перед EPIC 55.
+
+## V2 Definition of Done
+
+```text
+[ ] new Plan ID mg4 imported/reconciled CLEAN; v1 records immutable
+[ ] legacy open records superseded/closed with replacement evidence
+[ ] EPIC 44 migration baseline repair merged
+[ ] EPIC 45 canonical docs/Task Manager/worktree hygiene complete
+[ ] EPIC 46 isolated staging/restore control plane available within spend cap
+[ ] EPIC 47 credentials rotated and runtime env complete
+[ ] EPIC 48 clean/upgrade/full restore/DB-backed proofs PASS
+[ ] EPIC 49 preview public runtime PASS, noindex, rollback proven
+[ ] EPIC 50 leads terminal state recorded; enabled form passes security/E2E
+[ ] EPIC 51–52 all fact/content rows terminal
+[ ] EPIC 53 only PASS cohort indexed; schema/browser/performance PASS
+[ ] EPIC 54 exact-main release candidate, one RISKY gate and immutable digest PASS
+[ ] EPIC 55–56 excluded from implementation graph until release command
+[ ] after release command, release graph evidence proves rollout/cutover/rollback window
+```
+
+**Конец документа — План №3 v2 REVIEW.**

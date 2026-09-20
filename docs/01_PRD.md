@@ -96,7 +96,7 @@ Main Flow:
 1. Пользователь открывает продуктовую страницу `/podbor/`.
 2. Понимает, что получит и как проходит работа.
 3. Заполняет квалифицирующую форму.
-4. Заявка уходит через AMS Leads API.
+4. Заявка проходит server-side проверку и сохраняется локальным Payload intake.
 Expected Result: валидная квалифицированная заявка.
 
 ## 5. Functional Requirements
@@ -162,7 +162,9 @@ Acceptance outcome: до формы пользователь понимает р
 ### REQ-012 — Форма
 Priority: Must
 Requirement: форма должна квалифицировать капитал, цель, горизонт, денежный поток, личное использование, риск и регион.
-Acceptance outcome: валидная заявка отправляется через AMS Leads API; браузер не содержит CRM/API secrets.
+Acceptance outcome: валидная заявка сохраняется в Payload вместе с consent и
+delivery state; браузер не содержит CMS/CRM/API secrets. Внешний канал доставки
+не требуется, пока он явно не включён отдельным решением.
 
 ### REQ-013 — Внутренняя перелинковка
 Priority: Must
@@ -240,7 +242,7 @@ Acceptance outcome: PAGE-001..023 описаны в `02_PRODUCT_STRUCTURE.md`; �
 ## 7. Integrations
 
 Целевой первый релиз:
-- AMS Leads API;
+- локальный Payload intake и просмотр заявок в Payload Admin;
 - аналитика сайта;
 - Яндекс Карты в отложенном iframe только для контактов;
 - Payload Admin и PostgreSQL как единый CMS/data-контур.
@@ -314,7 +316,7 @@ Acceptance outcome: PAGE-001..023 описаны в `02_PRODUCT_STRUCTURE.md`; �
 | RISK-007 | Скрытый брокерский конфликт | утвердить модель вознаграждения и политику раскрытия | Open |
 | RISK-008 | Ошибки при переходе с файлового контента в CMS | небольшой курируемый каталог; migrations-only schema; поэтапное переключение через typed gateways | Mitigating |
 | RISK-009 | Потеря legacy SEO | inventory, backlinks/traffic check, прямые 301 и post-launch monitoring | Open |
-| RISK-012 | Ошибка обработки формы или ПДн | отдельный Leads API, consent version, rate limit, CAPTCHA и отсутствие ПДн в аналитике | Open |
+| RISK-012 | Ошибка обработки формы или ПДн | server-side Payload intake, consent version, transactional write, rate limit, CAPTCHA и отсутствие ПДн в аналитике | Open |
 
 Архитектурные риски клиентского JavaScript и совместимости зависимостей находятся
 в `03_ARCHITECTURE.md`, а риск конкретной реализации — в профильной Task.

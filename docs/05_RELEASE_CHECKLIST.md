@@ -1,8 +1,8 @@
 # Release Checklist — «Море и Горы»
 
 **Статус:** Active — TECHNICAL PREVIEW RELEASE
-**Версия:** 3.0 — Plan №3 technical closeout
-**Дата:** 2026-09-19
+**Версия:** 3.1 — Plan №3 v2 readiness
+**Дата:** 2026-09-20
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
 пройденным. Production выполняется только по отдельной команде владельца.
@@ -14,7 +14,8 @@
 - [x] Node runtime и trailing slash включены; static export удалён;
 - [x] Payload 3.89 подключён как единственный CMS/auth/schema owner;
 - [x] PostgreSQL adapter использует `push:false` и committed migrations;
-- [x] local PostgreSQL 18 clean migration + owner bootstrap доказаны;
+- [x] PostgreSQL 18 clean migration chain 26/26, owner bootstrap и upgrade
+  fixture доказаны в EPIC 44;
 - [x] anonymous users REST закрыт, GraphQL отключён;
 - [x] Server First boundary проверяется автоматически;
 - [x] metadata берётся из единого registry;
@@ -37,7 +38,7 @@
 - [x] browser console without hydration/runtime errors;
 - [x] mobile layout smoke;
 - [x] keyboard/touch/form smoke на доступных representative routes; DB-backed
-  detail routes отложены в EPIC 44 из-за historical migration-chain blocker;
+  detail routes ожидают project-owned staging DB и preview EPIC 49;
 - [x] Lighthouse accessibility audit on `/`;
 - [x] SourceCraft RISKY exact-head gate PR-19.
 - [x] SourceCraft RISKY exact-head gate PR-20 (run 21).
@@ -61,9 +62,10 @@
 - [x] юридический оператор и публичные реквизиты подтверждены владельцем;
 - [x] privacy/consent тексты утверждены владельцем;
 - [x] consent version утверждена: `pdn-consent-2026-09-17`;
-- [ ] production Leads API известен;
+- [ ] production activation и env локального Payload intake известны;
 - [ ] server validation, rate limit и CAPTCHA доказаны на backend;
-- [ ] форма прошла E2E delivery test;
+- [ ] форма прошла E2E intake test с записью в Payload; внешний delivery не
+  требуется, пока optional channel выключен;
 - [ ] ПДн отсутствуют в аналитике;
 - [ ] адрес и вариант карты утверждены.
 
@@ -106,7 +108,7 @@ SEO 69 объясняется единственным ожидаемым fail: 
 
 Production сейчас блокируют не фундамент Next.js, а:
 
-1. `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md` (staging/restore DB, historical
-   migration chain, enum drift, ротация credentials, domain cutover);
+1. `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md` (staging/restore DB, enum drift,
+   Turnstile, content facts, ротация credentials и domain cutover);
 2. неутверждённый контент и реальные project passports;
-3. отдельная команда владельца на EPIC 44.
+3. отдельная команда владельца на release EPIC 55–56.
