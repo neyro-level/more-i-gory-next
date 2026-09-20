@@ -2188,7 +2188,7 @@
       ],
       "depends_on": [
         "TASK-50-3A",
-        "EPIC-49"
+        "TASK-49-D"
       ],
       "required_context": [
         "docs/MORE_I_GORY_PLAN_№ 3.md",
@@ -3018,6 +3018,7 @@
       ],
       "depends_on": [
         "EPIC-45",
+        "EPIC-48",
         "EPIC-49",
         "EPIC-50",
         "EPIC-53"
