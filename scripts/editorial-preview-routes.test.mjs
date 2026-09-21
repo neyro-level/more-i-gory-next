@@ -24,6 +24,8 @@ test("all planned region routes and seed articles are present in preview navigat
 
   assert.equal(regions.length, 10);
   assert.equal(params.length, 9);
+  assert.equal(hrefs.length, 29);
+  assert.equal(new Set(hrefs).size, 29);
   for (const region of regions) assert.ok(hrefs.includes(region.path), `missing preview navigation: ${region.path}`);
   for (const href of [
     "/analitika/sochi-ili-krym/",

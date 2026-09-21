@@ -14,6 +14,7 @@ TARBALL="$2"
 CHECKSUM_FILE="${3:-$TARBALL.sha256}"
 ROOT="${MOREIGORY_ROOT:-/opt/moreigory}"
 DEST="$ROOT/releases/$SHA"
+CACHE_ROOT="$ROOT/shared/next-cache"
 INCOMING="$ROOT/releases/.incoming-$SHA-$$"
 CURRENT_CANDIDATE="$ROOT/.current-$SHA-$$"
 PREVIOUS_CANDIDATE="$ROOT/.previous-$SHA-$$"
@@ -78,7 +79,26 @@ while IFS= read -r member; do
   fi
 done < <(tar -tzf "$TARBALL")
 
-mkdir -p "$ROOT/releases" "$INCOMING"
+mkdir -p "$ROOT/releases" "$CACHE_ROOT" "$INCOMING"
+if [[ "$ROOT" == "/opt/moreigory" ]]; then
+  RUNTIME_USER="${MOREIGORY_RUNTIME_USER:-deploy}"
+  RUNTIME_GROUP="${MOREIGORY_RUNTIME_GROUP:-deploy}"
+  if [[ "$(id -u)" == "0" ]]; then
+    chown "$RUNTIME_USER:$RUNTIME_GROUP" "$CACHE_ROOT"
+    CACHE_WRITABLE="$(runuser -u "$RUNTIME_USER" -- test -w "$CACHE_ROOT" && echo yes || echo no)"
+  elif [[ "$(id -un)" == "$RUNTIME_USER" && -w "$CACHE_ROOT" ]]; then
+    CACHE_WRITABLE=yes
+  else
+    CACHE_WRITABLE=no
+  fi
+  if [[ "$CACHE_WRITABLE" != "yes" ]]; then
+    echo "runtime cache is not writable by $RUNTIME_USER: $CACHE_ROOT" >&2
+    exit 1
+  fi
+elif [[ ! -w "$CACHE_ROOT" ]]; then
+  echo "runtime cache is not writable: $CACHE_ROOT" >&2
+  exit 1
+fi
 tar --no-same-owner --no-same-permissions -xzf "$TARBALL" -C "$INCOMING"
 
 node - "$INCOMING/RELEASE.json" "$SHA" <<'NODE'
@@ -98,6 +118,8 @@ NODE
 test -f "$INCOMING/server.js"
 test -d "$INCOMING/.next/static"
 test -d "$INCOMING/public"
+rm -rf -- "$INCOMING/.next/cache"
+ln -s "$CACHE_ROOT" "$INCOMING/.next/cache"
 mv "$INCOMING" "$DEST"
 
 if [[ -L "$ROOT/current" ]]; then

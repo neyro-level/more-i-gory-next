@@ -112,6 +112,28 @@ test("sitemap never includes filter states, unit routes or layout routes", () =>
   );
 });
 
+test("sitemap excludes technical preview and database proof fixtures", () => {
+  const fixtures = [
+    "/obekty/db-proof-published/",
+    "/obekty/db-proof-draft/",
+    "/obekty/preview-project/",
+    "/novostroyki/preview-complex/",
+    "/zastroyshchik/preview-developer/",
+  ];
+
+  for (const fixture of fixtures) {
+    assert.equal(isAllowedSitemapCanonical(fixture), false, `${fixture} must stay outside sitemap`);
+  }
+
+  assert.deepEqual(
+    rejectDisallowedSitemapEntries([
+      { canonical: "/obekty/verified-passport/", priority: "P1" },
+      ...fixtures.map((canonical) => ({ canonical, priority: "P1" })),
+    ]),
+    [{ canonical: "/obekty/verified-passport/", priority: "P1" }],
+  );
+});
+
 test("published property, complex and developer appear in sitemap after CMS revalidate without rebuild", async () => {
   const { newbuildComplexSitemapEntries } = await import("../src/seo/newbuild-indexing.ts");
   const { createCmsMutationInvalidationHook } = await import("../src/core/cache/collection-invalidation.ts");

@@ -36,7 +36,12 @@ Layout:
 ```text
 /opt/moreigory/releases/<sha>/
 /opt/moreigory/current → /opt/moreigory/releases/<sha>
+/opt/moreigory/shared/next-cache/  # writable by the runtime user
 ```
+
+Each immutable release contains `.next/cache` as a symlink to the shared
+runtime-owned cache directory. The installer creates and validates this link;
+do not make a whole release writable to repair cache permissions.
 
 Artifact contents:
 

@@ -10,6 +10,7 @@ const host = "127.0.0.1";
 const port = Number.parseInt(process.env.VERIFY_RUNTIME_PORT ?? "4311", 10);
 const baseUrl = `http://${host}:${port}`;
 const siteUrl = new URL(process.env.NEXT_PUBLIC_SERVER_URL ?? "http://127.0.0.1:4311").origin;
+const stagingContour = process.env.AMS_RUNTIME_CONTOUR === "staging";
 const initialRouteJsBudgetGzipKb = 210;
 const largestChunkBudgetGzipKb = 300;
 
@@ -146,11 +147,22 @@ try {
   await waitForServer(server, serverLogs);
 
   const robots = await fetchRoute("/robots.txt");
-  assert(robots.body.includes(`${siteUrl}/sitemap.xml`), "robots.txt must reference the canonical sitemap.");
+  if (stagingContour) {
+    assert(/Disallow:\s*\//.test(robots.body), "Staging robots.txt must disallow all crawlers.");
+    assert(!robots.body.includes("Sitemap:"), "Staging robots.txt must not advertise a sitemap.");
+  } else {
+    assert(robots.body.includes(`${siteUrl}/sitemap.xml`), "robots.txt must reference the canonical sitemap.");
+  }
   const sitemap = await fetchRoute("/sitemap.xml");
   assert(sitemap.body.includes("<urlset"), "sitemap.xml must contain a URL set.");
   for (const pathname of unpublishedGenericRegionPaths) {
-    await fetchRoute(pathname, 404);
+    const region = await fetchRoute(pathname, stagingContour ? 200 : 404);
+    if (stagingContour) {
+      assert(
+        /name="robots" content="noindex, follow"/.test(region.body),
+        `Preview-only region must remain noindex: ${pathname}`,
+      );
+    }
     assert(!sitemap.body.includes(`<loc>${new URL(pathname, siteUrl).toString()}</loc>`), `Hidden region leaked into sitemap: ${pathname}`);
   }
 

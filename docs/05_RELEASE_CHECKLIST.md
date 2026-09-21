@@ -98,10 +98,10 @@
 
 - [x] maximum route JavaScript: ≤ 210 KB gzip (`/podbor/`);
 - [x] largest initial script chunk: 70 KB gzip ≤ 300 KB;
-- [ ] Project Passport first screen ≤ 1.5 MB без lazy gallery;
-- [x] local lab LCP: 694 ms ≤ 2.5 s;
+- [x] Project Passport first screen: 365 KB transferred ≤ 1.5 MB без lazy gallery;
+- [x] preview browser LCP: 500 ms maximum across measured representative routes ≤ 2.5 s;
 - [x] local lab CLS: 0.00 ≤ 0.1;
-- [ ] TBT ≤ 200 ms;
+- [x] preview browser TBT: 6 ms maximum across measured representative routes ≤ 200 ms;
 - [ ] после запуска INP ≤ 200 ms p75.
 
 Числа фиксируются по итоговому content-complete runtime build, а не переносятся из

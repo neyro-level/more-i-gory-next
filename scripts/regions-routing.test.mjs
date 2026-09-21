@@ -98,11 +98,12 @@ test("catch-all region route composes path from CMS records and reserved namespa
   assert.doesNotMatch(page, /export function generateStaticParams/);
 });
 
-test("runtime verification expects unpublished generic regions to return 404", () => {
+test("runtime verification exposes unpublished regions only on the noindex staging contour", () => {
   const source = readFileSync("scripts/verify-runtime.mjs", "utf8");
 
   assert.match(source, /unpublishedGenericRegionPaths/);
-  assert.match(source, /fetchRoute\(pathname, 404\)/);
+  assert.match(source, /fetchRoute\(pathname, stagingContour \? 200 : 404\)/);
+  assert.match(source, /Preview-only region must remain noindex/);
   assert.match(source, /Hidden region leaked into sitemap/);
 });
 

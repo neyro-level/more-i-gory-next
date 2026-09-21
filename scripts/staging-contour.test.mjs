@@ -37,8 +37,11 @@ test("preview contour pins host, single DB, S3 prefix, secret names, noindex and
 
 test("staging robots.txt disallows crawlers and does not advertise sitemap", () => {
   const source = read("src/app/robots.ts");
+  const runtimeVerifier = read("scripts/verify-runtime.mjs");
   assert.match(source, /resolveRuntimeContour\(\) === "staging"/);
   assert.match(source, /disallow: "\/"/);
+  assert.match(runtimeVerifier, /Staging robots\.txt must disallow all crawlers/);
+  assert.match(runtimeVerifier, /Staging robots\.txt must not advertise a sitemap/);
 });
 
 test("staging S3 plugin writes under staging/media, not the production media prefix", () => {

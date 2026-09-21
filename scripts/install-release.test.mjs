@@ -6,6 +6,8 @@ import {
   mkdtempSync,
   readFileSync,
   readlinkSync,
+  realpathSync,
+  statSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -21,6 +23,8 @@ test("install-release verifies and installs a tarball into /opt/moreigory/releas
   assert.match(script, /artifact contains an unsafe path/);
   assert.match(script, /release manifest does not match the artifact contract/);
   assert.match(script, /mv -Tf "\$CURRENT_CANDIDATE" "\$ROOT\/current"/);
+  assert.match(script, /CACHE_ROOT="\$ROOT\/shared\/next-cache"/);
+  assert.match(script, /ln -s "\$CACHE_ROOT" "\$INCOMING\/\.next\/cache"/);
   assert.match(script, /Do not compile the app on the runtime host/);
   assert.doesNotMatch(script, /^\s*pnpm /m);
   assert.doesNotMatch(script, /^\s*next build/m);
@@ -63,6 +67,8 @@ test("installer verifies and atomically switches a valid immutable release", {
 
   assert.equal(readlinkSync(join(root, "current")), join(root, "releases", sha));
   assert.equal(JSON.parse(readFileSync(join(root, "current", "RELEASE.json"), "utf8")).sha, sha);
+  assert.equal(realpathSync(join(root, "current", ".next", "cache")), realpathSync(join(root, "shared", "next-cache")));
+  assert.equal(statSync(join(root, "current", ".next", "cache")).isDirectory(), true);
 
   const nextSha = "c".repeat(40);
   const nextArchive = createArtifact(join(fixture, "next"), nextSha);
@@ -75,6 +81,7 @@ test("installer verifies and atomically switches a valid immutable release", {
   });
   assert.equal(readlinkSync(join(root, "current")), join(root, "releases", nextSha));
   assert.equal(readlinkSync(join(root, "previous")), join(root, "releases", sha));
+  assert.equal(realpathSync(join(root, "current", ".next", "cache")), realpathSync(join(root, "shared", "next-cache")));
 });
 
 test("installer fails closed before switching on checksum drift", {
