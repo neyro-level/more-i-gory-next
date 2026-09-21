@@ -20,3 +20,16 @@ test("runtime supervisor is systemd, not container orchestration", () => {
   assert.equal(existsSync(new URL("../compose.yaml", import.meta.url)), false);
   assert.doesNotMatch(unit, /docker/);
 });
+
+test("server-side monitoring uses a local systemd timer without external SaaS", () => {
+  const service = read("ops/systemd/moreigory-healthcheck.service");
+  const timer = read("ops/systemd/moreigory-healthcheck.timer");
+  const readme = read("ops/systemd/README.md");
+  assert.match(service, /http:\/\/127\.0\.0\.1:3000\/api\/health\//);
+  assert.match(service, /--max-time 10/);
+  assert.match(timer, /OnUnitActiveSec=5min/);
+  assert.match(timer, /Persistent=true/);
+  assert.match(readme, /systemctl enable --now moreigory-healthcheck\.timer/);
+  assert.match(readme, /journalctl -u moreigory-healthcheck/);
+  assert.doesNotMatch(`${service}\n${timer}`, /https:\/\//);
+});

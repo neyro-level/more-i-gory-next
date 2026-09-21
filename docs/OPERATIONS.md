@@ -23,7 +23,13 @@ that must resolve dependencies or build on the production host.
 
 Build happens off the runtime host. Pack with
 `node scripts/pack-release.mjs --from <linux-build> --sha <40-char> --out <dir>`,
-then install with `ops/runtime/install-release.sh`.
+verify the emitted `<dir>.tar.gz.sha256`, then install `<dir>.tar.gz` with
+`ops/runtime/install-release.sh`. The packer preserves pnpm relative symlinks
+verbatim and rejects absolute or dangling links before creating the archive.
+The installer independently verifies the SHA-256 sidecar and structured release
+manifest, extracts into an incoming directory, refuses to overwrite an existing
+release SHA, and atomically switches the `current` symlink while preserving the
+former target as `previous`.
 
 Layout:
 
@@ -37,7 +43,8 @@ Artifact contents:
 - `.next/standalone/`;
 - `.next/static/`;
 - `public/`;
-- release metadata with the exact git SHA.
+- release metadata with artifact version, Node major and exact git SHA;
+- a tar.gz archive and SHA-256 sidecar outside the release directory.
 
 Runtime command:
 
@@ -150,6 +157,18 @@ smoke
 
 It does not rebuild the application. Destructive migration requires a separate
 recovery plan and explicit owner decision.
+
+The rollback switch is transactional: a failed restart or loopback health smoke
+restores the original `current` pointer and restarts it. On success, `previous`
+becomes the former current release, so the operation remains reversible without
+database down/restore.
+
+Minimal server-side monitoring uses `moreigory-healthcheck.service` and
+`moreigory-healthcheck.timer`: loopback health runs every five minutes and its
+result is retained in the systemd journal. Runtime logs are read with
+`journalctl -u moreigory`; health timer failures with
+`journalctl -u moreigory-healthcheck`; Nginx logs remain
+`/var/log/nginx/access.log` and `/var/log/nginx/error.log`.
 
 ## Migrations
 

@@ -1,7 +1,10 @@
 #!/usr/bin/env node
-import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { packStandaloneRelease } from "./lib/pack-release.mjs";
+import {
+  assertPackedRelease,
+  createReleaseArchive,
+  packStandaloneRelease,
+} from "./lib/pack-release.mjs";
 
 const args = new Map();
 for (let i = 2; i < process.argv.length; i += 1) {
@@ -20,6 +23,10 @@ if (!sha) {
   process.exit(1);
 }
 
-mkdirSync(destRoot, { recursive: true });
 packStandaloneRelease({ sourceRoot, destRoot, sha });
-console.log(`packed ${sha} -> ${destRoot}`);
+assertPackedRelease(destRoot, sha);
+const archive = createReleaseArchive({
+  archivePath: `${destRoot}.tar.gz`,
+  destRoot,
+});
+console.log(JSON.stringify({ destRoot, sha: sha.toLowerCase(), ...archive }));
