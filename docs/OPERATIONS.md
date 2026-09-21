@@ -158,7 +158,8 @@ smoke
 It does not rebuild the application. Destructive migration requires a separate
 recovery plan and explicit owner decision.
 
-The rollback switch is transactional: a failed restart or loopback health smoke
+The rollback switch is transactional: after restart it gives the loopback
+health endpoint up to 30 seconds to become ready. A failed readiness smoke
 restores the original `current` pointer and restarts it. On success, `previous`
 becomes the former current release, so the operation remains reversible without
 database down/restore.

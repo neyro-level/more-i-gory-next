@@ -6,6 +6,8 @@ set -euo pipefail
 
 ROOT="/opt/moreigory"
 SMOKE_URL="${MOREIGORY_SMOKE_URL:-http://127.0.0.1:3000/api/health}"
+SMOKE_ATTEMPTS="${MOREIGORY_SMOKE_ATTEMPTS:-30}"
+SMOKE_INTERVAL_SECONDS="${MOREIGORY_SMOKE_INTERVAL_SECONDS:-1}"
 ROOT="${MOREIGORY_ROOT:-$ROOT}"
 CURRENT_CANDIDATE="$ROOT/.rollback-current-$$"
 PREVIOUS_CANDIDATE="$ROOT/.rollback-previous-$$"
@@ -25,6 +27,10 @@ if [[ "$ROOT" != "/opt/moreigory" && "$ROOT" != /tmp/* ]]; then
 fi
 if [[ ! "$SMOKE_URL" =~ ^http://127\.0\.0\.1:[0-9]{2,5}/api/health/?$ ]]; then
   echo "rollback smoke URL must be the loopback health endpoint" >&2
+  exit 1
+fi
+if [[ ! "$SMOKE_ATTEMPTS" =~ ^[1-9][0-9]*$ || ! "$SMOKE_INTERVAL_SECONDS" =~ ^[0-9]+$ ]]; then
+  echo "rollback smoke retry settings must be non-negative integers with at least one attempt" >&2
   exit 1
 fi
 
@@ -68,10 +74,23 @@ if [[ "$CURRENT_TARGET" == "$PREVIOUS_TARGET" ]]; then
   exit 1
 fi
 
+wait_for_smoke() {
+  local attempt
+  for ((attempt = 1; attempt <= SMOKE_ATTEMPTS; attempt += 1)); do
+    if curl -fsS -o /dev/null "$SMOKE_URL"; then
+      return 0
+    fi
+    if ((attempt < SMOKE_ATTEMPTS)); then
+      sleep "$SMOKE_INTERVAL_SECONDS"
+    fi
+  done
+  return 1
+}
+
 ln -s "$PREVIOUS_TARGET" "$CURRENT_CANDIDATE"
 mv -Tf "$CURRENT_CANDIDATE" "$ROOT/current"
 
-if systemctl restart moreigory && curl -fsS -o /dev/null "$SMOKE_URL"; then
+if systemctl restart moreigory && wait_for_smoke; then
   ln -s "$CURRENT_TARGET" "$PREVIOUS_CANDIDATE"
   mv -Tf "$PREVIOUS_CANDIDATE" "$ROOT/previous"
 else

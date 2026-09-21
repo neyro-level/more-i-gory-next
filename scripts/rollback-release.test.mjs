@@ -15,6 +15,7 @@ test("rollback switches current to previous, restarts, and smokes without rebuil
   assert.match(rollback, /restoring the original current release/);
   assert.match(rollback, /systemctl restart moreigory/);
   assert.match(rollback, /curl -fsS -o \/dev\/null "\$SMOKE_URL"/);
+  assert.match(rollback, /wait_for_smoke/);
   assert.doesNotMatch(rollback, /^\s*next build/m);
   assert.doesNotMatch(rollback, /^\s*pnpm /m);
   assert.match(install, /mv -Tf "\$PREVIOUS_CANDIDATE" "\$ROOT\/previous"/);
@@ -45,7 +46,20 @@ function createRuntimeFixture() {
   symlinkSync(current, join(root, "current"));
   symlinkSync(previous, join(root, "previous"));
   writeFileSync(join(bin, "systemctl"), "#!/usr/bin/env bash\nexit 0\n");
-  writeFileSync(join(bin, "curl"), "#!/usr/bin/env bash\nexit ${MOREIGORY_TEST_CURL_EXIT:-0}\n");
+  writeFileSync(
+    join(bin, "curl"),
+    `#!/usr/bin/env bash
+if [[ -n "\${MOREIGORY_TEST_CURL_COUNTER:-}" ]]; then
+  count=0
+  [[ -f "$MOREIGORY_TEST_CURL_COUNTER" ]] && count=$(cat "$MOREIGORY_TEST_CURL_COUNTER")
+  count=$((count + 1))
+  echo "$count" > "$MOREIGORY_TEST_CURL_COUNTER"
+  [[ "$count" -ge "\${MOREIGORY_TEST_CURL_SUCCEED_ON:-1}" ]] && exit 0
+  exit 1
+fi
+exit \${MOREIGORY_TEST_CURL_EXIT:-0}
+`,
+  );
   chmodSync(join(bin, "systemctl"), 0o755);
   chmodSync(join(bin, "curl"), 0o755);
   return { bin, current, fixture, previous, root };
@@ -71,6 +85,25 @@ test("rollback accepts the currently deployed legacy manifest only with exact SH
   assert.match(rollback, /manifest\.sha !== expectedSha/);
 });
 
+test("rollback waits for a restarted application to become healthy", { skip: process.platform === "win32" }, () => {
+  const fixture = createRuntimeFixture();
+  const counter = join(fixture.fixture, "curl-attempts");
+  execFileSync("bash", [new URL("../ops/runtime/rollback-release.sh", import.meta.url).pathname], {
+    env: {
+      ...process.env,
+      MOREIGORY_ALLOW_NONCANONICAL_ROOT: "1",
+      MOREIGORY_ROOT: fixture.root,
+      MOREIGORY_SMOKE_ATTEMPTS: "3",
+      MOREIGORY_SMOKE_INTERVAL_SECONDS: "0",
+      MOREIGORY_TEST_CURL_COUNTER: counter,
+      MOREIGORY_TEST_CURL_SUCCEED_ON: "3",
+      PATH: `${fixture.bin}:${process.env.PATH}`,
+    },
+  });
+  assert.equal(readFileSync(counter, "utf8").trim(), "3");
+  assert.equal(readlinkSync(join(fixture.root, "current")), fixture.previous);
+});
+
 test("failed rollback smoke restores the original current pointer", { skip: process.platform === "win32" }, () => {
   const fixture = createRuntimeFixture();
   const result = spawnSync("bash", [new URL("../ops/runtime/rollback-release.sh", import.meta.url).pathname], {
@@ -79,6 +112,8 @@ test("failed rollback smoke restores the original current pointer", { skip: proc
       ...process.env,
       MOREIGORY_ALLOW_NONCANONICAL_ROOT: "1",
       MOREIGORY_ROOT: fixture.root,
+      MOREIGORY_SMOKE_ATTEMPTS: "2",
+      MOREIGORY_SMOKE_INTERVAL_SECONDS: "0",
       MOREIGORY_TEST_CURL_EXIT: "1",
       PATH: `${fixture.bin}:${process.env.PATH}`,
     },
