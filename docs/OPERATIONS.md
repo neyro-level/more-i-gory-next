@@ -174,8 +174,8 @@ load /etc/moreigory/app.env without printing values
 → db:single:apply with explicit confirmation
 → bootstrap:owner with ephemeral Secret Master credentials
 → db:single:seed-proof with explicit confirmation
-→ deploy/restart the matching preview artifact
-→ single-db-application-smoke before-restart and after-restart
+→ before EPIC 49, start an exact-code loopback rehearsal against the same DB
+→ single-db-application-smoke before-restart and after a full process restart
 → verify 26 migration rows, 148 public tables and two technical proof records
 ```
 
@@ -192,8 +192,16 @@ node ops/runtime/single-db-application-smoke.mjs \
   --draft-slug=db-proof-draft \
   --expected-title="Техническая проверка DB" \
   --phase=before-restart
-# controlled restart of moreigory.service, then repeat with --phase=after-restart
+# fully stop/start the exact-code loopback process, then repeat with --phase=after-restart
 ```
+
+Before EPIC 49 installs the matching immutable preview artifact, set
+`DB_SMOKE_TRANSPORT_BASE_URL=http://127.0.0.1:<port>` and run the exact-main
+application through a loopback-only process with a private SSH tunnel to the
+same managed database. In this mode the smoke proves application reads and
+restart persistence; Nginx `noindex` is explicitly `NOT_APPLICABLE_LOOPBACK`.
+Public artifact installation, Nginx/noindex proof and service-level rollback
+remain EPIC 49 and must not be simulated here.
 
 `BOOTSTRAP_OWNER_EMAIL`, `BOOTSTRAP_OWNER_PASSWORD`, `DB_SMOKE_OWNER_EMAIL` and
 `DB_SMOKE_OWNER_PASSWORD` are ephemeral process variables sourced from Secret
