@@ -17,8 +17,15 @@ const privateFields = ["unitNumber", "cadastralNumber", "internalComment", "owne
 function matchesWhere(where, record) {
   return where.and.every((predicate) => {
     const [field, condition] = Object.entries(predicate)[0];
-    if ("equals" in condition) return record[field] === condition.equals;
-    if (condition.exists === true) return Boolean(record[field]);
+    const values = field.split(".").reduce(
+      (current, segment) => current.flatMap((value) => {
+        const nested = value?.[segment];
+        return Array.isArray(nested) ? nested : [nested];
+      }),
+      [record],
+    );
+    if ("equals" in condition) return values.includes(condition.equals);
+    if (condition.exists === true) return values.some(Boolean);
     return false;
   });
 }
@@ -29,8 +36,8 @@ const publicationExists = [
   { verifiedAt: { exists: true } },
   { verdict: { exists: true } },
   { riskSummary: { exists: true } },
-  { sources: { exists: true } },
-  { facts: { exists: true } },
+  { "sources.label": { exists: true } },
+  { "facts.label": { exists: true } },
 ];
 
 test("public properties predicate exposes only manual active published passports", () => {

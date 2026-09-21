@@ -73,8 +73,8 @@ const manualPassportPublicationExists: Where[] = [
   { verifiedAt: { exists: true } },
   { verdict: { exists: true } },
   { riskSummary: { exists: true } },
-  { sources: { exists: true } },
-  { facts: { exists: true } },
+  { "sources.label": { exists: true } },
+  { "facts.label": { exists: true } },
 ];
 
 export function propertyPublicationWhere(slug?: string): Where {
