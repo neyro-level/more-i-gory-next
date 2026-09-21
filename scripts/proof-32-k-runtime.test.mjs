@@ -72,6 +72,7 @@ test("runtime lead cycle logs contain zero PII markers", async () => {
 
   await handlePublicLeadRequest(request(leadBody()), {
     activeChannelIds: ["fake"],
+    consentVersion: "consent-v1",
     createLead: async () => ({ id: 9 }),
     enabled: true,
     logger,
@@ -80,6 +81,7 @@ test("runtime lead cycle logs contain zero PII markers", async () => {
   });
 
   await handlePublicLeadRequest(request(leadBody()), {
+    consentVersion: "consent-v1",
     createLead: async () => ({ id: 9 }),
     enabled: false,
     logger,

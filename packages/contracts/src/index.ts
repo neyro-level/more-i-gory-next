@@ -17,6 +17,8 @@ export {
   sourceSchema,
 } from "./schemas.ts";
 
+export { ACTIVE_CONSENT_VERSION } from "./legal.ts";
+
 export type {
   ArticleDTO,
   ContentStatus,

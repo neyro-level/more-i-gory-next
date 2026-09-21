@@ -99,7 +99,7 @@ export function LeadFormClient({
 
     if (!enabled) {
       setStatus({
-        message: "Форма готова технически, но отправка включается только после согласования Leads API и юридических текстов.",
+        message: "Отправка временно недоступна. Используйте контакты на странице.",
         state: "warning",
       });
       form.dataset.state = "server-disabled";
@@ -110,7 +110,7 @@ export function LeadFormClient({
     form.dataset.state = "submitting";
 
     try {
-      const response = await fetch("/api/public/leads", {
+      const response = await fetch("/api/public/leads/", {
         body: JSON.stringify({
           consent: {
             accepted: values.accepted,
@@ -144,7 +144,7 @@ export function LeadFormClient({
 
   return (
     <form
-      action="/api/public/leads"
+      action="/api/public/leads/"
       className="rounded-large bg-card p-6 text-foreground shadow-sm md:p-8"
       data-consent-version={consentVersion}
       data-lead-form
@@ -261,10 +261,15 @@ export function LeadFormClient({
           </Field>
 
           <Input autoComplete="off" className="hidden" name="company" tabIndex={-1} type="text" />
+          {!enabled ? (
+            <p className={statusClassName} data-state="warning" role="status">
+              Отправка формы временно недоступна. Свяжитесь с нами через контакты на странице.
+            </p>
+          ) : null}
           <Button
             className="w-full min-h-14 duration-150 ease-standard"
             data-lead-submit
-            disabled={submitting}
+            disabled={!enabled || submitting}
             size="cta"
             type="submit"
             variant="accent"

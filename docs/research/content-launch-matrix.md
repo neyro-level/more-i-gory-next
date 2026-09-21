@@ -1,8 +1,8 @@
 # Content launch matrix
 
-**Status:** TASK 52.1 evidence  
-**Plan:** `more-i-gory-production-readiness-2026-09` v2  
-**Snapshot:** `c824e9fa02ecfe370c859a851e3c0e0cedd48667`  
+**Status:** TASK 52.1 evidence
+**Plan:** `more-i-gory-production-readiness-2026-09` v2
+**Snapshot:** `c824e9fa02ecfe370c859a851e3c0e0cedd48667`
 **Date:** 2026-09-20
 
 This matrix assigns one terminal launch state to every current public route and

@@ -196,8 +196,9 @@ Merge, SourceCraft Gate и production не выполнялись.
 
 Отдельный release stream и явная команда владельца:
 
-1. Утвердить production activation локального Payload intake, rate limit,
-   CAPTCHA и SLA; внешний CRM/notification channel остаётся выключенным.
+1. Доказать production activation локального Payload intake, trusted-client
+   rate limit, honeypot, minimum-fill и SLA; внешний CRM/notification channel
+   остаётся выключенным.
 2. Подготовить versioned artifact upload, atomic switch и rollback runbook.
 3. Провести Nginx/TLS validation на production-like host.
 4. Выполнить exact-main release, live smoke, form E2E, logs и rollback proof.

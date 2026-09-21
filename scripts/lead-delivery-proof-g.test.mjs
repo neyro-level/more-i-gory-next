@@ -85,6 +85,7 @@ test("Proof G: POST /api/public/leads creates lead, delivery, job and fake deliv
     }),
     {
       activeChannelIds: ["fake"],
+      consentVersion: "consent-v1",
       createLead: async (input) => {
         const leadId = nextLeadId++;
         const deliveryId = nextDeliveryId++;

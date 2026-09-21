@@ -23,5 +23,5 @@ test("lead form uses canonical shadcn primitives without native control markup",
   assert.equal(leadForm.includes("<textarea"), false);
   assert.equal(leadForm.includes("<button"), false);
   assert.equal(leadForm.includes('type="checkbox"'), false);
-  assert.match(leadForm, /fetch\("\/api\/public\/leads"/);
+  assert.match(leadForm, /fetch\("\/api\/public\/leads\/"/);
 });

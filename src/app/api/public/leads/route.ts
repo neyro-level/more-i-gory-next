@@ -2,6 +2,7 @@ import { createLead } from "@/core/data-access/system/create-lead";
 import { parseActiveLeadChannels } from "@/core/leads/channels";
 import { handlePublicLeadRequest } from "@/core/leads/intake-endpoint";
 import { env } from "@/project/env";
+import { ACTIVE_CONSENT_VERSION } from "@more-i-gory/contracts";
 
 export const runtime = "nodejs";
 const activeChannelIds = parseActiveLeadChannels(env.LEAD_CHANNELS);
@@ -9,6 +10,7 @@ const activeChannelIds = parseActiveLeadChannels(env.LEAD_CHANNELS);
 export async function POST(request: Request) {
   return handlePublicLeadRequest(request, {
     activeChannelIds,
+    consentVersion: ACTIVE_CONSENT_VERSION,
     createLead,
     enabled: env.NEXT_PUBLIC_LEADS_ENABLED === "true",
     logger: console,
@@ -18,6 +20,7 @@ export async function POST(request: Request) {
 export function GET(request: Request) {
   return handlePublicLeadRequest(request, {
     activeChannelIds,
+    consentVersion: ACTIVE_CONSENT_VERSION,
     createLead,
     enabled: env.NEXT_PUBLIC_LEADS_ENABLED === "true",
     logger: console,

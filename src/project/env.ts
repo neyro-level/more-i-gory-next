@@ -57,6 +57,7 @@ const rawEnvSchema = z
         if (!value[key]) context.addIssue({ code: "custom", message: `${key} is required for the Telegram lead channel`, path: [key] });
       }
     }
+
   });
 
 export function isProductionRuntimeProfile(source: NodeJS.ProcessEnv): boolean {

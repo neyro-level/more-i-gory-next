@@ -1,8 +1,8 @@
 # Release Checklist — «Море и Горы»
 
 **Статус:** Active — TECHNICAL PREVIEW RELEASE
-**Версия:** 3.1 — Plan №3 v2 readiness
-**Дата:** 2026-09-20
+**Версия:** 3.2 — Plan №3 v3 readiness
+**Дата:** 2026-09-21
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
 пройденным. Production выполняется только по отдельной команде владельца.
@@ -62,16 +62,23 @@
 - [x] юридический оператор и публичные реквизиты подтверждены владельцем;
 - [x] privacy/consent тексты утверждены владельцем;
 - [x] consent version утверждена: `pdn-consent-2026-09-17`;
-- [ ] production activation и env локального Payload intake известны;
-- [ ] server validation, rate limit и CAPTCHA доказаны на backend;
-- [ ] форма прошла E2E intake test с записью в Payload; внешний delivery не
+- [x] canonical Payload intake утверждён: локальный `POST /api/public/leads/`
+  сохраняет заявку в единственной Payload/PostgreSQL базе; внешние notification
+  channels выключены;
+- [x] server validation, trusted-client/Nginx + application rate limit,
+  honeypot и minimum-fill доказаны на backend;
+- [x] внешний CAPTCHA-сервис и его ключи не требуются;
+- [x] форма прошла E2E intake test с записью в Payload; внешний delivery не
   требуется, пока optional channel выключен;
-- [ ] ПДн отсутствуют в аналитике;
+- [x] ПДн и пользовательский `sourcePath` отсутствуют в operational logs;
 - [ ] адрес и вариант карты утверждены.
 
-До этого `NEXT_PUBLIC_LEADS_ENABLED=false`: `POST /api/public/leads` остаётся
-закрыт на уровне приложения, а Nginx-пример не содержит legacy-заглушку
-`/api/leads → 503`.
+После E2E proof technical preview возвращён в безопасный режим
+`NEXT_PUBLIC_LEADS_ENABLED=false`: `POST /api/public/leads/` закрыт на уровне
+приложения до отдельной команды на включение формы.
+
+Включение формы зависит только от `NEXT_PUBLIC_LEADS_ENABLED` и успешного E2E
+локальной записи в Payload. Внешний CAPTCHA-сервис в архитектуру не входит.
 
 ## 5. Infrastructure and release
 

@@ -1,5 +1,7 @@
 import "server-only";
 
+import { isIP } from "node:net";
+
 import { z } from "zod";
 
 import type { CreateLeadInput } from "@/core/data-access/system/create-lead";
@@ -12,6 +14,7 @@ type RateLimitBucket = {
 
 type PublicLeadIntakeConfig = Readonly<{
   activeChannelIds?: readonly string[];
+  consentVersion: string;
   createLead: (input: CreateLeadInput) => Promise<{ id: number | string }>;
   enabled: boolean;
   logger: Pick<StructuredLogger, "info" | "warn" | "error">;
@@ -66,8 +69,11 @@ function jsonResponse(body: unknown, init: ResponseInit): Response {
 }
 
 function requesterKey(request: Request): string {
-  const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  return forwardedFor || request.headers.get("x-real-ip")?.trim() || "unknown";
+  // The public runtime is loopback-only. Nginx overwrites this project-owned
+  // header with $remote_addr; public Forwarded/X-Forwarded-For/X-Real-IP values
+  // are deliberately ignored here.
+  const trustedClientIp = request.headers.get("x-moreigory-client-ip")?.trim();
+  return trustedClientIp && isIP(trustedClientIp) !== 0 ? trustedClientIp : "unknown";
 }
 
 function checkRateLimit(request: Request, config: PublicLeadIntakeConfig): boolean {
@@ -125,20 +131,30 @@ export async function handlePublicLeadRequest(
     return jsonResponse({ error: "invalid_payload" }, { status: 400 });
   }
 
-  if (parsed.honeypot !== undefined || !hasMinimumFillTime(parsed.formStartedAt, config) || !isSafeSourcePath(parsed.sourcePath)) {
+  if (
+    parsed.consent.version !== config.consentVersion ||
+    parsed.honeypot !== undefined ||
+    !hasMinimumFillTime(parsed.formStartedAt, config) ||
+    !isSafeSourcePath(parsed.sourcePath)
+  ) {
     config.logger.warn("public lead rejected", { reason: "anti_spam" });
     return jsonResponse({ error: "invalid_payload" }, { status: 400 });
   }
 
+  const clientIp = requesterKey(request);
   try {
     await config.createLead({
       activeChannelIds: config.activeChannelIds ?? [],
-      consent: parsed.consent,
+      consent: {
+        accepted: true,
+        acceptedAt: new Date(config.now?.() ?? Date.now()).toISOString(),
+        version: config.consentVersion,
+      },
       email: parsed.email,
       formId: parsed.formId,
       message: parsed.message,
       metadata: {
-        requester: requesterKey(request) === "unknown" ? "unknown" : "present",
+        requester: clientIp === "unknown" ? "unknown" : "present",
       },
       name: parsed.name,
       phone: parsed.phone,
@@ -150,6 +166,6 @@ export async function handlePublicLeadRequest(
     return jsonResponse({ error: "server_error" }, { status: 500 });
   }
 
-  config.logger.info("public lead accepted", { sourcePath: parsed.sourcePath });
+  config.logger.info("public lead accepted", { route: "public_lead_intake" });
   return jsonResponse({ ok: true }, { status: 201 });
 }

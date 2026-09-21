@@ -19,8 +19,18 @@ test("proxy headers overwrite untrusted forwarded-for with the edge client", () 
   assert.match(nginx, /proxy_set_header X-Forwarded-Proto \$scheme/);
   assert.match(nginx, /proxy_set_header X-Real-IP \$remote_addr/);
   assert.match(nginx, /proxy_set_header X-Forwarded-For \$remote_addr/);
+  assert.match(nginx, /proxy_set_header X-Moreigory-Client-IP \$remote_addr/);
   assert.doesNotMatch(nginx, /proxy_add_x_forwarded_for/);
   assert.match(nginx, /Trusted real IP contract/);
+});
+
+test("canonical leads route has edge and application-aligned rate limits", () => {
+  assert.match(nginx, /limit_req_zone \$binary_remote_addr zone=leads_per_client:10m rate=5r\/m/);
+  assert.match(nginx, /location = \/api\/public\/leads \{/);
+  assert.match(nginx, /return 308 \/api\/public\/leads\//);
+  assert.match(nginx, /location = \/api\/public\/leads\/ \{/);
+  assert.match(nginx, /limit_req zone=leads_per_client burst=5 nodelay/);
+  assert.match(nginx, /limit_req_status 429/);
 });
 
 test("security headers, body size and proxy timeouts are set", () => {

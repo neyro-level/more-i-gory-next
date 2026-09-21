@@ -1,8 +1,8 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.5 Plan №3 v2 exact-main alignment
-**Дата:** 2026-09-20
+**Версия:** 2.6 Plan №3 v3 exact-head alignment
+**Дата:** 2026-09-21
 **Engineering baseline:** AMS Realty Platform Core 5.5 (норматив стека)
 **Важно:** этот документ фиксирует только проектную конкретику. Стек, границы
 данных и jobs сверяются с
@@ -60,15 +60,17 @@ Internet
 
 ```text
 Browser
-→ POST /api/public/leads
+→ POST /api/public/leads/
 → Nginx
-→ Next.js server validation / consent / rate limit / CAPTCHA
-→ Payload transaction: lead + pending delivery records
+→ Next.js server validation / consent / trusted-client rate limit / honeypot / minimum-fill
+→ Payload Local API transaction
+→ Managed PostgreSQL (`leads`)
 → Payload Admin
 ```
 
-Внешний CRM/notification adapter в этой программе выключен и не является
-условием первого release.
+Это canonical Payload intake первого релиза. Внешняя пересылка заявок и
+notification/outbound channels не входят в утверждённый маршрут. Оператор
+работает с сохранёнными заявками в Payload Admin.
 
 ## 1.1. Delivery Profile
 
@@ -406,18 +408,39 @@ Project:
 ```text
 Browser
 → Next.js `POST /api/public/leads`
-→ server validation + consent + rate limit + CAPTCHA verification
+→ server validation + consent + trusted-client rate limit + honeypot + minimum-fill
 → Payload transaction: lead + pending delivery records
 → Payload Jobs delivery/recovery when an approved channel is enabled
 ```
 
-Внешний канал сейчас выключен: заявки остаются в Payload Admin. Новый adapter,
-token, recipient и outbound host разрешаются только через отдельный integration
-gate; браузер никогда не пишет напрямую во внешний CRM/channel.
+Local Next.js/Payload intake:
+- server validation;
+- consent;
+- rate limit;
+- honeypot и minimum-fill anti-spam guards;
+- одна транзакция записи в Payload collection `leads`;
+- операторская видимость в Payload Admin.
+
+Trusted client boundary:
+- Node runtime доступен только через loopback;
+- публичный Nginx edge перезаписывает `X-Moreigory-Client-IP` значением
+  `$remote_addr`;
+- application limiter принимает только валидный IP из этого project-owned
+  header и игнорирует public `Forwarded`, `X-Forwarded-For` и `X-Real-IP`;
+- Nginx `limit_req` и application limiter дают effective policy
+  `5 requests/minute/client`, burst `5`, excess → HTTP `429`.
+
+Outbound delivery:
+- не входит в утверждённый первый релиз;
+- не требуется для успешного сохранения заявки;
+- пустой `LEAD_CHANNELS` означает отсутствие outbound delivery rows/jobs.
 
 Consent payload обязательно содержит `consentVersion`, `accepted` и `acceptedAt`.
-Production activation, CAPTCHA keys, SLA и routing остаются human gate. До него
-intake закрыт feature flag и не имитирует внешнюю доставку лида.
+Сервер сверяет `consentVersion` с активной версией и сам фиксирует
+`acceptedAt`; клиентские дата и версия не считаются доверенными при записи.
+`NEXT_PUBLIC_LEADS_ENABLED=true` не требует внешнего CAPTCHA-сервиса или его
+ключей. Публичная форма остаётся gated до E2E локальной записи в Payload;
+внешний delivery не имитируется и включается только отдельным решением.
 
 PII запрещено отправлять в web analytics.
 

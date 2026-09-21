@@ -12,7 +12,7 @@
 
 | Location | Operation | Class | Snippet |
 |---|---|---|---|
-| `scripts/lead-delivery-proof-g.test.mjs:109` | `jobs.queue` | TEST | `await memory.payload.jobs.queue({` |
+| `scripts/lead-delivery-proof-g.test.mjs:110` | `jobs.queue` | TEST | `await memory.payload.jobs.queue({` |
 | `scripts/seed-media-assets.mjs:64` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/seed-preview-db-proof.mjs:60` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/seed-regions.mjs:72` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |

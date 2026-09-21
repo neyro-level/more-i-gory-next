@@ -6,9 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CmsPage } from "@/components/page-blocks/cms-page";
 import { getCmsPageByPath } from "@/core/data-access/public";
 import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
+import { ACTIVE_CONSENT_VERSION } from "@more-i-gory/contracts";
 
 const pagePath = "/consent/";
-const consentVersion = "pdn-consent-2026-09-17";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = isEditorialPreviewEnabled() ? null : await getCmsPageByPath(pagePath);
@@ -96,7 +96,7 @@ export default async function ConsentPage() {
 
             <section className="flex flex-col gap-3">
               <h2 className="text-title-sm text-foreground">8. Версия согласия</h2>
-              <p>Версия согласия: {consentVersion}. Дата публикации: 17 сентября 2026 года.</p>
+              <p>Версия согласия: {ACTIVE_CONSENT_VERSION}. Дата публикации: 17 сентября 2026 года.</p>
             </section>
           </CardContent>
         </Card>

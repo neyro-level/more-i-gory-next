@@ -328,9 +328,25 @@ isolation, deactivation approval, recovery и запрет массовой де
 ## Leads
 
 CODE EXISTS: intake, transactional outbox, retry/recovery и retention в `main`
-(EPIC 10–12). RUNTIME NOT PROVEN E2E. Внешний канал оповещений DISABLED:
-оператор смотрит заявки в Payload Admin. PRODUCTION NOT PROVEN. PII и secrets
-в логи не попадают.
+(EPIC 10–12). Canonical production intake — локальный
+`POST /api/public/leads` → Payload Local API transaction → collection `leads`.
+RUNTIME NOT PROVEN E2E. Внешний AMS Leads API и канал оповещений DISABLED:
+`LEAD_CHANNELS` пуст, delivery rows/jobs не создаются, оператор смотрит заявки в
+Payload Admin. PRODUCTION NOT PROVEN. PII и secrets в логи не попадают.
+
+Не включать `LEAD_CHANNELS`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` и внешнюю
+маршрутизацию для первого release candidate. Их подключение — отдельная
+integration task, а не условие локального сохранения заявки.
+
+Trusted client/rate-limit boundary: публичный Nginx перезаписывает
+`X-Moreigory-Client-IP` значением `$remote_addr`; приложение игнорирует входящие
+`Forwarded`, `X-Forwarded-For` и `X-Real-IP`. Edge и application policy:
+`5 requests/minute/client`, Nginx burst `5`, excess → HTTP `429`.
+
+External CAPTCHA не используется и не требует аккаунта или secret. Anti-spam
+контур первого релиза: server validation, trusted-client rate limit на Nginx и в
+приложении, honeypot и minimum-fill. `NEXT_PUBLIC_LEADS_ENABLED` включается после
+успешного E2E локальной записи в Payload; при fail форма остаётся disabled.
 
 Дубли на стороне получателя не гарантируются (ADR-011). Если канал когда-нибудь
 будет включён, два сообщения с одним `Delivery ID` — это повтор одной

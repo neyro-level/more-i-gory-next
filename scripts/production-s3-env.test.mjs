@@ -40,3 +40,7 @@ test("production runtime fail-fast requires the full S3 contract", () => {
   );
   assert.doesNotThrow(() => parseProjectEnv({ ...baseEnv, NODE_ENV: "production", ...s3Env }));
 });
+
+test("public leads require no external CAPTCHA credentials", () => {
+  assert.doesNotThrow(() => parseProjectEnv({ ...baseEnv, NEXT_PUBLIC_LEADS_ENABLED: "true" }));
+});

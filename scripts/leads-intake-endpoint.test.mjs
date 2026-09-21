@@ -48,17 +48,21 @@ function logger() {
 
 test("public lead endpoint validates and creates a lead without returning PII", async () => {
   let received;
-  const response = await handlePublicLeadRequest(request(payload()), {
-    activeChannelIds: ["telegram"],
-    createLead: async (input) => {
-      received = input;
-      return { id: 1 };
+  const response = await handlePublicLeadRequest(
+    request(payload(), { headers: { "x-moreigory-client-ip": "203.0.113.10" } }),
+    {
+      activeChannelIds: ["telegram"],
+      consentVersion: "consent-v1",
+      createLead: async (input) => {
+        received = input;
+        return { id: 1 };
+      },
+      enabled: true,
+      logger: logger(),
+      now: () => now,
+      store: new Map(),
     },
-    enabled: true,
-    logger: logger(),
-    now: () => now,
-    store: new Map(),
-  });
+  );
 
   assert.equal(response.status, 201);
   assert.deepEqual(await response.json(), { ok: true });
@@ -66,12 +70,14 @@ test("public lead endpoint validates and creates a lead without returning PII", 
   assert.equal(received.phone, "+7 900 000-00-00");
   assert.deepEqual(received.activeChannelIds, ["telegram"]);
   assert.equal(received.consent.version, "consent-v1");
+  assert.equal(received.consent.acceptedAt, "2026-09-17T09:00:00.000Z");
   assert.deepEqual(received.metadata, { requester: "present" });
 });
 
 test("public lead endpoint is fail-closed while leads are disabled", async () => {
   let called = false;
   const response = await handlePublicLeadRequest(request(payload()), {
+    consentVersion: "consent-v1",
     createLead: async () => {
       called = true;
       return { id: 1 };
@@ -88,6 +94,7 @@ test("public lead endpoint is fail-closed while leads are disabled", async () =>
 
 test("public lead endpoint rejects honeypot and too-fast submissions", async () => {
   const config = {
+    consentVersion: "consent-v1",
     createLead: async () => ({ id: 1 }),
     enabled: true,
     logger: logger(),
@@ -105,6 +112,7 @@ test("public lead endpoint rejects honeypot and too-fast submissions", async () 
 test("public lead endpoint rate limits by requester key", async () => {
   const store = new Map();
   const config = {
+    consentVersion: "consent-v1",
     createLead: async () => ({ id: 1 }),
     enabled: true,
     logger: logger(),
@@ -117,8 +125,65 @@ test("public lead endpoint rate limits by requester key", async () => {
   assert.equal((await handlePublicLeadRequest(request(payload()), config)).status, 429);
 });
 
+test("spoofed public forwarding headers cannot select a different rate-limit bucket", async () => {
+  const store = new Map();
+  const config = {
+    consentVersion: "consent-v1",
+    createLead: async () => ({ id: 1 }),
+    enabled: true,
+    logger: logger(),
+    now: () => now,
+    rateLimit: { maxRequests: 1, windowMs: 60_000 },
+    store,
+  };
+
+  const first = request(payload(), {
+    headers: {
+      forwarded: "for=198.51.100.1",
+      "x-forwarded-for": "198.51.100.1",
+      "x-real-ip": "198.51.100.1",
+    },
+  });
+  const spoofed = request(payload(), {
+    headers: {
+      forwarded: "for=198.51.100.2",
+      "x-forwarded-for": "198.51.100.2",
+      "x-real-ip": "198.51.100.2",
+    },
+  });
+
+  assert.equal((await handlePublicLeadRequest(first, config)).status, 201);
+  assert.equal((await handlePublicLeadRequest(spoofed, config)).status, 429);
+  assert.deepEqual([...store.keys()], ["unknown"]);
+});
+
+test("trusted Nginx client header selects a validated IP bucket", async () => {
+  const store = new Map();
+  const config = {
+    consentVersion: "consent-v1",
+    createLead: async () => ({ id: 1 }),
+    enabled: true,
+    logger: logger(),
+    now: () => now,
+    rateLimit: { maxRequests: 1, windowMs: 60_000 },
+    store,
+  };
+
+  assert.equal(
+    (
+      await handlePublicLeadRequest(
+        request(payload(), { headers: { "x-moreigory-client-ip": "203.0.113.10" } }),
+        config,
+      )
+    ).status,
+    201,
+  );
+  assert.deepEqual([...store.keys()], ["203.0.113.10"]);
+});
+
 test("public lead endpoint rejects unsafe source paths and non-POST methods", async () => {
   const config = {
+    consentVersion: "consent-v1",
     createLead: async () => ({ id: 1 }),
     enabled: true,
     logger: logger(),
@@ -127,5 +192,14 @@ test("public lead endpoint rejects unsafe source paths and non-POST methods", as
   };
 
   assert.equal((await handlePublicLeadRequest(request(payload({ sourcePath: "//evil" })), config)).status, 400);
+  assert.equal(
+    (
+      await handlePublicLeadRequest(
+        request(payload({ consent: { ...payload().consent, version: "stale-version" } })),
+        config,
+      )
+    ).status,
+    400,
+  );
   assert.equal((await handlePublicLeadRequest(request(payload(), { method: "GET" }), config)).status, 405);
 });

@@ -287,7 +287,7 @@ const requiredLeadFormPrimitives = [
 if (
   requiredLeadFormPrimitives.some((spec) => !leadForm.includes(spec)) ||
   leadForm.includes('type="checkbox"') ||
-  !leadForm.includes('fetch("/api/public/leads"')
+  !leadForm.includes('fetch("/api/public/leads/"')
 ) {
   throw new Error("Lead form must use canonical shadcn primitives without changing the public leads transport");
 }

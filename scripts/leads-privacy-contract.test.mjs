@@ -8,6 +8,7 @@ const leadFormClient = read("src/ui/interactive/lead-form-client.tsx");
 const intakeEndpoint = read("src/core/leads/intake-endpoint.ts");
 const privacyPage = read("src/app/(site)/privacy/page.tsx");
 const consentPage = read("src/app/(site)/consent/page.tsx");
+const consentContract = read("packages/contracts/src/legal.ts");
 const companyPage = read("src/app/(site)/o-kompanii/page.tsx");
 const contactsPage = read("src/app/(site)/kontakty/page.tsx");
 
@@ -21,7 +22,7 @@ const analyticsSinks = [
 ];
 
 test("lead form posts PII only to the internal public lead endpoint", () => {
-  assert.match(leadFormClient, /fetch\("\/api\/public\/leads"/);
+  assert.match(leadFormClient, /fetch\("\/api\/public\/leads\/"/);
 
   for (const sink of analyticsSinks) {
     assert.equal(
@@ -42,19 +43,21 @@ test("public lead intake logs only safe operational context", () => {
     assert.equal(call.includes("parsed.phone"), false, "phone must not be logged");
     assert.equal(call.includes("parsed.email"), false, "email must not be logged");
     assert.equal(call.includes("parsed.message"), false, "message must not be logged");
+    assert.equal(call.includes("parsed.sourcePath"), false, "user-controlled source path must not be logged");
     assert.equal(call.includes("await request.json()"), false, "raw request body must not be logged");
   }
 
   assert.match(
     intakeEndpoint,
-    /config\.logger\.info\("public lead accepted", \{ sourcePath: parsed\.sourcePath \}\);/,
-    "accepted log may include sourcePath only",
+    /config\.logger\.info\("public lead accepted", \{ route: "public_lead_intake" \}\);/,
+    "accepted log must use a fixed operational route label",
   );
 });
 
 test("privacy and consent pages publish approved legal operator details", () => {
   assert.match(privacyPage, /privacy-2026-09-17/);
-  assert.match(consentPage, /pdn-consent-2026-09-17/);
+  assert.match(consentPage, /ACTIVE_CONSENT_VERSION/);
+  assert.match(consentContract, /pdn-consent-2026-09-17/);
   assert.match(privacyPage, /Колобова Ольга Викторовна/);
   assert.match(consentPage, /Колобовой Ольге Викторовне/);
   assert.match(privacyPage, /moregory-info@yandex\.com/);

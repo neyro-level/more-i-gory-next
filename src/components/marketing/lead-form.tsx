@@ -1,6 +1,5 @@
 import { LeadFormClient } from "@/ui/interactive/lead-form-client";
-
-const consentVersion = "pdn-consent-2026-09-17";
+import { ACTIVE_CONSENT_VERSION } from "@more-i-gory/contracts";
 
 type LeadFormProps = {
   formId?: string;
@@ -13,7 +12,7 @@ export function LeadForm({
 }: LeadFormProps) {
   return (
     <LeadFormClient
-      consentVersion={consentVersion}
+      consentVersion={ACTIVE_CONSENT_VERSION}
       formId={formId}
       sourcePath={sourcePath}
     />
