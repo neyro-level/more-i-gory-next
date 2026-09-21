@@ -163,6 +163,12 @@ restores the original `current` pointer and restarts it. On success, `previous`
 becomes the former current release, so the operation remains reversible without
 database down/restore.
 
+The first EPIC 49 rollout may roll back once to the already proven legacy
+standalone release whose manifest predates `artifactVersion` and `nodeMajor`.
+That compatibility path still requires exact directory SHA and
+`layout: next-standalone`; all newly packed releases require the full v1
+manifest.
+
 Minimal server-side monitoring uses `moreigory-healthcheck.service` and
 `moreigory-healthcheck.timer`: loopback health runs every five minutes and its
 result is retained in the systemd journal. Runtime logs are read with

@@ -53,7 +53,9 @@ validate_release() {
 const { readFileSync } = require("node:fs");
 const [manifestPath, expectedSha] = process.argv.slice(2);
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-if (manifest.artifactVersion !== 1 || manifest.layout !== "next-standalone" || manifest.nodeMajor !== 24 || manifest.sha !== expectedSha) {
+const versioned = manifest.artifactVersion === 1 && manifest.nodeMajor === 24;
+const legacy = manifest.artifactVersion == null && manifest.nodeMajor == null;
+if ((!versioned && !legacy) || manifest.layout !== "next-standalone" || manifest.sha !== expectedSha) {
   throw new Error("rollback release manifest mismatch");
 }
 NODE

@@ -31,14 +31,13 @@ function createRuntimeFixture() {
   mkdirSync(current, { recursive: true });
   mkdirSync(previous, { recursive: true });
   mkdirSync(bin, { recursive: true });
-  for (const release of [current, previous]) {
+  for (const [release, legacy] of [[current, false], [previous, true]]) {
     writeFileSync(join(release, "server.js"), "fixture\n");
     writeFileSync(
       join(release, "RELEASE.json"),
       `${JSON.stringify({
-        artifactVersion: 1,
+        ...(legacy ? {} : { artifactVersion: 1, nodeMajor: 24 }),
         layout: "next-standalone",
-        nodeMajor: 24,
         sha: release.split(/[\\/]/u).at(-1),
       })}\n`,
     );
@@ -64,6 +63,12 @@ test("rollback swaps current and previous after a successful smoke", { skip: pro
   });
   assert.equal(readlinkSync(join(fixture.root, "current")), fixture.previous);
   assert.equal(readlinkSync(join(fixture.root, "previous")), fixture.current);
+});
+
+test("rollback accepts the currently deployed legacy manifest only with exact SHA and layout", () => {
+  assert.match(rollback, /const legacy = manifest\.artifactVersion == null && manifest\.nodeMajor == null/);
+  assert.match(rollback, /manifest\.layout !== "next-standalone"/);
+  assert.match(rollback, /manifest\.sha !== expectedSha/);
 });
 
 test("failed rollback smoke restores the original current pointer", { skip: process.platform === "win32" }, () => {
