@@ -1,8 +1,8 @@
 # Документация проекта «Море и Горы»
 
 **Статус:** Active
-**Версия:** 3.1 — Plan №3 v2 production-readiness program
-**Дата:** 2026-09-20
+**Версия:** 3.2 — Plan №3 v3 technical-preview closeout
+**Дата:** 2026-09-21
 **Стандарт:** AMS Product Development Standard 2.0
 
 ## Что создаём
@@ -19,25 +19,25 @@
 
 ## Текущий статус
 
-- execution baseline Plan №3 v2 — exact `origin/main`
-  `c824e9fa02ecfe370c859a851e3c0e0cedd48667` перед EPIC 45; он включает
-  EPIC 43, content fact foundation EPIC 51 и migration repair EPIC 44;
+- Plan №3 v3 EPIC 44–53 смержены; exact `origin/main` перед EPIC 54 —
+  `53cabb8fde75188101900cf457b271a745551082`;
 - публичный read идёт через Public Gateway / Payload Local API и DTO;
   при недоступности БД действует безопасный fallback, не local JSON adapters;
 - production не выпускался; technical preview — `more-previu.tw1.ru`;
 - коммерческие и аналитические страницы остаются под content/trust/index gate;
-- чистая цепочка из 26 migrations и upgrade fixture доказаны; staging/restore
-  ресурс, property enum drift, ротация credentials и cutover `moreigori.ru`
-  остаются в [`OWNER_QUEUE.md`](OWNER_QUEUE.md);
+- чистая цепочка из 26 migrations, upgrade fixture, single-DB application
+  proof, credential rotation, immutable preview runtime и rollback доказаны;
+  restore явно отложен решением владельца в Plan №3 v3;
+  только фактические owner gates остаются в [`OWNER_QUEUE.md`](OWNER_QUEUE.md);
 - production относится только к EPIC 55–56 и не разрешён текущей программой.
 
 ## Audit / remediation baseline
 
-Plan №3 v2 **APPROVED** исполняется по EPIC 44–54. EPIC 55–56 остаются
+Plan №3 v3 **APPROVED** исполняется по EPIC 44–54. EPIC 55–56 остаются
 вне текущего implementation-loop и требуют отдельной release-команды владельца.
 
 ```text
-CODE_BASELINE=c824e9fa02ecfe370c859a851e3c0e0cedd48667  # exact origin/main после EPIC 44
+CODE_BASELINE=53cabb8fde75188101900cf457b271a745551082  # exact origin/main после EPIC 53
 PROFILE=REALTY_BASE
 TARGET_CORE=AMS Realty Platform 5.5
 UI_CORE=AMS UI Core 5.0
@@ -45,12 +45,12 @@ UI_CORE=AMS UI Core 5.0
 
 | Поле | Значение |
 |---|---|
-| Code baseline | SourceCraft `integrator-p/more-i-gory-next` @ `c824e9fa02ecfe370c859a851e3c0e0cedd48667` |
+| Code baseline | SourceCraft `integrator-p/more-i-gory-next` @ `53cabb8fde75188101900cf457b271a745551082` |
 | Профиль | `AMS_PROFILE=REALTY_BASE`, режим BUILD |
 | Техническая конституция | [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) |
 | UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
-| Активный мастер-план | [`MORE_I_GORY_PLAN_№ 3.md`](MORE_I_GORY_PLAN_№%203.md) v2 APPROVED |
-| Активный машинный inventory | [`task-manager-inventory.plan3.v2.json`](task-manager-inventory.plan3.v2.json); consumer: `Invoke-AmsMasterPlan.ps1` → Beads `.beads` |
+| Активный мастер-план | [`MORE_I_GORY_PLAN_№ 3.md`](MORE_I_GORY_PLAN_№%203.md) v3 APPROVED |
+| Активный машинный inventory | [`task-manager-inventory.plan3.v3.json`](task-manager-inventory.plan3.v3.json); consumer: `Invoke-AmsMasterPlan.ps1` → Beads `.beads` |
 | История | [`More-i-gory-plan №2.md`](More-i-gory-plan%20№2.md) и `task-manager-inventory.v6.json`; новые задачи из них не создаются |
 | Указатель волны | [`DELIVERY_STATE.yaml`](DELIVERY_STATE.yaml) |
 
@@ -116,9 +116,11 @@ entity.
 
 ## Current Focus
 
-NOW: Plan №3 v2 EPIC 45–54 — canonical state, staging/security, preview,
-observability, content and release-candidate evidence. EPIC 44 и EPIC 51 уже
-смержены; отдельные внешние решения перечислены в [`OWNER_QUEUE.md`](OWNER_QUEUE.md).
+NOW: Plan №3 v3 EPIC 54 — агрегирование evidence, один immutable
+technical-preview candidate и exact-main proof. EPIC 44–53 уже смержены;
+их терминальные SHA и gates собраны в
+[`proofs/54.1-evidence-index.md`](proofs/54.1-evidence-index.md). Отдельные
+внешние решения перечислены в [`OWNER_QUEUE.md`](OWNER_QUEUE.md).
 EPIC 55–56 и production не стартуют из этого документа автоматически.
 Атомарное состояние программы ведётся в локальном Beads-графе, Backlog остаётся
 верхним source of truth. Production не выпускался и текущим потоком не разрешён.

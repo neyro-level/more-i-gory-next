@@ -1,21 +1,21 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 4.1 — Plan №3 v2 execution
-**Дата:** 2026-09-20
+**Версия:** 4.2 — Plan №3 v3 closeout
+**Дата:** 2026-09-21
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
-Execution baseline Plan №3 v2 — exact `origin/main`
-`c824e9fa02ecfe370c859a851e3c0e0cedd48667` перед EPIC 45; в него смержены
-EPIC 43, EPIC 51 и repair исторической migration chain EPIC 44.
-Публичный сайт читает Payload через Public Gateway и DTO. Leads/ingest/jobs
-имеют код и TAP/proofs; live restore и production — нет.
+Execution baseline Plan №3 v3 — exact `origin/main`
+`53cabb8fde75188101900cf457b271a745551082` после EPIC 53. EPIC 44–53
+смержены с terminal exact-head gates; их evidence индексирует TASK 54.1.
+Публичный сайт читает Payload через Public Gateway и DTO. Single-DB
+application, preview runtime, leads intake, observability и performance имеют
+live proof; restore rehearsal отложен решением владельца, production — нет.
 
-NOW: Plan №3 v2 EPIC 45–54. Независимые задачи продолжаются при локальном
-owner-blocker; один эпик = одна ветка/PR, `MERGE_AFTER_GATE`. EPIC 55–56 и
-production требуют отдельной команды владельца.
+NOW: Plan №3 v3 EPIC 54. Один эпик = одна ветка/PR,
+`MERGE_AFTER_GATE`. EPIC 55–56 и production требуют отдельной команды владельца.
 
 Production не выпускался. Коммерческие и аналитические страницы остаются под
 content/trust/index gate, пока не пройден editorial gate.
@@ -75,6 +75,14 @@ content/trust/index gate, пока не пройден editorial gate.
 | PR-73 | EPIC 43 — Source of Truth / final conformance closeout | DONE |
 | PR-75 | EPIC 51 — content fact foundation | DONE |
 | PR-74 | EPIC 44 — historical PostgreSQL migration-chain repair | DONE |
+| PR-76 | EPIC 45 — canonical state closeout | DONE |
+| PR-82 | EPIC 46 — security and access closeout | DONE |
+| PR-84 | EPIC 47 — credential rotation | DONE |
+| PR-93 | EPIC 48 — single-DB migration/application proof; restore deferred | DONE |
+| PR-97 | EPIC 49 — immutable preview runtime and rollback | DONE |
+| PR-98 | EPIC 50 — enabled leads E2E and safe disable | DONE |
+| PR-77 | EPIC 52 — content readiness classification | DONE |
+| PR-99 | EPIC 53 — observability and performance closeout | DONE |
 
 Git-история и SourceCraft PR являются доказательством отдельных merge, а не этот
 документ.
@@ -101,13 +109,13 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 
 ## 4. NOW / NEXT — Realty Platform remediation
 
-Код в `main` — целевой Realty 5.5 контур без production; Plan №3 v2 является
+Код в `main` — целевой Realty 5.5 контур без production; Plan №3 v3 является
 активной программой завершения readiness.
 
 | Состояние | Эпик | Результат |
 |---|---|---|
-| DONE | EPIC 35–44, 51 | код и proofs в `main` `c824e9fa02ecfe370c859a851e3c0e0cedd48667`; migration chain 26/26 PASS |
-| NOW | EPIC 45–54 | docs/task-manager hygiene, staging/security, preview, observability, content и RC evidence |
+| DONE | EPIC 35–53 | код и proofs в `main` `53cabb8fde75188101900cf457b271a745551082`; terminal evidence индексирован TASK 54.1 |
+| NOW | EPIC 54 | один immutable technical-preview candidate, exact-main proof и closeout |
 | OWNER GATE | EPIC 55–56 | production/cutover только после readiness и отдельной release-команды |
 
 Контентные, legal и production решения остаются human gates и не подменяются

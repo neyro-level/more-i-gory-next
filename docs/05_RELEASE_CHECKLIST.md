@@ -1,7 +1,7 @@
 # Release Checklist — «Море и Горы»
 
-**Статус:** Active — TECHNICAL PREVIEW RELEASE
-**Версия:** 3.2 — Plan №3 v3 readiness
+**Статус:** Active — TECHNICAL PREVIEW CANDIDATE CLOSEOUT
+**Версия:** 3.3 — Plan №3 v3 closeout
 **Дата:** 2026-09-21
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
@@ -83,13 +83,14 @@
 ## 5. Infrastructure and release
 
 - [x] technical production hostname определён: `more-previu.tw1.ru`;
-- [ ] TLS для technical hostname проверен на сервере;
+- [x] TLS для technical hostname проверен на сервере;
 - [x] production database credentials identified in Secret Master `more-i-gory-server/prod`;
-- [ ] Nginx config отрендерен с реальным окружением и прошёл `nginx -t`;
-- [ ] access/error logs определены;
+- [x] Nginx config отрендерен с реальным окружением и прошёл `nginx -t`;
+- [x] access/error logs определены;
 - [x] standalone artifact mode enabled for immutable versioned rollout;
-- [ ] atomic switch и rollback протестированы;
-- [ ] clean canonical `main` и exact SHA подтверждены для release;
+- [x] atomic switch и rollback протестированы;
+- [ ] clean canonical `main`, exact SHA и один frozen candidate digest —
+  терминальный внешний proof TASK 54.D после merge;
 - [ ] выполнен один production release;
 - [ ] live 200/404/redirect/sitemap/robots/form smoke;
 - [ ] мобильная визуальная проверка production.
@@ -107,7 +108,7 @@
 Числа фиксируются по итоговому content-complete runtime build, а не переносятся из
 предыдущего PR.
 
-Текущий technical artifact: Lighthouse Accessibility 100, Best Practices 100.
+Текущий technical preview: Lighthouse Accessibility 100, Best Practices 100.
 SEO 69 объясняется единственным ожидаемым fail: `noindex` до content gate.
 Локальные LCP/CLS без network throttling являются smoke, а не прогнозом field CWV.
 
@@ -115,7 +116,7 @@ SEO 69 объясняется единственным ожидаемым fail: 
 
 Production сейчас блокируют не фундамент Next.js, а:
 
-1. `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md` (enum drift, content facts,
-   ротация credentials и domain cutover);
+1. оставшиеся `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md` (property enum drift,
+   content facts и domain cutover; credential rotation уже выполнена);
 2. неутверждённый контент и реальные project passports;
 3. отдельная команда владельца на release EPIC 55–56.

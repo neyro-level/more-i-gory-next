@@ -12,8 +12,8 @@
 ## 0. Transition contract
 
 EPIC 1 перевёл публичный сайт со static export на production Node.js runtime.
-EPIC 2–13, 15–17, 19–44 и 51 в `main`
-(`c824e9fa02ecfe370c859a851e3c0e0cedd48667`): Payload 3.89, PostgreSQL
+EPIC 2–13, 15–17, 19–53 в `main`
+(`53cabb8fde75188101900cf457b271a745551082`): Payload 3.89, PostgreSQL
 migrations, Public Gateway, media/S3, regions, properties, newbuild/ingest,
 leads, jobs, preview Nginx/systemd и proof matrix. Публичный read идёт через
 `src/core/data-access/public/**` (Payload Local API + DTO); при недоступности
@@ -22,12 +22,12 @@ Payload действует безопасный fallback.
 Принятая цель — `AMS_PROFILE=REALTY_BASE`: Next.js + Payload в одном Node.js
 runtime, Managed PostgreSQL, S3 и один jobs owner. Решение принято в
 [`ADR-004`](adr/ADR-004-realty-platform-runtime.md), project-specific профиль —
-в [`PROJECT.md`](PROJECT.md). Текущая readiness-программа — Plan №3 v2
-EPIC 45–54; release EPIC 55–56 требует отдельной команды владельца.
+в [`PROJECT.md`](PROJECT.md). Текущая readiness-программа — Plan №3 v3,
+EPIC 54 closeout; release EPIC 55–56 требует отдельной команды владельца.
 
-Remediation baseline (TASK 19.1) был `27ea4c2` (после EPIC 12). Exact main,
-от которого начато исполнение Plan №3 v2 и EPIC 45, —
-`c824e9fa02ecfe370c859a851e3c0e0cedd48667`. Итоговый merge SHA каждого эпика
+Remediation baseline (TASK 19.1) был `27ea4c2` (после EPIC 12). Exact main
+после EPIC 53 и перед EPIC 54 —
+`53cabb8fde75188101900cf457b271a745551082`. Итоговый merge SHA каждого эпика
 фиксируется его delivery ledger, а не предсказывается в feature-ветке. Карта —
 в [`README.md`](README.md).
 
