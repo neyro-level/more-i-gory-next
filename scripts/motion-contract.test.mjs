@@ -4,7 +4,7 @@ import test from "node:test";
 
 const globals = readFileSync("src/app/(site)/globals.css", "utf8");
 const consumers = [
-  "src/ui/interactive/lead-form-client.tsx",
+  "src/components/marketing/forms/lead-form-client.tsx",
   "src/components/layout/site-header.tsx",
   "src/components/layout/site-footer.tsx",
 ].map((file) => readFileSync(file, "utf8"));

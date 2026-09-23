@@ -52,7 +52,6 @@ test("OWNER_QUEUE.md separates deferred owner scope, next technical plan inputs 
     "`work/ci-gate-split`",
     "Property enum live preflight",
     "Recovery policy",
-    "Reserved `packages/ui`",
   ]) {
     assert.ok(technical.includes(source), `NEXT_TECHNICAL_PLAN_INPUTS missing ${source}`);
   }
@@ -62,6 +61,7 @@ test("OWNER_QUEUE.md separates deferred owner scope, next technical plan inputs 
     "Payload/S3/app env в Secret Master",
     "Preview runtime install/rollback",
     "S3 credential correction",
+    "Reserved `packages/ui`",
   ]) {
     assert.ok(resolved.includes(source), `RESOLVED missing ${source}`);
   }

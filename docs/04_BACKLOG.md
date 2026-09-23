@@ -279,12 +279,12 @@ CI/release contracts. Новый план должен сначала приня
 
 ### TD-007 — Reserved inactive `packages/ui`
 
-Status: Next technical plan cleanup candidate
+Status: Resolved in Plan №4 EPIC 65.1
 Risk: Low
 
-Пакет не используется runtime-кодом, но остаётся workspace entry и поддерживает
-guard/test contract. Удаление выполнять отдельной проверяемой задачей вместе с
-lockfile, guards, tests и architecture docs, не как скрытую docs-правку.
+Consumer-free пакет удалён вместе с lockfile importer. Architecture guard теперь
+запрещает его скрытое возвращение; canonical UI остаётся в едином project-owned
+`src/components/**`.
 
 ### TD-008 — Legacy Beads graph остаётся физически активным
 

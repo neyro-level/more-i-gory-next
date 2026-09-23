@@ -14,7 +14,8 @@ Platform.
 - Payload Admin остаётся native CMS-интерфейсом и не копирует публичный бренд;
 - canonical consumer API — `@/components/ui/*`; owner primitives —
   `src/components/ui/**` и exact paths из
-  `docs/ui-upstream-exceptions.json`; `packages/ui` reserved/inactive;
+  `scripts/ui-upstream-exceptions.json`; удалённый `packages/ui` не является
+  допустимым вторым owner tree;
 - страницы получают только DTO/contracts и не импортируют Payload persistence;
 - решение компонентов: 'REUSE → VARIANT → CREATE'.
 
@@ -40,7 +41,8 @@ Server-first
 
 - изображения и навигация — `next/image` и `next/link`;
 - media roles те же после Payload/S3;
-- `'use client'` только в минимальных interactive leaves;
+- `'use client'` только в минимальных leaf-компонентах `src/components/ui/**`
+  и `src/components/marketing/forms/**`;
 - dark mode выключен; Tailwind class variant остаётся техническим контрактом,
   но класс `.dark` приложение не устанавливает; reduced motion обязателен;
 - package-boundary перенос UI не является текущим design contract.
@@ -79,7 +81,18 @@ operations. Custom Views допустимы только для workflow, кот
 - произвольные цвета, radius, spacing и shadow в presentation-коде запрещены
   автоматическими guards;
 - upstream shadcn-код после установки является project-owned; намеренные
-  отклонения перечисляются только в `docs/ui-upstream-exceptions.json`.
+  отклонения перечисляются только в `scripts/ui-upstream-exceptions.json`.
+
+## Approved physical mapping
+
+- public UI и domain compositions: `src/components/**`;
+- canonical primitives: `src/components/ui/**`;
+- минимальный client leaf формы: `src/components/marketing/forms/**`;
+- единственный numeric token source: `src/app/(site)/globals.css`;
+- `packages/ui` и `src/ui/interactive` не являются допустимыми owner trees;
+- исторические `More-i-gory-plan №2.md` и `MORE_I_GORY_PLAN_№ 3.md` остаются
+  на исходных путях как ненормативное evidence: move/rename запрещён, потому что
+  сломает существующие ссылки без runtime-пользы.
 
 ## Approved exceptions
 
@@ -87,7 +100,7 @@ operations. Custom Views допустимы только для workflow, кот
 |---|---|---|---|
 | Next.js experimental `globalNotFound` | У приложения два root layouts — `(site)` и `(payload)`; единый 404 до выбора layout иначе не гарантируется | `next.config.ts`, `src/app/global-not-found.tsx` | Plan №3 / EPIC 43; пересмотреть после появления стабильного Next.js API |
 
-На установленном Next.js `16.3.4` опция присутствует в config schema, а
+На установленном Next.js `16.3.6` опция присутствует в config schema, а
 [официальная документация Next.js](https://nextjs.org/docs/app/api-reference/file-conventions/not-found#global-not-foundjs-experimental)
 по-прежнему помечает её experimental. Поэтому это осознанное исключение, а не
 скрытый drift.

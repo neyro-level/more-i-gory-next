@@ -34,7 +34,6 @@
 | P1 | `work/ci-gate-split` | отдельный clean stream, 5 commits поверх Plan №3 main | принять/перебазировать/отклонить до создания конкурирующего CI/release scope |
 | P1 | Property enum live preflight | до migration база была пустой; после minimal seed появились technical rows; старый `queried:false` больше не достаточен | новый read-only drift report; DDL только при фактической необходимости |
 | P1 | Recovery policy | restore rehearsal исключён решением Plan №3 v3; backup не считать доказанным restore | owner decision и отдельный recovery contract до production-ready claim |
-| P2 | Reserved `packages/ui` | пакет inactive, runtime imports отсутствуют, но guards/lockfile его учитывают | удалить со всеми references либо явно оставить как архитектурное решение |
 
 ## RESOLVED — REMOVE FROM ACTIVE QUEUE
 
@@ -48,6 +47,7 @@ blocker:
 | Preview runtime install/rollback | PASS на exact preview SHA `f06fdb0…` | `proofs/49.O-preview-operation.md` |
 | S3 credential correction | PASS; Put/Head/Delete и синхронизация выполнены | `proofs/49.O-preview-operation.md` |
 | CAPTCHA / Turnstile account | superseded; внешний CAPTCHA исключён approved v3 | `MORE_I_GORY_PLAN_№ 3.md` v3 |
+| Reserved `packages/ui` | PASS; consumer-free workspace удалён, возврат блокирует Guard 9 | Plan №4 EPIC 65.1 |
 
 ## REVISIT_ONLY_ON_TRIGGER
 

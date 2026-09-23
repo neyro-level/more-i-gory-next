@@ -20,7 +20,7 @@ const header = readFileSync("src/components/layout/site-header.tsx", "utf8");
 const hero = readFileSync("src/components/marketing/page-hero.tsx", "utf8");
 const container = readFileSync("src/components/layout/container.tsx", "utf8");
 const buttonVariants = readFileSync("src/lib/button-variants.ts", "utf8");
-const leadForm = readFileSync("src/ui/interactive/lead-form-client.tsx", "utf8");
+const leadForm = readFileSync("src/components/marketing/forms/lead-form-client.tsx", "utf8");
 
 test("representative widths keep overflow, CTA, keyboard, labels and reduced motion contracts", () => {
   assert.deepEqual(VIEWPORTS, [390, 768, 1024, 1440, 1920]);

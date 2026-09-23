@@ -35,7 +35,7 @@ const sourceFiles = walk(join(root, "src")).filter((file) => /\.(ts|tsx)$/.test(
 const projectUiFiles = sourceFiles.filter(
   (file) =>
     !file.includes(join("src", "components", "ui")) &&
-    !file.includes(join("src", "ui", "interactive")) &&
+    !file.includes(join("src", "components", "marketing", "forms")) &&
     !file.endsWith(join("src", "lib", "button-variants.ts")),
 );
 
@@ -81,11 +81,14 @@ for (const file of sourceFiles) {
       report("P1", file, `unverified primitive or project design literal ${literal}`);
     }
   }
-  if (/^[\"']use client[\"'];?/m.test(content) && !file.includes(join("src", "ui", "interactive"))) {
+  const approvedClientLeaf =
+    file.includes(join("src", "components", "ui")) ||
+    file.includes(join("src", "components", "marketing", "forms"));
+  if (/^[\"']use client[\"'];?/m.test(content) && !approvedClientLeaf) {
     report("P1", file, "client boundary outside approved interactive leaf");
   }
   if (
-    (relativePath.startsWith("src/components/") || relativePath.startsWith("src/ui/")) &&
+    relativePath.startsWith("src/components/") &&
     forbiddenPresentationImport.test(content)
   ) {
     report("P1", file, "presentation imported payload-types, project, or data-access instead of DTO");
@@ -173,7 +176,7 @@ for (const utility of requiredUtilities) {
   if (!combinedSource.includes(utility)) report("P2", globalsPath, "project token has no consumer " + utility);
 }
 
-const leadFormPath = join(root, "src", "ui", "interactive", "lead-form-client.tsx");
+const leadFormPath = join(root, "src", "components", "marketing", "forms", "lead-form-client.tsx");
 const leadForm = readFileSync(leadFormPath, "utf8");
 for (const field of ["name", "phone", "task", "accepted"]) {
   if (!leadForm.includes('id="' + field + '-error"') || !leadForm.includes('aria-describedby=')) {

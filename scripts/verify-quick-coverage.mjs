@@ -6,13 +6,13 @@ import { findUncoveredTestScripts } from "./lib/verify-quick-coverage.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const packageJson = JSON.parse(readFileSync(path.join(projectRoot, "package.json"), "utf8"));
-const exclusions = JSON.parse(
-  readFileSync(path.join(projectRoot, "scripts/verify-quick-exclusions.json"), "utf8"),
+const manifest = JSON.parse(
+  readFileSync(path.join(projectRoot, "scripts/verify-quick-manifest.json"), "utf8"),
 );
 
 const missing = findUncoveredTestScripts({
   scripts: packageJson.scripts,
-  exclusions,
+  manifest,
 });
 
 if (missing.length > 0) {
@@ -21,4 +21,4 @@ if (missing.length > 0) {
   );
 }
 
-console.log("verify:quick covers every test:* script or a recorded exclusion.");
+console.log("verify:quick manifest covers every test:* script or a recorded exclusion.");

@@ -1,4 +1,4 @@
-import { LeadFormClient } from "@/ui/interactive/lead-form-client";
+import { LeadFormClient } from "@/components/marketing/forms/lead-form-client";
 import { ACTIVE_CONSENT_VERSION } from "@more-i-gory/contracts";
 
 type LeadFormProps = {

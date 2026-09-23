@@ -28,7 +28,7 @@ test("unverified visual-system literals fail even inside primitive paths", () =>
 test("verified exact upstream literals pass only at their registered owner", () => {
   const literal = "rounded-[4px]";
   const allowed = findArchitectureGuardViolations({
-    files: [{ path: "src/ui/interactive/checkbox.tsx", content: `export const checkbox = "${literal}";` }],
+    files: [{ path: "src/components/ui/checkbox.tsx", content: `export const checkbox = "${literal}";` }],
     manifests: [],
     uiContract,
   });

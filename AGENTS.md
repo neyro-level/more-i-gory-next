@@ -27,7 +27,8 @@
 
 ## Инварианты
 
-- `SERVER FIRST`; `"use client"` разрешён только в `src/ui/interactive/**`.
+- `SERVER FIRST`; `"use client"` разрешён только в leaf-компонентах
+  `src/components/ui/**` и `src/components/marketing/forms/**`.
 - Страницы получают контент через Public Gateway (`src/core/data-access/public/**`)
   и serializable DTO; UI не импортирует Payload types.
 - Только `published` сущности создают production routes и sitemap entries.

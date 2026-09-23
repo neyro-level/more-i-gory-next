@@ -2,18 +2,25 @@ export function listTestScripts(scripts) {
   return Object.keys(scripts).filter((name) => name.startsWith("test:"));
 }
 
-export function listVerifyQuickTestSteps(verifyQuick) {
-  return String(verifyQuick)
-    .split("&&")
-    .map((step) => step.trim())
-    .filter((step) => /^pnpm test:[^\s]+$/.test(step))
-    .map((step) => step.slice("pnpm ".length));
+function requireScript(scripts, name, field) {
+  if (!(name in scripts)) {
+    throw new Error(`${field} references undefined package script ${name}.`);
+  }
 }
 
-export function findUncoveredTestScripts({ scripts, exclusions = {} }) {
-  const included = new Set(listVerifyQuickTestSteps(scripts["verify:quick"] ?? ""));
-  const missing = [];
+export function buildVerifyQuickPlan({ scripts, manifest }) {
+  if (manifest?.schemaVersion !== 1) {
+    throw new Error("verify:quick manifest schemaVersion must be 1.");
+  }
+  if (
+    manifest.testSelection?.includePrefix !== "test:" ||
+    manifest.testSelection?.order !== "package-json" ||
+    manifest.testSelection?.runtimeMetadataSource !== "package-script"
+  ) {
+    throw new Error("verify:quick manifest must select test:* in package order using package-script runtime metadata.");
+  }
 
+  const exclusions = manifest.excludedTests ?? {};
   for (const [name, reason] of Object.entries(exclusions)) {
     if (!name.startsWith("test:")) {
       throw new Error(`Exclusion ${name} is not a test:* script.`);
@@ -26,18 +33,19 @@ export function findUncoveredTestScripts({ scripts, exclusions = {} }) {
     }
   }
 
-  for (const name of listTestScripts(scripts)) {
-    if (included.has(name)) {
-      continue;
-    }
-
-    const reason = exclusions[name];
-    if (typeof reason === "string" && reason.trim().length > 0) {
-      continue;
-    }
-
-    missing.push(name);
+  const preTestScripts = manifest.preTestScripts ?? [];
+  const postTestScripts = manifest.postTestScripts ?? [];
+  for (const name of [...preTestScripts, ...postTestScripts]) {
+    requireScript(scripts, name, "verify:quick manifest");
   }
 
-  return missing;
+  const tests = listTestScripts(scripts).filter((name) => !(name in exclusions));
+  return [...preTestScripts, ...tests, ...postTestScripts];
+}
+
+export function findUncoveredTestScripts({ scripts, manifest }) {
+  const included = new Set(buildVerifyQuickPlan({ scripts, manifest }));
+  return listTestScripts(scripts).filter(
+    (name) => !included.has(name) && !(name in (manifest.excludedTests ?? {})),
+  );
 }

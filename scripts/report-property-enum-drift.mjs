@@ -44,7 +44,18 @@ Generated without applying a live-data rewrite.
 ${sql}
 \`\`\`
 
-## Result
+## Prior live schema evidence
+
+- checked against: Timeweb managed PostgreSQL 18 bootstrap database
+- checked at: 2026-09-19
+- schema preflight queried: true
+- \`properties\` table existed: false
+- out-of-contract rows: not applicable until the migration chain is applied
+
+This historical evidence is not a current zero-row drift result. It is preserved
+so a later read-only run cannot erase the verified pre-migration state.
+
+## Current read-only result
 
 - queried: ${queried}
 - out-of-contract rows: ${rowCount == null ? "not queried" : rowCount}

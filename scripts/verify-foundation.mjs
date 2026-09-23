@@ -47,7 +47,7 @@ const requiredFiles = [
   "src/core/security/redaction/index.ts",
   "src/core/observability/index.ts",
   "src/core/lib/index.ts",
-  "src/ui/interactive/.gitkeep",
+  "src/components/marketing/forms/lead-form-client.tsx",
   ".env.example",
   "docs/README.md",
   "docs/01_PRD.md",
@@ -162,6 +162,7 @@ const requiredPrimitives = [
   "badge",
   "button",
   "card",
+  "checkbox",
   "field",
   "input",
   "label",
@@ -175,10 +176,6 @@ for (const primitive of requiredPrimitives) {
   if (!existsSync(join(root, "src", "components", "ui", `${primitive}.tsx`))) {
     throw new Error(`Missing canonical shadcn primitive: ${primitive}`);
   }
-}
-
-if (!existsSync(join(root, "src", "ui", "interactive", "checkbox.tsx"))) {
-  throw new Error("Missing canonical interactive checkbox leaf: checkbox");
 }
 
 const requiredProjectUi = [
@@ -222,7 +219,7 @@ const sourceFiles = walk(join(root, "src")).filter((file) =>
 const projectOwnedUiFiles = sourceFiles.filter(
   (file) =>
     !file.includes(`${join("src", "components", "ui")}`) &&
-    !file.includes(`${join("src", "ui", "interactive")}`),
+    !file.includes(`${join("src", "components", "marketing", "forms")}`),
 );
 const forbiddenProjectUiPatterns = [
   /\bspace-y-/,
@@ -275,7 +272,7 @@ if (!rootPage.includes("CapitalTasksSection") || rootPage.split(/\r?\n/).length 
   throw new Error("Home page must remain composition-first and below 120 lines");
 }
 
-const leadForm = readFileSync(join(root, "src", "ui", "interactive", "lead-form-client.tsx"), "utf8");
+const leadForm = readFileSync(join(root, "src", "components", "marketing", "forms", "lead-form-client.tsx"), "utf8");
 const requiredLeadFormPrimitives = [
   'from "@/components/ui/input"',
   'from "@/components/ui/textarea"',
@@ -293,15 +290,18 @@ if (
 }
 const illegalClientFiles = sourceFiles.filter((file) => {
   const text = readFileSync(file, "utf8");
+  const approvedClientLeaf =
+    file.includes(`${join("src", "components", "ui")}`) ||
+    file.includes(`${join("src", "components", "marketing", "forms")}`);
   return (
     /^["']use client["'];?/.test(text) &&
-    !file.includes(`${join("src", "ui", "interactive")}`)
+    !approvedClientLeaf
   );
 });
 
 if (illegalClientFiles.length > 0) {
   throw new Error(
-    `"use client" is allowed only in src/ui/interactive: ${illegalClientFiles.join(", ")}`,
+    `"use client" is allowed only in approved component leaves: ${illegalClientFiles.join(", ")}`,
   );
 }
 
@@ -374,7 +374,7 @@ if (overrideAccessConsumers.length > 0) {
 
 const reusableUiFiles = sourceFiles.filter((file) => {
   const normalized = file.replaceAll("\\", "/");
-  return normalized.includes("/src/components/") || normalized.includes("/src/ui/");
+  return normalized.includes("/src/components/");
 });
 const persistenceImportPattern = /from\s+["'](?:@payloadcms\/|payload(?:\/|["'])|@\/(?:collections|payload|persistence|core\/persistence)(?:\/|["']))/;
 for (const file of reusableUiFiles) {
@@ -384,7 +384,7 @@ for (const file of reusableUiFiles) {
 }
 
 const clientFiles = sourceFiles.filter((file) =>
-  file.includes(`${join("src", "ui", "interactive")}`),
+  /^["']use client["'];?/.test(readFileSync(file, "utf8")),
 );
 const forbiddenClientPatterns = [
   /@\/content\//,

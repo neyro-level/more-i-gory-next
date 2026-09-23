@@ -36,7 +36,7 @@ test("project UI has one Button/control system", () => {
   assert.match(actionLink, /from "@\/lib\/button-variants"/);
   assert.match(actionLink, /buttonVariants\(/);
 
-  const leadForm = readFileSync("src/ui/interactive/lead-form-client.tsx", "utf8");
+  const leadForm = readFileSync("src/components/marketing/forms/lead-form-client.tsx", "utf8");
   assert.match(leadForm, /from "@\/components\/ui\/button"/);
   assert.match(leadForm, /<Button\b/);
 });

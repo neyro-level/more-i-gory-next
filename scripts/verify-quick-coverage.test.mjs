@@ -1,57 +1,89 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { findUncoveredTestScripts, listVerifyQuickTestSteps } from "./lib/verify-quick-coverage.mjs";
+import { buildVerifyQuickPlan, findUncoveredTestScripts } from "./lib/verify-quick-coverage.mjs";
 
-test("verify:quick test steps are parsed as pnpm test:* tokens", () => {
-  assert.deepEqual(
-    listVerifyQuickTestSteps("pnpm lint && pnpm test:alpha && pnpm verify:foundation && pnpm test:beta"),
-    ["test:alpha", "test:beta"],
-  );
+const manifest = {
+  schemaVersion: 1,
+  preTestScripts: ["lint"],
+  testSelection: {
+    includePrefix: "test:",
+    order: "package-json",
+    runtimeMetadataSource: "package-script",
+  },
+  excludedTests: {},
+  postTestScripts: ["verify:foundation"],
+};
+
+test("runner keeps package order and delegates exact runtime metadata to package scripts", () => {
+  const scripts = {
+    lint: "eslint .",
+    "test:plain": "node --test scripts/plain.test.mjs",
+    "test:server": "node --conditions=react-server --test scripts/server.test.mjs",
+    "verify:foundation": "node scripts/verify-foundation.mjs",
+  };
+
+  assert.deepEqual(buildVerifyQuickPlan({ scripts, manifest }), [
+    "lint",
+    "test:plain",
+    "test:server",
+    "verify:foundation",
+  ]);
+  assert.match(scripts["test:server"], /--conditions=react-server/);
 });
 
-test("a test:* outside verify:quick fails without a recorded reason", () => {
+test("every test:* script is covered automatically", () => {
   assert.deepEqual(
     findUncoveredTestScripts({
       scripts: {
+        lint: "eslint .",
         "test:alpha": "node --test",
-        "test:orphan": "node --test",
-        "verify:quick": "pnpm test:alpha",
+        "test:newly-added": "node --conditions=react-server --test",
+        "verify:foundation": "node verify.mjs",
       },
-      exclusions: {},
-    }),
-    ["test:orphan"],
-  );
-});
-
-test("a recorded exclusion with a reason is allowed", () => {
-  assert.deepEqual(
-    findUncoveredTestScripts({
-      scripts: {
-        "test:alpha": "node --test",
-        "test:slow": "node --test",
-        "verify:quick": "pnpm test:alpha",
-      },
-      exclusions: {
-        "test:slow": "manual operator-only proof, not part of the default MERGE gate",
-      },
+      manifest,
     }),
     [],
   );
 });
 
+test("a recorded exclusion with a reason is omitted", () => {
+  const withExclusion = {
+    ...manifest,
+    excludedTests: { "test:operator": "manual operator-only proof" },
+  };
+  const scripts = {
+    lint: "eslint .",
+    "test:alpha": "node --test",
+    "test:operator": "node --test",
+    "verify:foundation": "node verify.mjs",
+  };
+
+  assert.deepEqual(buildVerifyQuickPlan({ scripts, manifest: withExclusion }), [
+    "lint",
+    "test:alpha",
+    "verify:foundation",
+  ]);
+});
+
 test("empty exclusion reason is rejected", () => {
   assert.throws(
     () =>
-      findUncoveredTestScripts({
+      buildVerifyQuickPlan({
         scripts: {
+          lint: "eslint .",
           "test:alpha": "node --test",
-          "verify:quick": "pnpm test:alpha",
+          "verify:foundation": "node verify.mjs",
         },
-        exclusions: {
-          "test:alpha": "   ",
-        },
+        manifest: { ...manifest, excludedTests: { "test:alpha": "   " } },
       }),
     /non-empty reason/,
+  );
+});
+
+test("undefined lifecycle scripts fail before execution", () => {
+  assert.throws(
+    () => buildVerifyQuickPlan({ scripts: { "test:alpha": "node --test" }, manifest }),
+    /references undefined package script lint/,
   );
 });

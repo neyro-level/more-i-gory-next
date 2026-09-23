@@ -27,7 +27,8 @@ Server-first
 ```
 
 `output: "standalone"` задан в `next.config.ts`. `"use client"` разрешён только в
-`src/ui/interactive/**`. Public pages остаются Server Components.
+leaf-компонентах `src/components/ui/**` и `src/components/marketing/forms/**`.
+Public pages остаются Server Components.
 
 ## 2. Runtime / Exact Versions
 
@@ -72,7 +73,7 @@ Official evidence:
 ## 5. Leads / Forms
 
 - Canonical lead UI: LeadForm.
-- Transport: browser POST `/api/public/leads` через `src/ui/interactive/lead-form-client.tsx`.
+- Transport: browser POST `/api/public/leads` через `src/components/marketing/forms/lead-form-client.tsx`.
 - Server owner: тот же Node runtime и Payload collections `leads` /
   `lead-deliveries`; отдельный static-export AMS Leads API не используется.
 - PII/legal: consent version и policy gate из Product Structure/Architecture.

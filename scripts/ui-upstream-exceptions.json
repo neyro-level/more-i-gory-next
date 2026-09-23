@@ -5,12 +5,7 @@
   "preset": "base-nova",
   "primitiveOwnerRoots": ["src/components/ui/"],
   "primitiveOwnerFiles": [
-    "src/lib/button-variants.ts",
-    "src/ui/interactive/checkbox.tsx",
-    "src/ui/interactive/field.tsx",
-    "src/ui/interactive/label.tsx",
-    "src/ui/interactive/separator.tsx",
-    "src/ui/interactive/sheet.tsx"
+    "src/lib/button-variants.ts"
   ],
   "exceptions": [
     {
@@ -54,7 +49,7 @@
       "reason": "Exact small-button type size from the pinned upstream primitive."
     },
     {
-      "file": "src/ui/interactive/checkbox.tsx",
+      "file": "src/components/ui/checkbox.tsx",
       "literal": "rounded-[4px]",
       "pattern": "exact",
       "component": "checkbox",
@@ -64,7 +59,7 @@
       "reason": "Exact checkbox radius from the pinned upstream primitive."
     },
     {
-      "file": "src/ui/interactive/sheet.tsx",
+      "file": "src/components/ui/sheet.tsx",
       "literal": "bg-black/10",
       "pattern": "exact",
       "component": "sheet",

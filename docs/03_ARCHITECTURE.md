@@ -123,17 +123,15 @@ Payload-group `3.90.1` на основании официальных critical s
 FOLDER FORM = canonical
 ```
 
-Публичный UI живёт в `src/components/**` и `src/ui/**`. Массовый перенос в
-`packages/ui` запрещён.
+Публичный UI живёт в едином project-owned дереве `src/components/**`. Отдельный
+`packages/ui` удалён как consumer-free workspace и не должен возвращаться.
 
 | Package | Статус |
 |---|---|
 | `packages/contracts` (`@more-i-gory/contracts`) | active — shared DTO/schemas |
-| `packages/ui` (`@more-i-gory/ui`) | reserved / inactive — workspace package сохранён |
 
-`packages/ui` остаётся в `pnpm-workspace.yaml`, чтобы не ломать lockfile в середине
-remediation. Вопрос об удалении пакета возвращается после EPIC 32
-(`docs/OWNER_QUEUE.md`).
+`pnpm-workspace.yaml` сохраняет общий `packages/*`, но фактически включает только
+активные packages. Lockfile не содержит importer для удалённого `packages/ui`.
 
 shadcn contract:
 - официальный встроенный registry `@shadcn`; он доступен CLI даже при
@@ -142,8 +140,9 @@ shadcn contract:
 - preset `nova`;
 - Tailwind CSS 4 и CSS variables;
 - `components.json` и project aliases;
-- CLI пишет primitives в `src/components/ui/**`; client-only реализации
-  изолируются в `src/ui/interactive/**` и реэкспортируются через canonical alias;
+- CLI пишет primitives и их client-only реализации прямо в canonical
+  `src/components/ui/**`; доменные client leaves изолируются в профильных
+  подпапках, сейчас только `src/components/marketing/forms/**`;
 - собственные составные компоненты хранятся локально в `src/components/**`;
 - частный namespace `@ams` не подключается, пока реально не существует
   утверждённый registry endpoint;
@@ -317,7 +316,7 @@ Server by default:
 `"use client"` запрещён в `src/app/**` и больших композиционных секциях.
 
 Форма рендерится на сервере и получает минимальный client leaf в
-`src/ui/interactive/lead-form-client.tsx`; при отключённом JavaScript отправка
+`src/components/marketing/forms/lead-form-client.tsx`; при отключённом JavaScript отправка
 fail-closed.
 
 Внутренние переходы используют `next/link`; изображения — `next/image` с
@@ -583,7 +582,13 @@ Budgets are project gates, not SEO ranking guarantees.
 
 ## 25. Verification Commands
 
-`pnpm verify:quick` проверяет:
+`pnpm verify:quick` выполняется через `scripts/verify-quick.mjs` и
+`scripts/verify-quick-manifest.json`. Runner берёт все `test:*` в порядке
+`package.json`, а точные Node runtime conditions — из команды каждого package
+script; условия не угадываются по имени файла. Manifest явно фиксирует pre/post
+стадии и обоснованные исключения.
+
+Quick-проверка охватывает:
 - typecheck;
 - lint;
 - schemas;

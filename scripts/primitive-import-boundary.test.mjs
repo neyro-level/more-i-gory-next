@@ -10,7 +10,7 @@ test("Base UI stays inside canonical primitive implementation owners", () => {
   const allowed = findArchitectureGuardViolations({
     files: [
       { path: "src/components/ui/button.tsx", content: 'import { Button } from "@base-ui/react/button";' },
-      { path: "src/ui/interactive/checkbox.tsx", content: 'import { Checkbox } from "@base-ui/react/checkbox";' },
+      { path: "src/components/ui/checkbox.tsx", content: 'import { Checkbox } from "@base-ui/react/checkbox";' },
     ],
     manifests: [],
     uiContract,
@@ -25,13 +25,12 @@ test("Base UI stays inside canonical primitive implementation owners", () => {
   assert.match(denied.join("\n"), /Base UI imports are allowed only/);
 });
 
-test("consumer re-exports point to the canonical implementation and are not duplicate primitives", () => {
-  assert.equal(
-    readFileSync(new URL("../src/components/ui/checkbox.tsx", import.meta.url), "utf8").trim(),
-    'export * from "@/ui/interactive/checkbox";',
-  );
-  assert.equal(
-    readFileSync(new URL("../src/components/ui/sheet.tsx", import.meta.url), "utf8").trim(),
-    'export * from "@/ui/interactive/sheet";',
-  );
+test("canonical primitive files own their implementations directly", () => {
+  const checkbox = readFileSync(new URL("../src/components/ui/checkbox.tsx", import.meta.url), "utf8");
+  const sheet = readFileSync(new URL("../src/components/ui/sheet.tsx", import.meta.url), "utf8");
+
+  assert.match(checkbox, /from "@base-ui\/react\/checkbox"/);
+  assert.match(sheet, /from "@base-ui\/react\/dialog"/);
+  assert.doesNotMatch(checkbox, /@\/ui\/interactive/);
+  assert.doesNotMatch(sheet, /@\/ui\/interactive/);
 });

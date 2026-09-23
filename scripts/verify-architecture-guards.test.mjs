@@ -16,13 +16,6 @@ const cleanContractsManifest = {
   },
 };
 
-const cleanUiManifest = {
-  dependencies: {
-    "@more-i-gory/contracts": "workspace:*",
-    react: "19.3.0",
-  },
-};
-
 function expectGuard(guard, snapshot) {
   assert.throws(() => assertArchitectureGuards(snapshot), new RegExp(`Guard ${guard}:`));
 }
@@ -35,13 +28,11 @@ test("clean architecture fixture passes all guards", () => {
         { path: "src/project/env.ts", content: "export const secret = process.env.PAYLOAD_SECRET;" },
         { path: "next.config.ts", content: "export const bucket = process.env.S3_BUCKET; export const endpoint = process.env.S3_ENDPOINT;" },
         { path: "packages/contracts/src/index.ts", content: 'import { z } from "zod"; export { pageSchema } from "./schemas.ts";' },
-        { path: "packages/ui/src/index.ts", content: 'import type { PageContent } from "@more-i-gory/contracts"; export type UiPage = PageContent;' },
         { path: "src/components/marketing/layout.tsx", content: 'export const className = "grid grid-cols-[auto_1fr]";' },
       ],
       manifests: [
         { path: "package.json", manifest: exactManifest },
         { path: "packages/contracts/package.json", manifest: cleanContractsManifest },
-        { path: "packages/ui/package.json", manifest: cleanUiManifest },
       ],
     }),
   );
@@ -252,10 +243,10 @@ test("Guard 9 rejects framework runtime in contracts sources and manifest", () =
   });
 });
 
-test("Guard 9 rejects persistence and project data dependencies in ui", () => {
+test("Guard 9 rejects reintroduction of the removed packages/ui workspace", () => {
   expectGuard(9, {
-    files: [{ path: "packages/ui/src/card.tsx", content: 'import { getPayload } from "payload"; import { env } from "@/project/env";' }],
-    manifests: [{ path: "packages/ui/package.json", manifest: { dependencies: { payload: "3.89.0" } } }],
+    files: [{ path: "packages/ui/src/card.tsx", content: "export const Card = {};" }],
+    manifests: [{ path: "packages/ui/package.json", manifest: {} }],
   });
 });
 
@@ -263,7 +254,7 @@ test("Guard 9 rejects Payload and data-access imports in presentation components
   expectGuard(9, {
     files: [
       { path: "src/components/page-blocks/cms-page.tsx", content: 'import type { CmsPageDTO } from "@/core/data-access/public/cms-page-contract";' },
-      { path: "src/ui/interactive/lead-form-client.tsx", content: 'import { env } from "@/project/env";' },
+      { path: "src/components/marketing/forms/lead-form-client.tsx", content: 'import { env } from "@/project/env";' },
     ],
     manifests: [],
   });
@@ -307,7 +298,7 @@ test("Guard 11 allows structural arbitrary values", () => {
     assertArchitectureGuards({
       files: [
         { path: "src/components/marketing/grid.tsx", content: 'export const className = "grid lg:grid-cols-[0.85fr_1.15fr] has-[>svg]:grid-cols-[auto_1fr]";' },
-        { path: "src/ui/interactive/sheet.tsx", content: 'export const className = "translate-x-[2.5rem] max-w-[42rem]";' },
+        { path: "src/components/ui/sheet.tsx", content: 'export const className = "translate-x-[2.5rem] max-w-[42rem]";' },
       ],
       manifests: [],
     }),

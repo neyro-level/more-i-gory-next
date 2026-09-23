@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "preTestScripts": [
+    "content:build",
+    "typecheck",
+    "lint",
+    "verify:guards",
+    "verify:guards:test",
+    "verify:quick-coverage"
+  ],
+  "testSelection": {
+    "includePrefix": "test:",
+    "order": "package-json",
+    "runtimeMetadataSource": "package-script"
+  },
+  "excludedTests": {},
+  "postTestScripts": [
+    "verify:foundation",
+    "verify:ui-drift",
+    "verify:content",
+    "verify:seo"
+  ]
+}

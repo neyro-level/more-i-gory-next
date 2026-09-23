@@ -192,29 +192,10 @@ function isRelativeSpecifier(specifier) {
   return specifier.startsWith(".");
 }
 
-function isForbiddenUiSpecifier(specifier) {
-  return (
-    specifier === "@payload-config" ||
-    specifier === "payload" ||
-    specifier.startsWith("payload/") ||
-    specifier.startsWith("@payloadcms/") ||
-    specifier === "pg" ||
-    specifier.startsWith("pg/") ||
-    specifier === "postgres" ||
-    specifier.startsWith("postgres/") ||
-    specifier === "drizzle-orm" ||
-    specifier.startsWith("drizzle-orm/") ||
-    specifier === "@prisma/client" ||
-    specifier === "prisma" ||
-    specifier.startsWith("@/project/") ||
-    specifier.startsWith("@/core/data-access/")
-  );
-}
-
 const registeredPresentationAdapters = new Set();
 
 function isPresentationLayer(filePath) {
-  return filePath.startsWith("src/components/") || filePath.startsWith("src/ui/");
+  return filePath.startsWith("src/components/");
 }
 
 function isForbiddenPresentationSpecifier(specifier) {
@@ -236,18 +217,6 @@ function isForbiddenSeoSpecifier(specifier) {
     specifier.startsWith("payload/") ||
     specifier.startsWith("@payloadcms/") ||
     /(?:^|\/)payload\.config(?:\.[cm]?[jt]s)?$/.test(specifier)
-  );
-}
-
-function isForbiddenUiDependency(name) {
-  return (
-    name === "payload" ||
-    name.startsWith("@payloadcms/") ||
-    name === "pg" ||
-    name === "postgres" ||
-    name === "drizzle-orm" ||
-    name === "@prisma/client" ||
-    name === "prisma"
   );
 }
 
@@ -369,7 +338,8 @@ export function findArchitectureGuardViolations({ files, manifests, uiContract }
         filePath === "src/project/env.ts" ||
         filePath === "payload.config.ts" ||
         (filePath === "next.config.ts" && envKeys.every((key) => ["S3_BUCKET", "S3_ENDPOINT"].includes(key))) ||
-        (filePath.startsWith("src/ui/interactive/") && envKeys.every((key) => key.startsWith("NEXT_PUBLIC_")));
+        (filePath.startsWith("src/components/marketing/forms/") &&
+          envKeys.every((key) => key.startsWith("NEXT_PUBLIC_")));
       if (!approvedEnvLayer) {
         addViolation(
           violations,
@@ -398,11 +368,7 @@ export function findArchitectureGuardViolations({ files, manifests, uiContract }
     }
 
     if (filePath.startsWith("packages/ui/")) {
-      for (const specifier of moduleSpecifiers(content)) {
-        if (isForbiddenUiSpecifier(specifier)) {
-          addViolation(violations, 9, filePath, `packages/ui must not depend on persistence or project data layers, got ${specifier}`);
-        }
-      }
+      addViolation(violations, 9, filePath, "removed packages/ui workspace must not return");
     }
 
     if (isPresentationLayer(filePath) && !registeredPresentationAdapters.has(filePath)) {
@@ -467,6 +433,9 @@ export function findArchitectureGuardViolations({ files, manifests, uiContract }
 
   for (const entry of manifests) {
     const filePath = normalizePath(entry.path);
+    if (filePath === "packages/ui/package.json") {
+      addViolation(violations, 9, filePath, "removed packages/ui workspace must not return");
+    }
     for (const section of ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]) {
       for (const [name, version] of Object.entries(entry.manifest[section] ?? {})) {
         if (!isExactDependencyVersion(name, version)) {
@@ -477,9 +446,6 @@ export function findArchitectureGuardViolations({ files, manifests, uiContract }
           addViolation(violations, 9, filePath, `packages/contracts package dependencies are limited to zod, got ${name}`);
         }
 
-        if (filePath === "packages/ui/package.json" && isForbiddenUiDependency(name)) {
-          addViolation(violations, 9, filePath, `packages/ui package.json must not depend on persistence packages, got ${name}`);
-        }
       }
     }
   }

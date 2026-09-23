@@ -4,7 +4,7 @@ import test from "node:test";
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
-const leadFormClient = read("src/ui/interactive/lead-form-client.tsx");
+const leadFormClient = read("src/components/marketing/forms/lead-form-client.tsx");
 const intakeEndpoint = read("src/core/leads/intake-endpoint.ts");
 const privacyPage = read("src/app/(site)/privacy/page.tsx");
 const consentPage = read("src/app/(site)/consent/page.tsx");

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-const leadForm = readFileSync("src/ui/interactive/lead-form-client.tsx", "utf8");
+const leadForm = readFileSync("src/components/marketing/forms/lead-form-client.tsx", "utf8");
 
 const primitives = [
   ["Input", "@/components/ui/input"],

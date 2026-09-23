@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -18,15 +18,12 @@ function walk(relativeDirectory) {
   });
 }
 
-test("FOLDER FORM is canonical and packages/ui stays reserved inactive", () => {
+test("FOLDER FORM is canonical and the inactive packages/ui workspace stays removed", () => {
   const architecture = read("docs/03_ARCHITECTURE.md");
   assert.match(architecture, /FOLDER FORM = canonical/);
   assert.match(architecture, /packages\/contracts/);
-  assert.match(architecture, /reserved \/ inactive/);
-
-  const uiPackage = JSON.parse(read("packages/ui/package.json"));
-  assert.match(String(uiPackage.description), /RESERVED\/INACTIVE/);
-  assert.equal(uiPackage.dependencies, undefined);
+  assert.match(architecture, /packages\/ui` удалён/);
+  assert.equal(existsSync(path.join(projectRoot, "packages/ui")), false);
 
   const contractsPackage = JSON.parse(read("packages/contracts/package.json"));
   assert.match(String(contractsPackage.description), /ACTIVE/);
@@ -34,6 +31,7 @@ test("FOLDER FORM is canonical and packages/ui stays reserved inactive", () => {
 
   const workspace = read("pnpm-workspace.yaml");
   assert.match(workspace, /packages\/\*/);
+  assert.doesNotMatch(read("pnpm-lock.yaml"), /^  packages\/ui:/m);
 
   const rootPackage = JSON.parse(read("package.json"));
   assert.equal(rootPackage.dependencies["@more-i-gory/ui"], undefined);

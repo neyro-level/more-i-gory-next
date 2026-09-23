@@ -24,7 +24,7 @@ test("UI drift audit blocks forbidden presentation data imports", () => {
     .filter((file) => /\.(ts|tsx)$/.test(file))
     .filter((file) => {
       const relativePath = file.replaceAll("\\", "/");
-      return relativePath.startsWith("src/components/") || relativePath.startsWith("src/ui/");
+      return relativePath.startsWith("src/components/");
     });
 
   for (const file of presentation) {
