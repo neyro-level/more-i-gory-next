@@ -256,10 +256,22 @@ second database and do not restore over `default_db`.
 
 ## Backup and recovery boundary
 
-Timeweb Managed PostgreSQL keeps provider backups. A separate restore database,
-backup/restore rehearsal and production disaster-recovery proof are explicitly
-outside approved plan v3 and do not block the technical preview. No project
-script provisions a restore target or dumps application data.
+Timeweb Managed PostgreSQL keeps provider backups. Restore proof is a
+**release-only owner gate**: implementation and preview work must not run it.
+It starts only after the owner gives the exact command `Выпускаем production`
+and approves the provider cost, backup identifier and cleanup window.
+
+The proof must use a newly created **ephemeral recovery target** with separate
+credentials. Record the source backup identifier/time, target identity,
+migration/schema result and application read smoke without copying credentials
+or data into evidence. Never restore over `default_db` and never reuse preview
+as the recovery target. Delete the temporary target after evidence is accepted;
+failure to delete it is an incident and a cost blocker for release completion.
+
+Stop without production rollout if the provider cannot create an isolated
+target, the expected backup is unavailable, schema/migration identity differs,
+application read smoke fails, or cleanup cannot be guaranteed. No standing
+staging/test/restore database is created by this plan.
 
 S3 media (TASK 31.5):
 
@@ -306,6 +318,13 @@ ops/runtime/jobs-handover.sh smoke
 Steady state обязан дать ровно один `true`. На шаге «assert no owner» —
 `--mode=handover-none` и ноль `true`. Переключение `false → true` только
 controlled restart, не live mutate.
+
+Jobs-owner activation is also release-only. Until the owner gives the exact
+command `Выпускаем production`, every candidate and preview runtime keeps
+`JOBS_AUTORUN=false`; implementation may validate only the handover contract.
+The release operator must prove zero owners before activation and exactly one
+owner after it. Any ambiguous, duplicate or unreachable owner is a hard stop;
+do not start jobs and do not continue rollout.
 
 ### Payload jobs diagnostics
 
@@ -403,9 +422,10 @@ secrets            : MOREIGORY_DATABASE_URL renders runtime DATABASE_URI;
 jobs ingest        : JOBS_AUTORUN=false; feed catalog remains frozen
 ```
 
-Preview использует ту же единственную project-owned database identity. Создание
-второй database/user и restore rehearsal исключены утверждённым v3; отдельного
-provisioning script нет.
+Preview использует ту же единственную project-owned database identity. Постоянная
+вторая database/user запрещена. Единственное исключение — краткоживущий
+изолированный recovery target во время явно разрешённого production release по
+процедуре выше; отдельного preview provisioning script нет.
 
 ## Incident checklist
 
