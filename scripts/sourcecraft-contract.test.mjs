@@ -4,6 +4,8 @@ import test from "node:test";
 
 const ci = await readFile(new URL("../.sourcecraft/ci.yaml", import.meta.url), "utf8");
 const workspace = await readFile(new URL("../pnpm-workspace.yaml", import.meta.url), "utf8");
+const releaseScript = await readFile(new URL("./ci/sourcecraft-release.sh", import.meta.url), "utf8");
+const runtimeRelease = await readFile(new URL("./verify-runtime-release.mjs", import.meta.url), "utf8");
 
 function workflow(name, nextName) {
   const start = ci.indexOf(`  ${name}:`);
@@ -17,6 +19,29 @@ test("development CI remains manual-only", () => {
   assert.match(ci, /^on:\s*\{\}\s*$/mu);
   assert.doesNotMatch(ci, /^\s*(?:trigger|triggers|push|pull_request|merge_request|schedule):/mu);
   assert.match(ci, /^workflows:\s*$/mu);
+});
+
+test("one manual release workflow owns the single-build artifact path", () => {
+  assert.equal(ci.match(/^  release-single-build:\s*$/gmu)?.length, 1);
+  const release = workflow("release-single-build");
+  assert.match(release, /expected_commit_sha/);
+  assert.match(release, /gate_run_slug/);
+  assert.match(release, /previous_release_sha/);
+  assert.match(release, /bash scripts\/ci\/sourcecraft-release\.sh/);
+  for (const artifact of [
+    "release.tar.gz",
+    "release.tar.gz.sha256",
+    "RELEASE_EVIDENCE.json",
+    "PACK_RESULT.json",
+  ]) {
+    assert.ok(release.includes(`dist/sourcecraft-release/${artifact}`));
+  }
+  assert.doesNotMatch(release, /\b(?:ssh|scp|rsync|docker\s+(?:build|compose)|kubectl)\b/);
+  assert.equal(ci.match(/bash scripts\/ci\/sourcecraft-release\.sh/g)?.length, 1);
+  assert.equal(releaseScript.match(/pnpm verify:risk:runtime-release/g)?.length, 1);
+  assert.equal(releaseScript.match(/node scripts\/pack-release\.mjs/g)?.length, 1);
+  assert.equal(runtimeRelease.match(/^  "build",$/gmu)?.length, 1);
+  assert.doesNotMatch(releaseScript, /\b(?:ssh|scp|rsync|docker\s+(?:build|compose)|kubectl)\b/);
 });
 
 test("both exact-head merge gates block high and critical dependency findings", () => {

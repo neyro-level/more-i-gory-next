@@ -21,6 +21,15 @@ Production release uses an exact `main` SHA and a Linux-built Next.js
 standalone artifact. The server receives the already built artifact, not source
 that must resolve dependencies or build on the production host.
 
+The only build-and-pack implementation is the manual SourceCraft workflow
+`release-single-build`. It requires the exact candidate SHA, the API-verified
+Merge Gate run, the previous rollback SHA and a release-store tag. The workflow
+builds once, reuses that output for runtime checks, creates one archive plus
+checksum and evidence, and stops before any server connection or deploy. It is
+never triggered by push or Pull Request; running it still requires a separate
+owner release command. A durable-store upload is a later operator step and must
+stop if the SourceCraft attachment API has not been verified at execution time.
+
 Build happens off the runtime host. Pack with
 `node scripts/pack-release.mjs --from <linux-build> --sha <40-char> --out <dir>`,
 verify the emitted `<dir>.tar.gz.sha256`, then install `<dir>.tar.gz` with
