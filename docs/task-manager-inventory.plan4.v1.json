@@ -1,0 +1,2450 @@
+{
+  "schema_version": 2,
+  "beads_prefix": "mg5",
+  "source": {
+    "plan_id": "more-i-gory-technical-hardening-2026-09",
+    "path": "docs/MORE_I_GORY_PLAN_№ 4.md",
+    "version": "v1",
+    "status": "APPROVED",
+    "approved_by": "owner",
+    "approved_at": "2026-09-23T14:52:38.5638231+03:00",
+    "sha256": "65459497d381dc39db9684d6d2eb2d5e79d69ea6c645494b2c7b02f68f42d5e0",
+    "epic_anchors": [
+      "EPIC 60",
+      "EPIC 61",
+      "EPIC 62",
+      "EPIC 63",
+      "EPIC 64",
+      "EPIC 65",
+      "EPIC 66",
+      "EPIC 67"
+    ]
+  },
+  "nodes": [
+    {
+      "key": "EPIC-60",
+      "title": "Execution-control foundation",
+      "type": "epic",
+      "source_anchor": "EPIC 60",
+      "goal": "Establish one current control plane, remote baseline and noncanonical-history boundary before implementation.",
+      "scope": [
+        "All approved requirements and prohibitions under EPIC 60 in Plan №4 v1"
+      ],
+      "acceptance_criteria": [
+        "All sibling implementation tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:a",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-60-1",
+      "title": "SourceCraft access and baseline preflight",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-60",
+      "source_anchor": "60.1",
+      "goal": "Confirm API access, fresh canonical main and current CI topology.",
+      "scope": [
+        "Implement only task 60.1 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "SourceCraft access and remote SHA are proven, or a precise external owner blocker is recorded.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-60-2",
+      "title": "Resolve ci-gate-split stream",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-60",
+      "source_anchor": "60.2",
+      "goal": "Review the exact five-commit stream and adopt, split or reject it without a competing release path.",
+      "scope": [
+        "Implement only task 60.2 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "One release-tooling path remains and the exact commit decision is recorded.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-60-3",
+      "title": "Quarantine legacy mg graph",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-60",
+      "source_anchor": "60.3",
+      "goal": "Supersede or quarantine legacy mg issues without deleting historical evidence.",
+      "scope": [
+        "Implement only task 60.3 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Plan-scoped ready work excludes legacy tasks and historical records remain queryable.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-60-4",
+      "title": "Freeze DB and execution baseline",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-60",
+      "source_anchor": "60.4",
+      "goal": "Record read-only migration preflight, task worktree ownership and stop conditions.",
+      "scope": [
+        "Implement only task 60.4 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Baseline and execution ownership are unambiguous and no live mutation occurred.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-60-D",
+      "title": "Deliver execution-control foundation",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-60",
+      "source_anchor": "60.D",
+      "goal": "Review, gate and merge EPIC 60.",
+      "scope": [
+        "Implement only task 60.D from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "EPIC 60 PR is merged at an exact attested SHA.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Review the full epic diff against Plan №4 v1",
+        "Run exactly one risk-based exact-head SourceCraft gate",
+        "Verify PR head and merge without production"
+      ],
+      "depends_on": [
+        "TASK-60-1",
+        "TASK-60-2",
+        "TASK-60-3",
+        "TASK-60-4"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:a",
+        "plan:v1",
+        "delivery:merge-after-gate"
+      ]
+    },
+    {
+      "key": "EPIC-61",
+      "title": "Critical dependency security upgrade",
+      "type": "epic",
+      "source_anchor": "EPIC 61",
+      "goal": "Remove the vulnerable Next and Payload baselines with exact synchronized versions.",
+      "scope": [
+        "All approved requirements and prohibitions under EPIC 61 in Plan №4 v1"
+      ],
+      "acceptance_criteria": [
+        "All sibling implementation tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-60"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:b",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-61-1",
+      "title": "Upgrade exact Next and Payload versions",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-61",
+      "source_anchor": "61.1",
+      "goal": "Install Next/eslint 16.3.6 and all Payload packages 3.90.1 with one lockfile set.",
+      "scope": [
+        "Implement only task 61.1 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Clean install and high audit pass with no mixed Next or Payload versions.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-61-2",
+      "title": "Generate Payload artifacts and auth migration",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-61",
+      "source_anchor": "61.2",
+      "goal": "Regenerate types/import map and create a reviewed forward-only auth migration.",
+      "scope": [
+        "Implement only task 61.2 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Generated artifacts match config and migration SQL is non-destructive.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-61-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-61-3",
+      "title": "Harden manual merge audit gates",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-61",
+      "source_anchor": "61.3",
+      "goal": "Require high audit in both manual merge profiles without push or PR triggers.",
+      "scope": [
+        "Implement only task 61.3 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "CI contract tests prove audit coverage and zero automatic development CI.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-61-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-61-D",
+      "title": "Deliver critical dependency upgrade",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-61",
+      "source_anchor": "61.D",
+      "goal": "Review, RISKY-gate and merge EPIC 61.",
+      "scope": [
+        "Implement only task 61.D from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "EPIC 61 PR is merged at an exact RISKY-attested SHA.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Review the full epic diff against Plan №4 v1",
+        "Run exactly one risk-based exact-head SourceCraft gate",
+        "Verify PR head and merge without production"
+      ],
+      "depends_on": [
+        "TASK-61-1",
+        "TASK-61-2",
+        "TASK-61-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:b",
+        "plan:v1",
+        "delivery:merge-after-gate"
+      ]
+    },
+    {
+      "key": "EPIC-62",
+      "title": "Payload config schema and runtime proof",
+      "type": "epic",
+      "source_anchor": "EPIC 62",
+      "goal": "Prove the upgraded Payload runtime across origin security, migrations, auth, Admin, media and editor.",
+      "scope": [
+        "All approved requirements and prohibitions under EPIC 62 in Plan №4 v1"
+      ],
+      "acceptance_criteria": [
+        "All sibling implementation tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-61"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:c",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-62-1",
+      "title": "Implement exact Payload origin policy",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-62",
+      "source_anchor": "62.1",
+      "goal": "Set serverURL, CSRF and CORS from exact env origins without wildcard.",
+      "scope": [
+        "Implement only task 62.1 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Same-origin auth works and foreign Origin with cookie is denied.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-61-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-62-2",
+      "title": "Complete Nginx headers and upload boundary",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-62",
+      "source_anchor": "62.2",
+      "goal": "Add the missing CSP contract and align all headers and upload limits.",
+      "scope": [
+        "Implement only task 62.2 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "CSP, frame policy, HSTS, nosniff, Referrer-Policy and 12 MiB limit are tested.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-61-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-62-3",
+      "title": "Run migration auth media and editor proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-62",
+      "source_anchor": "62.3",
+      "goal": "Prove blank and populated migration fixtures plus Admin/auth/S3/Lexical regressions.",
+      "scope": [
+        "Implement only task 62.3 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Both fixtures and the full Payload runtime evidence matrix pass.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-62-1",
+        "TASK-62-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-62-D",
+      "title": "Deliver Payload security and runtime proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-62",
+      "source_anchor": "62.D",
+      "goal": "Review, RISKY-gate and merge EPIC 62.",
+      "scope": [
+        "Implement only task 62.D from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "EPIC 62 PR is merged at an exact RISKY-attested SHA.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Review the full epic diff against Plan №4 v1",
+        "Run exactly one risk-based exact-head SourceCraft gate",
+        "Verify PR head and merge without production"
+      ],
+      "depends_on": [
+        "TASK-62-1",
+        "TASK-62-2",
+        "TASK-62-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:c",
+        "plan:v1",
+        "delivery:merge-after-gate"
+      ]
+    },
+    {
+      "key": "EPIC-63",
+      "title": "Ingest correctness and bounded performance",
+      "type": "epic",
+      "source_anchor": "EPIC 63",
+      "goal": "Make the frozen feed pipeline source-safe, baseline-correct, job-aware and bounded before any future activation.",
+      "scope": [
+        "All approved requirements and prohibitions under EPIC 63 in Plan №4 v1"
+      ],
+      "acceptance_criteria": [
+        "All sibling implementation tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-60"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:c",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-63-1",
+      "title": "Fix feed identity isolation and batching",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-63",
+      "source_anchor": "63.1",
+      "goal": "Use feedSource plus externalId identity and bounded lookup/update operations.",
+      "scope": [
+        "Implement only task 63.1 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Cross-feed collision and 2000-offer query-ceiling tests pass.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-63-2",
+      "title": "Freeze normalized offer write contract",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-63",
+      "source_anchor": "63.2",
+      "goal": "Make normalized money, area, grouping and validation own imported writes and hashes.",
+      "scope": [
+        "Implement only task 63.2 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Money/area/null/invalid-offer tests pass and invalid offers create no property.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-63-3",
+      "title": "Fix full-run baseline and safety gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-63",
+      "source_anchor": "63.3",
+      "goal": "Update baseline only on successful full runs and compare safety to lastOfferCount.",
+      "scope": [
+        "Implement only task 63.3 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Partial/full/suspicious regressions pass while the absolute ceiling remains enforced.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-63-1",
+        "TASK-63-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-63-4",
+      "title": "Make janitor job-aware and adaptive",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-63",
+      "source_anchor": "63.4",
+      "goal": "Protect live queued jobs and derive stale threshold from observed successful duration.",
+      "scope": [
+        "Implement only task 63.4 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Queued/running/job-link/waitUntil regression matrix passes.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-63-5",
+      "title": "Refresh ingest proof A C D",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-63",
+      "source_anchor": "63.5",
+      "goal": "Run deterministic runtime evidence without enabling schedules or feeds.",
+      "scope": [
+        "Implement only task 63.5 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Proof A/C/D is current and feed plus JOBS_AUTORUN remain disabled.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-63-3",
+        "TASK-63-4"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-63-D",
+      "title": "Deliver ingest hardening",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-63",
+      "source_anchor": "63.D",
+      "goal": "Review, RISKY-gate and merge EPIC 63.",
+      "scope": [
+        "Implement only task 63.D from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "EPIC 63 PR is merged at an exact RISKY-attested SHA.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Review the full epic diff against Plan №4 v1",
+        "Run exactly one risk-based exact-head SourceCraft gate",
+        "Verify PR head and merge without production"
+      ],
+      "depends_on": [
+        "TASK-63-1",
+        "TASK-63-2",
+        "TASK-63-3",
+        "TASK-63-4",
+        "TASK-63-5"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:c",
+        "plan:v1",
+        "delivery:merge-after-gate"
+      ]
+    },
+    {
+      "key": "EPIC-64",
+      "title": "Leads backend hardening",
+      "type": "epic",
+      "source_anchor": "EPIC 64",
+      "goal": "Prevent future intake global rate-limit failure and credential or PII leakage without enabling outbound delivery.",
+      "scope": [
+        "All approved requirements and prohibitions under EPIC 64 in Plan №4 v1"
+      ],
+      "acceptance_criteria": [
+        "All sibling implementation tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-60"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:c",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-64-1",
+      "title": "Bound trusted-client rate limiting",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-64",
+      "source_anchor": "64.1",
+      "goal": "Remove the shared unknown outage mode and bound/expire the in-memory store.",
+      "scope": [
+        "Implement only task 64.1 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Missing-IP concurrency, expiry and capacity tests pass.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-64-2",
+      "title": "Audit DB URL and PII redaction",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-64",
+      "source_anchor": "64.2",
+      "goal": "Cover ops and application error paths with negative secret/PII assertions.",
+      "scope": [
+        "Implement only task 64.2 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Logs and thrown errors contain no credentials or PII.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-64-3",
+      "title": "Reconcile disabled lead-channel contract",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-64",
+      "source_anchor": "64.3",
+      "goal": "Make PROJECT and env truthfully describe empty LEAD_CHANNELS and fail-closed runtime.",
+      "scope": [
+        "Implement only task 64.3 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Empty channel registry and runtime tests pass; outbound remains disabled.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-64-1",
+        "TASK-64-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-64-D",
+      "title": "Deliver leads backend hardening",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-64",
+      "source_anchor": "64.D",
+      "goal": "Review, RISKY-gate and merge EPIC 64.",
+      "scope": [
+        "Implement only task 64.D from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "EPIC 64 PR is merged at an exact RISKY-attested SHA.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Review the full epic diff against Plan №4 v1",
+        "Run exactly one risk-based exact-head SourceCraft gate",
+        "Verify PR head and merge without production"
+      ],
+      "depends_on": [
+        "TASK-64-1",
+        "TASK-64-2",
+        "TASK-64-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:c",
+        "plan:v1",
+        "delivery:merge-after-gate"
+      ]
+    },
+    {
+      "key": "EPIC-65",
+      "title": "Repository and UI-foundation hygiene",
+      "type": "epic",
+      "source_anchor": "EPIC 65",
+      "goal": "Remove proven repository debt while preserving public page behavior and historical evidence.",
+      "scope": [
+        "All approved requirements and prohibitions under EPIC 65 in Plan №4 v1"
+      ],
+      "acceptance_criteria": [
+        "All sibling implementation tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-60"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:d",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-65-1",
+      "title": "Remove inactive packages-ui workspace",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-65",
+      "source_anchor": "65.1",
+      "goal": "Delete the consumer-free reserved package and all valid workspace/lockfile references.",
+      "scope": [
+        "Implement only task 65.1 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Consumer proof and workspace/lockfile checks pass.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-65-2",
+      "title": "Consolidate project-owned primitives",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-65",
+      "source_anchor": "65.2",
+      "goal": "Move primitives to components/ui and the lead client to marketing/forms without redesign.",
+      "scope": [
+        "Implement only task 65.2 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Import guards, typecheck and responsive accessibility regression pass.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-65-3",
+      "title": "Replace fragile verify-quick command",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-65",
+      "source_anchor": "65.3",
+      "goal": "Use deterministic test metadata/manifest without guessing runtime conditions.",
+      "scope": [
+        "Implement only task 65.3 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Coverage self-test and full verify include every required test.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-65-4",
+      "title": "Close enum dead-dependency and DESIGN evidence",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-65",
+      "source_anchor": "65.4",
+      "goal": "Run read-only enum/dead-dependency reports and record physical-path exceptions.",
+      "scope": [
+        "Implement only task 65.4 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Reports are recorded, no unapproved DDL ran and historical links remain intact.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-65-1",
+        "TASK-65-2",
+        "TASK-65-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-65-D",
+      "title": "Deliver repository hygiene",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-65",
+      "source_anchor": "65.D",
+      "goal": "Review, RISKY-gate and merge EPIC 65.",
+      "scope": [
+        "Implement only task 65.D from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "EPIC 65 PR is merged at an exact attested SHA.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Review the full epic diff against Plan №4 v1",
+        "Run exactly one risk-based exact-head SourceCraft gate",
+        "Verify PR head and merge without production"
+      ],
+      "depends_on": [
+        "TASK-65-1",
+        "TASK-65-2",
+        "TASK-65-3",
+        "TASK-65-4"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:d",
+        "plan:v1",
+        "delivery:merge-after-gate"
+      ]
+    },
+    {
+      "key": "EPIC-66",
+      "title": "Delivery recovery and release-contract cleanup",
+      "type": "epic",
+      "source_anchor": "EPIC 66",
+      "goal": "Leave one build/install/rollback path and explicit release-only recovery and jobs procedures.",
+      "scope": [
+        "All approved requirements and prohibitions under EPIC 66 in Plan №4 v1"
+      ],
+      "acceptance_criteria": [
+        "All sibling implementation tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-60",
+        "EPIC-61",
+        "EPIC-62"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:d",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-66-1",
+      "title": "Consolidate release implementation",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-66",
+      "source_anchor": "66.1",
+      "goal": "Apply the approved ci-gate-split decision and keep one pack/install/rollback path.",
+      "scope": [
+        "Implement only task 66.1 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "One release implementation and zero automatic push/PR CI are proven.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-2",
+        "TASK-61-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-66-2",
+      "title": "Record no-separate-staging ADR",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-66",
+      "source_anchor": "66.2",
+      "goal": "Document the owner-approved production-candidate exception and domain-cutover expiry.",
+      "scope": [
+        "Implement only task 66.2 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "ADR forbids real traffic and production without a release command.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-60-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-66-3",
+      "title": "Prepare jobs-owner and restore procedures",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-66",
+      "source_anchor": "66.3",
+      "goal": "Complete preflights and runbooks without enabling jobs or creating a standing test DB.",
+      "scope": [
+        "Implement only task 66.3 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Procedures require a release command and an ephemeral recovery target for restore proof.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-62-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-66-4",
+      "title": "Verify local delivery contracts",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-66",
+      "source_anchor": "66.4",
+      "goal": "Run pack/install/rollback and staging contract tests after dependency changes.",
+      "scope": [
+        "Implement only task 66.4 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Deterministic delivery-contract matrix passes.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-66-1",
+        "TASK-66-2",
+        "TASK-66-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-66-D",
+      "title": "Deliver recovery and release-contract cleanup",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-66",
+      "source_anchor": "66.D",
+      "goal": "Review, RISKY-gate and merge EPIC 66.",
+      "scope": [
+        "Implement only task 66.D from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "EPIC 66 PR is merged at an exact RISKY-attested SHA.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Review the full epic diff against Plan №4 v1",
+        "Run exactly one risk-based exact-head SourceCraft gate",
+        "Verify PR head and merge without production"
+      ],
+      "depends_on": [
+        "TASK-66-1",
+        "TASK-66-2",
+        "TASK-66-3",
+        "TASK-66-4"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:d",
+        "plan:v1",
+        "delivery:merge-after-gate"
+      ]
+    },
+    {
+      "key": "EPIC-67",
+      "title": "Technical-preview candidate and closeout",
+      "type": "epic",
+      "source_anchor": "EPIC 67",
+      "goal": "Produce one reproducible technical-preview candidate and close Plan №4 without production.",
+      "scope": [
+        "All approved requirements and prohibitions under EPIC 67 in Plan №4 v1"
+      ],
+      "acceptance_criteria": [
+        "All sibling implementation tasks have complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic acceptance contract is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-62",
+        "EPIC-63",
+        "EPIC-64",
+        "EPIC-65",
+        "EPIC-66"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:e",
+        "plan:v1",
+        "role:implementation-program"
+      ]
+    },
+    {
+      "key": "TASK-67-1",
+      "title": "Run full cross-epic verification",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-67",
+      "source_anchor": "67.1",
+      "goal": "Review requirements and run the final local verification/audit matrix.",
+      "scope": [
+        "Implement only task 67.1 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Full pnpm verify, audit and requirements review pass.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-62-D",
+        "TASK-63-D",
+        "TASK-64-D",
+        "TASK-65-D",
+        "TASK-66-D"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-67-2",
+      "title": "Install one immutable preview artifact",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-67",
+      "source_anchor": "67.2",
+      "goal": "Build once and install the same digest on the current preview contour.",
+      "scope": [
+        "Implement only task 67.2 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Exact SHA, digest, installed path and install evidence are recorded.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-67-1"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-67-3",
+      "title": "Prove runtime and reconcile canon",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "parent_key": "EPIC-67",
+      "source_anchor": "67.3",
+      "goal": "Smoke changed runtime surfaces and update canonical docs/state without production.",
+      "scope": [
+        "Implement only task 67.3 from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Live smoke passes and docs, Task Manager and Git describe the same state.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Run the task-specific checks named in Plan №4 v1",
+        "Map every acceptance criterion to factual evidence"
+      ],
+      "depends_on": [
+        "TASK-67-2"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "create_pr"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1",
+        "risk:scoped"
+      ]
+    },
+    {
+      "key": "TASK-67-D",
+      "title": "Deliver Plan 4 closeout",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "parent_key": "EPIC-67",
+      "source_anchor": "67.D",
+      "goal": "Review, RISKY-gate and merge EPIC 67.",
+      "scope": [
+        "Implement only task 67.D from approved Plan №4 v1; preserve frozen page/content and production boundaries"
+      ],
+      "acceptance_criteria": [
+        "Plan №4 closes with exact candidate tuple and production remains unauthorized.",
+        "Required task-scope evidence is recorded in EXECUTION_LEDGER_V1"
+      ],
+      "required_checks": [
+        "Review the full epic diff against Plan №4 v1",
+        "Run exactly one risk-based exact-head SourceCraft gate",
+        "Verify PR head and merge without production"
+      ],
+      "depends_on": [
+        "TASK-67-1",
+        "TASK-67-2",
+        "TASK-67-3"
+      ],
+      "required_context": [
+        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/OPERATIONS.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production or domain cutover",
+        "scope expansion outside Plan №4 v1",
+        "secret or PII exposure",
+        "destructive live-data action",
+        "source or inventory drift"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:e",
+        "plan:v1",
+        "delivery:merge-after-gate"
+      ]
+    }
+  ]
+}

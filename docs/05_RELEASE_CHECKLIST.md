@@ -1,11 +1,13 @@
 # Release Checklist — «Море и Горы»
 
-**Статус:** Active — TECHNICAL PREVIEW CANDIDATE CLOSEOUT
-**Версия:** 3.3 — Plan №3 v3 closeout
-**Дата:** 2026-09-21
+**Статус:** Active — release deferred; no active release program
+**Версия:** 3.6 — Plan №3 closed / Plan №4 v1 APPROVED security program
+**Дата:** 2026-09-23
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
 пройденным. Production выполняется только по отдельной команде владельца.
+Открытые content/page пункты сохранены как будущие acceptance criteria, но
+явно отложены владельцем и не входят в текущую техническую нормализацию.
 
 ## 1. Technical foundation
 
@@ -112,11 +114,15 @@
 SEO 69 объясняется единственным ожидаемым fail: `noindex` до content gate.
 Локальные LCP/CLS без network throttling являются smoke, а не прогнозом field CWV.
 
-## 7. Current blockers
+## 7. Next release prerequisites
 
-Production сейчас блокируют не фундамент Next.js, а:
+Активного release stream сейчас нет. До нового production-ready claim нужны:
 
-1. оставшиеся `BLOCKS_RELEASE` в `docs/OWNER_QUEUE.md` (property enum drift,
-   content facts и domain cutover; credential rotation уже выполнена);
-2. неутверждённый контент и реальные project passports;
-3. отдельная команда владельца на release EPIC 55–56.
+1. approved technical plan с critical Next.js `16.3.6` и Payload-group `3.90.1` upgrades;
+2. reconciliation ветки `work/ci-gate-split` и единый release contract;
+3. новый read-only property enum preflight и принятое recovery/restore решение;
+4. exact-main immutable candidate evidence вместо утраченных EPIC 54 ledgers;
+5. позднее — отдельный content/product plan и явная release-команда владельца.
+
+Credential rotation, Secret Master env, S3 и preview runtime уже доказаны и не
+являются текущими blockers. Актуальная классификация — в `OWNER_QUEUE.md`.

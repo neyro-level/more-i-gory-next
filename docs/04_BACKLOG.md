@@ -1,24 +1,28 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 4.2 — Plan №3 v3 closeout
-**Дата:** 2026-09-21
+**Версия:** 4.6 — Plan №3 closed / Plan №4 v1 APPROVED
+**Дата:** 2026-09-23
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
-Execution baseline Plan №3 v3 — exact `origin/main`
-`53cabb8fde75188101900cf457b271a745551082` после EPIC 53. EPIC 44–53
-смержены с terminal exact-head gates; их evidence индексирует TASK 54.1.
+Execution baseline Plan №3 v3 — exact closeout `main`
+`21e484c98503550dbfbcbef38eb2e9eecd8d8308` после EPIC 54 / PR 100.
+EPIC 44–54 закрыты; активных задач этого Plan ID в Task Manager нет.
 Публичный сайт читает Payload через Public Gateway и DTO. Single-DB
 application, preview runtime, leads intake, observability и performance имеют
 live proof; restore rehearsal отложен решением владельца, production — нет.
 
-NOW: Plan №3 v3 EPIC 54. Один эпик = одна ветка/PR,
-`MERGE_AFTER_GATE`. EPIC 55–56 и production требуют отдельной команды владельца.
+NOW: каноническая нормализация после Plan №3 завершает подготовку. Следующий
+технический master plan собран в
+[`MORE_I_GORY_PLAN_№ 4.md`](MORE_I_GORY_PLAN_№%204.md) как v1 APPROVED.
+Его первый приоритет — срочное обновление Next/Payload до
+рекомендованной exact-версии с official compatibility verification, затем
+закрытие перечисленного ниже технического остатка.
 
-Production не выпускался. Коммерческие и аналитические страницы остаются под
-content/trust/index gate, пока не пройден editorial gate.
+Production не выпускался. По решению владельца страницы, business facts,
+коммерческая модель, методика и география запуска пока не входят в работу.
 
 ## 2. Завершённые эпики
 
@@ -83,6 +87,7 @@ content/trust/index gate, пока не пройден editorial gate.
 | PR-98 | EPIC 50 — enabled leads E2E and safe disable | DONE |
 | PR-77 | EPIC 52 — content readiness classification | DONE |
 | PR-99 | EPIC 53 — observability and performance closeout | DONE |
+| PR-100 | EPIC 54 — technical preview candidate closeout | DONE WITH EVIDENCE LIMITATION |
 
 Git-история и SourceCraft PR являются доказательством отдельных merge, а не этот
 документ.
@@ -107,19 +112,22 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 - [x] обновить project router и SourceCraft path guards;
 - [x] выполнить финальную проверку ссылок и `pnpm verify`.
 
-## 4. NOW / NEXT — Realty Platform remediation
+## 4. NOW / NEXT — техническая нормализация
 
-Код в `main` — целевой Realty 5.5 контур без production; Plan №3 v3 является
-активной программой завершения readiness.
+Код в `main` — Realty 5.5 контур без production. Plan №3 v3 закрыт; новый
+execution graph отсутствует.
 
 | Состояние | Эпик | Результат |
 |---|---|---|
-| DONE | EPIC 35–53 | код и proofs в `main` `53cabb8fde75188101900cf457b271a745551082`; terminal evidence индексирован TASK 54.1 |
-| NOW | EPIC 54 | один immutable technical-preview candidate, exact-main proof и closeout |
-| OWNER GATE | EPIC 55–56 | production/cutover только после readiness и отдельной release-команды |
+| DONE | EPIC 35–54 | код в `main` `21e484c98503550dbfbcbef38eb2e9eecd8d8308`; PR 100 / RISKY run 143; original EPIC 54 task ledgers утрачены |
+| NOW | Canon cleanup | синхронизировать docs/state/queue; legacy graph объявить noncanonical и запретить к исполнению |
+| NEXT PLAN | Critical dependency upgrade | Next `16.3.6` + Payload-group `3.90.1`; migration/compatibility scope и RISKY proof |
+| NEXT PLAN | Technical debt | exact-main candidate evidence, enum preflight, recovery policy, `ci-gate-split`, inactive workspace package |
+| DEFERRED OWNER | Content/product | страницы, facts, коммерческая модель, методика, география и index gates отложены |
+| PRODUCTION GATE | Release/cutover | только отдельная release-команда после нового approved plan |
 
-Контентные, legal и production решения остаются human gates и не подменяются
-технической готовностью.
+Старые открытые `mg-*` задачи не являются READY work нового плана. До approval
+нового exact plan Task Manager не импортируется и Developer не запускается.
 
 ## Appendix A — Completed EPIC-18 UI Constitution Conformance 2.0
 
@@ -200,9 +208,10 @@ Local proof:
 
 Merge, SourceCraft Gate и production не выполнялись.
 
-## 5. LATER — Production Release
+## 5. DEFERRED — Content и Production Release
 
-Отдельный release stream и явная команда владельца:
+Этот scope отложен владельцем. Когда он будет возвращён в работу, потребуется
+отдельный release stream и явная команда владельца:
 
 1. Доказать production activation локального Payload intake, trusted-client
    rate limit, honeypot, minimum-fill и SLA; внешний CRM/notification channel
@@ -223,21 +232,68 @@ Risk: Closed
 
 ### TD-002 — Production release automation не реализована
 
-Status: Open — частично закрыто PR-42
+Status: Next technical plan input — частично закрыто PR-42 и preview runbook
 Risk: High for production; none for local development
 
 Standalone artifact, Nginx, systemd, pack/rollback и preview contour в `main`.
 Live restore в disposable DB FAIL (нет `CREATEDB`). Production запрещён до
-очистки `BLOCKS_RELEASE` и отдельной команды владельца.
+approved recovery/release contract и отдельной команды владельца.
 
 ### TD-003 — Draft article shells находятся в preview artifact
 
-Status: Accepted during content stage
+Status: Deferred by owner with content/page scope
 Risk: Low
 
 Пять первых экранов статей собираются для согласования, но имеют `noindex` и не
 попадают в sitemap. Перед release каждый материал проходит editorial gate либо
 исключается из artifact.
+
+### TD-004 — Payload version upgrade
+
+Status: Urgent next technical plan input
+Risk: High / RISKY
+
+Текущий exact baseline — Payload и `@payloadcms/*` `3.89.0`; Plan №4 v1 APPROVED
+предлагает exact target `3.90.1`. Перед реализацией повторно подтвердить latest
+и совместимость с Next.js, React, Node.js, PostgreSQL adapter, Admin, Jobs,
+migrations и generated types по свежей официальной документации. Upgrade не
+смешивать с контентом или production release.
+
+### TD-005 — EPIC 54 terminal evidence gap
+
+Status: Next technical plan input
+Risk: Medium for development; High before release claim
+
+PR 100, RISKY run 143 и merge SHA известны, но original per-task ledgers и
+immutable tuple `exact main SHA + digest + installed path + smoke` не сохранены.
+Нельзя считать `21e484c` доказанным installed candidate без нового evidence.
+
+### TD-006 — Unmerged release-tooling stream
+
+Status: Decision required before next plan import
+Risk: High if duplicated
+
+`work/ci-gate-split` содержит пять чистых commits поверх Plan №3 main и меняет
+CI/release contracts. Новый план должен сначала принять, перебазировать или
+отклонить этот stream; параллельный второй release-контур запрещён.
+
+### TD-007 — Reserved inactive `packages/ui`
+
+Status: Next technical plan cleanup candidate
+Risk: Low
+
+Пакет не используется runtime-кодом, но остаётся workspace entry и поддерживает
+guard/test contract. Удаление выполнять отдельной проверяемой задачей вместе с
+lockfile, guards, tests и architecture docs, не как скрытую docs-правку.
+
+### TD-008 — Legacy Beads graph остаётся физически активным
+
+Status: P0 next technical plan cleanup input
+Risk: High for autonomous execution
+
+Старый prefix `mg-*` содержит 156 open, 149 blocked и 7 ready-записей без
+current Plan ID. Они объявлены noncanonical и запрещены к исполнению, но не
+закрываются массово без history-preserving cleanup contract и approval.
 
 ## 7. Human gates
 

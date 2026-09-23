@@ -1,12 +1,12 @@
 # CONTENT_FACT_PACKET — «Море и Горы»
 
-**Статус:** Awaiting owner facts
+**Статус:** Deferred by owner — вне текущего технического потока
 
-**План:** `more-i-gory-production-readiness-2026-09` v2
+**Источник:** `more-i-gory-production-readiness-2026-09` v3 CLOSED
 
 **Задача:** `TASK 51.2`
 
-**Дата:** 2026-09-20
+**Дата решения об отсрочке:** 2026-09-23
 
 Это единственный консолидированный пакет недостающих business facts. До
 подтверждения ответы являются входящими evidence, а не Source of Truth. После

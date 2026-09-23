@@ -21,35 +21,51 @@ function tableSources(block) {
     .map((line) => line.split("|")[1].trim());
 }
 
-test("OWNER_QUEUE.md is a single BLOCKS_RELEASE / IMPROVEMENT inventory", () => {
+test("OWNER_QUEUE.md separates deferred owner scope, next technical plan inputs and resolved history", () => {
   const markdown = readFileSync(queuePath, "utf8");
 
-  assert.match(markdown, /## BLOCKS_RELEASE/);
-  assert.match(markdown, /## IMPROVEMENT/);
+  assert.match(markdown, /## DEFERRED_BY_OWNER/);
+  assert.match(markdown, /## NEXT_TECHNICAL_PLAN_INPUTS/);
+  assert.match(markdown, /## RESOLVED — REMOVE FROM ACTIVE QUEUE/);
+  assert.match(markdown, /## REVISIT_ONLY_ON_TRIGGER/);
   assert.doesNotMatch(markdown, /\n\| — \| — \|/);
+  assert.doesNotMatch(markdown, /## BLOCKS_RELEASE/);
+  assert.doesNotMatch(markdown, /## IMPROVEMENT/);
 
-  const blocking = tableSources(section(markdown, "## BLOCKS_RELEASE"));
-  const improvements = tableSources(section(markdown, "## IMPROVEMENT"));
+  const deferred = tableSources(section(markdown, "## DEFERRED_BY_OWNER"));
+  const technical = section(markdown, "## NEXT_TECHNICAL_PLAN_INPUTS");
+  const resolved = tableSources(section(markdown, "## RESOLVED — REMOVE FROM ACTIVE QUEUE"));
 
   for (const source of [
-    "TASK 24.1b",
-    "`mg4-epic-52.1` / EPIC 52",
-    "Domain cutover",
-    "Credentials hygiene",
+    "Business facts, команда, коммерческая модель, методика, география",
+    "Коммерческие, региональные и аналитические страницы",
+    "Адрес/карта/provider",
+    "Production и `moreigori.ru`",
   ]) {
-    assert.ok(blocking.includes(source), `BLOCKS_RELEASE missing ${source}`);
+    assert.ok(deferred.includes(source), `DEFERRED_BY_OWNER missing ${source}`);
   }
 
   for (const source of [
-    "TASK 21.6",
-    "TASK 25.8 вариант 1",
-    "TASK 25.8 вариант 2",
-    "TASK 28.4",
-    "TASK 31.x",
+    "Critical Next/Payload upgrade",
+    "Legacy `mg-*` Beads graph",
+    "EPIC 54 exact-main candidate evidence",
+    "`work/ci-gate-split`",
+    "Property enum live preflight",
+    "Recovery policy",
+    "Reserved `packages/ui`",
   ]) {
-    assert.ok(improvements.includes(source), `IMPROVEMENT missing ${source}`);
+    assert.ok(technical.includes(source), `NEXT_TECHNICAL_PLAN_INPUTS missing ${source}`);
   }
 
-  assert.equal(new Set(blocking).size, blocking.length);
-  assert.equal(new Set(improvements).size, improvements.length);
+  for (const source of [
+    "Managed PostgreSQL credential rotation",
+    "Payload/S3/app env в Secret Master",
+    "Preview runtime install/rollback",
+    "S3 credential correction",
+  ]) {
+    assert.ok(resolved.includes(source), `RESOLVED missing ${source}`);
+  }
+
+  assert.equal(new Set(deferred).size, deferred.length);
+  assert.equal(new Set(resolved).size, resolved.length);
 });

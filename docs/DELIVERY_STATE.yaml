@@ -1,10 +1,18 @@
 # Machine-readable pointer. Requirements live in 03/04 and OWNER_QUEUE.
 program: more-i-gory-production-readiness-2026-09
 plan_version: v3
-code_baseline_sha: 53cabb8fde75188101900cf457b271a745551082
-last_verified_main_sha: 53cabb8fde75188101900cf457b271a745551082
+plan_status: closed
+code_baseline_sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308
+last_verified_main_sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308
 verification_date: 2026-09-21
-current_status: epic_54_exact_main_closeout_pending
+current_status: plan3_closed_with_declared_epic54_evidence_gap
+task_manager:
+  plan_prefix: mg4
+  active_items: 0
+  closed_items: 66
+  recovery_note: original_per_task_execution_ledgers_not_retained
+  legacy_mg_graph: deferred_queryable_superseded_by_plan4_v1
+  legacy_mg_items: 156
 last_merged:
   - { epic: EPIC-43, pr: 73, sha: 78c2753efc48fb2abafd0527b8949e85af199762 }
   - { epic: EPIC-44, pr: 74, sha: c824e9fa02ecfe370c859a851e3c0e0cedd48667 }
@@ -17,5 +25,54 @@ last_merged:
   - { epic: EPIC-51, pr: 75, sha: dcd51ed2700e88492c32309725cf8754b442f016 }
   - { epic: EPIC-52, pr: 77, sha: 6d9d927a5535f903578ed9625c9c345a7ca704d5 }
   - { epic: EPIC-53, pr: 99, sha: 53cabb8fde75188101900cf457b271a745551082 }
-next_step: gate and squash-merge PR 100, verify tree equality, then build and prove one exact-main technical-preview artifact externally; EPIC 55-56 require a separate owner release command
+  - { epic: EPIC-54, pr: 100, sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308 }
+technical_preview:
+  hostname: more-previu.tw1.ru
+  last_proven_installed_sha: f06fdb06c1e42aff3a117c4b7a2f22b74455708d
+  exact_baseline_candidate_proven: false
+  evidence_gap: exact_main_digest_installed_path_and_smoke_not_retained
+next_program:
+  plan_id: more-i-gory-technical-hardening-2026-09
+  plan_path: docs/MORE_I_GORY_PLAN_№ 4.md
+  inventory_path: docs/task-manager-inventory.plan4.v1.json
+  version: v1
+  status: epic60_delivery_ready
+  source_sha256: 65459497d381dc39db9684d6d2eb2d5e79d69ea6c645494b2c7b02f68f42d5e0
+  first_priority: critical_next_and_payload_security_upgrade
+  inputs: [legacy_graph_cleanup, epic54_evidence, ci_gate_split, payload_origin_security, ingest_correctness, leads_backend_hardening, property_enum_preflight, recovery_policy, inactive_ui_package]
+  deferred_owner_scope: [pages, business_facts, commercial_model, methodology, launch_geography, production]
+  ci_gate_split:
+    branch: work/ci-gate-split
+    head_sha: 4b7da016fdbd6cf2fc24059abcea3add7432189c
+    decision: split_do_not_merge_as_is
+    active_release_path_on_main: none
+    commit_map:
+      - { sha: 5a01a82, disposition: reject_superseded_docs }
+      - { sha: 59eb2e1, disposition: adapt_under_task_61_3 }
+      - { sha: 747dde3, disposition: adapt_under_epic_66 }
+      - { sha: e3aec84, disposition: adapt_under_epic_66 }
+      - { sha: 4b7da01, disposition: adapt_under_epic_66 }
+    constraints:
+      - standard_and_risky_gates_must_both_fail_on_high_or_critical_audit
+      - no_standing_staging_or_test_database
+      - release_storage_and_sourcecraft_artifact_api_require_current_proof
+  execution_baseline:
+    epic_60_branch: codex/plan4-epic60
+    branch_base_sha: ab37b021e1bc6b7b2771621d8fa5021574d114f4
+    canonical_main_observed_sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308
+    sourcecraft_access: pass_api_and_git
+    stop_conditions: [production, domain_cutover, real_traffic, destructive_live_data, source_or_inventory_drift]
+  database_preflight:
+    mode: static_read_only_no_connection
+    owner: payload_postgres_adapter
+    schema_push: false
+    registered_migrations: 26
+    first_migration: 20260915_171809_initial_users_jobs
+    last_migration: 20260919_202220_epic44_status_enum_collision
+    expected_database: default_db
+    expected_postgres_major: 18
+    live_mutation: false
+    standing_test_database: false
+    restore_rehearsal: ephemeral_release_gate_only
+next_step: deliver EPIC 60, then start the critical Next and Payload security upgrade; production remains separately authorized
 production: not_authorized
