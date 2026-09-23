@@ -10,8 +10,14 @@ export type ImportRunMaintenanceRecord = {
   feedSource?: number | string | { id?: number | string } | null;
   heartbeatAt?: string | null;
   id: string | number;
+  jobId?: string | null;
   startedAt?: string | null;
   status: ImportRunMaintenanceStatus;
+};
+
+export type ImportRunJobState = {
+  live: boolean;
+  waitUntil?: string | null;
 };
 
 export type ImportRunJanitorAction = {
@@ -28,6 +34,19 @@ export type ImportRunJanitorAction = {
 
 export function calculateOrphanQueuedThresholdMs(dispatcherIntervalMinutes: number): number {
   return Math.max(15 * minuteMs, 3 * dispatcherIntervalMinutes * minuteMs);
+}
+
+export function calculateAdaptiveStaleRunningThresholdMinutes(
+  baselineMinutes: number,
+  successfulDurationsMs: readonly number[],
+): number {
+  const observed = successfulDurationsMs
+    .filter((duration) => Number.isFinite(duration) && duration > 0)
+    .sort((left, right) => left - right);
+  if (observed.length === 0) return baselineMinutes;
+  const percentileIndex = Math.min(observed.length - 1, Math.ceil(observed.length * 0.95) - 1);
+  const adaptiveMinutes = Math.ceil((observed[percentileIndex] * 2) / minuteMs);
+  return Math.min(24 * 60, Math.max(baselineMinutes, adaptiveMinutes));
 }
 
 export function createImportRunHeartbeat(nowIso: string): {
@@ -48,13 +67,19 @@ function ageMs(nowMs: number, value: string | null | undefined): number {
 
 export function planImportRunJanitor(args: {
   dispatcherIntervalMinutes: number;
+  jobsById?: ReadonlyMap<string, ImportRunJobState>;
   nowIso: string;
+  successfulDurationsMs?: readonly number[];
   runs: ImportRunMaintenanceRecord[];
   staleRunningThresholdMinutes: number;
 }): ImportRunJanitorAction[] {
   const nowMs = new Date(args.nowIso).getTime();
   const orphanQueuedThresholdMs = calculateOrphanQueuedThresholdMs(args.dispatcherIntervalMinutes);
-  const staleRunningThresholdMs = args.staleRunningThresholdMinutes * minuteMs;
+  const staleRunningThresholdMs =
+    calculateAdaptiveStaleRunningThresholdMinutes(
+      args.staleRunningThresholdMinutes,
+      args.successfulDurationsMs ?? [],
+    ) * minuteMs;
 
   const actions: ImportRunJanitorAction[] = [];
 
@@ -77,6 +102,11 @@ export function planImportRunJanitor(args: {
     }
 
     if (run.status === "queued" && ageMs(nowMs, run.createdAt) >= orphanQueuedThresholdMs) {
+      const linkedJob = run.jobId ? args.jobsById?.get(run.jobId) : undefined;
+      const futureWaitUntil = linkedJob?.waitUntil
+        ? new Date(linkedJob.waitUntil).getTime() > nowMs
+        : false;
+      if (linkedJob?.live || futureWaitUntil) continue;
       actions.push({
         baselinePreserved: true,
         data: {

@@ -1,4 +1,5 @@
 import { scheduleFeedSourceAfterRun } from "./import-feed-run.ts";
+import { findImportJobStates } from "./jobs.ts";
 import {
   defaultDispatcherIntervalMinutes,
   defaultStaleRunningThresholdMinutes,
@@ -6,7 +7,8 @@ import {
   planImportRunJanitor,
 } from "../../ingest/import-maintenance.ts";
 
-type PayloadLike = Parameters<typeof scheduleFeedSourceAfterRun>[0];
+type PayloadLike = Parameters<typeof scheduleFeedSourceAfterRun>[0] &
+  Parameters<typeof findImportJobStates>[0];
 
 function feedSourceId(value: ImportRunMaintenanceRecord["feedSource"]): string | null {
   if (typeof value === "string" || typeof value === "number") return String(value);
@@ -37,6 +39,7 @@ export async function jobsJanitor(
       feedSource: true,
       heartbeatAt: true,
       id: true,
+      jobId: true,
       startedAt: true,
       status: true,
     },
@@ -55,16 +58,40 @@ export async function jobsJanitor(
       feedSource: run.feedSource,
       heartbeatAt: run.heartbeatAt,
       id: run.id,
+      jobId: typeof (run as { jobId?: unknown }).jobId === "string" ? (run as { jobId: string }).jobId : null,
       startedAt: run.startedAt,
       status: run.status,
     });
   }
   const byId = new Map(runs.map((run) => [String(run.id), run]));
+  const completed = await payload.find?.({
+    collection: "import-runs",
+    depth: 0,
+    limit: 20,
+    overrideAccess: true,
+    pagination: false,
+    select: { finishedAt: true, startedAt: true },
+    sort: "-finishedAt",
+    where: { status: { in: ["success", "unchanged"] } },
+  });
+  const successfulDurationsMs = (completed?.docs ?? []).flatMap((run) => {
+    const started = Date.parse(run.startedAt ?? "");
+    const finished = Date.parse((run as { finishedAt?: string }).finishedAt ?? "");
+    return Number.isFinite(started) && Number.isFinite(finished) && finished > started
+      ? [finished - started]
+      : [];
+  });
+  const jobsById = await findImportJobStates(
+    payload,
+    runs.flatMap((run) => (run.jobId ? [run.jobId] : [])),
+  );
   const actions = planImportRunJanitor({
     dispatcherIntervalMinutes: defaultDispatcherIntervalMinutes,
+    jobsById,
     nowIso,
     runs,
     staleRunningThresholdMinutes: defaultStaleRunningThresholdMinutes,
+    successfulDurationsMs,
   });
 
   for (const action of actions) {

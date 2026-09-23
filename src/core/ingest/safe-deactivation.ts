@@ -12,11 +12,11 @@ export type DeactivationApproval = {
 };
 
 export type SafeDeactivationInput = {
-  activeInScopeCount: number;
   deactivationApproval?: DeactivationApproval | null;
   feedSourceId: string;
   importRunId: string;
   isBaseline?: boolean;
+  lastOfferCount: number | null;
   lastFullRunAt?: string | Date | null;
   market: "newbuild" | "secondary";
   maxDeactivationsPerRun: number;
@@ -80,9 +80,11 @@ export function createSafeDeactivationScope(input: {
 
 function exceedsSafetyGate(input: SafeDeactivationInput): boolean {
   if (input.maxDeactivationsPerRun >= 0 && input.missingFromFeedCount > input.maxDeactivationsPerRun) return true;
-  if (input.activeInScopeCount <= 0) return input.missingFromFeedCount > 0;
+  if (input.lastOfferCount == null || input.lastOfferCount <= 0) {
+    return input.missingFromFeedCount > 0;
+  }
 
-  const missingPercent = (input.missingFromFeedCount / input.activeInScopeCount) * 100;
+  const missingPercent = (input.missingFromFeedCount / input.lastOfferCount) * 100;
   return missingPercent > input.safetyThresholdPercent;
 }
 

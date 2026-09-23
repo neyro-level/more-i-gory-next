@@ -178,10 +178,15 @@ export async function markFeedSourceImportFinished(
     collection: "feed-sources",
     data: {
       ...(input.successful && input.etag ? { lastEtag: input.etag } : {}),
-      ...(input.successful && input.feedHash ? { lastFeedHash: input.feedHash } : {}),
       ...(input.successful && input.lastModified ? { lastModified: input.lastModified } : {}),
-      ...(input.successful ? { lastOfferCount: input.lastOfferCount, lastSuccessfulRunAt: input.nowIso } : {}),
-      ...(input.markFullRun && input.successful ? { lastFullRunAt: input.nowIso } : {}),
+      ...(input.successful ? { lastSuccessfulRunAt: input.nowIso } : {}),
+      ...(input.markFullRun && input.successful
+        ? {
+            ...(input.feedHash ? { lastFeedHash: input.feedHash } : {}),
+            lastFullRunAt: input.nowIso,
+            lastOfferCount: input.lastOfferCount,
+          }
+        : {}),
     },
     id: input.feedSourceId,
     overrideAccess: true,

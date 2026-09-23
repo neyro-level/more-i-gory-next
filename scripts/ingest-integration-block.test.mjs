@@ -51,7 +51,7 @@ test("§18.5 import block: local feed parses, hashes and plans writes per feed s
 
 test("§18.5 import-run cannot deactivate manual origin even during mass-missing feed", () => {
   const deactivation = planSafeDeactivation({
-    activeInScopeCount: 10,
+    lastOfferCount: 10,
     deactivationApproval: { decision: "approved" },
     feedSourceId: "feed-a",
     importRunId: "run-a",
@@ -124,7 +124,7 @@ test("§18.5 multi-feed independence: Feed A cannot touch Feed B rows or fields"
   );
 
   const deactivation = planSafeDeactivation({
-    activeInScopeCount: 2,
+    lastOfferCount: 2,
     deactivationApproval: { decision: "approved" },
     feedSourceId: "feed-a",
     importRunId: "run-a",
@@ -163,7 +163,7 @@ test("§18.5 import maintenance proof: interrupted import cannot mutate baseline
 
 test("§18.5 baseline import does not deactivate even when feed appears empty", () => {
   assert.deepEqual(planSafeDeactivation({
-    activeInScopeCount: 25,
+    lastOfferCount: 25,
     deactivationApproval: { decision: "approved" },
     feedSourceId: "feed-a",
     importRunId: "baseline-run",

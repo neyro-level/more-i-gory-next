@@ -12,13 +12,30 @@ import {
 } from "../src/core/ingest/import-state.ts";
 
 const offer = {
+  category: null,
+  currency: "RUB",
+  dealType: null,
+  district: null,
+  externalBuildingId: null,
+  externalComplexId: null,
+  externalComplexName: null,
   externalId: "flat-1",
-  source: {
-    id: "flat-1",
-    name: "Апартамент у моря",
-    price: "12500000",
-  },
+  externalLayoutId: null,
+  floor: null,
+  floors: null,
+  house: null,
+  kitchenArea: null,
+  lat: null,
+  livingArea: null,
+  lng: null,
+  locality: null,
+  priceMinor: 1250000000,
+  pricePerMeterMinor: null,
+  publicAddress: null,
+  rooms: null,
+  street: null,
   title: "Апартамент у моря",
+  totalArea: null,
 };
 
 test("conditional GET uses stored ETag and Last-Modified without exposing feed URL", () => {
@@ -47,14 +64,11 @@ test("first full run is a baseline even if incremental hashes already exist", ()
   assert.equal(isFirstFullRun({ lastFeedHash: "hash", mode: "incremental" }), false);
 });
 
-test("importHash is stable for reordered offer source fields", () => {
+test("importHash is stable for reordered normalized fields", () => {
   const sameOfferDifferentOrder = {
-    externalId: "flat-1",
-    source: {
-      price: "12500000",
-      name: "Апартамент у моря",
-      id: "flat-1",
-    },
+    title: offer.title,
+    externalId: offer.externalId,
+    ...Object.fromEntries(Object.entries(offer).filter(([key]) => key !== "title" && key !== "externalId").reverse()),
   };
 
   assert.equal(createImportHash(offer), createImportHash(sameOfferDifferentOrder));

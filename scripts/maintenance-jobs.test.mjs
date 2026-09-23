@@ -121,7 +121,7 @@ test("jobsJanitor maintenance task delegates to import-run janitor", async () =>
       staleRunning: 0,
     },
   });
-  assert.equal(findCalls.length, 1);
+  assert.equal(findCalls.length, 2);
   assert.equal(findCalls[0].collection, "import-runs");
 });
 

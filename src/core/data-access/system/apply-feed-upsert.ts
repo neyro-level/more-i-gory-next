@@ -13,6 +13,7 @@ type PayloadLike = {
     overrideAccess: true;
     pagination: false;
     select: {
+      externalId: true;
       feedSource: true;
       id: true;
       importHash: true;
@@ -22,6 +23,7 @@ type PayloadLike = {
     where: Record<string, unknown>;
   }) => Promise<{
     docs?: Array<{
+      externalId?: string | null;
       feedSource?: string | number | { id?: string | number } | null;
       id: number | string;
       importHash?: string | null;
@@ -32,10 +34,13 @@ type PayloadLike = {
   update: (args: {
     collection: "properties";
     data: Record<string, unknown>;
-    id: number | string;
+    id?: number | string;
     overrideAccess: true;
+    where?: Record<string, unknown>;
   }) => Promise<unknown>;
 };
+
+export const feedUpsertBatchSize = 200;
 
 function relationId(value: unknown): string | number | null {
   if (typeof value === "number" && Number.isFinite(value)) return value;
@@ -44,29 +49,65 @@ function relationId(value: unknown): string | number | null {
   return null;
 }
 
-export async function findPropertiesByExternalId(
-  payload: PayloadLike,
-  externalId: string,
-): Promise<ExistingImportedProperty[]> {
-  const result = await payload.find({
-    collection: "properties",
-    depth: 0,
-    limit: 20,
-    overrideAccess: true,
-    pagination: false,
-    select: {
-      feedSource: true,
-      id: true,
-      importHash: true,
-      origin: true,
-      title: true,
-    },
-    where: { externalId: { equals: externalId } },
-  });
+function chunks<T>(values: readonly T[], size: number): T[][] {
+  const result: T[][] = [];
+  for (let index = 0; index < values.length; index += size) {
+    result.push(values.slice(index, index + size));
+  }
+  return result;
+}
 
-  return (result.docs ?? [])
-    .filter((doc) => doc.origin === "feed" || doc.origin === "manual")
+export async function findFeedUpsertCandidates(
+  payload: PayloadLike,
+  args: { externalIds: readonly string[]; feedSourceId: string },
+): Promise<ExistingImportedProperty[]> {
+  const externalIds = [...new Set(args.externalIds)];
+  const docs: NonNullable<Awaited<ReturnType<PayloadLike["find"]>>["docs"]> = [];
+
+  for (const batch of chunks(externalIds, feedUpsertBatchSize)) {
+    if (batch.length === 0) continue;
+    const result = await payload.find({
+      collection: "properties",
+      depth: 0,
+      limit: batch.length * 2,
+      overrideAccess: true,
+      pagination: false,
+      select: {
+        externalId: true,
+        feedSource: true,
+        id: true,
+        importHash: true,
+        origin: true,
+        title: true,
+      },
+      where: {
+        or: [
+          {
+            and: [
+              { feedSource: { equals: args.feedSourceId } },
+              { externalId: { in: batch } },
+            ],
+          },
+          {
+            and: [
+              { origin: { equals: "manual" } },
+              { externalId: { in: batch } },
+            ],
+          },
+        ],
+      },
+    });
+    docs.push(...(result.docs ?? []));
+  }
+
+  return docs
+    .filter(
+      (doc) =>
+        typeof doc.externalId === "string" &&
+        (doc.origin === "feed" || doc.origin === "manual"),
+    )
     .map((doc) => ({
+      externalId: doc.externalId as string,
       feedSource: relationId(doc.feedSource),
       id: doc.id,
       importHash: doc.importHash,
@@ -77,9 +118,15 @@ export async function findPropertiesByExternalId(
 
 export function pickExistingPropertyForFeed(
   docs: ExistingImportedProperty[],
+  externalId: string,
   feedSourceId: string,
 ): ExistingImportedProperty | null {
-  return docs.find((doc) => String(doc.feedSource) === feedSourceId) ?? docs[0] ?? null;
+  const matching = docs.filter((doc) => doc.externalId === externalId);
+  return (
+    matching.find((doc) => doc.origin === "feed" && String(doc.feedSource) === feedSourceId) ??
+    matching.find((doc) => doc.origin === "manual") ??
+    null
+  );
 }
 
 export async function createFeedOwnedProperty(
@@ -104,4 +151,20 @@ export async function updateFeedOwnedProperty(
     id,
     overrideAccess: true,
   });
+}
+
+export async function updateFeedOwnedProperties(
+  payload: PayloadLike,
+  ids: readonly (number | string)[],
+  data: Record<string, unknown>,
+): Promise<void> {
+  for (const batch of chunks(ids, feedUpsertBatchSize)) {
+    if (batch.length === 0) continue;
+    await payload.update({
+      collection: "properties",
+      data,
+      overrideAccess: true,
+      where: { id: { in: batch } },
+    });
+  }
 }

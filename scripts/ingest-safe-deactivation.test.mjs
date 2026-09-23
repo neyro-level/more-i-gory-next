@@ -5,11 +5,11 @@ import { planSafeDeactivation } from "../src/core/ingest/safe-deactivation.ts";
 import { FeedSources } from "../src/project/collections/feed-sources.ts";
 
 const baseInput = {
-  activeInScopeCount: 100,
   deactivationApproval: {},
   feedSourceId: "feed-a",
   importRunId: "run-1",
   isBaseline: false,
+  lastOfferCount: 100,
   market: "newbuild",
   maxDeactivationsPerRun: 20,
   missingFromFeedCount: 5,

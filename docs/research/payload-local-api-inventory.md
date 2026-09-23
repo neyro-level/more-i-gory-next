@@ -48,9 +48,10 @@
 | `src/core/data-access/public/site-chrome.ts:22` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "navigation", depth: 0, overrideAccess: false, select: publicNavigationSelect }),` |
 | `src/core/data-access/public/sitemap-pages.ts:21` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/sitemap-pages.ts:22` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/system/apply-feed-upsert.ts:51` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/system/apply-feed-upsert.ts:89` | `create` | SYSTEM GATEWAY | `return payload.create({` |
-| `src/core/data-access/system/apply-feed-upsert.ts:101` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/apply-feed-upsert.ts:69` | `find` | SYSTEM GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/system/apply-feed-upsert.ts:136` | `create` | SYSTEM GATEWAY | `return payload.create({` |
+| `src/core/data-access/system/apply-feed-upsert.ts:148` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/apply-feed-upsert.ts:163` | `update` | SYSTEM GATEWAY | `await payload.update({` |
 | `src/core/data-access/system/apply-safe-deactivation.ts:44` | `findByID` | SYSTEM GATEWAY | `const source = await payload.findByID({` |
 | `src/core/data-access/system/apply-safe-deactivation.ts:78` | `findByID` | SYSTEM GATEWAY | `const run = await payload.findByID({` |
 | `src/core/data-access/system/apply-safe-deactivation.ts:94` | `find` | SYSTEM GATEWAY | `payload.find({` |
@@ -79,15 +80,17 @@
 | `src/core/data-access/system/import-feed-run.ts:104` | `update` | SYSTEM GATEWAY | `await payload.update({` |
 | `src/core/data-access/system/import-feed-run.ts:135` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
 | `src/core/data-access/system/import-feed-run.ts:177` | `update` | SYSTEM GATEWAY | `await payload.update({` |
-| `src/core/data-access/system/import-feed-run.ts:196` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
-| `src/core/data-access/system/import-feed-run.ts:220` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
-| `src/core/data-access/system/import-feed-run.ts:245` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
-| `src/core/data-access/system/import-feed-run.ts:270` | `findByID` | SYSTEM GATEWAY | `const source = await payload.findByID?.({` |
-| `src/core/data-access/system/import-feed-run.ts:281` | `find` | SYSTEM GATEWAY | `const history = await payload.find?.({` |
-| `src/core/data-access/system/import-feed-run.ts:300` | `update` | SYSTEM GATEWAY | `await payload.update({` |
-| `src/core/data-access/system/jobs-janitor.ts:29` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
-| `src/core/data-access/system/jobs-janitor.ts:71` | `update` | SYSTEM GATEWAY | `await payload.update({` |
-| `src/core/data-access/system/jobs.ts:50` | `find` | SYSTEM GATEWAY | `payload.find({` |
+| `src/core/data-access/system/import-feed-run.ts:201` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:225` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:250` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
+| `src/core/data-access/system/import-feed-run.ts:275` | `findByID` | SYSTEM GATEWAY | `const source = await payload.findByID?.({` |
+| `src/core/data-access/system/import-feed-run.ts:286` | `find` | SYSTEM GATEWAY | `const history = await payload.find?.({` |
+| `src/core/data-access/system/import-feed-run.ts:305` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/jobs-janitor.ts:31` | `find` | SYSTEM GATEWAY | `const result = await payload.find?.({` |
+| `src/core/data-access/system/jobs-janitor.ts:67` | `find` | SYSTEM GATEWAY | `const completed = await payload.find?.({` |
+| `src/core/data-access/system/jobs-janitor.ts:98` | `update` | SYSTEM GATEWAY | `await payload.update({` |
+| `src/core/data-access/system/jobs.ts:43` | `find` | SYSTEM GATEWAY | `payload.find({` |
+| `src/core/data-access/system/jobs.ts:90` | `find` | SYSTEM GATEWAY | `payload.find({` |
 | `src/core/data-access/system/lead-delivery.ts:90` | `update` | SYSTEM GATEWAY | `const transition = await payload.update({` |
 | `src/core/data-access/system/lead-delivery.ts:123` | `findByID` | SYSTEM GATEWAY | `const existing = await payload.findByID?.({` |
 | `src/core/data-access/system/lead-delivery.ts:142` | `update` | SYSTEM GATEWAY | `const update = await payload.update({` |

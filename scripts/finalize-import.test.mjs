@@ -85,6 +85,37 @@ test("successful full run stamps lastSuccessfulRunAt and lastFullRunAt", async (
   assert.equal(sourceWrite.data.lastOfferCount, 2);
 });
 
+test("successful incremental run does not replace the full-run hash or offer baseline", async () => {
+  const writes = [];
+  const payload = {
+    async findByID() {
+      return { mode: "incremental" };
+    },
+    async update(args) {
+      writes.push(args);
+      return { docs: [{ id: "501" }] };
+    },
+  };
+  const handler = createFinalizeImportHandler({ payload });
+  const result = await handler({
+    input: { feedSourceId: "101", importRunId: "501" },
+    state: {
+      fetch: { etag: '"incremental"', lastModified: "Thu" },
+      parse: { feedHash: "partial-hash", offeredCount: 3 },
+      upsert: { createdCount: 0, skippedCount: 3, updatedCount: 0 },
+      deactivation: { action: "skip", missingFromFeedCount: 0 },
+    },
+  });
+
+  assert.deepEqual(result, { continue: true, status: "success" });
+  const sourceWrite = writes.find((write) => write.collection === "feed-sources");
+  assert.equal(typeof sourceWrite.data.lastSuccessfulRunAt, "string");
+  assert.equal(sourceWrite.data.lastEtag, '"incremental"');
+  assert.equal("lastFeedHash" in sourceWrite.data, false);
+  assert.equal("lastOfferCount" in sourceWrite.data, false);
+  assert.equal("lastFullRunAt" in sourceWrite.data, false);
+});
+
 test("suspicious deactivation finalizes without lastSuccessfulRunAt", async () => {
   const writes = [];
   const payload = {

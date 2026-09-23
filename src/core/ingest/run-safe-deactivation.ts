@@ -25,12 +25,12 @@ export async function runSafeDeactivation(args: {
 
   if (mode !== "full" || policy.market == null) {
     return planSafeDeactivation({
-      activeInScopeCount: 0,
       deactivationApproval: policy.deactivationApproval,
       feedSourceId: args.feedSourceId,
       importRunId: args.importRunId,
       isBaseline: true,
       lastFullRunAt: policy.lastFullRunAt,
+      lastOfferCount: policy.lastOfferCount,
       market: policy.market ?? "newbuild",
       maxDeactivationsPerRun: policy.maxDeactivationsPerRun,
       missingFromFeedCount: 0,
@@ -52,7 +52,6 @@ export async function runSafeDeactivation(args: {
   const seen = new Set(args.seenExternalIds);
   const missing = active.filter((item) => !seen.has(item.externalId));
   const plan = planSafeDeactivation({
-    activeInScopeCount: active.length,
     deactivationApproval: policy.deactivationApproval,
     feedSourceId: args.feedSourceId,
     importRunId: args.importRunId,
@@ -62,6 +61,7 @@ export async function runSafeDeactivation(args: {
       lastOfferCount: policy.lastOfferCount,
     }),
     lastFullRunAt: policy.lastFullRunAt,
+    lastOfferCount: policy.lastOfferCount,
     market: policy.market,
     maxDeactivationsPerRun: policy.maxDeactivationsPerRun,
     missingFromFeedCount: missing.length,

@@ -6,7 +6,7 @@ import { loadFeedSourceUrlRef } from "../../../core/data-access/system/load-feed
 import { loadFeedSourceMarket } from "../../../core/data-access/system/load-feed-source-market.ts";
 import { loadFeedDeactivationPolicy } from "../../../core/data-access/system/apply-safe-deactivation.ts";
 import { createImportIssue } from "../../../core/data-access/system/create-import-issue.ts";
-import { findPropertiesByExternalId } from "../../../core/data-access/system/apply-feed-upsert.ts";
+import { findFeedUpsertCandidates } from "../../../core/data-access/system/apply-feed-upsert.ts";
 import { createClassifyConditionalHandler } from "../../../core/ingest/classify-conditional.ts";
 import { createFetchFeedHandler, parseOutboundAllowedHosts } from "../../../core/ingest/fetch-feed.ts";
 import { createSafeDeactivationHandler } from "../../../core/ingest/run-safe-deactivation.ts";
@@ -51,7 +51,7 @@ type ImportFeedPayload = Parameters<typeof transitionImportRunToRunning>[0] &
   Parameters<typeof loadFeedSourceConditionalState>[0] &
   Parameters<typeof loadFeedSourceParser>[0] &
   Parameters<typeof loadFeedSourceMarket>[0] &
-  Parameters<typeof findPropertiesByExternalId>[0] &
+  Parameters<typeof findFeedUpsertCandidates>[0] &
   Parameters<typeof createImportIssue>[0] &
   Parameters<typeof loadFeedDeactivationPolicy>[0];
 

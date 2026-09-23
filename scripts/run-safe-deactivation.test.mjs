@@ -98,6 +98,54 @@ test("in-gate missing offers are archived in feed+market+active scope", async ()
   assert.equal(writes[0].data.deactivatedByRun, "run-1");
 });
 
+test("percentage safety gate uses the last successful full offer count", async () => {
+  const { payload, writes } = payloadMock({
+    active: [
+      ...Array.from({ length: 7 }, (_, index) => ({ id: index + 1, externalId: `keep-${index}` })),
+      { id: 8, externalId: "gone-1" },
+      { id: 9, externalId: "gone-2" },
+      { id: 10, externalId: "gone-3" },
+    ],
+    lastOfferCount: 100,
+    maxDeactivationsPerRun: 20,
+    safetyThresholdPercent: 20,
+  });
+  const plan = await runSafeDeactivation({
+    feedSourceId: "feed-a",
+    importRunId: "run-1",
+    nowIso: "2026-09-18T12:00:00.000Z",
+    payload,
+    seenExternalIds: Array.from({ length: 7 }, (_, index) => `keep-${index}`),
+  });
+
+  assert.equal(plan.action, "deactivate");
+  assert.deepEqual(writes[0].where, { id: { in: [8, 9, 10] } });
+});
+
+test("absolute deactivation ceiling remains enforced even below the percentage threshold", async () => {
+  const { payload, writes } = payloadMock({
+    active: [
+      { id: 1, externalId: "keep" },
+      { id: 2, externalId: "gone-1" },
+      { id: 3, externalId: "gone-2" },
+    ],
+    lastOfferCount: 100,
+    maxDeactivationsPerRun: 1,
+    safetyThresholdPercent: 20,
+  });
+  const plan = await runSafeDeactivation({
+    feedSourceId: "feed-a",
+    importRunId: "run-1",
+    nowIso: "2026-09-18T12:00:00.000Z",
+    payload,
+    seenExternalIds: ["keep"],
+  });
+
+  assert.equal(plan.action, "suspicious");
+  assert.equal(plan.issueCode, "deactivation-approval-required");
+  assert.equal(writes.some((write) => write.collection === "properties"), false);
+});
+
 test("threshold breach without run-bound approval stays suspicious and does not archive", async () => {
   const { payload, writes } = payloadMock({
     maxDeactivationsPerRun: 1,

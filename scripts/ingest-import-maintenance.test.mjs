@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { jobsJanitor } from "../src/core/data-access/system/jobs-janitor.ts";
 import {
+  calculateAdaptiveStaleRunningThresholdMinutes,
   calculateOrphanQueuedThresholdMs,
   createImportRunHeartbeat,
   planImportRunJanitor,
@@ -33,6 +34,11 @@ test("heartbeat update is explicitly outside the ingest transaction", () => {
 test("orphan queued threshold is max of 15 minutes and 3 dispatcher intervals", () => {
   assert.equal(calculateOrphanQueuedThresholdMs(5), 15 * 60_000);
   assert.equal(calculateOrphanQueuedThresholdMs(10), 30 * 60_000);
+});
+
+test("stale-running threshold adapts to observed successful duration", () => {
+  assert.equal(calculateAdaptiveStaleRunningThresholdMinutes(15, []), 15);
+  assert.equal(calculateAdaptiveStaleRunningThresholdMinutes(15, [20 * 60_000]), 40);
 });
 
 test("jobsJanitor marks stale running import as interrupted without touching baseline or deactivation", () => {
@@ -132,7 +138,7 @@ test("jobsJanitor system task interrupts stale and orphan runs without deactivat
     orphanQueued: 1,
     staleRunning: 1,
   });
-  assert.equal(findCalls.length, 1);
+  assert.equal(findCalls.length, 2);
   assert.equal(findCalls[0].collection, "import-runs");
   assert.equal(findCalls[0].overrideAccess, true);
   assert.deepEqual(findCalls[0].where, { status: { in: ["queued", "running"] } });
@@ -168,4 +174,56 @@ test("jobsJanitor later interrupts an import-run left queued after dispatcher qu
     orphanQueued: 1,
     staleRunning: 0,
   });
+});
+
+test("linked live import job with future waitUntil is not declared orphan queued", async () => {
+  const updateCalls = [];
+  const payload = {
+    async find(args) {
+      if (args.collection === "payload-jobs") {
+        return {
+          docs: [{ id: "job-1", processing: false, waitUntil: "2026-09-17T03:30:00.000Z" }],
+          hasNextPage: false,
+        };
+      }
+      if (args.where.status?.in?.includes("success")) return { docs: [] };
+      return {
+        docs: [{
+          createdAt: "2026-09-17T02:00:00.000Z",
+          id: 701,
+          jobId: "job-1",
+          status: "queued",
+        }],
+      };
+    },
+    async update(args) {
+      updateCalls.push(args);
+      return { docs: [] };
+    },
+  };
+
+  assert.deepEqual(await jobsJanitor(payload, new Date("2026-09-17T03:00:00.000Z")), {
+    interrupted: 0,
+    massDeactivationForbidden: true,
+    orphanQueued: 0,
+    staleRunning: 0,
+  });
+  assert.equal(updateCalls.length, 0);
+});
+
+test("adaptive threshold keeps a long but healthy running import alive", () => {
+  assert.deepEqual(
+    planImportRunJanitor({
+      dispatcherIntervalMinutes: 5,
+      nowIso: "2026-09-17T03:00:00.000Z",
+      runs: [{
+        heartbeatAt: "2026-09-17T02:30:00.000Z",
+        id: 801,
+        status: "running",
+      }],
+      staleRunningThresholdMinutes: 15,
+      successfulDurationsMs: [20 * 60_000],
+    }),
+    [],
+  );
 });

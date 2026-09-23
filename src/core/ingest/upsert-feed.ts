@@ -1,14 +1,14 @@
 import { loadFeedSourceMarket } from "../data-access/system/load-feed-source-market.ts";
 import {
   createFeedOwnedProperty,
-  findPropertiesByExternalId,
+  findFeedUpsertCandidates,
   pickExistingPropertyForFeed,
   updateFeedOwnedProperty,
+  updateFeedOwnedProperties,
 } from "../data-access/system/apply-feed-upsert.ts";
 import { applyFeedFieldOwnership, type FieldOwner } from "./field-ownership.ts";
 import { planOfferImport, type OfferImportPlan } from "./import-state.ts";
 import type { NormalizedFeedOffer } from "./normalize-feed.ts";
-import type { ParsedFeedOffer } from "./parsers/types.ts";
 
 export type UpsertFeedSummary = {
   createdCount: number;
@@ -17,15 +17,14 @@ export type UpsertFeedSummary = {
   updatedCount: number;
 };
 
-type UpsertPayload = Parameters<typeof findPropertiesByExternalId>[0] &
+type UpsertPayload = Parameters<typeof findFeedUpsertCandidates>[0] &
   Parameters<typeof loadFeedSourceMarket>[0];
 
 export async function upsertParsedFeedOffers(args: {
   feedSourceId: string;
   importRunId: string;
   nowIso?: string;
-  offers: readonly ParsedFeedOffer[];
-  normalized?: readonly NormalizedFeedOffer[];
+  offers: readonly NormalizedFeedOffer[];
   payload: UpsertPayload;
   explicitOwners?: Partial<Record<"title", FieldOwner>>;
 }): Promise<UpsertFeedSummary> {
@@ -35,17 +34,31 @@ export async function upsertParsedFeedOffers(args: {
     throw new Error("Feed source market is missing.");
   }
 
-  const titles = new Map((args.normalized ?? []).map((offer) => [offer.externalId, offer]));
+  const titles = new Map(args.offers.map((offer) => [offer.externalId, offer]));
   const summary: UpsertFeedSummary = {
     createdCount: 0,
     plans: [],
     skippedCount: 0,
     updatedCount: 0,
   };
+  const candidates = await findFeedUpsertCandidates(args.payload, {
+    externalIds: args.offers.map((offer) => offer.externalId),
+    feedSourceId: args.feedSourceId,
+  });
+  const candidatesByExternalId = new Map<string, typeof candidates>();
+  for (const candidate of candidates) {
+    const current = candidatesByExternalId.get(candidate.externalId) ?? [];
+    current.push(candidate);
+    candidatesByExternalId.set(candidate.externalId, current);
+  }
+  const seenPropertyIds: Array<string | number> = [];
 
   for (const offer of args.offers) {
-    const existingDocs = await findPropertiesByExternalId(args.payload, offer.externalId);
-    const existing = pickExistingPropertyForFeed(existingDocs, args.feedSourceId);
+    const existing = pickExistingPropertyForFeed(
+      candidatesByExternalId.get(offer.externalId) ?? [],
+      offer.externalId,
+      args.feedSourceId,
+    );
     const plan = planOfferImport({
       existing,
       feedMarket: market,
@@ -62,7 +75,7 @@ export async function upsertParsedFeedOffers(args: {
     }
 
     if (plan.kind === "touch-seen") {
-      await updateFeedOwnedProperty(args.payload, plan.propertyId, plan.data);
+      seenPropertyIds.push(plan.propertyId);
       summary.skippedCount += 1;
       continue;
     }
@@ -97,6 +110,11 @@ export async function upsertParsedFeedOffers(args: {
     }
   }
 
+  await updateFeedOwnedProperties(args.payload, seenPropertyIds, {
+    lastImportRun: args.importRunId,
+    lastSeenAt: nowIso,
+  });
+
   return summary;
 }
 
@@ -104,12 +122,12 @@ export function createUpsertFeedHandler(deps: { payload: UpsertPayload }) {
   return async (context: {
     input: { feedSourceId: string; importRunId: string };
     state: {
-      parse?: { offers: ParsedFeedOffer[] };
+      parse?: { offers: unknown[] };
       normalize?: { offers: NormalizedFeedOffer[] };
       upsert?: UpsertFeedSummary;
     };
   }) => {
-    if (!context.state.parse) {
+    if (!context.state.parse || !context.state.normalize) {
       return { continue: false, status: "failed" as const };
     }
 
@@ -117,8 +135,7 @@ export function createUpsertFeedHandler(deps: { payload: UpsertPayload }) {
       context.state.upsert = await upsertParsedFeedOffers({
         feedSourceId: context.input.feedSourceId,
         importRunId: context.input.importRunId,
-        offers: context.state.parse.offers,
-        normalized: context.state.normalize?.offers,
+        offers: context.state.normalize.offers,
         payload: deps.payload,
       });
       return { continue: true, status: "running" as const };

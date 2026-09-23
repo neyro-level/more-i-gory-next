@@ -12,6 +12,7 @@ import {
   validatePropertyDealTypeField,
 } from "../src/core/catalog/property-enums.ts";
 import { planOfferImport } from "../src/core/ingest/import-state.ts";
+import { normalizeParsedOffers } from "../src/core/ingest/normalize-feed.ts";
 import { Properties } from "../src/project/collections/properties.ts";
 
 function field(name) {
@@ -55,20 +56,28 @@ test("ingest mapping accepts canonical and known feed aliases and rejects the re
 });
 
 test("new feed writes only normalized enum values and never persist rejected aliases", () => {
+  const normalized = normalizeParsedOffers({
+    issues: [],
+    offeredCount: 1,
+    offers: [{
+      externalId: "1",
+      source: { category: "таунхаус", id: "1", name: "X", type: "продажа" },
+      title: "X",
+    }],
+    parser: "yrl",
+    skippedCount: 0,
+    suspicious: false,
+  });
   const plan = planOfferImport({
     feedMarket: "newbuild",
     feedSourceId: "feed-a",
     importRunId: "run-1",
     nowIso: "2026-09-18T00:00:00.000Z",
-    offer: {
-      externalId: "1",
-      source: { category: "таунхаус", id: "1", name: "X", type: "продажа" },
-      title: "X",
-    },
+    offer: normalized.offers[0],
   });
   assert.equal(plan.kind, "create");
   assert.equal(plan.data.dealType, "sale");
-  assert.equal(plan.data.category, undefined);
+  assert.equal(plan.data.category, null);
 });
 
 test("out-of-contract report SQL lists only values outside the locked enums", () => {

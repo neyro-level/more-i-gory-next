@@ -1,7 +1,11 @@
 import { collectBoundedPages } from "../../lib/bounded-pagination.ts";
 
 type PayloadJobRecord = {
+  completedAt?: string | null;
+  id?: number | string;
   input?: unknown;
+  processing?: boolean | null;
+  waitUntil?: string | null;
 };
 
 type PayloadJobsLike = {
@@ -27,6 +31,42 @@ function readLeadDeliveryId(input: unknown): string | null {
   }
 
   return null;
+}
+
+export async function findImportJobStates(
+  payload: PayloadJobsLike,
+  jobIds: readonly string[],
+): Promise<ReadonlyMap<string, { live: boolean; waitUntil: string | null }>> {
+  if (jobIds.length === 0) return new Map();
+  const docs = await collectBoundedPages<PayloadJobRecord>({
+    fetchPage: async (page, limit) =>
+      payload.find({
+        collection: "payload-jobs",
+        depth: 0,
+        limit,
+        overrideAccess: true,
+        page,
+        pagination: true,
+        where: {
+          and: [
+            { id: { in: [...new Set(jobIds)] } },
+            { taskSlug: { equals: "importFeed" } },
+            { queue: { equals: "imports" } },
+          ],
+        },
+      }),
+  });
+  return new Map(
+    docs
+      .filter((job) => job.id != null)
+      .map((job) => [
+        String(job.id),
+        {
+          live: job.processing === true || !job.completedAt,
+          waitUntil: typeof job.waitUntil === "string" ? job.waitUntil : null,
+        },
+      ]),
+  );
 }
 
 export async function findLiveDeliverLeadJobIds(

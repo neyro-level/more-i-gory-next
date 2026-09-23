@@ -1,9 +1,6 @@
 import { createHash } from "node:crypto";
 
-import type { PropertyCategory, PropertyDealType } from "@more-i-gory/contracts";
-
-import type { ParsedFeedOffer } from "./parsers/types.ts";
-import { resolveFeedPropertyEnums } from "../catalog/property-enums.ts";
+import type { NormalizedFeedOffer } from "./normalize-feed.ts";
 
 export type ConditionalFeedState = {
   lastEtag?: string | null;
@@ -23,6 +20,7 @@ export type ConditionalFeedResult =
   | { kind: "read-body"; businessWrite: false };
 
 export type ExistingImportedProperty = {
+  externalId: string;
   id: string | number;
   feedSource?: string | number | null;
   importHash?: string | null;
@@ -39,9 +37,7 @@ export type OfferImportPlan =
     }
   | {
       businessWrite: true;
-      data: {
-        category?: PropertyCategory;
-        dealType?: PropertyDealType;
+      data: Omit<NormalizedFeedOffer, "title"> & {
         externalId: string;
         feedSource: string;
         firstSeenAt?: string;
@@ -94,8 +90,8 @@ export function isFirstFullRun(args: {
   return args.lastFullRunAt == null || args.lastFullRunAt === "";
 }
 
-export function createImportHash(offer: ParsedFeedOffer): string {
-  return createHash("sha256").update(stableStringify(offer.source)).digest("hex");
+export function createImportHash(offer: NormalizedFeedOffer): string {
+  return createHash("sha256").update(stableStringify(offer)).digest("hex");
 }
 
 export function planOfferImport(args: {
@@ -104,17 +100,17 @@ export function planOfferImport(args: {
   feedSourceId: string;
   importRunId: string;
   nowIso: string;
-  offer: ParsedFeedOffer;
+  offer: NormalizedFeedOffer;
 }): OfferImportPlan {
   const importHash = createImportHash(args.offer);
   const existing = args.existing;
-  const enums = resolveFeedPropertyEnums(args.offer.source);
+  const { title: _title, ...normalizedData } = args.offer;
 
   if (!existing) {
     return {
       businessWrite: true,
       data: {
-        ...enums.values,
+        ...normalizedData,
         externalId: args.offer.externalId,
         feedSource: args.feedSourceId,
         firstSeenAt: args.nowIso,
@@ -151,7 +147,7 @@ export function planOfferImport(args: {
   return {
     businessWrite: true,
     data: {
-      ...enums.values,
+      ...normalizedData,
       externalId: args.offer.externalId,
       feedSource: args.feedSourceId,
       importHash,
