@@ -1,7 +1,7 @@
 # Release Checklist — «Море и Горы»
 
 **Статус:** Active — release deferred; no active release program
-**Версия:** 3.6 — Plan №3 closed / Plan №4 v1 APPROVED security program
+**Версия:** 3.7 — Plan №4 technical candidate verified
 **Дата:** 2026-09-23
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
@@ -14,9 +14,9 @@
 - [x] canonical docs и runtime повторно сверены;
 - [x] exact toolchain и frozen lockfile зафиксированы;
 - [x] Node runtime и trailing slash включены; static export удалён;
-- [x] Payload 3.89 подключён как единственный CMS/auth/schema owner;
+- [x] Payload 3.90.1 подключён как единственный CMS/auth/schema owner;
 - [x] PostgreSQL adapter использует `push:false` и committed migrations;
-- [x] PostgreSQL 18 clean migration chain 26/26, owner bootstrap и upgrade
+- [x] PostgreSQL 18 clean migration chain 27/27, owner bootstrap и upgrade
   fixture доказаны в EPIC 44;
 - [x] anonymous users REST закрыт, GraphQL отключён;
 - [x] Server First boundary проверяется автоматически;
@@ -98,8 +98,8 @@
   принято и target удалён без остаточного cost;
 - [ ] jobs handover доказал zero owners перед переключением и ровно одного owner
   после переключения;
-- [ ] clean canonical `main`, exact SHA и один frozen candidate digest —
-  терминальный внешний proof TASK 54.D после merge;
+- [x] clean canonical `main`, exact SHA и один frozen candidate digest:
+  RISKY run 163, single-build run 164, preview install/smoke EPIC 67;
 - [ ] выполнен один production release;
 - [ ] live 200/404/redirect/sitemap/robots/form smoke;
 - [ ] мобильная визуальная проверка production.

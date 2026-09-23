@@ -4,23 +4,18 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const read = (file) => readFileSync(file, "utf8");
-const baselineSha = "21e484c98503550dbfbcbef38eb2e9eecd8d8308";
+const baselineSha = "cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452";
 const expectedMerged = new Map([
-  ["EPIC-43", "78c2753efc48fb2abafd0527b8949e85af199762"],
-  ["EPIC-44", "c824e9fa02ecfe370c859a851e3c0e0cedd48667"],
-  ["EPIC-45", "3ae8f135cfe9fc6f504fef6d1db3fcc65df59f86"],
-  ["EPIC-46", "ea27da151073861f1f9c695ce94dd5d9a61792cc"],
-  ["EPIC-47", "7503ea2ddbdd68de917bf8ca4366284abc1c4382"],
-  ["EPIC-48", "e4b0d006f279a1df9c788b826d151c7c6089545e"],
-  ["EPIC-49", "fbc542392c9cfa01e48fe03483c0a3dbd443654b"],
-  ["EPIC-50", "515db2520bb6dd6e4ecd0b7f91e21a030fa0551f"],
-  ["EPIC-51", "dcd51ed2700e88492c32309725cf8754b442f016"],
-  ["EPIC-52", "6d9d927a5535f903578ed9625c9c345a7ca704d5"],
-  ["EPIC-53", "53cabb8fde75188101900cf457b271a745551082"],
-  ["EPIC-54", baselineSha],
+  ["EPIC-60", "78b154255d672e54382995ba868be1eecb92eef6"],
+  ["EPIC-61", "7a06a958d216f23b66addb794ee4cbdf4f883bd1"],
+  ["EPIC-65", "7845a53d3622b166fe18420937a134135e400eec"],
+  ["EPIC-62", "06848b9f00c5c74e33e34ecfa52a57033f3858d6"],
+  ["EPIC-66", "cb17f87a1b76ba613118d2551e7be17d7b39c6e8"],
+  ["EPIC-63", "d1d0d528e42144d187e0c7a884585a87992d60bd"],
+  ["EPIC-64", baselineSha],
 ]);
 
-test("Plan 3 canonical documents expose one unambiguous delivery state", () => {
+test("Plan 4 canonical documents expose one unambiguous delivery state", () => {
   const state = read("docs/DELIVERY_STATE.yaml");
   const readme = read("docs/README.md");
 
@@ -43,11 +38,10 @@ test("Plan 3 canonical documents expose one unambiguous delivery state", () => {
   assert.doesNotMatch(readme, /Активный машинный inventory/);
   assert.match(state, new RegExp(baselineSha));
   assert.doesNotMatch(state, /842b0cce/);
-  assert.match(state, /current_status: plan3_closed_with_declared_epic54_evidence_gap/);
-  assert.match(state, /next_step: deliver EPIC 61, then prove Payload config, auth and runtime boundaries in EPIC 62/);
-  assert.match(state, /first_priority: critical_next_and_payload_security_upgrade/);
+  assert.match(state, /current_status: plan4_closed_candidate_installed_and_smoke_pass/);
+  assert.match(state, /next_step: prepare a separately approved product\/content plan/);
   assert.match(state, /plan_id: more-i-gory-technical-hardening-2026-09/);
-  assert.match(state, /status: epic61_delivery_ready/);
+  assert.match(state, /status: implementation_complete/);
   assert.match(state, /sourcecraft_access: pass_api_and_git/);
   assert.match(state, /next: 16\.3\.6/);
   assert.match(state, /payload: 3\.90\.1/);
@@ -56,13 +50,13 @@ test("Plan 3 canonical documents expose one unambiguous delivery state", () => {
   assert.match(state, /legacy_mg_graph: deferred_queryable_superseded_by_plan4_v1/);
   assert.match(state, /legacy_mg_items: 156/);
   assert.match(state, /epic_60_branch: codex\/plan4-epic60/);
-  assert.match(state, /mode: static_read_only_no_connection/);
+  assert.match(state, /mode: committed_migration_applied_on_preview/);
   assert.match(state, /registered_migrations: 27/);
   assert.match(state, /last_migration: 20260923_141141_add_reset_password_requested_at/);
-  assert.match(state, /live_mutation: false/);
+  assert.match(state, /live_mutation: additive_migration_only/);
   assert.match(state, /standing_test_database: false/);
   assert.match(state, /restore_rehearsal: ephemeral_release_gate_only/);
-  assert.match(state, /exact_baseline_candidate_proven: false/);
+  assert.match(state, /exact_baseline_candidate_proven: true/);
 
   const mergedRows = [...state.matchAll(/epic:\s*(EPIC-\d+),\s*pr:\s*\d+,\s*sha:\s*([0-9a-f]{40})/g)];
   assert.equal(mergedRows.length, expectedMerged.size, "unexpected last_merged row count");

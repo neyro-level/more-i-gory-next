@@ -1,25 +1,21 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 4.6 — Plan №3 closed / Plan №4 v1 APPROVED
+**Версия:** 4.7 — Plan №4 technical implementation complete
 **Дата:** 2026-09-23
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
-Execution baseline Plan №3 v3 — exact closeout `main`
-`21e484c98503550dbfbcbef38eb2e9eecd8d8308` после EPIC 54 / PR 100.
-EPIC 44–54 закрыты; активных задач этого Plan ID в Task Manager нет.
+Execution baseline Plan №4 — `main`
+`cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452` после EPIC 66 / PR 106.
+EPIC 60–66 закрыты; EPIC 67 завершает delivery и синхронизацию канона.
 Публичный сайт читает Payload через Public Gateway и DTO. Single-DB
 application, preview runtime, leads intake, observability и performance имеют
 live proof; restore rehearsal отложен решением владельца, production — нет.
 
-NOW: каноническая нормализация после Plan №3 завершает подготовку. Следующий
-технический master plan собран в
-[`MORE_I_GORY_PLAN_№ 4.md`](MORE_I_GORY_PLAN_№%204.md) как v1 APPROVED.
-Его первый приоритет — срочное обновление Next/Payload до
-рекомендованной exact-версии с official compatibility verification, затем
-закрытие перечисленного ниже технического остатка.
+NOW: финальная доставка Plan №4. Next/Payload обновлены, технический остаток
+закрыт, exact-main candidate установлен на preview и прошёл live smoke.
 
 Production не выпускался. По решению владельца страницы, business facts,
 коммерческая модель, методика и география запуска пока не входят в работу.
@@ -120,9 +116,9 @@ execution graph отсутствует.
 | Состояние | Эпик | Результат |
 |---|---|---|
 | DONE | EPIC 35–54 | код в `main` `21e484c98503550dbfbcbef38eb2e9eecd8d8308`; PR 100 / RISKY run 143; original EPIC 54 task ledgers утрачены |
-| NOW | Canon cleanup | синхронизировать docs/state/queue; legacy graph объявить noncanonical и запретить к исполнению |
-| NEXT PLAN | Critical dependency upgrade | Next `16.3.6` + Payload-group `3.90.1`; migration/compatibility scope и RISKY proof |
-| NEXT PLAN | Technical debt | exact-main candidate evidence, enum preflight, recovery policy, `ci-gate-split`, inactive workspace package |
+| DONE | EPIC 60–66 | Next `16.3.6`, Payload `3.90.1`, runtime/security/ingest/leads/repository/delivery hardening смержены |
+| NOW | EPIC 67 | full verify, exact-main artifact, preview install/migration/live smoke и docs sync выполнены; финальный PR/gate |
+| NEXT PLAN | Product/content | отдельный новый план после решения владельца; технический долг Plan №4 не переносится |
 | DEFERRED OWNER | Content/product | страницы, facts, коммерческая модель, методика, география и index gates отложены |
 | PRODUCTION GATE | Release/cutover | только отдельная release-команда после нового approved plan |
 

@@ -1,51 +1,49 @@
 # Machine-readable pointer. Requirements live in 03/04 and OWNER_QUEUE.
-program: more-i-gory-production-readiness-2026-09
-plan_version: v3
+program: more-i-gory-technical-hardening-2026-09
+plan_version: v1
 plan_status: closed
-code_baseline_sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308
-last_verified_main_sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308
-verification_date: 2026-09-21
-current_status: plan3_closed_with_declared_epic54_evidence_gap
+code_baseline_sha: cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452
+last_verified_main_sha: cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452
+verification_date: 2026-09-23
+current_status: plan4_closed_candidate_installed_and_smoke_pass
 task_manager:
-  plan_prefix: mg4
+  plan_prefix: mg5
   active_items: 0
-  closed_items: 66
-  recovery_note: original_per_task_execution_ledgers_not_retained
+  closed_items: 45
+  recovery_note: plan4_execution_ledgers_retained
   legacy_mg_graph: deferred_queryable_superseded_by_plan4_v1
   legacy_mg_items: 156
 last_merged:
-  - { epic: EPIC-43, pr: 73, sha: 78c2753efc48fb2abafd0527b8949e85af199762 }
-  - { epic: EPIC-44, pr: 74, sha: c824e9fa02ecfe370c859a851e3c0e0cedd48667 }
-  - { epic: EPIC-45, pr: 76, sha: 3ae8f135cfe9fc6f504fef6d1db3fcc65df59f86 }
-  - { epic: EPIC-46, pr: 82, sha: ea27da151073861f1f9c695ce94dd5d9a61792cc }
-  - { epic: EPIC-47, pr: 84, sha: 7503ea2ddbdd68de917bf8ca4366284abc1c4382 }
-  - { epic: EPIC-48, pr: 93, sha: e4b0d006f279a1df9c788b826d151c7c6089545e }
-  - { epic: EPIC-49, pr: 97, sha: fbc542392c9cfa01e48fe03483c0a3dbd443654b }
-  - { epic: EPIC-50, pr: 98, sha: 515db2520bb6dd6e4ecd0b7f91e21a030fa0551f }
-  - { epic: EPIC-51, pr: 75, sha: dcd51ed2700e88492c32309725cf8754b442f016 }
-  - { epic: EPIC-52, pr: 77, sha: 6d9d927a5535f903578ed9625c9c345a7ca704d5 }
-  - { epic: EPIC-53, pr: 99, sha: 53cabb8fde75188101900cf457b271a745551082 }
-  - { epic: EPIC-54, pr: 100, sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308 }
+  - { epic: EPIC-60, pr: 102, sha: 78b154255d672e54382995ba868be1eecb92eef6 }
+  - { epic: EPIC-61, pr: 103, sha: 7a06a958d216f23b66addb794ee4cbdf4f883bd1 }
+  - { epic: EPIC-65, pr: 104, sha: 7845a53d3622b166fe18420937a134135e400eec }
+  - { epic: EPIC-62, pr: 105, sha: 06848b9f00c5c74e33e34ecfa52a57033f3858d6 }
+  - { epic: EPIC-66, pr: 106, sha: cb17f87a1b76ba613118d2551e7be17d7b39c6e8 }
+  - { epic: EPIC-63, pr: 107, sha: d1d0d528e42144d187e0c7a884585a87992d60bd }
+  - { epic: EPIC-64, pr: 108, sha: cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452 }
 technical_preview:
   hostname: more-previu.tw1.ru
-  last_proven_installed_sha: f06fdb06c1e42aff3a117c4b7a2f22b74455708d
-  exact_baseline_candidate_proven: false
-  evidence_gap: exact_main_digest_installed_path_and_smoke_not_retained
-next_program:
+  last_proven_installed_sha: cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452
+  exact_baseline_candidate_proven: true
+  gate_run: 163
+  build_run: 164
+  sha256: 18a0eee21e8725dae3fcafbfdd18db825d6fa839e02d6afd44a64277685757b3
+  migration_count: 27
+  live_smoke: pass
+completed_program:
   plan_id: more-i-gory-technical-hardening-2026-09
   plan_path: docs/MORE_I_GORY_PLAN_№ 4.md
   inventory_path: docs/task-manager-inventory.plan4.v1.json
   version: v1
-  status: epic61_delivery_ready
+  status: implementation_complete
   source_sha256: 65459497d381dc39db9684d6d2eb2d5e79d69ea6c645494b2c7b02f68f42d5e0
-  first_priority: critical_next_and_payload_security_upgrade
-  inputs: [legacy_graph_cleanup, epic54_evidence, ci_gate_split, payload_origin_security, ingest_correctness, leads_backend_hardening, property_enum_preflight, recovery_policy, inactive_ui_package]
+  result: [critical_dependency_upgrade, payload_runtime_proof, ingest_hardening, leads_hardening, repository_hygiene, delivery_recovery, exact_candidate_evidence]
   deferred_owner_scope: [pages, business_facts, commercial_model, methodology, launch_geography, production]
   ci_gate_split:
     branch: work/ci-gate-split
     head_sha: 4b7da016fdbd6cf2fc24059abcea3add7432189c
     decision: split_do_not_merge_as_is
-    active_release_path_on_main: none
+    active_release_path_on_main: release_single_build
     commit_map:
       - { sha: 5a01a82, disposition: reject_superseded_docs }
       - { sha: 59eb2e1, disposition: adapt_under_task_61_3 }
@@ -74,7 +72,7 @@ next_program:
     automatic_development_triggers: false
     production_applied: false
   database_preflight:
-    mode: static_read_only_no_connection
+    mode: committed_migration_applied_on_preview
     owner: payload_postgres_adapter
     schema_push: false
     registered_migrations: 27
@@ -82,8 +80,8 @@ next_program:
     last_migration: 20260923_141141_add_reset_password_requested_at
     expected_database: default_db
     expected_postgres_major: 18
-    live_mutation: false
+    live_mutation: additive_migration_only
     standing_test_database: false
     restore_rehearsal: ephemeral_release_gate_only
-next_step: deliver EPIC 61, then prove Payload config, auth and runtime boundaries in EPIC 62; production remains separately authorized
+next_step: prepare a separately approved product/content plan; production remains separately authorized
 production: not_authorized

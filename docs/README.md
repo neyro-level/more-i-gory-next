@@ -1,7 +1,7 @@
 # Документация проекта «Море и Горы»
 
 **Статус:** Active
-**Версия:** 3.6 — Plan №3 closed / Plan №4 v1 APPROVED
+**Версия:** 3.7 — Plan №4 technical implementation complete
 **Дата:** 2026-09-23
 **Стандарт:** AMS Product Development Standard 2.0
 
@@ -19,34 +19,33 @@
 
 ## Текущий статус
 
-- Plan №3 v3 EPIC 44–54 смержены; итоговый зафиксированный `main` —
-  `21e484c98503550dbfbcbef38eb2e9eecd8d8308` (PR 100);
+- Plan №4 EPIC 60–66 смержены; technical-preview candidate собран из
+  `cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452`;
 - публичный read идёт через Public Gateway / Payload Local API и DTO;
   при недоступности БД действует безопасный fallback, не local JSON adapters;
 - production не выпускался; technical preview — `more-previu.tw1.ru`;
 - коммерческие и аналитические страницы остаются под content/trust/index gate;
-- чистая цепочка из 26 migrations, upgrade fixture, single-DB application
-  proof, credential rotation, immutable preview runtime и rollback доказаны;
+- цепочка из 27 migrations, upgrade fixture, single-DB application proof,
+  credential rotation, immutable preview runtime и rollback доказаны;
+  единственная новая migration Payload применена на preview, owner login и
+  live smoke прошли;
   restore явно отложен решением владельца в Plan №3 v3;
   актуальные deferred и next-plan inputs собраны в
   [`OWNER_QUEUE.md`](OWNER_QUEUE.md);
-- исходные per-task `EXECUTION_LEDGER_V1` EPIC 54 не сохранились после
-  восстановления локального Task Manager; merge/gate подтверждены, но exact-main
-  digest/install/smoke остаётся отдельным evidence-входом следующего технического
-  плана;
-- production не разрешён; EPIC 55–56 не импортировались и не являются активной
-  программой.
+- exact-main RISKY gate 163, single-build run 164, digest, installed path и
+  smoke зафиксированы в
+  [`research/plan4-final-verification-evidence.md`](research/plan4-final-verification-evidence.md);
+- production не разрешён; domain cutover, jobs, outbound channels и страницы
+  не активировались.
 
 ## Audit / remediation baseline
 
-Plan №3 v3 **APPROVED / CLOSED**: EPIC 44–54 закрыты, активных задач этого
-Plan ID в Task Manager нет. Следующая техническая программа собрана в
-[`MORE_I_GORY_PLAN_№ 4.md`](MORE_I_GORY_PLAN_№%204.md) как **v1 APPROVED**.
-Final audit дал `READY_WITH_LIMITS`; единственное ограничение — SourceCraft
-HTTP 401 до восстановления PAT. Production планом не разрешён.
+Plan №4 v1 прошёл реализацию EPIC 60–67 и финальную техническую проверку.
+SourceCraft API/Git восстановлены; exact-main candidate собран один раз и
+установлен на существующий technical preview. Production планом не разрешён.
 
 ```text
-CODE_BASELINE=21e484c98503550dbfbcbef38eb2e9eecd8d8308  # Plan №3 closeout / PR 100
+CODE_BASELINE=cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452  # Plan №4 EPIC 60–66 merged candidate
 PROFILE=REALTY_BASE
 TARGET_CORE=AMS Realty Platform 5.5
 UI_CORE=AMS UI Core 5.0
@@ -54,12 +53,12 @@ UI_CORE=AMS UI Core 5.0
 
 | Поле | Значение |
 |---|---|
-| Code baseline | SourceCraft `integrator-p/more-i-gory-next` @ `21e484c98503550dbfbcbef38eb2e9eecd8d8308` |
+| Code baseline | SourceCraft `integrator-p/more-i-gory-next` @ `cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452` |
 | Профиль | `AMS_PROFILE=REALTY_BASE`, режим BUILD |
 | Техническая конституция | [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) |
 | UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
-| Последний утверждённый мастер-план | [`MORE_I_GORY_PLAN_№ 3.md`](MORE_I_GORY_PLAN_№%203.md) v3 APPROVED / CLOSED |
-| Следующий технический план | [`MORE_I_GORY_PLAN_№ 4.md`](MORE_I_GORY_PLAN_№%204.md) v1 APPROVED; inventory schema v2 |
+| Последний утверждённый мастер-план | [`MORE_I_GORY_PLAN_№ 4.md`](MORE_I_GORY_PLAN_№%204.md) v1 APPROVED; implementation complete |
+| Предыдущий план | [`MORE_I_GORY_PLAN_№ 3.md`](MORE_I_GORY_PLAN_№%203.md) v3 APPROVED / CLOSED |
 | Машинный inventory Plan №4 | [`task-manager-inventory.plan4.v1.json`](task-manager-inventory.plan4.v1.json); Plan ID `more-i-gory-technical-hardening-2026-09`, prefix `mg5` |
 | Исторический машинный inventory | [`task-manager-inventory.plan3.v3.json`](task-manager-inventory.plan3.v3.json); повторно не импортировать |
 | История | [`More-i-gory-plan №2.md`](More-i-gory-plan%20№2.md) и `task-manager-inventory.v6.json`; новые задачи из них не создаются |
@@ -126,8 +125,7 @@ Research объясняет причины решений, но не являе�
 
 ## Current Focus
 
-NOW: нормализация канона после закрытия Plan №3. Следующий master plan собран
-как Plan №4 v1 APPROVED и включает critical Next/Payload updates,
-остаточный technical debt и восстановление exact-main candidate evidence.
+NOW: финальная доставка Plan №4. Critical Next/Payload updates, остаточный
+technical debt и exact-main candidate evidence закрыты.
 Business facts, коммерческая модель, методика, география и страницы отложены
 явным решением владельца. Production не выпускался и не разрешён.

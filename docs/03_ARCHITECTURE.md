@@ -1,7 +1,7 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 2.9 Plan №3 closeout / Plan №4 v1 APPROVED security baseline
+**Версия:** 3.0 Plan №4 technical implementation complete
 **Дата:** 2026-09-23
 **Engineering baseline:** AMS Realty Platform Core 5.5 (норматив стека)
 **Важно:** этот документ фиксирует только проектную конкретику. Стек, границы
@@ -12,8 +12,8 @@
 ## 0. Transition contract
 
 EPIC 1 перевёл публичный сайт со static export на production Node.js runtime.
-EPIC 2–13, 15–17, 19–54 в `main`
-(`21e484c98503550dbfbcbef38eb2e9eecd8d8308`): Payload 3.89, PostgreSQL
+EPIC 2–13, 15–17, 19–66 в `main`
+(`cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452`): Payload 3.90.1, PostgreSQL
 migrations, Public Gateway, media/S3, regions, properties, newbuild/ingest,
 leads, jobs, preview Nginx/systemd и proof matrix. Публичный read идёт через
 `src/core/data-access/public/**` (Payload Local API + DTO); при недоступности
@@ -26,11 +26,9 @@ runtime, Managed PostgreSQL, S3 и один jobs owner. Решение прин�
 release EPIC 55–56 не импортировались, production не разрешён.
 
 Remediation baseline (TASK 19.1) был `27ea4c2` (после EPIC 12). Итоговый
-Plan №3 closeout — `21e484c98503550dbfbcbef38eb2e9eecd8d8308` (PR 100).
-Per-task ledgers EPIC 54 не сохранились после восстановления Task Manager;
-поэтому exact-main digest/install/smoke не считается доказанным и переносится
-как явный evidence-вход следующего технического плана. Карта — в
-[`README.md`](README.md).
+Plan №4 candidate — `cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452`.
+Exact-main gate, single-build digest, immutable install, migration and live
+smoke доказаны в EPIC 67. Карта — в [`README.md`](README.md).
 
 ## 1. Architecture Summary
 
@@ -92,8 +90,8 @@ Exact toolchain первого релиза:
 |---|---:|---|
 | Node.js | `24.20.0` | `.node-version`, CI |
 | pnpm | `11.5.1` | `packageManager`, lockfile |
-| Next.js | `16.3.4` | App Router, Node.js runtime |
-| Payload / `@payloadcms/*` | `3.89.0` | CMS, Admin, auth, jobs, schema/migrations owner |
+| Next.js | `16.3.6` | App Router, Node.js runtime |
+| Payload / `@payloadcms/*` | `3.90.1` | CMS, Admin, auth, jobs, schema/migrations owner |
 | PostgreSQL | `18.6` local / `18.6` managed | one approved cluster `4210557` / database `default_db`; no second staging/restore resource |
 | React / React DOM | `19.3.0` | Server First |
 | TypeScript | `6.0.3` | strict; TypeScript 7 не используется |
@@ -111,11 +109,9 @@ Exact toolchain первого релиза:
 Также используется `concurrently` для совместного локального запуска Next.js и Velite.
 Exact versions фиксируются в `package.json` и lockfile без ranges.
 
-Next.js `16.3.4` и Payload `3.89.0` являются текущим установленным baseline.
-Plan №4 v1 APPROVED фиксирует exact targets Next.js / eslint config `16.3.6` и
-Payload-group `3.90.1` на основании официальных critical security releases;
-перед реализацией compatibility matrix повторно сверяется по свежей официальной
-документации. В рамках этой нормализации зависимости не изменяются.
+Next.js / eslint config `16.3.6` и Payload-group `3.90.1` являются текущим
+установленным baseline. Compatibility matrix, auth/Admin/media/runtime proof и
+HIGH/CRITICAL audit прошли в Plan №4.
 
 ## 2.1. Package strategy
 
@@ -540,7 +536,8 @@ Rollback:
 БД:
 - Timeweb Managed PostgreSQL с автоматическими backup provider;
 - schema изменяется только committed Payload migrations (`push:false`);
-- чистая PostgreSQL 18 прошла полную цепочку 26/26 и upgrade fixture в EPIC 44;
+- чистая PostgreSQL 18 прошла полную цепочку 27/27; migration
+  `20260923_141141_add_reset_password_requested_at` применена на preview;
 - отдельная restore DB и backup/restore rehearsal исключены из v3;
 - production disaster-recovery rehearsal требует нового отдельного решения;
   текущий technical preview не заявляет restore readiness.
