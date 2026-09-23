@@ -1,16 +1,16 @@
 # Machine-readable pointer. Requirements live in 03/04 and OWNER_QUEUE.
-program: more-i-gory-production-readiness-2026-09
-plan_version: v3
-plan_status: closed
-code_baseline_sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308
-last_verified_main_sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308
-verification_date: 2026-09-21
-current_status: plan3_closed_with_declared_epic54_evidence_gap
+program: more-i-gory-technical-hardening-2026-09
+plan_version: v1
+plan_status: final_delivery
+code_baseline_sha: cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452
+last_verified_main_sha: cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452
+verification_date: 2026-09-23
+current_status: plan4_epic67_candidate_installed_and_smoke_pass
 task_manager:
-  plan_prefix: mg4
-  active_items: 0
-  closed_items: 66
-  recovery_note: original_per_task_execution_ledgers_not_retained
+  plan_prefix: mg5
+  active_items: 2
+  closed_items: 26
+  recovery_note: plan4_execution_ledgers_retained
   legacy_mg_graph: deferred_queryable_superseded_by_plan4_v1
   legacy_mg_items: 156
 last_merged:
@@ -28,9 +28,13 @@ last_merged:
   - { epic: EPIC-54, pr: 100, sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308 }
 technical_preview:
   hostname: more-previu.tw1.ru
-  last_proven_installed_sha: f06fdb06c1e42aff3a117c4b7a2f22b74455708d
-  exact_baseline_candidate_proven: false
-  evidence_gap: exact_main_digest_installed_path_and_smoke_not_retained
+  last_proven_installed_sha: cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452
+  exact_baseline_candidate_proven: true
+  gate_run: 163
+  build_run: 164
+  sha256: 18a0eee21e8725dae3fcafbfdd18db825d6fa839e02d6afd44a64277685757b3
+  migration_count: 27
+  live_smoke: pass
 next_program:
   plan_id: more-i-gory-technical-hardening-2026-09
   plan_path: docs/MORE_I_GORY_PLAN_№ 4.md

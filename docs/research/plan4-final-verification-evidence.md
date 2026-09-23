@@ -44,3 +44,19 @@ Candidate base: `cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452`
 | Active pointer | `/opt/moreigory/current` resolves to the installed path |
 | Rollback pointer | `/opt/moreigory/previous` preserves `21e484c98503550dbfbcbef38eb2e9eecd8d8308` |
 | Install proof | Checksum and release manifest PASS; `moreigory.service` active; loopback `/api/health` PASS |
+
+## Technical preview migration and live smoke
+
+| Check | Result |
+|---|---|
+| Migration status before apply | 26 applied; only `20260923_141141_add_reset_password_requested_at` pending |
+| Migration apply | PASS; additive column migration completed in 7 ms; ledger now 27/27 |
+| Health / home / Admin | `200 / 200 / 200` |
+| Owner login | `200` after migration |
+| Anonymous Payload REST | `403` |
+| Disabled public lead intake | `503` (`not_configured`) |
+| Jobs / leads / outbound | `JOBS_AUTORUN=false`; `NEXT_PUBLIC_LEADS_ENABLED=false`; `LEAD_CHANNELS` empty |
+| Indexing and headers | `X-Robots-Tag: noindex, nofollow`; HSTS and `nosniff` present; robots disallow present |
+
+No production release, domain cutover, page/content change, feed activation or
+outbound delivery was performed.
