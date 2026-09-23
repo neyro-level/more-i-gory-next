@@ -34,6 +34,25 @@ test("canonical leads route has edge and application-aligned rate limits", () =>
 });
 
 test("security headers, body size and proxy timeouts are set", () => {
+  const repeatedSecurityHeaders = [
+    "Content-Security-Policy",
+    "Strict-Transport-Security",
+    "X-Content-Type-Options",
+    "Referrer-Policy",
+    "X-Frame-Options",
+  ];
+
+  for (const header of repeatedSecurityHeaders) {
+    assert.equal(
+      nginx.match(new RegExp(`add_header ${header} `, "g"))?.length,
+      3,
+      `${header} must cover the server, /admin and /_next/static scopes`,
+    );
+  }
+
+  assert.match(nginx, /Content-Security-Policy "default-src 'self';[^\n]*frame-ancestors 'none';/);
+  assert.match(nginx, /Content-Security-Policy "[^\n]*object-src 'none';/);
+  assert.match(nginx, /Content-Security-Policy "[^\n]*upgrade-insecure-requests" always;/);
   assert.match(nginx, /Strict-Transport-Security "max-age=31536000; includeSubDomains"/);
   assert.match(nginx, /X-Content-Type-Options "nosniff"/);
   assert.match(nginx, /Referrer-Policy "strict-origin-when-cross-origin"/);
@@ -41,6 +60,8 @@ test("security headers, body size and proxy timeouts are set", () => {
   assert.match(nginx, /Permissions-Policy "camera=\(\), microphone=\(\), geolocation=\(\)"/);
   assert.match(nginx, /X-Robots-Tag "noindex, nofollow"/);
   assert.match(nginx, /client_max_body_size 12m/);
+  assert.equal(nginx.match(/client_max_body_size 12m;/g)?.length, 2);
+  assert.match(nginx, /location = \/api\/public\/leads\/ \{[\s\S]*?client_max_body_size 64k;/);
   assert.match(nginx, /proxy_connect_timeout 5s/);
   assert.match(nginx, /proxy_send_timeout 60s/);
   assert.match(nginx, /proxy_read_timeout 60s/);
