@@ -1,7 +1,9 @@
 # Plan №4 EPIC 66 — local delivery-contract evidence
 
-Date: 2026-09-23  
-Scope: TASK 66.4, local deterministic verification only  
+Date: 2026-09-23
+
+Scope: TASK 66.4, local deterministic verification only
+
 Production, preview rollout, jobs activation and restore execution: not run
 
 ## Result
