@@ -18,6 +18,7 @@
     "payload:generate-types": "payload generate:types",
     "payload:migrate": "payload migrate",
     "payload:migrate:create": "payload migrate:create",
+    "proof:payload-runtime": "node --conditions=react-server node_modules/payload/bin.js run scripts/run-payload-runtime-proof.mjs",
     "db:single:preflight": "node ops/runtime/single-db-migration.mjs preflight",
     "db:single:apply": "node ops/runtime/single-db-migration.mjs apply",
     "db:single:seed-proof": "node --conditions=react-server node_modules/payload/bin.js run scripts/run-preview-db-proof.mjs",

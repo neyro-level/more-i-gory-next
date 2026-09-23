@@ -24,6 +24,7 @@ test("path classifier distinguishes System Gateway owners from orchestration", (
   assert.equal(classifyLocalApiPath("src/project/collections/redirects.ts"), "CMS ADMIN");
   assert.equal(classifyLocalApiPath("migrations/20260917.ts"), "MIGRATION");
   assert.equal(classifyLocalApiPath("scripts/jobs-config.test.mjs"), "TEST");
+  assert.equal(classifyLocalApiPath("scripts/run-payload-runtime-proof.mjs"), "TEST");
   assert.equal(classifyLocalApiPath("src/app/(site)/page.tsx"), null);
 });
 
