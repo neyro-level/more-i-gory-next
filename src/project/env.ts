@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { resolveExactHttpOrigin } from "./security/payload-origin-policy.ts";
 
 const optionalNonEmpty = z.string().trim().min(1).optional();
 const optionalUrl = z.url().optional();
@@ -16,7 +17,14 @@ const rawEnvSchema = z
         message: "DATABASE_URI must be a PostgreSQL connection string",
       }),
     PAYLOAD_SECRET: z.string().min(32),
-    NEXT_PUBLIC_SERVER_URL: z.url(),
+    NEXT_PUBLIC_SERVER_URL: z.url().refine((value) => {
+      try {
+        resolveExactHttpOrigin(value);
+        return true;
+      } catch {
+        return false;
+      }
+    }, "NEXT_PUBLIC_SERVER_URL must be an exact HTTP(S) origin without a path, query, hash, or trailing slash"),
     NEXT_PUBLIC_LEADS_ENABLED: z.enum(["true", "false"]).default("false"),
     CACHE_INVALIDATION_MODE: z.literal("http").optional(),
     REVALIDATE_SECRET: z.string().min(32).optional(),
