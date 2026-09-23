@@ -102,6 +102,7 @@
     "test:preview-proof-seed": "node --conditions=react-server --test scripts/preview-proof-seed.test.mjs",
     "test:single-db-runbook": "node --test scripts/single-db-runbook.test.mjs",
     "test:release-recovery-gates": "node --test scripts/release-recovery-gates.test.mjs",
+    "test:redaction-contract": "node --test scripts/redaction-contract.test.mjs",
     "test:leads-collections": "node --conditions=react-server --test scripts/leads-collections-contract.test.mjs",
     "test:lead-delivery-channel": "node --conditions=react-server --test scripts/lead-delivery-channel.test.mjs",
     "test:lead-delivery-e2e-fake": "node --conditions=react-server --test scripts/lead-delivery-e2e-fake.test.mjs",

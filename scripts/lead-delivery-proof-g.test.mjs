@@ -80,7 +80,7 @@ test("Proof G: POST /api/public/leads creates lead, delivery, job and fake deliv
         phone: "+7 900 000-00-00",
         sourcePath: "/podbor/",
       }),
-      headers: { "content-type": "application/json", "x-forwarded-for": "203.0.113.10" },
+      headers: { "content-type": "application/json", "x-moreigory-client-ip": "203.0.113.10" },
       method: "POST",
     }),
     {

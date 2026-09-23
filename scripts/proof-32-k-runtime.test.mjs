@@ -55,7 +55,7 @@ function leadBody() {
 function request(body) {
   return new Request("https://moreigori.ru/api/public/leads", {
     body: JSON.stringify(body),
-    headers: { "content-type": "application/json", "x-forwarded-for": "203.0.113.10" },
+    headers: { "content-type": "application/json", "x-moreigory-client-ip": "203.0.113.10" },
     method: "POST",
   });
 }

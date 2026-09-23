@@ -187,8 +187,8 @@ export function main(argv = process.argv.slice(2), environment = process.env) {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     main();
-  } catch (error) {
-    process.stderr.write(`single-db-migration: ${error instanceof Error ? error.message : "unknown failure"}\n`);
+  } catch {
+    process.stderr.write("single-db-migration: operation failed; details redacted\n");
     process.exitCode = 1;
   }
 }

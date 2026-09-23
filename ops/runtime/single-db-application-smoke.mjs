@@ -126,8 +126,8 @@ export async function main(argv = process.argv.slice(2)) {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     await main();
-  } catch (error) {
-    process.stderr.write(`single-db-application-smoke: ${error instanceof Error ? error.message : "unknown failure"}\n`);
+  } catch {
+    process.stderr.write("single-db-application-smoke: operation failed; details redacted\n");
     process.exitCode = 1;
   }
 }

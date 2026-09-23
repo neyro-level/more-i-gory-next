@@ -73,8 +73,8 @@ export async function seedPreviewDbProof(argv = process.argv.slice(2), source = 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
     await seedPreviewDbProof();
-  } catch (error) {
-    process.stderr.write(`seed-preview-db-proof: ${error instanceof Error ? error.message : "unknown failure"}\n`);
+  } catch {
+    process.stderr.write("seed-preview-db-proof: operation failed; details redacted\n");
     process.exitCode = 1;
   }
 }

@@ -184,9 +184,9 @@ CACHE_INVALIDATION_MODE=http
 | Internal revalidation auth | `REVALIDATE_SECRET` | secret |
 | S3 | `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY` | credentials are secret; required fail-fast in production runtime; local/build/verify-runtime may omit them |
 | Outbound policy | `OUTBOUND_ALLOWED_HOSTS` | exact allowlist |
-| Lead channels | `LEAD_CHANNELS` | `telegram` |
-| Lead outbound policy | `LEAD_OUTBOUND_HOSTS` | exact allowlist |
-| Lead channel | не настроен; канал оповещений исключён из текущей программы |
+| Lead channels | `LEAD_CHANNELS` | unset; пустой registry — текущий contract |
+| Lead outbound policy | `LEAD_OUTBOUND_HOSTS` | unset при пустом registry; exact allowlist нужен только после отдельного включения канала |
+| Lead channel | не настроен; delivery rows/jobs и внешний outbound не создаются |
 | Alerts | `ALERT_WEBHOOK_URL` | optional secret integration |
 | Feed sources | `FEED_SOURCE_*` | optional; freeze — не обязательны и не включают ingest после деплоя |
 

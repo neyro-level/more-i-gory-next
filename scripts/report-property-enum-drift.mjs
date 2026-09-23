@@ -24,8 +24,8 @@ if (databaseUri) {
     } finally {
       await sqlClient.end({ timeout: 5 });
     }
-  } catch (error) {
-    queryError = error instanceof Error ? error.message : String(error);
+  } catch {
+    queryError = "database query failed; details redacted";
   }
 }
 

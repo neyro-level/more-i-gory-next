@@ -21,6 +21,7 @@ type PublicLeadIntakeConfig = Readonly<{
   minimumFillTimeMs?: number;
   now?: () => number;
   rateLimit?: {
+    maxBuckets?: number;
     maxRequests: number;
     windowMs: number;
   };
@@ -28,6 +29,7 @@ type PublicLeadIntakeConfig = Readonly<{
 }>;
 
 const defaultRateLimit = {
+  maxBuckets: 10_000,
   maxRequests: 5,
   windowMs: 60_000,
 } as const;
@@ -68,22 +70,45 @@ function jsonResponse(body: unknown, init: ResponseInit): Response {
   });
 }
 
-function requesterKey(request: Request): string {
+function requesterKey(request: Request): string | null {
   // The public runtime is loopback-only. Nginx overwrites this project-owned
   // header with $remote_addr; public Forwarded/X-Forwarded-For/X-Real-IP values
   // are deliberately ignored here.
   const trustedClientIp = request.headers.get("x-moreigory-client-ip")?.trim();
-  return trustedClientIp && isIP(trustedClientIp) !== 0 ? trustedClientIp : "unknown";
+  return trustedClientIp && isIP(trustedClientIp) !== 0 ? trustedClientIp : null;
 }
 
-function checkRateLimit(request: Request, config: PublicLeadIntakeConfig): boolean {
+function removeExpiredBuckets(store: Map<string, RateLimitBucket>, now: number): void {
+  for (const [key, bucket] of store) {
+    if (bucket.resetAt <= now) store.delete(key);
+  }
+}
+
+function evictSoonestResetBucket(store: Map<string, RateLimitBucket>): void {
+  let candidateKey: string | undefined;
+  let candidateResetAt = Number.POSITIVE_INFINITY;
+
+  for (const [key, bucket] of store) {
+    if (bucket.resetAt < candidateResetAt) {
+      candidateKey = key;
+      candidateResetAt = bucket.resetAt;
+    }
+  }
+
+  if (candidateKey !== undefined) store.delete(candidateKey);
+}
+
+function checkRateLimit(key: string, config: PublicLeadIntakeConfig): boolean {
   const limit = config.rateLimit ?? defaultRateLimit;
   const now = config.now?.() ?? Date.now();
   const store = config.store ?? defaultStore;
-  const key = requesterKey(request);
+  const maxBuckets = Math.max(1, limit.maxBuckets ?? defaultRateLimit.maxBuckets);
+
+  removeExpiredBuckets(store, now);
   const existing = store.get(key);
 
-  if (!existing || existing.resetAt <= now) {
+  if (!existing) {
+    if (store.size >= maxBuckets) evictSoonestResetBucket(store);
     store.set(key, { count: 1, resetAt: now + limit.windowMs });
     return true;
   }
@@ -118,7 +143,13 @@ export async function handlePublicLeadRequest(
     return jsonResponse({ error: "not_configured" }, { status: 503 });
   }
 
-  if (!checkRateLimit(request, config)) {
+  const clientIp = requesterKey(request);
+  if (clientIp === null) {
+    config.logger.warn("public lead rejected", { reason: "trusted_client_ip_missing" });
+    return jsonResponse({ error: "not_configured" }, { status: 503 });
+  }
+
+  if (!checkRateLimit(clientIp, config)) {
     config.logger.warn("public lead rejected", { reason: "rate_limited" });
     return jsonResponse({ error: "rate_limited" }, { status: 429 });
   }
@@ -141,7 +172,6 @@ export async function handlePublicLeadRequest(
     return jsonResponse({ error: "invalid_payload" }, { status: 400 });
   }
 
-  const clientIp = requesterKey(request);
   try {
     await config.createLead({
       activeChannelIds: config.activeChannelIds ?? [],
@@ -154,7 +184,7 @@ export async function handlePublicLeadRequest(
       formId: parsed.formId,
       message: parsed.message,
       metadata: {
-        requester: clientIp === "unknown" ? "unknown" : "present",
+        requester: "present",
       },
       name: parsed.name,
       phone: parsed.phone,

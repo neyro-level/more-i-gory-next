@@ -102,9 +102,19 @@ test("public lead endpoint rejects honeypot and too-fast submissions", async () 
     store: new Map(),
   };
 
-  assert.equal((await handlePublicLeadRequest(request(payload({ honeypot: "company" })), config)).status, 400);
+  const trustedHeaders = { "x-moreigory-client-ip": "203.0.113.20" };
   assert.equal(
-    (await handlePublicLeadRequest(request(payload({ formStartedAt: "2026-09-17T08:59:59.000Z" })), config)).status,
+    (await handlePublicLeadRequest(request(payload({ honeypot: "company" }), { headers: trustedHeaders }), config))
+      .status,
+    400,
+  );
+  assert.equal(
+    (
+      await handlePublicLeadRequest(
+        request(payload({ formStartedAt: "2026-09-17T08:59:59.000Z" }), { headers: trustedHeaders }),
+        config,
+      )
+    ).status,
     400,
   );
 });
@@ -121,40 +131,69 @@ test("public lead endpoint rate limits by requester key", async () => {
     store,
   };
 
-  assert.equal((await handlePublicLeadRequest(request(payload()), config)).status, 201);
-  assert.equal((await handlePublicLeadRequest(request(payload()), config)).status, 429);
+  const trustedRequest = () =>
+    request(payload(), { headers: { "x-moreigory-client-ip": "203.0.113.10" } });
+  assert.equal((await handlePublicLeadRequest(trustedRequest(), config)).status, 201);
+  assert.equal((await handlePublicLeadRequest(trustedRequest(), config)).status, 429);
 });
 
-test("spoofed public forwarding headers cannot select a different rate-limit bucket", async () => {
+test("missing trusted client IP fails closed without creating a shared rate-limit bucket", async () => {
+  const store = new Map();
+  const warnings = [];
+  const config = {
+    consentVersion: "consent-v1",
+    createLead: async () => ({ id: 1 }),
+    enabled: true,
+    logger: {
+      ...logger(),
+      warn(message, context) {
+        warnings.push({ message, context });
+      },
+    },
+    now: () => now,
+    rateLimit: { maxRequests: 1, windowMs: 60_000 },
+    store,
+  };
+
+  const responses = await Promise.all(
+    Array.from({ length: 20 }, (_, index) =>
+      handlePublicLeadRequest(
+        request(payload(), { headers: { "x-forwarded-for": `198.51.100.${index + 1}` } }),
+        config,
+      ),
+    ),
+  );
+
+  assert.deepEqual(responses.map((response) => response.status), Array(20).fill(503));
+  assert.equal(store.size, 0);
+  assert.equal(warnings.length, 20);
+  assert.ok(warnings.every(({ context }) => context.reason === "trusted_client_ip_missing"));
+});
+
+test("rate-limit store removes expired buckets and remains capacity-bounded", async () => {
+  let currentTime = now;
   const store = new Map();
   const config = {
     consentVersion: "consent-v1",
     createLead: async () => ({ id: 1 }),
     enabled: true,
     logger: logger(),
-    now: () => now,
-    rateLimit: { maxRequests: 1, windowMs: 60_000 },
+    now: () => currentTime,
+    rateLimit: { maxBuckets: 2, maxRequests: 1, windowMs: 60_000 },
     store,
   };
+  const submit = (ip) =>
+    handlePublicLeadRequest(request(payload(), { headers: { "x-moreigory-client-ip": ip } }), config);
 
-  const first = request(payload(), {
-    headers: {
-      forwarded: "for=198.51.100.1",
-      "x-forwarded-for": "198.51.100.1",
-      "x-real-ip": "198.51.100.1",
-    },
-  });
-  const spoofed = request(payload(), {
-    headers: {
-      forwarded: "for=198.51.100.2",
-      "x-forwarded-for": "198.51.100.2",
-      "x-real-ip": "198.51.100.2",
-    },
-  });
+  assert.equal((await submit("203.0.113.1")).status, 201);
+  assert.equal((await submit("203.0.113.2")).status, 201);
+  assert.equal((await submit("203.0.113.3")).status, 201);
+  assert.equal(store.size, 2);
+  assert.deepEqual([...store.keys()], ["203.0.113.2", "203.0.113.3"]);
 
-  assert.equal((await handlePublicLeadRequest(first, config)).status, 201);
-  assert.equal((await handlePublicLeadRequest(spoofed, config)).status, 429);
-  assert.deepEqual([...store.keys()], ["unknown"]);
+  currentTime += 60_001;
+  assert.equal((await submit("203.0.113.4")).status, 201);
+  assert.deepEqual([...store.keys()], ["203.0.113.4"]);
 });
 
 test("trusted Nginx client header selects a validated IP bucket", async () => {
@@ -191,11 +230,18 @@ test("public lead endpoint rejects unsafe source paths and non-POST methods", as
     store: new Map(),
   };
 
-  assert.equal((await handlePublicLeadRequest(request(payload({ sourcePath: "//evil" })), config)).status, 400);
+  const trustedHeaders = { "x-moreigory-client-ip": "203.0.113.30" };
+  assert.equal(
+    (await handlePublicLeadRequest(request(payload({ sourcePath: "//evil" }), { headers: trustedHeaders }), config))
+      .status,
+    400,
+  );
   assert.equal(
     (
       await handlePublicLeadRequest(
-        request(payload({ consent: { ...payload().consent, version: "stale-version" } })),
+        request(payload({ consent: { ...payload().consent, version: "stale-version" } }), {
+          headers: trustedHeaders,
+        }),
         config,
       )
     ).status,
