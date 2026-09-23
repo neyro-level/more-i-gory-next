@@ -24,6 +24,7 @@ import * as migration_20260918_190215_deactivation_approval from './20260918_190
 import * as migration_20260919_114121_import_run_canonical_status from './20260919_114121_import_run_canonical_status';
 import * as migration_20260919_123428 from './20260919_123428';
 import * as migration_20260919_202220_epic44_status_enum_collision from './20260919_202220_epic44_status_enum_collision';
+import * as migration_20260923_141141_add_reset_password_requested_at from './20260923_141141_add_reset_password_requested_at';
 
 export const migrations = [
   {
@@ -154,6 +155,11 @@ export const migrations = [
   {
     up: migration_20260919_202220_epic44_status_enum_collision.up,
     down: migration_20260919_202220_epic44_status_enum_collision.down,
-    name: '20260919_202220_epic44_status_enum_collision'
+    name: '20260919_202220_epic44_status_enum_collision',
+  },
+  {
+    up: migration_20260923_141141_add_reset_password_requested_at.up,
+    down: migration_20260923_141141_add_reset_password_requested_at.down,
+    name: '20260923_141141_add_reset_password_requested_at'
   },
 ];

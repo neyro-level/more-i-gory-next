@@ -36,7 +36,7 @@ next_program:
   plan_path: docs/MORE_I_GORY_PLAN_№ 4.md
   inventory_path: docs/task-manager-inventory.plan4.v1.json
   version: v1
-  status: epic60_delivery_ready
+  status: epic61_delivery_ready
   source_sha256: 65459497d381dc39db9684d6d2eb2d5e79d69ea6c645494b2c7b02f68f42d5e0
   first_priority: critical_next_and_payload_security_upgrade
   inputs: [legacy_graph_cleanup, epic54_evidence, ci_gate_split, payload_origin_security, ingest_correctness, leads_backend_hardening, property_enum_preflight, recovery_policy, inactive_ui_package]
@@ -62,17 +62,28 @@ next_program:
     canonical_main_observed_sha: 21e484c98503550dbfbcbef38eb2e9eecd8d8308
     sourcecraft_access: pass_api_and_git
     stop_conditions: [production, domain_cutover, real_traffic, destructive_live_data, source_or_inventory_drift]
+  epic_61_candidate:
+    branch: codex/plan4-epic61
+    base_sha: 78b154255d672e54382995ba868be1eecb92eef6
+    next: 16.3.6
+    eslint_config_next: 16.3.6
+    payload: 3.90.1
+    migration: 20260923_141141_add_reset_password_requested_at
+    high_audit: pass
+    manual_gate_contract: standard_and_risky
+    automatic_development_triggers: false
+    production_applied: false
   database_preflight:
     mode: static_read_only_no_connection
     owner: payload_postgres_adapter
     schema_push: false
-    registered_migrations: 26
+    registered_migrations: 27
     first_migration: 20260915_171809_initial_users_jobs
-    last_migration: 20260919_202220_epic44_status_enum_collision
+    last_migration: 20260923_141141_add_reset_password_requested_at
     expected_database: default_db
     expected_postgres_major: 18
     live_mutation: false
     standing_test_database: false
     restore_rehearsal: ephemeral_release_gate_only
-next_step: deliver EPIC 60, then start the critical Next and Payload security upgrade; production remains separately authorized
+next_step: deliver EPIC 61, then prove Payload config, auth and runtime boundaries in EPIC 62; production remains separately authorized
 production: not_authorized

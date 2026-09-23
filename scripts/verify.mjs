@@ -13,7 +13,7 @@ const verificationEnv = {
   TZ: process.env.TZ ?? "Europe/Moscow",
 };
 
-for (const script of ["check:preview-env-contract", "verify:quick", "build", "verify:runtime"]) {
+for (const script of ["check:preview-env-contract", "verify:sourcecraft-contract", "verify:quick", "build", "verify:runtime"]) {
   const result = spawnSync(process.execPath, [pnpmCli, script], {
     env: verificationEnv,
     stdio: "inherit",

@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 export const EXPECTED_DATABASE = "default_db";
 export const EXPECTED_POSTGRES_MAJOR = 18;
-export const EXPECTED_MIGRATION_COUNT = 26;
+export const EXPECTED_MIGRATION_COUNT = 27;
 export const EXPECTED_PUBLIC_TABLE_COUNT = 148;
 export const APPLY_CONFIRMATION = "APPLY_SINGLE_DB_MIGRATIONS";
 
