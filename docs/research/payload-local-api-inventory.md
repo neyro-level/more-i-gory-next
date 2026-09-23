@@ -1,7 +1,7 @@
 # Payload Local API inventory
 
-**Дата:** 2026-09-19
-**Задача:** TASK 36.4
+**Дата:** 2026-09-23
+**Задача:** TASK 36.4, TASK 62.3
 **Статус:** Evidence only
 
 Каждый вызов `getPayload`, `payload.find/findByID/findGlobal/create/update/delete`,
@@ -13,6 +13,13 @@
 | Location | Operation | Class | Snippet |
 |---|---|---|---|
 | `scripts/lead-delivery-proof-g.test.mjs:110` | `jobs.queue` | TEST | `await memory.payload.jobs.queue({` |
+| `scripts/run-payload-runtime-proof.mjs:23` | `getPayload` | TEST | `const payload = await getPayload({ config });` |
+| `scripts/run-payload-runtime-proof.mjs:35` | `create` | TEST | `const editor = await payload.create({` |
+| `scripts/run-payload-runtime-proof.mjs:41` | `create` | TEST | `const lockoutUser = await payload.create({` |
+| `scripts/run-payload-runtime-proof.mjs:61` | `create` | TEST | `payload.create({` |
+| `scripts/run-payload-runtime-proof.mjs:87` | `findByID` | TEST | `const locked = await payload.findByID({` |
+| `scripts/run-payload-runtime-proof.mjs:116` | `find` | TEST | `const users = await payload.find({ collection: "users", limit: 10, overrideAccess: false, user: owner });` |
+| `scripts/run-payload-runtime-proof.mjs:117` | `findGlobal` | TEST | `const siteSettings = await payload.findGlobal({ slug: "site-settings", overrideAccess: false, user: owner });` |
 | `scripts/seed-media-assets.mjs:64` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/seed-preview-db-proof.mjs:60` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/seed-regions.mjs:72` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |

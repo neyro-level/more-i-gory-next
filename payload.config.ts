@@ -23,10 +23,12 @@ import { Users } from "./src/project/collections/users.ts";
 import { env } from "./src/project/env.ts";
 import { Navigation, SiteSettings } from "./src/project/globals/index.ts";
 import { createJobsConfig } from "./src/project/jobs/config.ts";
+import { createPayloadOriginPolicy } from "./src/project/security/payload-origin-policy.ts";
 import { createStoragePlugins } from "./src/project/storage/s3.ts";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const schemaVerifyDir = process.env.PAYLOAD_SCHEMA_VERIFY_DIR;
+const originPolicy = createPayloadOriginPolicy(env.NEXT_PUBLIC_SERVER_URL);
 
 if (schemaVerifyDir && process.env.NODE_ENV === "production") {
   throw new Error("PAYLOAD_SCHEMA_VERIFY_DIR is forbidden in production.");
@@ -54,6 +56,8 @@ export default buildConfig({
     Buildings,
     Layouts,
   ],
+  cors: originPolicy.cors,
+  csrf: originPolicy.csrf,
   db: postgresAdapter({
     afterSchemaInit: [applyPropertyNumericDbContract],
     migrationDir: schemaVerifyDir ? path.resolve(schemaVerifyDir, "migrations") : path.resolve(dirname, "migrations"),
@@ -66,6 +70,7 @@ export default buildConfig({
   jobs: createJobsConfig(env.JOBS_AUTORUN),
   plugins: createStoragePlugins(env),
   secret: env.PAYLOAD_SECRET,
+  serverURL: originPolicy.serverURL,
   sharp,
   typescript: {
     outputFile: schemaVerifyDir
