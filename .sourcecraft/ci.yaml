@@ -93,3 +93,35 @@ workflows:
               - pnpm audit --audit-level high
               - pnpm verify
               - pnpm verify:schema
+
+  release-single-build:
+    inputs:
+      expected_commit_sha:
+        type: string
+        required: true
+        description: "Exact release candidate SHA"
+      gate_run_slug:
+        type: string
+        required: true
+        description: "Green exact-SHA Merge Gate run verified by the operator"
+      previous_release_sha:
+        type: string
+        required: true
+        description: "Known rollback release SHA"
+      store_release_tag:
+        type: string
+        required: true
+        description: "Draft SourceCraft Release used as the durable artifact store"
+    tasks:
+      - name: exact-sha-release-unit
+        cubes:
+          - name: build-pack-rehearse
+            image: docker.io/library/node:24.20.0-bookworm
+            script:
+              - EXPECTED_COMMIT_SHA=${{ inputs.expected_commit_sha }} GATE_RUN_SLUG=${{ inputs.gate_run_slug }} PREVIOUS_RELEASE_SHA=${{ inputs.previous_release_sha }} STORE_RELEASE_TAG=${{ inputs.store_release_tag }} bash scripts/ci/sourcecraft-release.sh
+            artifacts:
+              paths:
+                - dist/sourcecraft-release/release.tar.gz
+                - dist/sourcecraft-release/release.tar.gz.sha256
+                - dist/sourcecraft-release/RELEASE_EVIDENCE.json
+                - dist/sourcecraft-release/PACK_RESULT.json

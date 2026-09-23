@@ -91,6 +91,13 @@
 - [x] access/error logs определены;
 - [x] standalone artifact mode enabled for immutable versioned rollout;
 - [x] atomic switch и rollback протестированы;
+- [x] jobs-owner и restore процедуры подготовлены: до отдельной команды
+  `Выпускаем production` autorun остаётся выключенным, а restore proof разрешён
+  только в одноразовый ephemeral recovery target;
+- [ ] release-only restore proof выполнен в ephemeral recovery target, evidence
+  принято и target удалён без остаточного cost;
+- [ ] jobs handover доказал zero owners перед переключением и ровно одного owner
+  после переключения;
 - [ ] clean canonical `main`, exact SHA и один frozen candidate digest —
   терминальный внешний proof TASK 54.D после merge;
 - [ ] выполнен один production release;

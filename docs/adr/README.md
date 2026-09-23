@@ -16,5 +16,6 @@
 | [ADR-009](ADR-009-deferred-ingest.md) | Deferred XML ingest | Accepted | EPIC 26: fixture+freeze; ADR не удалять |
 | [ADR-010](ADR-010-analytics-journal-module.md) | Analytics URL as journal namespace | Accepted | Действует |
 | [ADR-011](ADR-011-lead-delivery-duplicates.md) | Lead delivery duplicates | Accepted | Recipient dedup is not guaranteed; operator uses deliveryId |
+| [ADR-012](ADR-012-no-separate-staging.md) | Temporary no-separate-staging exception | Accepted / time-boxed | Preview is a production candidate only; expires at domain cutover |
 
 Static-export contract задавал только ADR-001 (и частично формулировки ADR-002). Оба помечены superseded ADR-004. Файлы на месте.
