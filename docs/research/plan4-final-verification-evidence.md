@@ -31,3 +31,16 @@ Candidate base: `cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452`
 - Business facts, commercial model, methodology, launch geography and public pages remain frozen.
 - Feed schedules, lead outbound channels and automatic jobs remain disabled.
 - Production and domain cutover require a separate owner release command.
+
+## Immutable preview artifact
+
+| Field | Evidence |
+|---|---|
+| Candidate SHA | `cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452` |
+| Exact-main gate | SourceCraft RISKY run 163 — PASS |
+| Single build | SourceCraft `release-single-build` run 164 — PASS |
+| SHA-256 | `18a0eee21e8725dae3fcafbfdd18db825d6fa839e02d6afd44a64277685757b3` |
+| Installed path | `/opt/moreigory/releases/cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452` |
+| Active pointer | `/opt/moreigory/current` resolves to the installed path |
+| Rollback pointer | `/opt/moreigory/previous` preserves `21e484c98503550dbfbcbef38eb2e9eecd8d8308` |
+| Install proof | Checksum and release manifest PASS; `moreigory.service` active; loopback `/api/health` PASS |
