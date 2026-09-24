@@ -88,7 +88,7 @@ const existingTargetFiles = new Map([
   ["/analitika/**", "src/app/(site)/analitika/[slug]/page.tsx"],
 ]);
 for (const entry of manifest.entries.filter((item) => item.targetExistsNow)) {
-  const routeFile = existingTargetFiles.get(entry.targetUrl);
+  const routeFile = existingTargetFiles.get(entry.targetUrl) ?? `src/app/(site)${entry.targetUrl}page.tsx`;
   assert(routeFile && existsSync(routeFile), `${entry.id} target existence lacks route evidence`);
 }
 for (const entry of redirects.filter((item) => !item.targetExistsNow)) {

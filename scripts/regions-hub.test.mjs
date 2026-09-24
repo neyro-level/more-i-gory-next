@@ -20,8 +20,8 @@ test("investment hub map is built from the regions route plan and excludes stubs
       "/krym/alushta/",
       "/investicionnaya-nedvizhimost/krym/novostroyki/",
       "/investicionnaya-nedvizhimost/krym/apartamenty/",
-      "/investicionnaya-nedvizhimost/arkhyz/",
-      "/investicionnaya-nedvizhimost/altay/",
+      "/arkhyz/",
+      "/altay/",
     ],
   );
 });

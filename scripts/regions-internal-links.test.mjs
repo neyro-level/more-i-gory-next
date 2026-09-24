@@ -65,7 +65,7 @@ test("Crimea newbuilds get the approved catalog cross-link", () => {
 });
 
 test("region page renders related links from CMS hierarchy", () => {
-  const source = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx", "utf8");
+  const source = readFileSync("src/app/(site)/_shared/region-route-page.tsx", "utf8");
 
   assert.match(source, /getPublicRegionRelatedLinks/);
   assert.match(source, /relatedLinks\.map/);

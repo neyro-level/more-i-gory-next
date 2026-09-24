@@ -8,6 +8,7 @@ export {
 export {
   composePublicRegionPath,
   getPublicRegionByPath,
+  getRoutableRegionByPath,
   getPublicRegionRelatedLinks,
   getPublicRegionStaticParams,
   isGenericPublicRegion,

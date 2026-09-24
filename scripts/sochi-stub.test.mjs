@@ -9,7 +9,7 @@ const landingPages = [];
 test("Sochi is a noindex stub outside sitemap", () => {
   const sochi = registry.find((entry) => entry.pageId === "PAGE-003");
 
-  assert.equal(sochi.canonical, "/investicionnaya-nedvizhimost/sochi/");
+  assert.equal(sochi.canonical, "/sochi/");
   assert.equal(sochi.index, "noindex");
   assert.equal(sochi.sitemap, "no");
   assert.match(sochi.h1, /регион в проработке/i);
@@ -28,19 +28,21 @@ test("removed Sochi PAGE-004/005/006 routes cannot return as static pages", () =
 
 test("Sochi stub page renders honest copy and CTA", () => {
   const source = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/sochi/page.tsx", "utf8");
+  const target = readFileSync("src/app/(site)/sochi/page.tsx", "utf8");
 
   assert.match(source, /robots:\s*"noindex-follow"/);
   assert.match(source, /Регион в проработке/);
   assert.match(source, /\/podbor\//);
+  assert.match(target, /RegionRoutePage path="\/sochi\/"/);
 });
 
-test("CMS-backed hub and catch-all keep Sochi as a dedicated noindex stub without a child cluster", () => {
+test("CMS-backed hub and target route keep Sochi as a dedicated noindex stub without a child cluster", () => {
   const hubReader = readFileSync("src/core/data-access/public/regions.ts", "utf8");
   assert.match(hubReader, /status === "published"/);
   assert.match(hubReader, /slug !== "sochi"/);
 
-  const catchAll = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx", "utf8");
-  assert.match(catchAll, /isGenericPublicRegion\(region\)/);
+  const template = readFileSync("src/app/(site)/_shared/region-route-page.tsx", "utf8");
+  assert.match(template, /region\.status === "stub"/);
 
   const seed = readFileSync("src/content/regions/region-seed-content.ts", "utf8");
   assert.match(seed, /status: "stub"/);

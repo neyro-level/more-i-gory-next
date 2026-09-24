@@ -60,8 +60,8 @@ test("live region pages read Public Gateway instead of hardcoded domain copy", (
   const home = readFileSync("src/app/(site)/page.tsx", "utf8");
   assert.match(home, /listPublicHubRegions/);
 
-  const page = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx", "utf8");
-  assert.match(page, /getPublicRegionByPath/);
+  const page = readFileSync("src/app/(site)/_shared/region-route-page.tsx", "utf8");
+  assert.match(page, /getRoutableRegionByPath/);
   assert.match(page, /region\.lead/);
   assert.match(page, /region\.investmentThesis/);
 });

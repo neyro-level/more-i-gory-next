@@ -72,10 +72,10 @@ test("SEO registry is a separate index policy and already drifts from the route 
 });
 
 test("public region route composes builder-owned paths and reads Payload through Public Gateway", () => {
-  const page = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx", "utf8");
-  assert.match(page, /from "@\/content\/regions\/region-path-policy"/);
-  assert.match(page, /composeRegionPathFromSlugs/);
-  assert.match(page, /getPublicRegionByPath/);
+  const page = readFileSync("src/app/(site)/_shared/region-route-page.tsx", "utf8");
+  assert.match(page, /getRoutableRegionByPath/);
+  const route = readFileSync("src/app/(site)/krym/yalta/page.tsx", "utf8");
+  assert.match(route, /path="\/krym\/yalta\/"/);
   const dtoSource = readFileSync("src/content/regions/region-dtos.ts", "utf8");
   assert.match(dtoSource, /regionSeedContent/);
   assert.doesNotMatch(dtoSource, /collection:\s*"regions"/);

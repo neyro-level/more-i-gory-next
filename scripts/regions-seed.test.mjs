@@ -26,9 +26,9 @@ test("region seed covers the EPIC 7 URL map without indexing draft content", () 
       "/krym/alushta/",
       "/investicionnaya-nedvizhimost/krym/novostroyki/",
       "/investicionnaya-nedvizhimost/krym/apartamenty/",
-      "/investicionnaya-nedvizhimost/arkhyz/",
-      "/investicionnaya-nedvizhimost/altay/",
-      "/investicionnaya-nedvizhimost/sochi/",
+      "/arkhyz/",
+      "/altay/",
+      "/sochi/",
     ],
   );
   assert.equal(plan.some((entry) => entry.status === "published"), false);
@@ -44,7 +44,7 @@ test("region seed keeps hierarchy, kinds and media references explicit", () => {
   assert.equal(getRegionSeedPlan().every((entry) => mediaSourceLabels.has(entry.mediaSourceLabel)), true);
 });
 
-test("runtime seed defers future regions without an approved canonical pageKey", () => {
+test("runtime seed prepares every approved geo identity without publishing hidden content", () => {
   const executableKeys = getExecutableRegionSeedPlan().map((entry) => entry.key);
 
   assert.deepEqual(executableKeys, [
@@ -55,6 +55,9 @@ test("runtime seed defers future regions without an approved canonical pageKey",
     "alushta",
     "krym-novostroyki",
     "krym-apartamenty",
+    "arkhyz",
+    "altay",
+    "sochi",
   ]);
 });
 

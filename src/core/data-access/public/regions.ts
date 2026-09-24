@@ -47,7 +47,30 @@ async function readPublicRegions(): Promise<readonly PublicRegionDTO[]> {
   });
 }
 
+async function readRoutableRegions(): Promise<readonly PublicRegionDTO[]> {
+  return publicReadOrThrow({
+    reader: "routable-regions",
+    read: async () => {
+      const payload = await getPayload({ config });
+      const result = await payload.find({
+        collection: "regions",
+        depth: 1,
+        limit: 100,
+        overrideAccess: false,
+        pagination: false,
+        select: publicRegionSelect,
+      });
+
+      return mapPublicRegions(result.docs);
+    },
+  });
+}
+
 const getCachedPublicRegions = unstable_cache(readPublicRegions, ["public-regions"], {
+  tags: ["catalog", "sitemap"],
+});
+
+const getCachedRoutableRegions = unstable_cache(readRoutableRegions, ["routable-regions"], {
   tags: ["catalog", "sitemap"],
 });
 
@@ -62,6 +85,11 @@ export async function listPublicRegions(): Promise<readonly PublicRegionDTO[]> {
 
 export async function getPublicRegionByPath(path: string): Promise<PublicRegionDTO | null> {
   const regions = await getCachedPublicRegions();
+  return regions.find((region) => region.path === path) ?? null;
+}
+
+export async function getRoutableRegionByPath(path: string): Promise<PublicRegionDTO | null> {
+  const regions = await getCachedRoutableRegions();
   return regions.find((region) => region.path === path) ?? null;
 }
 

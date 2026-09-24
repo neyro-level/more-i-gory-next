@@ -6,7 +6,7 @@ const VIEWPORTS = [390, 768, 1024, 1440, 1920];
 const REPRESENTATIVE_ROUTES = [
   "/",
   "/investicionnaya-nedvizhimost/",
-  "/investicionnaya-nedvizhimost/[...path]/",
+  "/krym/",
   "/novostroyki/",
   "/novostroyki/[slug]/",
   "/obekty/",

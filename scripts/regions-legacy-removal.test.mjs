@@ -31,7 +31,7 @@ test("public pages use typed article and media modules instead of the legacy ser
   for (const file of [
     "src/app/(site)/page.tsx",
     "src/app/(site)/investicionnaya-nedvizhimost/page.tsx",
-    "src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx",
+    "src/app/(site)/_shared/region-route-page.tsx",
     "src/app/(site)/analitika/page.tsx",
     "src/app/(site)/analitika/[slug]/page.tsx",
   ]) {

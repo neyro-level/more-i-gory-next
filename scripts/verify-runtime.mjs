@@ -24,11 +24,11 @@ const unpublishedGenericRegionPaths = new Set(
     .filter((entry) => entry.key !== "sochi" && regionSeedContent[entry.key]?.status !== "published")
     .map((entry) => entry.path),
 );
-for (const entry of urlMigrationManifest.entries) {
-  if (entry.targetUrl && unpublishedGenericRegionPaths.has(entry.targetUrl)) {
-    unpublishedGenericRegionPaths.add(entry.currentCanonical);
-  }
-}
+const inactiveGeoRedirects = urlMigrationManifest.entries.filter(
+  (entry) => entry.migrationAction === "REDIRECT_301"
+    && entry.targetUrl
+    && unpublishedGenericRegionPaths.has(entry.targetUrl),
+);
 const concreteSeoEntries = [
   ...seoRegistry.filter((entry) => entry.kind === "static" && !unpublishedGenericRegionPaths.has(entry.canonical)),
   ...articles.map((article) => ({
@@ -170,6 +170,15 @@ try {
       );
     }
     assert(!sitemap.body.includes(`<loc>${new URL(pathname, siteUrl).toString()}</loc>`), `Hidden region leaked into sitemap: ${pathname}`);
+  }
+  for (const entry of inactiveGeoRedirects) {
+    const legacy = await fetchRoute(entry.currentCanonical, stagingContour ? 308 : 404);
+    if (stagingContour) {
+      assert(
+        legacy.response.headers.get("location") === new URL(entry.targetUrl, baseUrl).toString(),
+        `Legacy geo redirect target drift: ${entry.currentCanonical}`,
+      );
+    }
   }
 
   const cssFiles = walk(path.join(nextDir, "static")).filter((file) => file.endsWith(".css"));

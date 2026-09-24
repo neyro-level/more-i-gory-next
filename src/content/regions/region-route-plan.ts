@@ -22,9 +22,9 @@ export const regionRouteEntries = [
   { key: "alushta", pageId: "PAGE-011", slug: "alushta", parentKey: "krym", pageKey: "CITY" },
   { key: "krym-novostroyki", pageId: "PAGE-024", slug: "novostroyki", parentKey: "krym", pageKey: null },
   { key: "krym-apartamenty", pageId: "PAGE-025", slug: "apartamenty", parentKey: "krym", pageKey: null },
-  { key: "arkhyz", pageId: "PAGE-012", slug: "arkhyz", parentKey: null, pageKey: null },
-  { key: "altay", pageId: "PAGE-013", slug: "altay", parentKey: null, pageKey: null },
-  { key: "sochi", pageId: "PAGE-003", slug: "sochi", parentKey: null, pageKey: null },
+  { key: "arkhyz", pageId: "PAGE-012", slug: "arkhyz", parentKey: null, pageKey: "REGION" },
+  { key: "altay", pageId: "PAGE-013", slug: "altay", parentKey: null, pageKey: "REGION" },
+  { key: "sochi", pageId: "PAGE-003", slug: "sochi", parentKey: null, pageKey: "REGION" },
 ] as const satisfies readonly RegionRouteEntry[];
 
 export function getRegionRoutePath(entry: RegionRouteEntry, entries: readonly RegionRouteEntry[] = regionRouteEntries) {

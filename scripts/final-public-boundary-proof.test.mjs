@@ -64,16 +64,16 @@ test("final public boundary exposes published and rejects hidden plus stub in ev
   assert.equal(getPublicRegionRelatedLinks(publishedRegion, fixture).some((link) => /hidden|stub/.test(link.href)), false);
 });
 
-test("final public gateway, hub and catch-all route retain the published-only contract", () => {
+test("final public gateway, hub and geo template retain the publication contract", () => {
   const gateway = readFileSync("src/core/data-access/public/regions.ts", "utf8");
-  const route = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx", "utf8");
+  const route = readFileSync("src/app/(site)/_shared/region-route-page.tsx", "utf8");
 
   assert.match(gateway, /export async function listPublicRegions/);
   assert.match(gateway, /where:\s*\{\s*status:\s*\{\s*equals:\s*"published"/s);
   assert.match(gateway, /listPublicHubRegions/);
   assert.match(gateway, /region\.status === "published" && region\.slug !== "sochi"/);
-  assert.match(route, /getPublicRegionByPath/);
-  assert.match(route, /isGenericPublicRegion/);
+  assert.match(route, /getRoutableRegionByPath/);
+  assert.match(route, /isVisibleRegionRoute/);
   assert.match(route, /getPublicRegionRelatedLinks/);
   assert.match(route, /notFound\(\)/);
 });
