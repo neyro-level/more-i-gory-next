@@ -53,16 +53,17 @@ UI_CORE=AMS UI Core 5.0
 
 | Поле | Значение |
 |---|---|
-| Code baseline | SourceCraft `integrator-p/more-i-gory-next` @ `cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452` |
+| Code baseline | SourceCraft `integrator-p/more-i-gory-next` @ `b253bf50b40d76b75fdfe1aca235c55763db97a2` |
 | Профиль | `AMS_PROFILE=REALTY_BASE`, режим BUILD |
 | Техническая конституция | [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) |
 | UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
-| Последний утверждённый мастер-план | [`MORE_I_GORY_PLAN_№ 4.md`](MORE_I_GORY_PLAN_№%204.md) v1 APPROVED; implementation complete |
-| Предыдущий план | [`MORE_I_GORY_PLAN_№ 3.md`](MORE_I_GORY_PLAN_№%203.md) v3 APPROVED / CLOSED |
-| Машинный inventory Plan №4 | [`task-manager-inventory.plan4.v1.json`](task-manager-inventory.plan4.v1.json); Plan ID `more-i-gory-technical-hardening-2026-09`, prefix `mg5` |
+| Последний утверждённый мастер-план | [`AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md`](AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md) v1 APPROVED; execution active |
+| Предыдущий план | [`MORE_I_GORY_PLAN_№ 4.md`](MORE_I_GORY_PLAN_№%204.md) v1 APPROVED / implementation complete |
+| Машинный inventory текущего плана | [`task-manager-inventory.geo-first.v1.json`](task-manager-inventory.geo-first.v1.json); Plan ID `AMS-MORE-I-GORY-GEO-FIRST-INVESTMENT-REMEDIATION`, prefix `mggeo` |
 | Исторический машинный inventory | [`task-manager-inventory.plan3.v3.json`](task-manager-inventory.plan3.v3.json); повторно не импортировать |
-| История | [`More-i-gory-plan №2.md`](More-i-gory-plan%20№2.md) и `task-manager-inventory.v6.json`; новые задачи из них не создаются |
+| История | [`MORE_I_GORY_PLAN_№ 3.md`](MORE_I_GORY_PLAN_№%203.md), [`More-i-gory-plan №2.md`](More-i-gory-plan%20№2.md) и `task-manager-inventory.v6.json`; новые задачи из них не создаются |
 | Указатель волны | [`DELIVERY_STATE.yaml`](DELIVERY_STATE.yaml) |
+| Baseline EPIC 68 | [`remediation/CURRENT_STATE_V5.md`](remediation/CURRENT_STATE_V5.md) |
 
 Нельзя описывать текущий `main` как «до Payload» или как состояние после EPIC 12.
 
@@ -125,7 +126,7 @@ Research объясняет причины решений, но не являе�
 
 ## Current Focus
 
-NOW: финальная доставка Plan №4. Critical Next/Payload updates, остаточный
-technical debt и exact-main candidate evidence закрыты.
-Business facts, коммерческая модель, методика, география и страницы отложены
-явным решением владельца. Production не выпускался и не разрешён.
+NOW: GEO-first remediation v1, EPIC 68 baseline intake. Plan №4 остаётся
+закрытой технической основой. Business facts по Крыму и четырём городам пока
+`MISSING`: технические contracts/routes могут выполняться, но index activation
+остаётся закрытой Content Gate. Production не выпускался и не разрешён.
