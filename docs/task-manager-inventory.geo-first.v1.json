@@ -1,0 +1,3142 @@
+{
+  "schema_version": 2,
+  "beads_prefix": "mggeo",
+  "source": {
+    "plan_id": "AMS-MORE-I-GORY-GEO-FIRST-INVESTMENT-REMEDIATION",
+    "path": "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+    "version": "v1",
+    "status": "APPROVED",
+    "approved_by": "owner",
+    "approved_at": "2026-09-24T00:00:00+03:00",
+    "sha256": "d87f6fbf768c860e04d43a8a91da85da554ff238095a9382dde1adec3a4190b4",
+    "epic_anchors": [
+      "EPIC 68",
+      "EPIC 69",
+      "EPIC 70",
+      "EPIC 71",
+      "EPIC 72",
+      "EPIC 73",
+      "EPIC 74",
+      "EPIC 75",
+      "EPIC 76",
+      "EPIC 77",
+      "EPIC 78",
+      "EPIC 79",
+      "EPIC 80",
+      "EPIC 81",
+      "EPIC 82",
+      "EPIC 83",
+      "EPIC 84",
+      "EPIC 85",
+      "EPIC 86"
+    ]
+  },
+  "repositories": [
+    {
+      "key": "more-i-gory-next",
+      "remote": "https://git.sourcecraft.dev/integrator-p/more-i-gory-next.git",
+      "default_branch": "main"
+    }
+  ],
+  "nodes": [
+    {
+      "key": "EPIC-68",
+      "title": "Freeze current state and factual preflight",
+      "type": "epic",
+      "source_anchor": "EPIC 68",
+      "goal": "Freeze the exact runtime, route, SEO and content-fact baseline without changing public behavior.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 68 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-68-IMPLEMENT",
+      "title": "Implement EPIC 68: Freeze current state and factual preflight",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-68",
+      "source_anchor": "EPIC 68",
+      "goal": "Freeze the exact runtime, route, SEO and content-fact baseline without changing public behavior.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 68; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 68 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 68 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-68-DELIVERY",
+      "title": "Deliver EPIC 68 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-68",
+      "source_anchor": "EPIC 68",
+      "goal": "Review, STANDARD-gate and merge EPIC 68 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 68 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 68 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 68 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-68-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:a",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-69",
+      "title": "Freeze GEO-first architecture contracts",
+      "type": "epic",
+      "source_anchor": "EPIC 69",
+      "goal": "Make the approved IA, intent ownership and ADR contracts the single documented target.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 69 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-68"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-69-IMPLEMENT",
+      "title": "Implement EPIC 69: Freeze GEO-first architecture contracts",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-69",
+      "source_anchor": "EPIC 69",
+      "goal": "Make the approved IA, intent ownership and ADR contracts the single documented target.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 69; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 69 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 69 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-69-DELIVERY",
+      "title": "Deliver EPIC 69 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-69",
+      "source_anchor": "EPIC 69",
+      "goal": "Review, STANDARD-gate and merge EPIC 69 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 69 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 69 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 69 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-69-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:a",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-70",
+      "title": "Create URL migration evidence and decisions",
+      "type": "epic",
+      "source_anchor": "EPIC 70",
+      "goal": "Classify every current or legacy SEO route from factual evidence without guessed redirects.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 70 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-69"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:b",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-70-IMPLEMENT",
+      "title": "Implement EPIC 70: Create URL migration evidence and decisions",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-70",
+      "source_anchor": "EPIC 70",
+      "goal": "Classify every current or legacy SEO route from factual evidence without guessed redirects.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 70; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 70 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 70 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-70-DELIVERY",
+      "title": "Deliver EPIC 70 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-70",
+      "source_anchor": "EPIC 70",
+      "goal": "Review, STANDARD-gate and merge EPIC 70 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 70 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 70 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 70 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-70-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:b",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-71",
+      "title": "Implement canonical RouteIdentity grammar",
+      "type": "epic",
+      "source_anchor": "EPIC 71",
+      "goal": "Provide one typed reversible URL grammar for every target static and dynamic identity.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 71 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-69"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:b",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-71-IMPLEMENT",
+      "title": "Implement EPIC 71: Implement canonical RouteIdentity grammar",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-71",
+      "source_anchor": "EPIC 71",
+      "goal": "Provide one typed reversible URL grammar for every target static and dynamic identity.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 71; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 71 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 71 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-71-DELIVERY",
+      "title": "Deliver EPIC 71 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-71",
+      "source_anchor": "EPIC 71",
+      "goal": "Review, RISKY-gate and merge EPIC 71 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 71 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 71 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 71 diff against plan v1",
+        "Run exactly one merge-risky exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-71-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:b",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "EPIC-72",
+      "title": "Implement unified SEO state resolver",
+      "type": "epic",
+      "source_anchor": "EPIC 72",
+      "goal": "Compute canonical, indexability, sitemap, lifecycle and redirect intent from one pure server contract.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 72 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-71"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:c",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-72-IMPLEMENT",
+      "title": "Implement EPIC 72: Implement unified SEO state resolver",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-72",
+      "source_anchor": "EPIC 72",
+      "goal": "Compute canonical, indexability, sitemap, lifecycle and redirect intent from one pure server contract.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 72; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 72 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 72 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-72-DELIVERY",
+      "title": "Deliver EPIC 72 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-72",
+      "source_anchor": "EPIC 72",
+      "goal": "Review, RISKY-gate and merge EPIC 72 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 72 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 72 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 72 diff against plan v1",
+        "Run exactly one merge-risky exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-72-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:c",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "EPIC-73",
+      "title": "Materialize HTTP redirect and cache semantics",
+      "type": "epic",
+      "source_anchor": "EPIC 73",
+      "goal": "Map approved SEO lifecycle decisions to real HTTP behavior without caching infrastructure failures as absence.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 73 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-70",
+        "EPIC-72"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:c",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-73-IMPLEMENT",
+      "title": "Implement EPIC 73: Materialize HTTP redirect and cache semantics",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-73",
+      "source_anchor": "EPIC 73",
+      "goal": "Map approved SEO lifecycle decisions to real HTTP behavior without caching infrastructure failures as absence.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 73; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 73 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 73 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-73-DELIVERY",
+      "title": "Deliver EPIC 73 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-73",
+      "source_anchor": "EPIC 73",
+      "goal": "Review, RISKY-gate and merge EPIC 73 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 73 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 73 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 73 diff against plan v1",
+        "Run exactly one merge-risky exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-73-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:c",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "EPIC-74",
+      "title": "Normalize Crimea geo model and DTOs",
+      "type": "epic",
+      "source_anchor": "EPIC 74",
+      "goal": "Represent Crimea and four cities in the existing Payload geo model with validated public DTO relations.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 74 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-69",
+        "EPIC-71"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:c",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-74-IMPLEMENT",
+      "title": "Implement EPIC 74: Normalize Crimea geo model and DTOs",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-74",
+      "source_anchor": "EPIC 74",
+      "goal": "Represent Crimea and four cities in the existing Payload geo model with validated public DTO relations.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 74; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 74 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 74 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-74-DELIVERY",
+      "title": "Deliver EPIC 74 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-74",
+      "source_anchor": "EPIC 74",
+      "goal": "Review, RISKY-gate and merge EPIC 74 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 74 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 74 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 74 diff against plan v1",
+        "Run exactly one merge-risky exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-74-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:c",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "EPIC-75",
+      "title": "Materialize GEO-first routes",
+      "type": "epic",
+      "source_anchor": "EPIC 75",
+      "goal": "Serve target GEO-first routes through Public Gateway and the unified SEO state with explicit legacy behavior.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 75 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-70",
+        "EPIC-71",
+        "EPIC-72",
+        "EPIC-73",
+        "EPIC-74"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:d",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-75-IMPLEMENT",
+      "title": "Implement EPIC 75: Materialize GEO-first routes",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-75",
+      "source_anchor": "EPIC 75",
+      "goal": "Serve target GEO-first routes through Public Gateway and the unified SEO state with explicit legacy behavior.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 75; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 75 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 75 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-75-DELIVERY",
+      "title": "Deliver EPIC 75 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-75",
+      "source_anchor": "EPIC 75",
+      "goal": "Review, RISKY-gate and merge EPIC 75 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 75 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 75 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 75 diff against plan v1",
+        "Run exactly one merge-risky exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-75-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:d",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "EPIC-76",
+      "title": "Deliver curated global investment catalog",
+      "type": "epic",
+      "source_anchor": "EPIC 76",
+      "goal": "Make /obekty/ a useful curated catalog without leaking feed inventory or indexable filters.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 76 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-72",
+        "EPIC-74",
+        "EPIC-75"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:d",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-76-IMPLEMENT",
+      "title": "Implement EPIC 76: Deliver curated global investment catalog",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-76",
+      "source_anchor": "EPIC 76",
+      "goal": "Make /obekty/ a useful curated catalog without leaking feed inventory or indexable filters.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 76; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 76 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 76 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-76-DELIVERY",
+      "title": "Deliver EPIC 76 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-76",
+      "source_anchor": "EPIC 76",
+      "goal": "Review, STANDARD-gate and merge EPIC 76 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 76 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 76 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 76 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-76-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:d",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-77",
+      "title": "Deliver stable investment project entities",
+      "type": "epic",
+      "source_anchor": "EPIC 77",
+      "goal": "Keep one global canonical per investment project while exposing crawlable geo context and verified relations.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 77 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-72",
+        "EPIC-73",
+        "EPIC-74",
+        "EPIC-75"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:d",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-77-IMPLEMENT",
+      "title": "Implement EPIC 77: Deliver stable investment project entities",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-77",
+      "source_anchor": "EPIC 77",
+      "goal": "Keep one global canonical per investment project while exposing crawlable geo context and verified relations.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 77; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 77 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 77 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-77-DELIVERY",
+      "title": "Deliver EPIC 77 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-77",
+      "source_anchor": "EPIC 77",
+      "goal": "Review, STANDARD-gate and merge EPIC 77 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 77 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 77 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 77 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-77-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:d",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-78",
+      "title": "Deliver Crimea regional hub contract",
+      "type": "epic",
+      "source_anchor": "EPIC 78",
+      "goal": "Provide the Crimea market hub and freeze the shared child-city contract with honest Content Gate behavior.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 78 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-75",
+        "EPIC-76",
+        "EPIC-77"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:e",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-78-IMPLEMENT",
+      "title": "Implement EPIC 78: Deliver Crimea regional hub contract",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-78",
+      "source_anchor": "EPIC 78",
+      "goal": "Provide the Crimea market hub and freeze the shared child-city contract with honest Content Gate behavior.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 78; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 78 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 78 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-78-DELIVERY",
+      "title": "Deliver EPIC 78 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-78",
+      "source_anchor": "EPIC 78",
+      "goal": "Review, STANDARD-gate and merge EPIC 78 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 78 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 78 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 78 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-78-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:e",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-79",
+      "title": "Deliver Yalta market hub",
+      "type": "epic",
+      "source_anchor": "EPIC 79",
+      "goal": "Provide a differentiated Yalta market surface or a safe noindex state when factual evidence is missing.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 79 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-78"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:e",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-79-IMPLEMENT",
+      "title": "Implement EPIC 79: Deliver Yalta market hub",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-79",
+      "source_anchor": "EPIC 79",
+      "goal": "Provide a differentiated Yalta market surface or a safe noindex state when factual evidence is missing.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 79; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 79 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 79 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-79-DELIVERY",
+      "title": "Deliver EPIC 79 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-79",
+      "source_anchor": "EPIC 79",
+      "goal": "Review, STANDARD-gate and merge EPIC 79 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 79 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 79 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 79 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-79-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:e",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-80",
+      "title": "Deliver Sevastopol market hub",
+      "type": "epic",
+      "source_anchor": "EPIC 80",
+      "goal": "Provide a differentiated Sevastopol market surface or a safe noindex state when factual evidence is missing.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 80 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-78"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:e",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-80-IMPLEMENT",
+      "title": "Implement EPIC 80: Deliver Sevastopol market hub",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-80",
+      "source_anchor": "EPIC 80",
+      "goal": "Provide a differentiated Sevastopol market surface or a safe noindex state when factual evidence is missing.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 80; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 80 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 80 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-80-DELIVERY",
+      "title": "Deliver EPIC 80 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-80",
+      "source_anchor": "EPIC 80",
+      "goal": "Review, STANDARD-gate and merge EPIC 80 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 80 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 80 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 80 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-80-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:e",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-81",
+      "title": "Deliver Evpatoriya market hub",
+      "type": "epic",
+      "source_anchor": "EPIC 81",
+      "goal": "Provide a differentiated Evpatoriya market surface or a safe noindex state when factual evidence is missing.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 81 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-78"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:e",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-81-IMPLEMENT",
+      "title": "Implement EPIC 81: Deliver Evpatoriya market hub",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-81",
+      "source_anchor": "EPIC 81",
+      "goal": "Provide a differentiated Evpatoriya market surface or a safe noindex state when factual evidence is missing.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 81; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 81 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 81 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-81-DELIVERY",
+      "title": "Deliver EPIC 81 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-81",
+      "source_anchor": "EPIC 81",
+      "goal": "Review, STANDARD-gate and merge EPIC 81 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 81 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 81 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 81 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-81-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:e",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-82",
+      "title": "Deliver Alushta market hub",
+      "type": "epic",
+      "source_anchor": "EPIC 82",
+      "goal": "Provide a differentiated Alushta market surface or a safe noindex state when factual evidence is missing.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 82 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-78"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:e",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-82-IMPLEMENT",
+      "title": "Implement EPIC 82: Deliver Alushta market hub",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-82",
+      "source_anchor": "EPIC 82",
+      "goal": "Provide a differentiated Alushta market surface or a safe noindex state when factual evidence is missing.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 82; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 82 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 82 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:e",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-82-DELIVERY",
+      "title": "Deliver EPIC 82 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-82",
+      "source_anchor": "EPIC 82",
+      "goal": "Review, STANDARD-gate and merge EPIC 82 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 82 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 82 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 82 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-82-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:e",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-83",
+      "title": "Deliver future-geo activation framework",
+      "type": "epic",
+      "source_anchor": "EPIC 83",
+      "goal": "Activate or safely prepare Arkhyz, Altay and Sochi through data-driven states without routing forks.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 83 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-71",
+        "EPIC-72",
+        "EPIC-74",
+        "EPIC-75"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:d",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-83-IMPLEMENT",
+      "title": "Implement EPIC 83: Deliver future-geo activation framework",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-83",
+      "source_anchor": "EPIC 83",
+      "goal": "Activate or safely prepare Arkhyz, Altay and Sochi through data-driven states without routing forks.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 83; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 83 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 83 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:d",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-83-DELIVERY",
+      "title": "Deliver EPIC 83 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-83",
+      "source_anchor": "EPIC 83",
+      "goal": "Review, RISKY-gate and merge EPIC 83 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 83 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 83 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 83 diff against plan v1",
+        "Run exactly one merge-risky exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-83-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:d",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "EPIC-84",
+      "title": "Reconcile linking navigation and analytics",
+      "type": "epic",
+      "source_anchor": "EPIC 84",
+      "goal": "Create one crawlable IA graph with consistent breadcrumbs, navigation states and non-PII analytics dimensions.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 84 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-76",
+        "EPIC-77",
+        "EPIC-78",
+        "EPIC-79",
+        "EPIC-80",
+        "EPIC-81",
+        "EPIC-82",
+        "EPIC-83"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:f",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-84-IMPLEMENT",
+      "title": "Implement EPIC 84: Reconcile linking navigation and analytics",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-84",
+      "source_anchor": "EPIC 84",
+      "goal": "Create one crawlable IA graph with consistent breadcrumbs, navigation states and non-PII analytics dimensions.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 84; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 84 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 84 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:f",
+        "plan:v1",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "TASK-84-DELIVERY",
+      "title": "Deliver EPIC 84 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-84",
+      "source_anchor": "EPIC 84",
+      "goal": "Review, STANDARD-gate and merge EPIC 84 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 84 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 84 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 84 diff against plan v1",
+        "Run exactly one merge-standard exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-84-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:f",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:standard"
+      ]
+    },
+    {
+      "key": "EPIC-85",
+      "title": "Prove SEO invariants through crawl",
+      "type": "epic",
+      "source_anchor": "EPIC 85",
+      "goal": "Prove the target IA through automated invariants and production-like HTTP crawl evidence.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 85 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-84"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:g",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-85-IMPLEMENT",
+      "title": "Implement EPIC 85: Prove SEO invariants through crawl",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-85",
+      "source_anchor": "EPIC 85",
+      "goal": "Prove the target IA through automated invariants and production-like HTTP crawl evidence.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 85; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 85 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 85 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:g",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-85-DELIVERY",
+      "title": "Deliver EPIC 85 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-85",
+      "source_anchor": "EPIC 85",
+      "goal": "Review, RISKY-gate and merge EPIC 85 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 85 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 85 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 85 diff against plan v1",
+        "Run exactly one merge-risky exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-85-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:g",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "EPIC-86",
+      "title": "Close the GEO-first program",
+      "type": "epic",
+      "source_anchor": "EPIC 86",
+      "goal": "Reconcile code, canon, evidence and exact candidate state without executing production.",
+      "scope": [
+        "All approved requirements, tasks, DoD and prohibitions under EPIC 86 in GEO-first plan v1"
+      ],
+      "acceptance_criteria": [
+        "The implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "The terminal delivery task is complete and the epic DoD is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-85"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "wave:g",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-86-IMPLEMENT",
+      "title": "Implement EPIC 86: Close the GEO-first program",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-86",
+      "source_anchor": "EPIC 86",
+      "goal": "Reconcile code, canon, evidence and exact candidate state without executing production.",
+      "scope": [
+        "Implement exactly the Tasks section and reach the DoD of EPIC 86; keep production excluded"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 86 DoD row is mapped to factual evidence",
+        "Missing external facts block only index activation and never authorize invented content",
+        "EXECUTION_LEDGER_V1 is complete at a pushed exact head SHA"
+      ],
+      "required_checks": [
+        "Run the exact EPIC 86 checks from the approved plan using current package scripts",
+        "Review changed scope against Public Gateway, Payload and SEO ownership boundaries",
+        "Map every acceptance criterion to evidence"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:g",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-86-DELIVERY",
+      "title": "Deliver EPIC 86 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-86",
+      "source_anchor": "EPIC 86",
+      "goal": "Review, RISKY-gate and merge EPIC 86 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 86 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 86 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full EPIC 86 diff against plan v1",
+        "Run exactly one merge-risky exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-86-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, DNS, domain cutover or real-traffic activation",
+        "fabricated business facts or unsupported SEO claims",
+        "destructive live-data action",
+        "source plan or inventory drift",
+        "secret or PII exposure"
+      ],
+      "priority": 1,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:g",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    }
+  ]
+}
