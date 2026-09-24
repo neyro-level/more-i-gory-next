@@ -210,6 +210,13 @@ export const Properties: CollectionConfig = {
       index: true,
       relationTo: "regions",
     },
+    {
+      name: "cityOrArea",
+      type: "relationship",
+      hasMany: false,
+      index: true,
+      relationTo: "regions",
+    },
     { name: "locality", type: "text" },
     { name: "district", type: "text" },
     { name: "street", type: "text" },

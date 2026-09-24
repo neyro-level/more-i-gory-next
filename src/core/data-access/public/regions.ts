@@ -6,6 +6,7 @@ import { getPayload } from "payload";
 import config from "../../../../payload.config.ts";
 import { publicReadWithFallback } from "./read-fallback.ts";
 import {
+  isGenericPublicRegion,
   listFallbackPublicRegions,
   mapPublicRegions,
   publicRegionSelect,
@@ -40,7 +41,9 @@ async function readPublicRegions(): Promise<readonly PublicRegionDTO[]> {
         },
       });
 
-      return mapPublicRegions(result.docs);
+      return mapPublicRegions(result.docs).filter(
+        (region) => region.status === "published" && isGenericPublicRegion(region),
+      );
     },
   });
 }
@@ -56,5 +59,7 @@ export async function getPublicRegionByPath(path: string): Promise<PublicRegionD
 
 export async function listPublicHubRegions(): Promise<readonly PublicRegionDTO[]> {
   const regions = await listPublicRegions();
-  return regions.filter((region) => region.status === "published" && region.slug !== "sochi");
+  return regions.filter(
+    (region) => region.status === "published" && region.slug !== "sochi" && isGenericPublicRegion(region),
+  );
 }

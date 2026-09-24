@@ -12,6 +12,7 @@ test("public region mapper uses CMS title, lead, thesis, risks, media, status an
       kind: "region",
       lead: "Черновик региональной страницы Крыма до утверждения контента владельцем.",
       order: 10,
+      pageKey: "REGION",
       riskSummary: "До публикации нельзя обещать доходность без проверки.",
       slug: "krym",
       status: "hidden",
@@ -29,6 +30,7 @@ test("public region mapper uses CMS title, lead, thesis, risks, media, status an
       kind: "locality",
       lead: "Черновик страницы Ялты в крымском инвестиционном разделе.",
       order: 20,
+      pageKey: "CITY",
       parent: { id: 1, slug: "krym" },
       riskSummary: "Главный риск чернового этапа — подменить проверку объекта спросом.",
       slug: "yalta",
@@ -37,10 +39,10 @@ test("public region mapper uses CMS title, lead, thesis, risks, media, status an
     },
   ]);
 
-  assert.equal(mapped[0]?.path, "/investicionnaya-nedvizhimost/krym/");
+  assert.equal(mapped[0]?.path, "/krym/");
   assert.equal(mapped[0]?.title, "Крым");
   assert.equal(mapped[0]?.status, "hidden");
-  assert.equal(mapped[1]?.path, "/investicionnaya-nedvizhimost/krym/yalta/");
+  assert.equal(mapped[1]?.path, "/krym/yalta/");
   assert.equal(mapped[1]?.parentSlug, "krym");
   assert.equal(mapped[1]?.pageId, "PAGE-008");
 });

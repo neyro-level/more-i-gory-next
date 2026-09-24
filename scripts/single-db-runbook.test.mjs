@@ -20,7 +20,7 @@ test("EPIC 48 runbook keeps mutation behind exact SHA, confirmation and single-D
   assert.match(operations, /do not create a\s+second database/i);
   assert.match(migration, /EXPECTED_DATABASE = "default_db"/);
   assert.match(migration, /EXPECTED_POSTGRES_MAJOR = 18/);
-  assert.match(migration, /EXPECTED_MIGRATION_COUNT = 27/);
+  assert.match(migration, /EXPECTED_MIGRATION_COUNT = 28/);
   assert.match(migration, /EXPECTED_PUBLIC_TABLE_COUNT = 148/);
   assert.match(seed, /AMS_RUNTIME_CONTOUR !== "staging"/);
   assert.match(seed, /https:\/\/more-previu\.tw1\.ru/);

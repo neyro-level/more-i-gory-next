@@ -4,7 +4,7 @@ import type { Media, Region } from "../../../payload-types.ts";
 import { regionSeedContent } from "../../../content/regions/region-seed-content.ts";
 import { getRegionRoutePlan } from "../../../content/regions/region-route-plan.ts";
 import type { RegionInternalLink } from "../../../content/regions/region-route-plan.ts";
-import { composeRegionPathFromSlugs } from "../../../content/regions/region-path-policy.ts";
+import { composeLegacyRegionPathFromSlugs, composeRegionPathFromSlugs } from "../../../content/regions/region-path-policy.ts";
 import { getMediaAsset } from "../../../content/media/media-assets.ts";
 import { publicRegionSchema, type PublicRegionDTO } from "../../dto/region.ts";
 import { CANONICAL_MISSING_IMAGE, publicMediaOrFallback } from "./missing-image.ts";
@@ -15,7 +15,9 @@ export type { PublicRegionDTO } from "../../dto/region.ts";
 type PublicRegionRecord = Readonly<
   Pick<Region, "id" | "investmentThesis" | "kind" | "lead" | "order" | "riskSummary" | "slug" | "status" | "title"> & {
     heroMedia?: number | Media | null;
+    pageKey?: "CITY" | "REGION" | null;
     parent?: number | Region | null;
+    verifiedAt?: string | null;
   }
 >;
 
@@ -32,7 +34,7 @@ function mapImage(value: PublicRegionRecord["heroMedia"]) {
 }
 
 export function isGenericPublicRegion(region: PublicRegionDTO | null): region is PublicRegionDTO {
-  return region?.status === "published";
+  return region?.status === "published" && (region.pageKey === "REGION" || region.pageKey === "CITY");
 }
 
 export function getPublicRegionStaticParams(regions: readonly PublicRegionDTO[]) {
@@ -40,7 +42,7 @@ export function getPublicRegionStaticParams(regions: readonly PublicRegionDTO[])
     .filter(isGenericPublicRegion)
     .filter((region) => region.slug !== "sochi")
     .map((region) => ({
-      path: region.path.replace(/^\/investicionnaya-nedvizhimost\//, "").replace(/\/$/, "").split("/"),
+      path: region.path.replace(/^\//, "").replace(/\/$/, "").split("/"),
     }));
 }
 
@@ -51,11 +53,13 @@ export const publicRegionSelect = {
   kind: true,
   lead: true,
   order: true,
+  pageKey: true,
   parent: true,
   riskSummary: true,
   slug: true,
   status: true,
   title: true,
+  verifiedAt: true,
 } satisfies SelectType;
 
 function relationSlug(value: PublicRegionRecord["parent"]): string | undefined {
@@ -83,7 +87,8 @@ export function composePublicRegionPath(record: PublicRegionRecord, records: rea
     if (slugs.length > 8) break;
   }
 
-  return composeRegionPathFromSlugs(slugs);
+  const pageKey = record.pageKey ?? null;
+  return pageKey ? composeRegionPathFromSlugs(slugs) : composeLegacyRegionPathFromSlugs(slugs);
 }
 
 export function mapPublicRegion(
@@ -91,6 +96,7 @@ export function mapPublicRegion(
   records: readonly PublicRegionRecord[] = [record],
 ): PublicRegionDTO {
   const path = composePublicRegionPath(record, records);
+  const pageKey = record.pageKey ?? undefined;
   const pageId = getRegionRoutePlan().find((entry) => entry.path === path)?.pageId ?? `region:${record.slug}`;
 
   return publicRegionSchema.parse({
@@ -99,6 +105,7 @@ export function mapPublicRegion(
     investmentThesis: record.investmentThesis,
     kind: record.kind,
     lead: record.lead,
+    pageKey,
     pageId,
     parentSlug: relationSlug(record.parent),
     path,
@@ -106,6 +113,7 @@ export function mapPublicRegion(
     slug: record.slug,
     status: regionStatus(String(record.status)),
     title: record.title,
+    verifiedAt: record.verifiedAt ?? undefined,
   });
 }
 
@@ -131,6 +139,7 @@ export function listFallbackPublicRegions(): readonly PublicRegionDTO[] {
         investmentThesis: content.investmentThesis,
         kind: content.kind,
         lead: content.lead,
+        pageKey: entry.pageKey ?? undefined,
         pageId: entry.pageId,
         parentSlug: parent?.slug,
         path: entry.path,
@@ -140,7 +149,7 @@ export function listFallbackPublicRegions(): readonly PublicRegionDTO[] {
         title: content.title,
       });
     })
-    .filter((region) => region.status === "published");
+    .filter(isGenericPublicRegion);
 }
 
 const approvedRegionCrossLinks: readonly RegionInternalLink[] = [
@@ -149,7 +158,7 @@ const approvedRegionCrossLinks: readonly RegionInternalLink[] = [
 ];
 
 function visiblePublicRegions(regions: readonly PublicRegionDTO[]): readonly PublicRegionDTO[] {
-  return regions.filter((region) => region.status === "published" && region.slug !== "sochi");
+  return regions.filter((region) => isGenericPublicRegion(region) && region.slug !== "sochi");
 }
 
 export function getPublicRegionRelatedLinks(
@@ -174,6 +183,7 @@ export function getPublicRegionRelatedLinks(
     links.push(
       ...catalog
         .filter((item) => item.parentSlug === region.parentSlug && item.id !== region.id)
+        .filter((item) => item.path.startsWith(`/${region.parentSlug}/`))
         .map((item) => ({ href: item.path, label: item.title, relation: "sibling" as const })),
     );
   }

@@ -32,6 +32,7 @@ export const regionDtos = routePlan.map((entry): RegionDTO => {
     id: `region-${entry.key}`,
     investmentThesis: content.investmentThesis,
     lead: content.lead,
+    pageKey: entry.pageKey ?? undefined,
     pageId: entry.pageId,
     parentPageId: parent?.pageId ?? (entry.parentKey ? undefined : "PAGE-002"),
     path: entry.path,

@@ -15,6 +15,7 @@ const initialRouteJsBudgetGzipKb = 210;
 const largestChunkBudgetGzipKb = 300;
 
 const seoRegistry = readJson("src/seo/registry.json");
+const urlMigrationManifest = readJson("docs/migration/V5_URL_MANIFEST.json");
 const { articles } = await import("../src/content/articles/articles.ts");
 const { regionSeedContent } = await import("../src/content/regions/region-seed-content.ts");
 const { getRegionRoutePlan } = await import("../src/content/regions/region-route-plan.ts");
@@ -23,6 +24,11 @@ const unpublishedGenericRegionPaths = new Set(
     .filter((entry) => entry.key !== "sochi" && regionSeedContent[entry.key]?.status !== "published")
     .map((entry) => entry.path),
 );
+for (const entry of urlMigrationManifest.entries) {
+  if (entry.targetUrl && unpublishedGenericRegionPaths.has(entry.targetUrl)) {
+    unpublishedGenericRegionPaths.add(entry.currentCanonical);
+  }
+}
 const concreteSeoEntries = [
   ...seoRegistry.filter((entry) => entry.kind === "static" && !unpublishedGenericRegionPaths.has(entry.canonical)),
   ...articles.map((article) => ({

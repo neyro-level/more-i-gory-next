@@ -36,6 +36,7 @@ function buildPreviewRegions(): readonly PublicRegionDTO[] {
       investmentThesis: content.investmentThesis,
       kind: content.kind,
       lead: content.lead,
+      pageKey: entry.pageKey ?? undefined,
       pageId: entry.pageId,
       parentSlug: parent?.slug,
       path: entry.path,
@@ -68,7 +69,7 @@ export function getEditorialPreviewRegionStaticParams(source: NodeJS.ProcessEnv 
   return listEditorialPreviewRegions(source)
     .filter((region) => region.slug !== "sochi")
     .map((region) => ({
-      path: region.path.replace(/^\/investicionnaya-nedvizhimost\//, "").replace(/\/$/, "").split("/"),
+      path: region.path.replace(/^\//, "").replace(/\/$/, "").split("/"),
     }));
 }
 

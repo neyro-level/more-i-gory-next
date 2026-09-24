@@ -52,7 +52,7 @@ export function publishedCatalogSitemapEntries(
 
 export function publicRegionSitemapEntries(regions: readonly PublicRegionDTO[]): readonly SitemapSourceEntry[] {
   return regions
-    .filter((region) => region.status === "published")
+    .filter((region) => region.status === "published" && (region.pageKey === "REGION" || region.pageKey === "CITY"))
     .map((region) => ({
       canonical: normalizeSitemapCanonical(region.path),
       priority: "P1",

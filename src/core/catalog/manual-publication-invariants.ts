@@ -5,6 +5,7 @@ export type ManualPublicationRecord = {
   facts?: unknown;
   origin?: unknown;
   publishedAt?: unknown;
+  region?: unknown;
   riskSummary?: unknown;
   slug?: unknown;
   sources?: unknown;
@@ -41,6 +42,7 @@ export function mergeManualPublicationRecord(
     facts: patch.facts !== undefined ? patch.facts : original?.facts,
     origin: patch.origin !== undefined ? patch.origin : original?.origin,
     publishedAt: patch.publishedAt !== undefined ? patch.publishedAt : original?.publishedAt,
+    region: patch.region !== undefined ? patch.region : original?.region,
     riskSummary: patch.riskSummary !== undefined ? patch.riskSummary : original?.riskSummary,
     slug: patch.slug !== undefined ? patch.slug : original?.slug,
     sources: patch.sources !== undefined ? patch.sources : original?.sources,
@@ -57,6 +59,9 @@ export function manualPublicationGateError(record: ManualPublicationRecord): str
   if (!isManualPublicationAttempt(record)) return null;
   if (!hasNonEmptyString(record.slug)) {
     return "Published manual passports require slug.";
+  }
+  if (record.region == null || record.region === "") {
+    return "Published manual passports require a region relation.";
   }
   if (!hasPresentDate(record.verifiedAt)) {
     return "Published manual passports require verifiedAt.";

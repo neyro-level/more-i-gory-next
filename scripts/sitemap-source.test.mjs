@@ -80,6 +80,7 @@ test("published region enters sitemap while hidden and stub regions stay absent"
     investmentThesis: "t",
     kind: "region",
     lead: "l",
+    pageKey: "REGION",
     pageId: "region:test",
     riskSummary: "r",
     title: "Test",
@@ -87,11 +88,11 @@ test("published region enters sitemap while hidden and stub regions stay absent"
 
   assert.deepEqual(
     publicRegionSitemapEntries([
-      { ...base, id: "published", path: "/investicionnaya-nedvizhimost/published/", slug: "published", status: "published" },
-      { ...base, id: "hidden", path: "/investicionnaya-nedvizhimost/hidden/", slug: "hidden", status: "hidden" },
-      { ...base, id: "stub", path: "/investicionnaya-nedvizhimost/stub/", slug: "stub", status: "stub" },
+      { ...base, id: "published", path: "/published/", slug: "published", status: "published" },
+      { ...base, id: "hidden", path: "/hidden/", slug: "hidden", status: "hidden" },
+      { ...base, id: "stub", path: "/stub/", slug: "stub", status: "stub" },
     ]),
-    [{ canonical: "/investicionnaya-nedvizhimost/published/", priority: "P1" }],
+    [{ canonical: "/published/", priority: "P1" }],
   );
 });
 

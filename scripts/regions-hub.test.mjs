@@ -13,11 +13,11 @@ test("investment hub map is built from the regions route plan and excludes stubs
   assert.deepEqual(
     plan.map((entry) => entry.path),
     [
-      "/investicionnaya-nedvizhimost/krym/",
-      "/investicionnaya-nedvizhimost/krym/yalta/",
-      "/investicionnaya-nedvizhimost/krym/sevastopol/",
-      "/investicionnaya-nedvizhimost/krym/evpatoriya/",
-      "/investicionnaya-nedvizhimost/krym/alushta/",
+      "/krym/",
+      "/krym/yalta/",
+      "/krym/sevastopol/",
+      "/krym/evpatoriya/",
+      "/krym/alushta/",
       "/investicionnaya-nedvizhimost/krym/novostroyki/",
       "/investicionnaya-nedvizhimost/krym/apartamenty/",
       "/investicionnaya-nedvizhimost/arkhyz/",

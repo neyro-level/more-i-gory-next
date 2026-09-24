@@ -41,6 +41,7 @@ export function getPayloadRegionData(entry, parentId, heroMediaId) {
     kind: content.kind,
     lead: content.lead,
     order: content.order,
+    pageKey: entry.pageKey ?? undefined,
     parent: parentId ?? undefined,
     riskSummary: content.riskSummary,
     seo: {

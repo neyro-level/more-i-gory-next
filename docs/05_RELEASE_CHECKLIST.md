@@ -17,8 +17,9 @@ graph. При `MISSING` facts техническая работа продолж
 - [x] Node runtime и trailing slash включены; static export удалён;
 - [x] Payload 3.90.1 подключён как единственный CMS/auth/schema owner;
 - [x] PostgreSQL adapter использует `push:false` и committed migrations;
-- [x] PostgreSQL 18 clean migration chain 27/27, owner bootstrap и upgrade
-  fixture доказаны в EPIC 44;
+- [x] PostgreSQL 18 baseline 27/27, owner bootstrap и upgrade fixture доказаны
+  в EPIC 44; EPIC 74 добавил migration №28, schema-drift proof пройден, apply
+  остаётся release-only действием;
 - [x] anonymous users REST закрыт, GraphQL отключён;
 - [x] Server First boundary проверяется автоматически;
 - [x] metadata берётся из единого registry;
@@ -56,6 +57,8 @@ graph. При `MISSING` facts техническая работа продолж
 - [x] current/legacy URL manifest принял решение по каждому migration candidate;
 - [x] target URL grammar имеет typed builder/parser, collision protection и
   deterministic round-trip suite;
+- [x] Крым и четыре города нормализованы в одной Payload geo model; canonical
+  строится builder, manual project DTO имеет region и optional city/area context;
 - [ ] runtime routes, canonical, robots и sitemap соответствуют target tree;
 - [ ] сильные утверждения подтверждены;
 - [ ] реальные проекты имеют sources и `verifiedAt`;

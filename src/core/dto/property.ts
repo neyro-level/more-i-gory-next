@@ -2,11 +2,22 @@ import { z } from "zod";
 
 import { publicMediaSchema } from "./media.ts";
 
+const publicGeoEntitySchema = z.object({
+  id: z.string().min(1),
+  path: z.string().startsWith("/").endsWith("/"),
+  slug: z.string().min(1),
+  title: z.string().min(1),
+});
+
 export const publicPropertySchema = z.object({
   budgetNote: z.string().optional(),
   deactivatedAt: z.string().optional(),
   description: z.string().optional(),
   facts: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).min(1),
+  geoContext: z.object({
+    cityOrArea: publicGeoEntitySchema.optional(),
+    region: publicGeoEntitySchema,
+  }),
   id: z.string().min(1),
   image: publicMediaSchema,
   market: z.enum(["secondary", "newbuild"]).optional(),

@@ -6,6 +6,32 @@ import { pageBlocks } from "../blocks/page-blocks.ts";
 import { assertPublishedSeo, seoFields } from "../fields/seo.ts";
 import { isOwnerAccess, publicReadAccess } from "../globals/access.ts";
 
+const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+const validateRegionDomain: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
+  if (!data) return data;
+  const record = { ...originalDoc, ...data };
+  if (typeof record.slug !== "string" || !slugPattern.test(record.slug)) {
+    throw new Error("Region slug must use lowercase latin letters, digits and single hyphens.");
+  }
+  if (record.kind === "region" && record.pageKey !== "REGION") {
+    throw new Error("Region entities require pageKey REGION.");
+  }
+  if (record.kind === "locality" && (record.pageKey !== "CITY" || !record.parent)) {
+    throw new Error("City or area entities require pageKey CITY and a parent region.");
+  }
+  if (record.kind === "segment" && record.pageKey) {
+    throw new Error("Legacy segment entities cannot own REGION or CITY canonicals.");
+  }
+  if (record.kind === "segment" && record.status === "published") {
+    throw new Error("Legacy segment entities cannot be published as canonical geo pages.");
+  }
+  if (record.status === "published" && !record.verifiedAt) {
+    throw new Error("Published region entities require verifiedAt.");
+  }
+  return data;
+};
+
 const validatePublishedSeo: CollectionBeforeValidateHook = ({ data }) => {
   if (data) assertPublishedSeo(data);
   return data;
@@ -26,7 +52,7 @@ export const Regions: CollectionConfig = {
   },
   fields: [
     { name: "title", type: "text", required: true },
-    { name: "slug", type: "text", required: true },
+    { name: "slug", type: "text", index: true, required: true, unique: true },
     {
       name: "kind",
       type: "select",
@@ -43,6 +69,15 @@ export const Regions: CollectionConfig = {
       hasMany: false,
       relationTo: "regions",
     },
+    {
+      name: "pageKey",
+      type: "select",
+      options: [
+        { label: "Region canonical", value: "REGION" },
+        { label: "City or area canonical", value: "CITY" },
+      ],
+    },
+    { name: "verifiedAt", type: "date" },
     {
       name: "order",
       type: "number",
@@ -81,7 +116,7 @@ export const Regions: CollectionConfig = {
   hooks: {
     afterChange: [createCmsMutationInvalidationHook("regions")],
     afterDelete: [createCmsMutationInvalidationHook("regions")],
-    beforeValidate: [validatePublishedSeo],
+    beforeValidate: [validateRegionDomain, validatePublishedSeo],
   },
   lockDocuments: {
     duration: 300,

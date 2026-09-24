@@ -1,9 +1,10 @@
-import { composeRegionPathFromSlugs } from "./region-path-policy.ts";
+import { composeLegacyRegionPathFromSlugs, composeRegionPathFromSlugs } from "./region-path-policy.ts";
 
 export type RegionRouteEntry = Readonly<{
   key: string;
   pageId: string;
   parentKey: string | null;
+  pageKey: "CITY" | "REGION" | null;
   slug: string;
 }>;
 
@@ -14,16 +15,16 @@ export type RegionInternalLink = Readonly<{
 }>;
 
 export const regionRouteEntries = [
-  { key: "krym", pageId: "PAGE-007", slug: "krym", parentKey: null },
-  { key: "yalta", pageId: "PAGE-008", slug: "yalta", parentKey: "krym" },
-  { key: "sevastopol", pageId: "PAGE-009", slug: "sevastopol", parentKey: "krym" },
-  { key: "evpatoriya", pageId: "PAGE-010", slug: "evpatoriya", parentKey: "krym" },
-  { key: "alushta", pageId: "PAGE-011", slug: "alushta", parentKey: "krym" },
-  { key: "krym-novostroyki", pageId: "PAGE-024", slug: "novostroyki", parentKey: "krym" },
-  { key: "krym-apartamenty", pageId: "PAGE-025", slug: "apartamenty", parentKey: "krym" },
-  { key: "arkhyz", pageId: "PAGE-012", slug: "arkhyz", parentKey: null },
-  { key: "altay", pageId: "PAGE-013", slug: "altay", parentKey: null },
-  { key: "sochi", pageId: "PAGE-003", slug: "sochi", parentKey: null },
+  { key: "krym", pageId: "PAGE-007", slug: "krym", parentKey: null, pageKey: "REGION" },
+  { key: "yalta", pageId: "PAGE-008", slug: "yalta", parentKey: "krym", pageKey: "CITY" },
+  { key: "sevastopol", pageId: "PAGE-009", slug: "sevastopol", parentKey: "krym", pageKey: "CITY" },
+  { key: "evpatoriya", pageId: "PAGE-010", slug: "evpatoriya", parentKey: "krym", pageKey: "CITY" },
+  { key: "alushta", pageId: "PAGE-011", slug: "alushta", parentKey: "krym", pageKey: "CITY" },
+  { key: "krym-novostroyki", pageId: "PAGE-024", slug: "novostroyki", parentKey: "krym", pageKey: null },
+  { key: "krym-apartamenty", pageId: "PAGE-025", slug: "apartamenty", parentKey: "krym", pageKey: null },
+  { key: "arkhyz", pageId: "PAGE-012", slug: "arkhyz", parentKey: null, pageKey: null },
+  { key: "altay", pageId: "PAGE-013", slug: "altay", parentKey: null, pageKey: null },
+  { key: "sochi", pageId: "PAGE-003", slug: "sochi", parentKey: null, pageKey: null },
 ] as const satisfies readonly RegionRouteEntry[];
 
 export function getRegionRoutePath(entry: RegionRouteEntry, entries: readonly RegionRouteEntry[] = regionRouteEntries) {
@@ -38,7 +39,7 @@ export function getRegionRoutePath(entry: RegionRouteEntry, entries: readonly Re
     parentKey = parent.parentKey;
   }
 
-  return composeRegionPathFromSlugs(slugs);
+  return entry.pageKey ? composeRegionPathFromSlugs(slugs) : composeLegacyRegionPathFromSlugs(slugs);
 }
 
 export function getRegionRoutePlan() {

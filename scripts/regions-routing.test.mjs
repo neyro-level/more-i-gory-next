@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
-import { composeRegionPathFromSlugs, REGION_RESERVED_NAMESPACE } from "../src/content/regions/region-path-policy.ts";
+import { composeRegionPathFromSlugs } from "../src/content/regions/region-path-policy.ts";
 import { findRegionRouteBySegments, getRegionRoutePath, getRegionRoutePlan, regionRouteEntries } from "../src/content/regions/region-route-plan.ts";
 import { composePublicRegionPath, getPublicRegionStaticParams, isGenericPublicRegion } from "../src/core/data-access/public/regions-contract.ts";
 
@@ -10,24 +10,24 @@ test("region routes are computed from slug plus parent chain", () => {
   const yalta = regionRouteEntries.find((entry) => entry.key === "yalta");
   const novostroyki = regionRouteEntries.find((entry) => entry.key === "krym-novostroyki");
 
-  assert.equal(getRegionRoutePath(yalta), "/investicionnaya-nedvizhimost/krym/yalta/");
+  assert.equal(getRegionRoutePath(yalta), "/krym/yalta/");
   assert.equal(getRegionRoutePath(novostroyki), "/investicionnaya-nedvizhimost/krym/novostroyki/");
   assert.equal(findRegionRouteBySegments(["krym", "yalta"])?.key, "yalta");
   assert.equal(findRegionRouteBySegments(["krym", "unknown"]), null);
 });
 
-test("public region path uses reserved namespace, slug and CMS parent relation", () => {
-  assert.equal(REGION_RESERVED_NAMESPACE, "/investicionnaya-nedvizhimost");
-  assert.equal(composeRegionPathFromSlugs(["krym", "yalta"]), "/investicionnaya-nedvizhimost/krym/yalta/");
+test("public geo path uses RouteIdentity builder, slug and CMS parent relation", () => {
+  assert.equal(composeRegionPathFromSlugs(["krym"]), "/krym/");
+  assert.equal(composeRegionPathFromSlugs(["krym", "yalta"]), "/krym/yalta/");
   assert.equal(
     composePublicRegionPath(
-      { id: 2, investmentThesis: "t", kind: "locality", lead: "l", order: 2, riskSummary: "r", slug: "yalta", status: "hidden", title: "Ялта", parent: { id: 1, slug: "krym" } },
+      { id: 2, investmentThesis: "t", kind: "locality", lead: "l", order: 2, pageKey: "CITY", riskSummary: "r", slug: "yalta", status: "hidden", title: "Ялта", parent: { id: 1, slug: "krym" } },
       [
         { id: 1, investmentThesis: "t", kind: "region", lead: "l", order: 1, riskSummary: "r", slug: "krym", status: "hidden", title: "Крым" },
-        { id: 2, investmentThesis: "t", kind: "locality", lead: "l", order: 2, riskSummary: "r", slug: "yalta", status: "hidden", title: "Ялта", parent: { id: 1, slug: "krym" } },
+        { id: 2, investmentThesis: "t", kind: "locality", lead: "l", order: 2, pageKey: "CITY", riskSummary: "r", slug: "yalta", status: "hidden", title: "Ялта", parent: { id: 1, slug: "krym" } },
       ],
     ),
-    "/investicionnaya-nedvizhimost/krym/yalta/",
+    "/krym/yalta/",
   );
   assert.throws(() => composeRegionPathFromSlugs(["Yalta"]));
 });
@@ -40,7 +40,8 @@ test("generic region route accepts only published entities", () => {
     kind: "region",
     lead: "l",
     pageId: "region:test",
-    path: "/investicionnaya-nedvizhimost/test/",
+    path: "/test/",
+    pageKey: "REGION",
     riskSummary: "r",
     slug: "test",
     title: "Test",
@@ -60,15 +61,16 @@ test("static params contain published regions only", () => {
     kind: "region",
     lead: "l",
     pageId: "region:test",
-    path: "/investicionnaya-nedvizhimost/test/",
+    path: "/test/",
+    pageKey: "REGION",
     riskSummary: "r",
     slug: "test",
     title: "Test",
   };
   const params = getPublicRegionStaticParams([
     { ...region, status: "published" },
-    { ...region, id: "hidden", path: "/investicionnaya-nedvizhimost/hidden/", slug: "hidden", status: "hidden" },
-    { ...region, id: "stub", path: "/investicionnaya-nedvizhimost/stub/", slug: "stub", status: "stub" },
+    { ...region, id: "hidden", path: "/hidden/", slug: "hidden", status: "hidden" },
+    { ...region, id: "stub", path: "/stub/", slug: "stub", status: "stub" },
   ]);
 
   assert.deepEqual(params, [{ path: ["test"] }]);
@@ -102,15 +104,19 @@ test("runtime verification exposes unpublished regions only on the noindex stagi
   const source = readFileSync("scripts/verify-runtime.mjs", "utf8");
 
   assert.match(source, /unpublishedGenericRegionPaths/);
+  assert.match(source, /V5_URL_MANIFEST\.json/);
+  assert.match(source, /unpublishedGenericRegionPaths\.add\(entry\.currentCanonical\)/);
   assert.match(source, /fetchRoute\(pathname, stagingContour \? 200 : 404\)/);
   assert.match(source, /Preview-only region must remain noindex/);
   assert.match(source, /Hidden region leaked into sitemap/);
 });
 
-test("region route plan does not store a third path field", () => {
+test("normalized geo route plan delegates canonicals to the shared builder", () => {
   const source = readFileSync("src/content/regions/region-route-plan.ts", "utf8");
   const plan = getRegionRoutePlan();
 
   assert.equal(/path:\s*["']\/investicionnaya-nedvizhimost/.test(source), false);
-  assert.equal(plan.every((entry) => entry.path.startsWith("/investicionnaya-nedvizhimost/")), true);
+  assert.equal(plan.find((entry) => entry.key === "krym")?.path, "/krym/");
+  assert.equal(plan.find((entry) => entry.key === "yalta")?.path, "/krym/yalta/");
+  assert.equal(plan.find((entry) => entry.key === "krym-apartamenty")?.path, "/investicionnaya-nedvizhimost/krym/apartamenty/");
 });

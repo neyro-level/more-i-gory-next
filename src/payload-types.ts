@@ -438,6 +438,8 @@ export interface Region {
   slug: string;
   kind: 'region' | 'locality' | 'segment';
   parent?: (number | null) | Region;
+  pageKey?: ('REGION' | 'CITY') | null;
+  verifiedAt?: string | null;
   order: number;
   lead: string;
   investmentThesis: string;
@@ -827,6 +829,7 @@ export interface Property {
   floor?: number | null;
   floors?: number | null;
   region?: (number | null) | Region;
+  cityOrArea?: (number | null) | Region;
   locality?: string | null;
   district?: string | null;
   street?: string | null;
@@ -1617,6 +1620,8 @@ export interface RegionsSelect<T extends boolean = true> {
   slug?: T;
   kind?: T;
   parent?: T;
+  pageKey?: T;
+  verifiedAt?: T;
   order?: T;
   lead?: T;
   investmentThesis?: T;
@@ -1992,6 +1997,7 @@ export interface PropertiesSelect<T extends boolean = true> {
   floor?: T;
   floors?: T;
   region?: T;
+  cityOrArea?: T;
   locality?: T;
   district?: T;
   street?: T;

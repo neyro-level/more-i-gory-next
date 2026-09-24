@@ -14,6 +14,6 @@ export type {
 export type { CmsPageBlockDTO, CmsPageDTO, CmsSeoDTO } from "./cms-page.ts";
 export type { PublicMediaDTO } from "./media.ts";
 export type { PublicPropertyDTO } from "./property.ts";
-export type { PublicRegionDTO } from "./region.ts";
+export type { CityOrAreaDTO, PublicNormalizedRegionDTO, PublicRegionDTO } from "./region.ts";
 export type { EditorialPreviewNavigationGroup, SiteChrome, SiteNavigationLink } from "./site-chrome.ts";
 export type { SitemapPageDTO } from "./sitemap-page.ts";

@@ -121,14 +121,14 @@ test("typed cache targets map approved domain changes to paths and tags", () => 
   ]);
   assert.deepEqual(cacheTargets.regionPage("krym"), [
     { kind: "tag", tag: "region:krym" },
-    { kind: "path", path: "/investicionnaya-nedvizhimost/krym/" },
+    { kind: "path", path: "/krym/" },
     { kind: "tag", tag: "catalog" },
     { kind: "tag", tag: "sitemap" },
     { kind: "tag", tag: "navigation" },
   ]);
   assert.deepEqual(cacheTargets.regionPage("krym/yalta"), [
     { kind: "tag", tag: "region:krym:yalta" },
-    { kind: "path", path: "/investicionnaya-nedvizhimost/krym/yalta/" },
+    { kind: "path", path: "/krym/yalta/" },
     { kind: "tag", tag: "catalog" },
     { kind: "tag", tag: "sitemap" },
     { kind: "tag", tag: "navigation" },
@@ -284,7 +284,7 @@ test("CMS mutations map to CacheInvalidator targets after commit", () => {
   ]);
   assert.ok(cmsMutationCacheTargets("pages", { slug: "privacy" }).some((target) => target.kind === "tag" && target.tag === "page:privacy"));
   assert.ok(cmsMutationCacheTargets("properties", { slug: "sample-resort" }).some((target) => target.kind === "tag" && target.tag === "properties"));
-  assert.ok(cmsMutationCacheTargets("regions", { parent: { slug: "krym" }, slug: "yalta" }).some((target) => target.kind === "path" && target.path === "/investicionnaya-nedvizhimost/krym/yalta/"));
+  assert.ok(cmsMutationCacheTargets("regions", { parent: { slug: "krym" }, slug: "yalta" }).some((target) => target.kind === "path" && target.path === "/krym/yalta/"));
   assert.ok(cmsMutationCacheTargets("residential-complexes", { slug: "sample-complex" }).some((target) => target.kind === "tag" && target.tag === "complex:sample-complex"));
   assert.ok(cmsMutationCacheTargets("developers", { slug: "sample-developer" }).some((target) => target.kind === "path" && target.path === "/zastroyshchik/sample-developer/"));
   assert.ok(cmsMutationCacheTargets("redirects").some((target) => target.kind === "tag" && target.tag === "redirects"));

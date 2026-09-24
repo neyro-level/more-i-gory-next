@@ -43,6 +43,7 @@ test("properties collection exposes the approved EPIC 8.2 schema surface", () =>
     "floor",
     "floors",
     "region",
+    "cityOrArea",
     "locality",
     "district",
     "street",
@@ -91,6 +92,8 @@ test("properties collection keeps inventory defaults and relationships explicit"
   assert.deepEqual(field("dealType").options.map((option) => option.value), ["sale", "rent"]);
   assert.equal(field("market").index, true);
   assert.equal(field("region").relationTo, "regions");
+  assert.equal(field("cityOrArea").relationTo, "regions");
+  assert.equal(field("cityOrArea").hasMany, false);
   assert.equal(field("complex").relationTo, "residential-complexes");
   assert.equal(field("building").relationTo, "buildings");
   assert.equal(field("layout").relationTo, "layouts");

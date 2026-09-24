@@ -14,22 +14,22 @@ function sample(extra = {}) {
 }
 
 const regions = mapPublicRegions([
-  sample({ id: 1, kind: "region", order: 10, slug: "krym", status: "published", title: "Крым" }),
-  sample({ id: 2, kind: "locality", order: 20, parent: { id: 1, slug: "krym" }, slug: "yalta", status: "published", title: "Ялта" }),
-  sample({ id: 3, kind: "locality", order: 30, parent: { id: 1, slug: "krym" }, slug: "sevastopol", status: "published", title: "Севастополь" }),
+  sample({ id: 1, kind: "region", order: 10, pageKey: "REGION", slug: "krym", status: "published", title: "Крым" }),
+  sample({ id: 2, kind: "locality", order: 20, pageKey: "CITY", parent: { id: 1, slug: "krym" }, slug: "yalta", status: "published", title: "Ялта" }),
+  sample({ id: 3, kind: "locality", order: 30, pageKey: "CITY", parent: { id: 1, slug: "krym" }, slug: "sevastopol", status: "published", title: "Севастополь" }),
   sample({ id: 4, kind: "segment", order: 60, parent: { id: 1, slug: "krym" }, slug: "novostroyki", status: "published", title: "Новостройки Крыма" }),
   sample({ id: 5, kind: "segment", order: 70, parent: { id: 1, slug: "krym" }, slug: "apartamenty", status: "published", title: "Апартаменты Крыма" }),
   sample({ id: 6, kind: "region", order: 100, slug: "sochi", status: "stub", title: "Сочи" }),
   sample({ id: 7, kind: "locality", order: 110, parent: { id: 1, slug: "krym" }, slug: "hidden-city", status: "hidden", title: "Hidden City" }),
 ]);
 
-test("Crimea region links to locations, segments, methodology and objects without stubs", () => {
+test("Crimea region links to normalized locations, methodology and objects without legacy segments", () => {
   const krym = regions.find((region) => region.slug === "krym");
   const hrefs = getPublicRegionRelatedLinks(krym, regions).map((link) => link.href);
 
-  assert.ok(hrefs.includes("/investicionnaya-nedvizhimost/krym/yalta/"));
-  assert.ok(hrefs.includes("/investicionnaya-nedvizhimost/krym/novostroyki/"));
-  assert.ok(hrefs.includes("/investicionnaya-nedvizhimost/krym/apartamenty/"));
+  assert.ok(hrefs.includes("/krym/yalta/"));
+  assert.equal(hrefs.includes("/investicionnaya-nedvizhimost/krym/novostroyki/"), false);
+  assert.equal(hrefs.includes("/investicionnaya-nedvizhimost/krym/apartamenty/"), false);
   assert.ok(hrefs.includes("/metodika/"));
   assert.ok(hrefs.includes("/obekty/"));
   assert.equal(hrefs.includes("/investicionnaya-nedvizhimost/sochi/"), false);
@@ -51,9 +51,9 @@ test("Crimea child pages link back to Crimea and sibling locations or segments",
   const yalta = regions.find((region) => region.slug === "yalta");
   const hrefs = getPublicRegionRelatedLinks(yalta, regions).map((link) => link.href);
 
-  assert.ok(hrefs.includes("/investicionnaya-nedvizhimost/krym/"));
-  assert.ok(hrefs.includes("/investicionnaya-nedvizhimost/krym/sevastopol/"));
-  assert.ok(hrefs.includes("/investicionnaya-nedvizhimost/krym/novostroyki/"));
+  assert.ok(hrefs.includes("/krym/"));
+  assert.ok(hrefs.includes("/krym/sevastopol/"));
+  assert.equal(hrefs.includes("/investicionnaya-nedvizhimost/krym/novostroyki/"), false);
   assert.ok(hrefs.includes("/metodika/"));
   assert.ok(hrefs.includes("/obekty/"));
 });

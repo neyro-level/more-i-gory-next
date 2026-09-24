@@ -123,7 +123,7 @@ export const cacheTargets = {
     const normalized = normalizeSlug(slug, "region slug");
     return [
       { kind: "tag", tag: `region:${tagSlug(slug, "region slug")}` },
-      { kind: "path", path: `/investicionnaya-nedvizhimost/${normalized}/` },
+      { kind: "path", path: `/${normalized}/` },
       { kind: "tag", tag: "catalog" },
       { kind: "tag", tag: "sitemap" },
       ...this.navigation(),

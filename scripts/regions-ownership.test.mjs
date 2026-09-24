@@ -17,7 +17,7 @@ test("region ownership splits Payload content, code routing and SEO index policy
   });
   assert.equal(payloadOwnedRegionFields.includes("lead"), true);
   assert.equal(payloadOwnedRegionFields.includes("investmentThesis"), true);
-  assert.equal(codeOwnedRegionPolicies.includes("path-from-slug-and-parent"), true);
+  assert.equal(codeOwnedRegionPolicies.includes("path-from-route-identity-and-hierarchy"), true);
   assert.equal(seoRegistryOwnedFields.includes("index"), true);
   assert.equal(seoRegistryOwnedFields.includes("sitemap"), true);
 });

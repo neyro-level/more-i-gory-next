@@ -1,6 +1,7 @@
 import type { SelectType, Where } from "payload";
 
 import type { Media, Property, Region } from "../../../payload-types.ts";
+import { routeGrammar } from "../../routing/grammar/index.ts";
 import { publicPropertySchema, type PublicPropertyDTO } from "../../dto/property.ts";
 import { publicMediaOrFallback } from "./missing-image.ts";
 
@@ -13,6 +14,7 @@ type PublicPropertyRecord = Readonly<
         Property,
         | "budgetNote"
         | "complex"
+        | "cityOrArea"
         | "deactivatedAt"
         | "description"
         | "facts"
@@ -46,6 +48,7 @@ export type ArchiveReplacementCandidate = Readonly<{
 
 export const publicPropertySelect = {
   budgetNote: true,
+  cityOrArea: true,
   complex: true,
   deactivatedAt: true,
   description: true,
@@ -69,6 +72,7 @@ export const publicPropertySelect = {
 
 const manualPassportPublicationExists: Where[] = [
   { publishedAt: { exists: true } },
+  { region: { exists: true } },
   { slug: { exists: true } },
   { verifiedAt: { exists: true } },
   { verdict: { exists: true } },
@@ -117,11 +121,41 @@ function getImage(property: PublicPropertyRecord) {
 }
 
 function getRegionLabel(property: PublicPropertyRecord): string {
+  if (isRelationDocument<Region>(property.cityOrArea)) {
+    return property.cityOrArea.title;
+  }
   if (isRelationDocument<Region>(property.region)) {
     return property.region.title;
   }
 
   return property.locality ?? property.publicAddress ?? "Регион уточняется";
+}
+
+function getProjectGeoContext(property: PublicPropertyRecord) {
+  if (!isRelationDocument<Region>(property.region) || !property.region.slug) {
+    throw new Error("Published manual passport requires a populated region relation.");
+  }
+
+  const region = {
+    id: String(property.region.id),
+    path: routeGrammar.buildUrl({ pageKey: "REGION", regionSlug: property.region.slug }),
+    slug: property.region.slug,
+    title: property.region.title,
+  };
+  const cityOrArea = isRelationDocument<Region>(property.cityOrArea) && property.cityOrArea.slug
+    ? {
+        id: String(property.cityOrArea.id),
+        path: routeGrammar.buildUrl({
+          pageKey: "CITY",
+          regionSlug: property.region.slug,
+          citySlug: property.cityOrArea.slug,
+        }),
+        slug: property.cityOrArea.slug,
+        title: property.cityOrArea.title,
+      }
+    : undefined;
+
+  return { cityOrArea, region };
 }
 
 function relationId(value: unknown): string | undefined {
@@ -141,6 +175,7 @@ export function mapPublicProperty(property: PublicPropertyRecord): PublicPropert
     deactivatedAt: property.deactivatedAt ?? undefined,
     description: property.description ?? undefined,
     facts: property.facts?.map((fact) => ({ label: fact.label, value: fact.value })) ?? [],
+    geoContext: getProjectGeoContext(property),
     id: String(property.id),
     image: getImage(property),
     market: property.market,

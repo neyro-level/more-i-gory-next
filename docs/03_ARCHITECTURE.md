@@ -228,6 +228,14 @@ Prisma как второй ORM запрещён.
 - `MediaAssetDTO`
 - `LandingPageDTO`.
 
+GEO-first normalization EPIC 74 сохраняет одну Payload collection `regions`:
+`kind`, `parent`, `pageKey`, `slug`, `status` и `verifiedAt` являются входами
+domain model; canonical path не хранится и строится `RouteIdentity` builder.
+Public Gateway различает normalized region и `CityOrAreaDTO`. Manual project
+passport обязан иметь region relation и может иметь отдельную `cityOrArea`
+relation; public project DTO выдаёт оба уровня как `geoContext`. Feed-ingest и
+existing residential-complex relation этим контрактом не изменяются.
+
 `AreaDTO`, `LotDTO`, `DeveloperDTO`, `OperatorDTO` и отдельный `RedirectDTO`
 не входят в текущий код. Они добавляются только вместе с реальной моделью данных,
 чтобы архитектурный документ не обещал несуществующий runtime-контракт.

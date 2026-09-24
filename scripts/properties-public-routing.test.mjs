@@ -32,6 +32,7 @@ function matchesWhere(where, record) {
 
 const publicationExists = [
   { publishedAt: { exists: true } },
+  { region: { exists: true } },
   { slug: { exists: true } },
   { verifiedAt: { exists: true } },
   { verdict: { exists: true } },
@@ -69,6 +70,7 @@ test("published active passports are listed; unpublished and archived stay hidde
       origin: "manual",
       status: "active",
       publishedAt: "2026-09-17T00:00:00.000Z",
+      region: 1,
       slug: "yalta-passport",
       verifiedAt: "2026-09-17T00:00:00.000Z",
       verdict: "Подходит для ручного инвестиционного разбора.",
@@ -109,7 +111,8 @@ test("public property DTO mapper does not leak private inventory data", () => {
     origin: "manual",
     ownerContact: "private",
     publishedAt: "2026-09-17T00:00:00.000Z",
-    region: { id: 7, title: "Ялта" },
+    region: { id: 1, kind: "region", slug: "krym", title: "Крым" },
+    cityOrArea: { id: 7, kind: "locality", slug: "yalta", title: "Ялта" },
     riskSummary: "Риск проверяется в паспорте.",
     slug: "yalta-passport",
     sources: [{ label: "Открытые данные объекта" }],
@@ -123,6 +126,10 @@ test("public property DTO mapper does not leak private inventory data", () => {
 
   assert.equal(dto.path, "/obekty/yalta-passport/");
   assert.equal(dto.regionLabel, "Ялта");
+  assert.deepEqual(dto.geoContext, {
+    cityOrArea: { id: "7", path: "/krym/yalta/", slug: "yalta", title: "Ялта" },
+    region: { id: "1", path: "/krym/", slug: "krym", title: "Крым" },
+  });
 
   for (const name of privateFields) {
     assert.equal(name in dto, false, `${name} must not be present in public DTO`);

@@ -14,6 +14,7 @@ const completeManual = {
   origin: "manual",
   slug: "yalta-passport",
   publishedAt: "2026-09-18T00:00:00.000Z",
+  region: 1,
   verifiedAt: "2026-09-18T00:00:00.000Z",
   verdict: "Подходит для ручного инвестиционного разбора.",
   riskSummary: "Риск проверяется в паспорте.",
@@ -36,10 +37,11 @@ test("feed origin is not gated by the manual publication contract", () => {
   );
 });
 
-test("published manual passports require slug, dates, verdict, riskSummary, sources and facts", () => {
+test("published manual passports require geo, slug, dates, verdict, riskSummary, sources and facts", () => {
   assert.equal(MANUAL_PUBLICATION_MIN_SOURCES, 1);
   assert.equal(MANUAL_PUBLICATION_MIN_FACTS, 1);
   assert.match(manualPublicationGateError({ origin: "manual", publishedAt: "2026-09-18" }) ?? "", /slug/);
+  assert.match(manualPublicationGateError({ ...completeManual, region: null }) ?? "", /region relation/);
   assert.match(
     manualPublicationGateError({ ...completeManual, verifiedAt: null }) ?? "",
     /verifiedAt/,

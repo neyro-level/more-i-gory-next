@@ -1,17 +1,20 @@
-export const REGION_RESERVED_NAMESPACE = "/investicionnaya-nedvizhimost";
+import { routeGrammar } from "../../core/routing/grammar/index.ts";
 
-const slugPattern = /^[a-z0-9-]+$/;
+export const LEGACY_REGION_RESERVED_NAMESPACE = "/investicionnaya-nedvizhimost";
 
 export function composeRegionPathFromSlugs(slugs: readonly string[]): string {
-  if (slugs.length === 0) {
-    throw new Error("Region path requires at least one slug under the reserved namespace.");
+  if (slugs.length === 1) {
+    return routeGrammar.buildUrl({ pageKey: "REGION", regionSlug: slugs[0] ?? "" });
   }
 
-  for (const slug of slugs) {
-    if (!slugPattern.test(slug)) {
-      throw new Error(`Invalid region slug "${slug}".`);
-    }
+  if (slugs.length === 2) {
+    return routeGrammar.buildUrl({ pageKey: "CITY", regionSlug: slugs[0] ?? "", citySlug: slugs[1] ?? "" });
   }
 
-  return `${REGION_RESERVED_NAMESPACE}/${slugs.join("/")}/`;
+  throw new Error("Geo path requires one region slug or one region plus city/area slug.");
+}
+
+export function composeLegacyRegionPathFromSlugs(slugs: readonly string[]): string {
+  if (slugs.length === 0) throw new Error("Legacy region path requires at least one slug.");
+  return `${LEGACY_REGION_RESERVED_NAMESPACE}/${slugs.join("/")}/`;
 }

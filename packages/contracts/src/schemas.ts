@@ -75,6 +75,7 @@ export const regionSchema = z.object({
   id: z.string().min(1),
   investmentThesis: z.string().min(20),
   lead: z.string().min(20),
+  pageKey: z.enum(["REGION", "CITY"]).optional(),
   pageId: z.string().min(1),
   parentPageId: z.string().optional(),
   path: z.string().startsWith("/").endsWith("/"),

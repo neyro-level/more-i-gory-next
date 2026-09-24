@@ -17,6 +17,7 @@ const fixture = mapPublicRegions([
     kind: "region",
     lead: "Published lead",
     order: 1,
+    pageKey: "REGION",
     riskSummary: "Published risk",
     slug: "published",
     status: "published",
@@ -28,6 +29,7 @@ const fixture = mapPublicRegions([
     kind: "region",
     lead: "Hidden lead",
     order: 2,
+    pageKey: "REGION",
     riskSummary: "Hidden risk",
     slug: "hidden",
     status: "hidden",
@@ -39,6 +41,7 @@ const fixture = mapPublicRegions([
     kind: "region",
     lead: "Stub lead",
     order: 3,
+    pageKey: "REGION",
     riskSummary: "Stub risk",
     slug: "stub",
     status: "stub",
@@ -53,7 +56,7 @@ test("final public boundary exposes published and rejects hidden plus stub in ev
   assert.deepEqual(published.map((region) => region.slug), ["published"]);
   assert.deepEqual(getPublicRegionStaticParams(fixture), [{ path: ["published"] }]);
   assert.deepEqual(publicRegionSitemapEntries(fixture), [
-    { canonical: "/investicionnaya-nedvizhimost/published/", priority: "P1" },
+    { canonical: "/published/", priority: "P1" },
   ]);
   assert.equal(isGenericPublicRegion(publishedRegion), true);
   assert.equal(isGenericPublicRegion(hiddenRegion), false);

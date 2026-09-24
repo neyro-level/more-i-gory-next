@@ -14,13 +14,15 @@ export const payloadOwnedRegionFields = [
   "status",
   "kind",
   "parent",
+  "pageKey",
+  "verifiedAt",
   "order",
   "slug",
 ] as const;
 
 export const codeOwnedRegionPolicies = [
-  "path-from-slug-and-parent",
-  "reserved-namespace",
+  "path-from-route-identity-and-hierarchy",
+  "route-identity-builder",
   "internal-link-composition",
   "stub-presentation",
 ] as const;

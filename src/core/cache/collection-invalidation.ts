@@ -1,6 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, GlobalAfterChangeHook } from "payload";
 
-import { composeRegionPathFromSlugs, REGION_RESERVED_NAMESPACE } from "../../content/regions/region-path-policy.ts";
+import { composeRegionPathFromSlugs } from "../../content/regions/region-path-policy.ts";
 import type { StructuredLogger } from "../observability/index.ts";
 import {
   cacheTargets,
@@ -47,7 +47,7 @@ function regionPathSlug(doc: CmsDoc): string | null {
   if (parent) slugs.unshift(parent);
 
   return composeRegionPathFromSlugs(slugs)
-    .replace(new RegExp(`^${REGION_RESERVED_NAMESPACE}/`), "")
+    .replace(/^\//, "")
     .replace(/\/$/, "");
 }
 

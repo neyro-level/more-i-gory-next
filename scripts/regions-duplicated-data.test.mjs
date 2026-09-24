@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { regionDtos } from "../src/content/regions/region-dtos.ts";
-import { getRegionRoutePlan, regionRouteEntries } from "../src/content/regions/region-route-plan.ts";
+import { getRegionRoutePlan } from "../src/content/regions/region-route-plan.ts";
 import { regionSeedContent } from "../src/content/regions/region-seed-content.ts";
 import { Regions } from "../src/project/collections/regions.ts";
 
@@ -45,10 +45,9 @@ test("the four sources share the same ten region keys and pageIds", () => {
     regionDtos.map((entry) => entry.pageId),
     regionPageIds,
   );
-  assert.deepEqual(
-    plan.map((entry) => entry.path),
-    regionPageIds.map((pageId) => seoRegistry.find((entry) => entry.pageId === pageId)?.canonical),
-  );
+  assert.equal(plan.find((entry) => entry.pageId === "PAGE-007")?.path, "/krym/");
+  assert.equal(plan.find((entry) => entry.pageId === "PAGE-008")?.path, "/krym/yalta/");
+  assert.equal(plan.find((entry) => entry.pageId === "PAGE-025")?.path, "/investicionnaya-nedvizhimost/krym/apartamenty/");
 });
 
 test("domain copy and hierarchy exist in both Payload schema and hardcoded plan", () => {
@@ -72,7 +71,7 @@ test("SEO registry is a separate index policy and already drifts from the route 
   assert.match(inventory, /PAGE-009: plan P1 vs registry P2/);
 });
 
-test("public region route composes reserved-namespace path and reads Payload through Public Gateway", () => {
+test("public region route composes builder-owned paths and reads Payload through Public Gateway", () => {
   const page = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx", "utf8");
   assert.match(page, /from "@\/content\/regions\/region-path-policy"/);
   assert.match(page, /composeRegionPathFromSlugs/);

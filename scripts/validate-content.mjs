@@ -59,6 +59,7 @@ const parsedArticles = articleSchema.array().parse(articles);
 const pages = pageContentSchema.array().parse(pageContents);
 const landingPages = landingPageSchema.array().parse([]);
 const seoEntries = seoEntrySchema.array().parse(readJson("src/seo/registry.json"));
+const urlMigrationManifest = readJson("docs/migration/V5_URL_MANIFEST.json");
 
 assertUnique(media, "id", "media registry");
 assertUnique(regions, "id", "regions");
@@ -72,6 +73,11 @@ assertUnique(landingPages, "pageId", "landing pages");
 const mediaIds = new Set(media.map((asset) => asset.id));
 const regionIds = new Set(regions.map((region) => region.id));
 const seoByPageId = new Map(seoEntries.map((entry) => [entry.pageId, entry]));
+const migrationTargetByCurrentCanonical = new Map(
+  urlMigrationManifest.entries
+    .filter((entry) => entry.migrationAction === "REDIRECT_301" && entry.targetUrl)
+    .map((entry) => [entry.currentCanonical, entry.targetUrl]),
+);
 const knownPaths = new Set([
   ...seoEntries.map((entry) => entry.canonical),
   ...parsedArticles.map((article) => article.path),
@@ -86,7 +92,11 @@ for (const region of regions) {
   assertExists(mediaIds.has(region.heroMediaId), `regions: unknown heroMediaId "${region.heroMediaId}" in ${region.id}`);
   const seoEntry = seoByPageId.get(region.pageId);
   assertExists(seoEntry, `regions: unknown pageId "${region.pageId}" in ${region.id}`);
-  assertExists(seoEntry?.canonical === region.path, `regions: ${region.id} path must match SEO canonical ${seoEntry?.canonical}`);
+  const approvedTarget = seoEntry ? migrationTargetByCurrentCanonical.get(seoEntry.canonical) : undefined;
+  assertExists(
+    seoEntry?.canonical === region.path || approvedTarget === region.path,
+    `regions: ${region.id} path must match current SEO canonical ${seoEntry?.canonical} or approved migration target ${approvedTarget}`,
+  );
 }
 
 for (const article of parsedArticles) {

@@ -22,7 +22,7 @@
 | `scripts/run-payload-runtime-proof.mjs:117` | `findGlobal` | TEST | `const siteSettings = await payload.findGlobal({ slug: "site-settings", overrideAccess: false, user: owner });` |
 | `scripts/seed-media-assets.mjs:64` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/seed-preview-db-proof.mjs:60` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
-| `scripts/seed-regions.mjs:72` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
+| `scripts/seed-regions.mjs:73` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/verify-architecture-guards.test.mjs:56` | `find` | TEST | `files: [{ path: "src/core/data-access/public/pages.ts", content: 'payload.find({ collection: "pages" });' }],` |
 | `scripts/verify-architecture-guards.test.mjs:69` | `find` | TEST | `content: 'payload.find({ collection: "pages", overrideAccess: false });',` |
 | `scripts/verify-architecture-guards.test.mjs:118` | `find` | TEST | `files: [{ path: "src/core/data-access/system/jobs.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
@@ -41,8 +41,8 @@
 | `src/core/data-access/public/properties.ts:33` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/properties.ts:53` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/properties.ts:54` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/public/regions.ts:30` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/regions.ts:31` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/regions.ts:31` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/regions.ts:32` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/site-chrome.ts:19` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/site-chrome.ts:21` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "site-settings", depth: 0, overrideAccess: false, select: publicSiteSettingsSelect }),` |
 | `src/core/data-access/public/site-chrome.ts:22` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "navigation", depth: 0, overrideAccess: false, select: publicNavigationSelect }),` |
