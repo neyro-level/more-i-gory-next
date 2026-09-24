@@ -19,8 +19,7 @@
 │   ├── yalta/
 │   ├── sevastopol/
 │   ├── evpatoriya/
-│   ├── alushta/
-│   └── apartamenty/           # самостоятельный region×segment owner после Gate
+│   └── alushta/
 ├── obekty/
 │   └── <project-slug>/
 ├── analitika/
@@ -279,8 +278,9 @@ local/staging preview она остаётся доступным владель�
 
 ### PAGE-025 — Апартаменты Крыма
 
-- **URL:** `/krym/apartamenty/`
-- **Primary Intent:** сравнить апартаменты Крыма для инвестиций.
+- **URL:** `/investicionnaya-nedvizhimost/krym/apartamenty/`
+- **Status:** legacy migration candidate; target identity не назначен.
+- **Primary Intent:** не назначен до отдельного решения о region-segment identity.
 - **Secondary Intent:** оценить управление, расходы, сезонность, формат права и
   личное использование.
 - **H1:** `Апартаменты Крыма для инвестиций`.
@@ -291,9 +291,9 @@ local/staging preview она остаётся доступным владель�
 - **Внутренние ссылки:** Крым, четыре локальных страницы, PAGE-024, ручные
   инвестиционные паспорта, аналитика, методика, подбор.
 - **Primary CTA:** `Получить подборку апартаментов Крыма`.
-- **Index:** yes, after content gate.
-- **Content Gate:** минимум два сопоставимых объекта и подтверждённые сведения
-  об управлении; гарантированная доходность без документа запрещена.
+- **Index:** no; `NOINDEX_RETAIN` до отдельного PAGE/identity decision.
+- **Content Gate:** не применяется до отдельного решения. Гарантированная
+  доходность без документа запрещена.
 
 ### PAGE-012 — Архыз
 
@@ -580,7 +580,7 @@ Content Gate. Первый экран сам по себе не разрешае
 | PAGE-012 | купить апартаменты в Архызе | недвижимость Архыза для инвестиций | Купить апартаменты в Архызе для инвестиций \| Море и Горы | Купить апартаменты в Архызе для инвестиций: оценим сезонность, оператора, этап проекта, бюджет, риски и сценарий выхода. | `/arkhyz/` | gate | gate | P2 |
 | PAGE-013 | купить недвижимость на Алтае | недвижимость Алтая для инвестиций | Купить недвижимость на Алтае для инвестиций \| Море и Горы | Купить недвижимость на Алтае для инвестиций: сравним локации, форматы, управление, бюджет, инфраструктурные риски и выход. | `/altay/` | gate | gate | P2 |
 | PAGE-024 | legacy: новостройки Крыма | migration candidate | Новостройки Крыма для инвестиций \| Море и Горы | Историческая концепция без активного standalone intent owner; решение принимает URL manifest. | `/investicionnaya-nedvizhimost/krym/novostroyki/` | noindex | no | — |
-| PAGE-025 | апартаменты Крыма | купить апартаменты в Крыму | Апартаменты Крыма для инвестиций \| Море и Горы | Апартаменты Крыма для инвестиций: сравниваем города, управление, расходы, сезонность, ограничения и риски. | `/krym/apartamenty/` | gate | gate | P2 |
+| PAGE-025 | legacy: апартаменты Крыма | migration candidate | Апартаменты Крыма для инвестиций \| Море и Горы | Историческая концепция без target identity; отдельное решение обязательно. | `/investicionnaya-nedvizhimost/krym/apartamenty/` | noindex | no | — |
 | PAGE-026 | новостройки Крыма каталог | жилые комплексы Крыма | Новостройки Крыма каталог ЖК \| Море и Горы | Каталог опубликованных жилых комплексов Крыма: застройщик, корпуса, планировки, доступный inventory, риски и следующий шаг. | `/novostroyki/` | gate | gate | P1 |
 | PAGE-014 | курортная недвижимость для инвестиций | инвестиционные объекты недвижимости | Курортная недвижимость для инвестиций — объекты \| Море и Горы | Отобранные объекты курортной недвижимости: инвестиционный вывод, факты, бюджет, управление, риски и источники по каждому проекту. | `/obekty/` | gate | gate | P1 |
 | PAGE-015 | `<проект> купить` | `<проект> цены`, `<проект> инвестиции` | `<Название проекта> — купить, цены и инвестиции \| Море и Горы` | `<Название проекта>: инвестиционный разбор, актуальные цены, факты, экономика, риски, оператор и сценарии выхода.` | `/obekty/<project-slug>/` | gate | gate | P2 |
@@ -662,7 +662,7 @@ Structured data обязана совпадать с видимым контен
 | Главная | federal hub, Крым, Архыз, Алтай, проекты, методика, подбор |
 | Federal hub | регионы, ключевые сегменты, аналитика, методика |
 | Сочи stub | federal hub, Крым, подбор |
-| Крым | Ялта, Севастополь, Евпатория, Алушта, `/krym/apartamenty/`, published inventory `/novostroyki/`, проекты, аналитика |
+| Крым | Ялта, Севастополь, Евпатория, Алушта, published inventory `/novostroyki/`, проекты, аналитика |
 | Local/segment page | parent region, projects, related analytics, подбор |
 | Project | region/local page, методика, related projects, articles, подбор |
 | Article | commercial target, projects if relevant, методика, подбор |
@@ -699,7 +699,7 @@ candidates с действием `REVIEW`:
 | `/investicionnaya-nedvizhimost/krym/evpatoriya/` | `/krym/evpatoriya/` | REDIRECT_301 after target proof |
 | `/investicionnaya-nedvizhimost/krym/alushta/` | `/krym/alushta/` | REDIRECT_301 after target proof |
 | `/investicionnaya-nedvizhimost/krym/novostroyki/` | не назначен | NOINDEX_RETAIN |
-| `/investicionnaya-nedvizhimost/krym/apartamenty/` | `/krym/apartamenty/` | REDIRECT_301 after target proof |
+| `/investicionnaya-nedvizhimost/krym/apartamenty/` | не назначен | NOINDEX_RETAIN |
 | `/investicionnaya-nedvizhimost/arkhyz/` | `/arkhyz/` | REDIRECT_301 after target proof |
 | `/investicionnaya-nedvizhimost/altay/` | `/altay/` | REDIRECT_301 after target proof |
 | `/investicionnaya-nedvizhimost/sochi/` | `/sochi/` | NOINDEX_RETAIN |

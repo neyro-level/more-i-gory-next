@@ -147,13 +147,12 @@
       "currentRobots": "noindex-follow while index=gate",
       "currentSitemap": "excluded while sitemap=gate",
       "productionIndexEvidence": "none; business facts are MISSING",
-      "targetIntent": "Crimea apartments segment",
-      "targetUrl": "/krym/apartamenty/",
+      "targetIntent": "legacy region-segment concept; no target identity assigned",
+      "targetUrl": null,
       "targetExistsNow": false,
-      "migrationAction": "REDIRECT_301",
-      "activationGate": "Target route, canonical and HTTP proof must pass before redirect activation",
-      "reason": "Same region-segment intent and one-to-one canonical move.",
-      "evidence": ["src/seo/registry.json#PAGE-025", "docs/02_PRODUCT_STRUCTURE.md#PAGE-025"]
+      "migrationAction": "NOINDEX_RETAIN",
+      "reason": "Approved RouteIdentity has no region-segment identity; the noindex legacy URL cannot masquerade as a CITY canonical.",
+      "evidence": ["src/seo/registry.json#PAGE-025", "docs/02_PRODUCT_STRUCTURE.md#PAGE-025", "approved plan EPIC 71 RouteIdentity"]
     },
     {
       "id": "URL-010",

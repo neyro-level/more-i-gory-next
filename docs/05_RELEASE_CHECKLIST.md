@@ -54,6 +54,8 @@ graph. При `MISSING` facts техническая работа продолж
 - [x] PAGE-024 переведён в legacy migration candidate, а `/novostroyki/` не
   объявлен replacement для `/obekty/`;
 - [x] current/legacy URL manifest принял решение по каждому migration candidate;
+- [x] target URL grammar имеет typed builder/parser, collision protection и
+  deterministic round-trip suite;
 - [ ] runtime routes, canonical, robots и sitemap соответствуют target tree;
 - [ ] сильные утверждения подтверждены;
 - [ ] реальные проекты имеют sources и `verifiedAt`;

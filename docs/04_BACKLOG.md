@@ -117,7 +117,8 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 | DONE | EPIC 67 | Plan №4 final verification и preview evidence закрыты |
 | DONE | EPIC 68 | baseline, route/SEO inventory и factual preflight; PR 111 |
 | DONE | EPIC 69 | GEO-first IA, intent ownership и четыре ADR; PR 112 |
-| NOW | EPIC 70 | current/legacy URL manifest, migration decisions и три детерминированных отчёта |
+| DONE | EPIC 70 | current/legacy URL manifest, migration decisions и три детерминированных отчёта; PR 113 |
+| NOW | EPIC 71 | typed reversible `RouteIdentity` grammar, reserved-root protection и round-trip tests |
 | NEXT | EPIC 70–86 | URL manifest, route identity, SEO state, GEO pages, project passports и final proof по approved dependencies |
 | CONTENT GATE | Крым + четыре города | facts `MISSING`; index activation запрещена, technical work разрешена |
 | PRODUCTION GATE | Release/cutover | только отдельная release-команда после нового approved plan |

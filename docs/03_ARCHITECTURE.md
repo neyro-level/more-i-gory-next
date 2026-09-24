@@ -272,6 +272,15 @@ Raw HTML запрещён.
 
 ## 7. Routing
 
+- `src/core/routing/grammar/index.ts` — единственный typed target-grammar owner:
+  `RouteIdentity`, `buildUrl()` и `parseUrl()`;
+- builder всегда выдаёт canonical path с trailing slash, parser принимает
+  нормализуемое отсутствие trailing slash, но fail-closed отклоняет query/hash,
+  percent-encoded path, reserved root collision и unsupported depth;
+- old nested GEO IA не входит в canonical grammar; её поведение определяется
+  только `docs/migration/V5_URL_MANIFEST.json`;
+- sitemap, metadata, navigation и breadcrumbs подключают builder в профильных
+  последующих эпиках; новая ручная сборка target canonical запрещена;
 - GEO-first route ownership:
   - `/` — brand/trust;
   - `/investicionnaya-nedvizhimost/` — federal market comparison;

@@ -33,7 +33,7 @@ switches or index activation.
 | `/investicionnaya-nedvizhimost/krym/evpatoriya/` | `/krym/evpatoriya/` | REDIRECT_301 | Same city intent; target-first |
 | `/investicionnaya-nedvizhimost/krym/alushta/` | `/krym/alushta/` | REDIRECT_301 | Same city intent; target-first |
 | `/investicionnaya-nedvizhimost/krym/novostroyki/` | none | NOINDEX_RETAIN | PAGE-024 has no active standalone owner; `/novostroyki/` is a different inventory role |
-| `/investicionnaya-nedvizhimost/krym/apartamenty/` | `/krym/apartamenty/` | REDIRECT_301 | Same region-segment intent; target-first |
+| `/investicionnaya-nedvizhimost/krym/apartamenty/` | none | NOINDEX_RETAIN | Approved grammar has no region-segment identity; it cannot be disguised as CITY |
 | `/investicionnaya-nedvizhimost/arkhyz/` | `/arkhyz/` | REDIRECT_301 | Same intent; target route and registry activation required |
 | `/investicionnaya-nedvizhimost/altay/` | `/altay/` | REDIRECT_301 | Same intent; target route and registry activation required |
 | `/investicionnaya-nedvizhimost/sochi/` | `/sochi/` | NOINDEX_RETAIN | Current stub is preview/noindex; no automatic SEO redirect |
@@ -46,7 +46,7 @@ switches or index activation.
 
 ### Duplicate canonical report
 
-`PASS`: 16 current canonical declarations and 8 redirect targets are unique
+`PASS`: 16 current canonical declarations and 7 redirect targets are unique
 within their route classes. Pattern entries (`/**`) describe separate entity
 namespaces and do not claim a literal shared canonical.
 
@@ -59,8 +59,7 @@ bulk redirect to the home page or `/obekty/`.
 
 - Existing now (6): `/`, federal hub, `/obekty/**`, `/novostroyki/**`,
   `/zastroyshchik/**`, `/analitika/**`.
-- Planned and target-gated: `/krym/**`, `/arkhyz/`, `/altay/` and
-  `/krym/apartamenty/`.
+- Planned and target-gated: `/krym/**`, `/arkhyz/` and `/altay/`.
 - `/sochi/` is a planned target but the current stub remains `NOINDEX_RETAIN`
   until registry/content evidence permits a separate migration decision.
 
