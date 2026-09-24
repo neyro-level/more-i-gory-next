@@ -18,6 +18,7 @@ import {
   minimumFilterableCatalogSize,
   parseCatalogFilterQuery,
 } from "../src/core/catalog/public-catalog.ts";
+import { selectRelatedArticles, selectRelatedProjects } from "../src/core/projects/project-context.ts";
 
 const privateFields = ["unitNumber", "cadastralNumber", "internalComment", "ownerContact"];
 
@@ -170,6 +171,47 @@ test("catalog filters are data-driven, hidden for small inventory and never crea
   assert.equal(hasCatalogQueryState({}), false);
 });
 
+test("project context keeps one global canonical and bounds verified geo relations", () => {
+  const property = (id, region, city, overrides = {}) => ({
+    facts: [{ label: "Документы", value: "Проверены" }],
+    geoContext: {
+      cityOrArea: city ? { id: city, path: `/${region}/${city}/`, slug: city, title: city } : undefined,
+      region: { id: region, path: `/${region}/`, slug: region, title: region },
+    },
+    id,
+    image: { alt: id, height: 100, src: "/images/og/default.webp", width: 100 },
+    path: `/obekty/${id}/`,
+    publishedAt: "2026-09-01T00:00:00.000Z",
+    regionLabel: city ?? region,
+    riskSummary: "Риск",
+    slug: id,
+    sources: [{ label: "Источник" }],
+    status: "active",
+    title: id,
+    verdict: "Тезис",
+    verifiedAt: "2026-09-20T00:00:00.000Z",
+    ...overrides,
+  });
+  const current = property("current", "krym", "yalta");
+  const candidates = [
+    property("same-city", "krym", "yalta"),
+    property("same-region", "krym", "alushta"),
+    property("other-region", "altay", "manzherok"),
+    property("fourth", "krym", "sevastopol"),
+    property("fifth", "krym", "evpatoria"),
+  ];
+
+  assert.deepEqual(selectRelatedProjects(current, candidates).map((item) => item.id), ["same-city", "fifth", "fourth"]);
+  assert.equal(selectRelatedProjects(current, candidates).length, 3);
+  assert.equal(selectRelatedProjects(current, candidates).some((item) => item.path.includes("/krym/")), false);
+
+  const relatedArticles = selectRelatedArticles(current, [
+    { id: "draft", path: "/analitika/draft/", status: "draft", title: "Draft", description: "Draft description for testing only", primaryQuery: "draft", relatedProjectIds: ["current"], relatedRegionIds: [], secondaryQueries: [], slug: "draft", sourceIds: [], targetPageId: "PAGE-017" },
+    { id: "regional", path: "/analitika/regional/", status: "published", title: "Regional", description: "Published regional analysis for testing", primaryQuery: "regional", publishedAt: "2026-09-01", reviewedAt: "2026-09-20", relatedProjectIds: [], relatedRegionIds: ["region-krym"], secondaryQueries: [], slug: "regional", sourceIds: ["source"], targetPageId: "PAGE-017" },
+  ]);
+  assert.deepEqual(relatedArticles.map((article) => article.id), ["regional"]);
+});
+
 test("archived lifecycle serves noindex during retention, unique replacement 308, otherwise gone intent", () => {
   assert.equal(archiveRetentionDays, 60);
   const now = new Date("2026-09-17T00:00:00.000Z");
@@ -248,6 +290,9 @@ test("/obekty routes use Payload properties public gateway, not legacy project J
   assert.match(detailPage, /getArchivedPropertyAction/);
   assert.match(detailPage, /buildPassportPageMetadata/);
   assert.match(detailPage, /passportStructuredData/);
+  assert.match(detailPage, /selectRelatedProjects/);
+  assert.match(detailPage, /selectRelatedArticles/);
+  assert.match(await readFile("src/core/data-access/public/properties-contract.ts", "utf8"), /pageKey:\s*"INVESTMENT_PROJECT"/);
   assert.match(detailPage, /application\/ld\+json/);
   assert.match(detailPage, /materializeSeoHttpState/);
   assert.match(detailPage, /kind === "gone"/);
@@ -260,4 +305,10 @@ test("/obekty routes use Payload properties public gateway, not legacy project J
   assert.doesNotMatch(detailPage, /contentService|getProject/);
   assert.match(template, /Статус: не актуально/);
   assert.match(template, /альтернатив/iu);
+  assert.match(template, /BreadcrumbPage/);
+  assert.match(template, /property\.geoContext\.region\.path/);
+  assert.match(template, /property\.geoContext\.cityOrArea\.path/);
+  assert.match(template, /Источники паспорта/);
+  assert.match(template, /relatedProjects\.length/);
+  assert.match(template, /relatedArticles\.length/);
 });

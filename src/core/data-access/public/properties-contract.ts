@@ -171,6 +171,10 @@ function relationId(value: unknown): string | undefined {
 }
 
 export function mapPublicProperty(property: PublicPropertyRecord): PublicPropertyDTO {
+  if (!property.slug) {
+    throw new Error("Published manual passport requires a slug.");
+  }
+
   return publicPropertySchema.parse({
     budgetNote: property.budgetNote ?? undefined,
     category: property.category ?? undefined,
@@ -182,7 +186,7 @@ export function mapPublicProperty(property: PublicPropertyRecord): PublicPropert
     id: String(property.id),
     image: getImage(property),
     market: property.market,
-    path: `/obekty/${property.slug}/`,
+    path: routeGrammar.buildUrl({ pageKey: "INVESTMENT_PROJECT", projectSlug: property.slug }),
     publishedAt: property.publishedAt,
     regionLabel: getRegionLabel(property),
     riskSummary: property.riskSummary,
@@ -243,7 +247,9 @@ export function getArchivedPropertyAction(
     {
       complexId: property.complexId,
       market: property.market,
-      path: property.path ?? `/obekty/${property.slug ?? ""}/`,
+      path: property.path ?? (property.slug
+        ? routeGrammar.buildUrl({ pageKey: "INVESTMENT_PROJECT", projectSlug: property.slug })
+        : "/obekty/"),
       regionLabel: property.regionLabel ?? "",
       slug: property.slug ?? "",
     },

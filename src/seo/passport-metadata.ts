@@ -11,6 +11,7 @@ export type PassportMetadataFacts = Readonly<{
   status: "active" | "archived";
   title: string;
   verdict: string;
+  verifiedAt?: string;
 }>;
 
 function passportDescription(property: PassportMetadataFacts): string {
@@ -51,6 +52,10 @@ export function passportStructuredData(property: PassportMetadataFacts): Readonl
 
   if (property.image?.src) {
     data.image = new URL(property.image.src, siteUrl).toString();
+  }
+
+  if (property.verifiedAt) {
+    data.dateModified = property.verifiedAt;
   }
 
   if (property.facts.length > 0) {

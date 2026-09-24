@@ -71,6 +71,7 @@ test("manual passport metadata uses facts only: title, description, canonical, r
     status: "active",
     title: "Квартира в Ялте",
     verdict: "Подходит для ручного разбора.",
+    verifiedAt: "2026-09-20T00:00:00.000Z",
   };
 
   const metadata = buildPassportPageMetadata(property);
@@ -86,6 +87,7 @@ test("manual passport metadata uses facts only: title, description, canonical, r
   assert.equal(jsonLd.name, "Квартира в Ялте");
   assert.equal(jsonLd.description, "Подтверждённый инвестиционный тезис по фактам паспорта.");
   assert.deepEqual(jsonLd.additionalProperty, [{ "@type": "PropertyValue", name: "Документы", value: "ЕГРН проверен." }]);
+  assert.equal(jsonLd.dateModified, "2026-09-20T00:00:00.000Z");
   assert.equal("offers" in jsonLd, false);
   assert.equal(JSON.stringify(jsonLd).includes("15 000 000"), false);
 });
