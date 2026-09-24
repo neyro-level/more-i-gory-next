@@ -7,6 +7,7 @@ import type { RegionInternalLink } from "../../../content/regions/region-route-p
 import { composeLegacyRegionPathFromSlugs, composeRegionPathFromSlugs } from "../../../content/regions/region-path-policy.ts";
 import { getMediaAsset } from "../../../content/media/media-assets.ts";
 import { publicRegionSchema, type PublicRegionDTO } from "../../dto/region.ts";
+import { isRegionDiscoverable } from "../../regions/activation.ts";
 import { CANONICAL_MISSING_IMAGE, publicMediaOrFallback } from "./missing-image.ts";
 
 export { publicRegionSchema } from "../../dto/region.ts";
@@ -34,13 +35,14 @@ function mapImage(value: PublicRegionRecord["heroMedia"]) {
 }
 
 export function isGenericPublicRegion(region: PublicRegionDTO | null): region is PublicRegionDTO {
-  return region?.status === "published" && (region.pageKey === "REGION" || region.pageKey === "CITY");
+  return region !== null
+    && isRegionDiscoverable(region.status)
+    && (region.pageKey === "REGION" || region.pageKey === "CITY");
 }
 
 export function getPublicRegionStaticParams(regions: readonly PublicRegionDTO[]) {
   return regions
     .filter(isGenericPublicRegion)
-    .filter((region) => region.slug !== "sochi")
     .map((region) => ({
       path: region.path.replace(/^\//, "").replace(/\/$/, "").split("/"),
     }));
@@ -124,6 +126,10 @@ export function mapPublicRegions(records: readonly PublicRegionRecord[]): readon
 }
 
 export function listFallbackPublicRegions(): readonly PublicRegionDTO[] {
+  return listFallbackRoutableRegions().filter(isGenericPublicRegion);
+}
+
+export function listFallbackRoutableRegions(): readonly PublicRegionDTO[] {
   const plan = getRegionRoutePlan();
   const byKey = new Map(plan.map((entry) => [entry.key, entry]));
 
@@ -149,7 +155,7 @@ export function listFallbackPublicRegions(): readonly PublicRegionDTO[] {
         title: content.title,
       });
     })
-    .filter(isGenericPublicRegion);
+    .filter((region) => region.pageKey === "REGION" || region.pageKey === "CITY");
 }
 
 const approvedRegionCrossLinks: readonly RegionInternalLink[] = [
@@ -158,7 +164,7 @@ const approvedRegionCrossLinks: readonly RegionInternalLink[] = [
 ];
 
 function visiblePublicRegions(regions: readonly PublicRegionDTO[]): readonly PublicRegionDTO[] {
-  return regions.filter((region) => isGenericPublicRegion(region) && region.slug !== "sochi");
+  return regions.filter(isGenericPublicRegion);
 }
 
 export function getPublicRegionRelatedLinks(

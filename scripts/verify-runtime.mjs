@@ -19,9 +19,15 @@ const urlMigrationManifest = readJson("docs/migration/V5_URL_MANIFEST.json");
 const { articles } = await import("../src/content/articles/articles.ts");
 const { regionSeedContent } = await import("../src/content/regions/region-seed-content.ts");
 const { getRegionRoutePlan } = await import("../src/content/regions/region-route-plan.ts");
+const { resolveRegionActivation } = await import("../src/core/regions/activation.ts");
 const unpublishedGenericRegionPaths = new Set(
   getRegionRoutePlan()
-    .filter((entry) => entry.key !== "sochi" && regionSeedContent[entry.key]?.status !== "published")
+    .filter((entry) => resolveRegionActivation(regionSeedContent[entry.key]?.status) === "PREPARED_OFF")
+    .map((entry) => entry.path),
+);
+const stubGenericRegionPaths = new Set(
+  getRegionRoutePlan()
+    .filter((entry) => resolveRegionActivation(regionSeedContent[entry.key]?.status) === "STUB_NO_INDEX")
     .map((entry) => entry.path),
 );
 const inactiveGeoRedirects = urlMigrationManifest.entries.filter(
@@ -170,6 +176,11 @@ try {
       );
     }
     assert(!sitemap.body.includes(`<loc>${new URL(pathname, siteUrl).toString()}</loc>`), `Hidden region leaked into sitemap: ${pathname}`);
+  }
+  for (const pathname of stubGenericRegionPaths) {
+    const region = await fetchRoute(pathname, 200);
+    assert(/name="robots" content="noindex, follow"/.test(region.body), `Stub region must remain noindex: ${pathname}`);
+    assert(!sitemap.body.includes(`<loc>${new URL(pathname, siteUrl).toString()}</loc>`), `Stub region leaked into sitemap: ${pathname}`);
   }
   for (const entry of inactiveGeoRedirects) {
     const legacy = await fetchRoute(entry.currentCanonical, stagingContour ? 308 : 404);

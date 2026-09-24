@@ -5,6 +5,7 @@ import test from "node:test";
 import { composeRegionPathFromSlugs } from "../src/content/regions/region-path-policy.ts";
 import { findRegionRouteBySegments, getRegionRoutePath, getRegionRoutePlan, regionRouteEntries } from "../src/content/regions/region-route-plan.ts";
 import { composePublicRegionPath, getPublicRegionStaticParams, isGenericPublicRegion } from "../src/core/data-access/public/regions-contract.ts";
+import { isRegionPublicRoute, resolveRegionActivation } from "../src/core/regions/activation.ts";
 
 const seoRegistry = JSON.parse(readFileSync("src/seo/registry.json", "utf8"));
 const urlMigrationManifest = JSON.parse(readFileSync("docs/migration/V5_URL_MANIFEST.json", "utf8"));
@@ -57,6 +58,24 @@ test("generic region route accepts only published entities", () => {
   assert.equal(isGenericPublicRegion({ ...baseRegion, status: "hidden" }), false);
   assert.equal(isGenericPublicRegion({ ...baseRegion, status: "stub" }), false);
   assert.equal(isGenericPublicRegion(null), false);
+});
+
+test("future geo activation is status-driven for every approved region", () => {
+  assert.equal(resolveRegionActivation("published"), "ACTIVE");
+  assert.equal(resolveRegionActivation("stub"), "STUB_NO_INDEX");
+  assert.equal(resolveRegionActivation("hidden"), "PREPARED_OFF");
+  assert.equal(isRegionPublicRoute("published"), true);
+  assert.equal(isRegionPublicRoute("stub"), true);
+  assert.equal(isRegionPublicRoute("hidden"), false);
+
+  const plan = getRegionRoutePlan();
+  assert.deepEqual(
+    ["arkhyz", "altay", "sochi"].map((key) => plan.find((entry) => entry.key === key)?.path),
+    ["/arkhyz/", "/altay/", "/sochi/"],
+  );
+  const routeSources = ["arkhyz", "altay", "sochi"].map((slug) => readFileSync(`src/app/(site)/${slug}/page.tsx`, "utf8"));
+  assert.equal(routeSources.every((source) => /RegionRoutePage path=/.test(source)), true);
+  assert.equal(routeSources.every((source) => /getRegionRouteMetadata/.test(source)), true);
 });
 
 test("static params contain published regions only", () => {
@@ -118,6 +137,8 @@ test("runtime verification exposes unpublished regions only on the noindex stagi
   const source = readFileSync("scripts/verify-runtime.mjs", "utf8");
 
   assert.match(source, /unpublishedGenericRegionPaths/);
+  assert.match(source, /stubGenericRegionPaths/);
+  assert.match(source, /resolveRegionActivation/);
   assert.match(source, /V5_URL_MANIFEST\.json/);
   assert.match(source, /inactiveGeoRedirects/);
   assert.match(source, /entry\.migrationAction === "REDIRECT_301"/);
@@ -125,6 +146,7 @@ test("runtime verification exposes unpublished regions only on the noindex stagi
   assert.match(source, /fetchRoute\(entry\.currentCanonical, stagingContour \? 308 : 404\)/);
   assert.match(source, /Preview-only region must remain noindex/);
   assert.match(source, /Hidden region leaked into sitemap/);
+  assert.match(source, /Stub region must remain noindex/);
 });
 
 test("normalized geo route plan delegates canonicals to the shared builder", () => {
@@ -132,6 +154,7 @@ test("normalized geo route plan delegates canonicals to the shared builder", () 
   const plan = getRegionRoutePlan();
 
   assert.equal(/path:\s*["']\/investicionnaya-nedvizhimost/.test(source), false);
+  assert.doesNotMatch(source, /key !== "sochi"|slug !== "sochi"/);
   assert.equal(plan.find((entry) => entry.key === "krym")?.path, "/krym/");
   assert.equal(plan.find((entry) => entry.key === "yalta")?.path, "/krym/yalta/");
   assert.equal(plan.find((entry) => entry.key === "krym-apartamenty")?.path, "/investicionnaya-nedvizhimost/krym/apartamenty/");

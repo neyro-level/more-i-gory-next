@@ -41,10 +41,10 @@
 | `src/core/data-access/public/properties.ts:32` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/properties.ts:51` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/properties.ts:52` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/public/regions.ts:30` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/regions.ts:31` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
-| `src/core/data-access/public/regions.ts:54` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
-| `src/core/data-access/public/regions.ts:55` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/regions.ts:31` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/regions.ts:32` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
+| `src/core/data-access/public/regions.ts:55` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
+| `src/core/data-access/public/regions.ts:56` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/site-chrome.ts:18` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/site-chrome.ts:20` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "site-settings", depth: 0, overrideAccess: false, select: publicSiteSettingsSelect }),` |
 | `src/core/data-access/public/site-chrome.ts:21` | `findGlobal` | PUBLIC GATEWAY | `payload.findGlobal({ slug: "navigation", depth: 0, overrideAccess: false, select: publicNavigationSelect }),` |

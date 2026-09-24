@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { mapPublicRegions, listFallbackPublicRegions } from "../src/core/data-access/public/regions-contract.ts";
+import { mapPublicRegions, listFallbackPublicRegions, listFallbackRoutableRegions } from "../src/core/data-access/public/regions-contract.ts";
 
 test("public region mapper uses CMS title, lead, thesis, risks, media, status and parent hierarchy", () => {
   const mapped = mapPublicRegions([
@@ -71,6 +71,13 @@ test("generic fallback exposes only published regions", () => {
   assert.equal(fallback.every((region) => region.status === "published"), true);
   assert.equal(fallback.some((region) => region.status === "hidden"), false);
   assert.equal(fallback.some((region) => region.status === "stub"), false);
+});
+
+test("routable fallback retains every activation state without changing route code", () => {
+  const fallback = listFallbackRoutableRegions();
+  assert.equal(fallback.find((region) => region.path === "/arkhyz/")?.status, "hidden");
+  assert.equal(fallback.find((region) => region.path === "/altay/")?.status, "hidden");
+  assert.equal(fallback.find((region) => region.path === "/sochi/")?.status, "stub");
 });
 
 test("regions Public Gateway applies the publication predicate in the Payload query", () => {

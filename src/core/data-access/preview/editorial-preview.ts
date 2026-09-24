@@ -10,6 +10,7 @@ import {
 } from "../../../content/regions/region-route-plan.ts";
 import { resolveRuntimeContour } from "../../../project/runtime-contour.ts";
 import { publicRegionSchema, type PublicRegionDTO } from "../../dto/region.ts";
+import { isRegionPreviewRoute } from "../../regions/activation.ts";
 import type { EditorialPreviewNavigationGroup, SiteNavigationLink } from "../../dto/site-chrome.ts";
 import { CANONICAL_MISSING_IMAGE, publicMediaOrFallback } from "../public/missing-image.ts";
 
@@ -67,7 +68,7 @@ export function isEditorialPreviewRegion(region: PublicRegionDTO | null): region
 
 export function getEditorialPreviewRegionStaticParams(source: NodeJS.ProcessEnv = process.env) {
   return listEditorialPreviewRegions(source)
-    .filter((region) => region.slug !== "sochi")
+    .filter((region) => isRegionPreviewRoute(region.status))
     .map((region) => ({
       path: region.path.replace(/^\//, "").replace(/\/$/, "").split("/"),
     }));
@@ -81,7 +82,12 @@ export function getEditorialPreviewRegionRelatedLinks(region: PublicRegionDTO): 
   const titles = Object.fromEntries(
     plan.map((candidate) => [candidate.key, regionSeedContent[candidate.key].title]),
   );
-  return getRegionRelatedLinks(entry, titles);
+  const includedKeys = new Set(
+    plan
+      .filter((candidate) => isRegionPreviewRoute(regionSeedContent[candidate.key].status))
+      .map((candidate) => candidate.key),
+  );
+  return getRegionRelatedLinks(entry, titles, includedKeys);
 }
 
 export function getEditorialPreviewNavigation(

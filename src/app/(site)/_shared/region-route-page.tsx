@@ -23,19 +23,20 @@ import {
 } from "@/core/data-access/preview/editorial-preview";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
+import { isRegionPublicRoute } from "@/core/regions/activation";
 
 export const getRegionRouteModel = cache(async (path: string): Promise<PublicRegionDTO | null> =>
   getEditorialPreviewRegionByPath(path) ?? await getRoutableRegionByPath(path));
 
 export function isVisibleRegionRoute(region: PublicRegionDTO | null): region is PublicRegionDTO {
   return region !== null
-    && (region.id.startsWith("editorial-preview:") || region.status === "published" || region.status === "stub");
+    && (region.id.startsWith("editorial-preview:") || isRegionPublicRoute(region.status));
 }
 
 export async function getRegionRouteMetadata(path: string): Promise<Metadata> {
   const region = await getRegionRouteModel(path);
   if (!isVisibleRegionRoute(region)) return {};
-  return getStaticMetadata(region.pageId);
+  return getStaticMetadata(region.pageId, { technical: region.status !== "published" });
 }
 
 export async function RegionRoutePage({ path }: Readonly<{ path: string }>) {

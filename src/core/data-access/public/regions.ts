@@ -8,6 +8,7 @@ import { isPublicReadOperationalError, publicReadOrThrow } from "./read-fallback
 import {
   isGenericPublicRegion,
   listFallbackPublicRegions,
+  listFallbackRoutableRegions,
   mapPublicRegions,
   publicRegionSelect,
   type PublicRegionDTO,
@@ -89,13 +90,17 @@ export async function getPublicRegionByPath(path: string): Promise<PublicRegionD
 }
 
 export async function getRoutableRegionByPath(path: string): Promise<PublicRegionDTO | null> {
-  const regions = await getCachedRoutableRegions();
+  let regions: readonly PublicRegionDTO[];
+  try {
+    regions = await getCachedRoutableRegions();
+  } catch (error) {
+    if (!isPublicReadOperationalError(error)) throw error;
+    regions = listFallbackRoutableRegions();
+  }
   return regions.find((region) => region.path === path) ?? null;
 }
 
 export async function listPublicHubRegions(): Promise<readonly PublicRegionDTO[]> {
   const regions = await listPublicRegions();
-  return regions.filter(
-    (region) => region.status === "published" && region.slug !== "sochi" && isGenericPublicRegion(region),
-  );
+  return regions.filter(isGenericPublicRegion);
 }

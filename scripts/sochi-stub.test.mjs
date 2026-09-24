@@ -36,13 +36,14 @@ test("Sochi stub page renders honest copy and CTA", () => {
   assert.match(target, /RegionRoutePage path="\/sochi\/"/);
 });
 
-test("CMS-backed hub and target route keep Sochi as a dedicated noindex stub without a child cluster", () => {
+test("CMS-backed hub and target route resolve Sochi stub by status without slug exceptions", () => {
   const hubReader = readFileSync("src/core/data-access/public/regions.ts", "utf8");
   assert.match(hubReader, /status === "published"/);
-  assert.match(hubReader, /slug !== "sochi"/);
+  assert.doesNotMatch(hubReader, /slug !== "sochi"/);
 
   const template = readFileSync("src/app/(site)/_shared/region-route-page.tsx", "utf8");
-  assert.match(template, /region\.status === "stub"/);
+  assert.match(template, /isRegionPublicRoute/);
+  assert.match(template, /technical: region\.status !== "published"/);
 
   const seed = readFileSync("src/content/regions/region-seed-content.ts", "utf8");
   assert.match(seed, /status: "stub"/);

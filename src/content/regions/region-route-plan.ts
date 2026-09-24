@@ -46,16 +46,17 @@ export function getRegionRoutePlan() {
   return regionRouteEntries.map((entry) => ({ ...entry, path: getRegionRoutePath(entry) }));
 }
 
-export function getRegionHubPlan() {
-  return getRegionRoutePlan().filter((entry) => entry.key !== "sochi");
+export function getRegionHubPlan(includedKeys: ReadonlySet<string>) {
+  return getRegionRoutePlan().filter((entry) => includedKeys.has(entry.key));
 }
 
 export function getRegionRelatedLinks(
   entry: RegionRouteEntry,
   titles: Readonly<Record<string, string>> = {},
+  includedKeys: ReadonlySet<string> = new Set(regionRouteEntries.map((candidate) => candidate.key)),
 ): RegionInternalLink[] {
   const routePlan = getRegionRoutePlan();
-  const visibleEntries = routePlan.filter((candidate) => candidate.key !== "sochi");
+  const visibleEntries = routePlan.filter((candidate) => includedKeys.has(candidate.key));
   const links: RegionInternalLink[] = [];
   const labelFor = (candidate: { key: string; slug: string }) => titles[candidate.key] ?? candidate.slug;
 

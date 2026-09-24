@@ -71,7 +71,8 @@ test("final public gateway, hub and geo template retain the publication contract
   assert.match(gateway, /export async function listPublicRegions/);
   assert.match(gateway, /where:\s*\{\s*status:\s*\{\s*equals:\s*"published"/s);
   assert.match(gateway, /listPublicHubRegions/);
-  assert.match(gateway, /region\.status === "published" && region\.slug !== "sochi"/);
+  assert.match(gateway, /regions\.filter\(isGenericPublicRegion\)/);
+  assert.doesNotMatch(gateway, /slug !== "sochi"/);
   assert.match(route, /getRoutableRegionByPath/);
   assert.match(route, /isVisibleRegionRoute/);
   assert.match(route, /getPublicRegionRelatedLinks/);
