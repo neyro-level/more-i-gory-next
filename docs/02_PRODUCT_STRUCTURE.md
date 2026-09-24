@@ -12,9 +12,9 @@
 ```text
 /
 ├── investicionnaya-nedvizhimost/
-│   ├── arkhyz/
-│   ├── altay/
-│   └── sochi/                 # stub: 200, noindex, вне sitemap/navigation
+├── arkhyz/                    # future region; registry/Gate
+├── altay/                     # future region; registry/Gate
+├── sochi/                     # future stub: noindex, вне sitemap/navigation
 ├── krym/
 │   ├── yalta/
 │   ├── sevastopol/
@@ -158,7 +158,7 @@ local/staging preview она остаётся доступным владель�
 
 ### PAGE-003 — Сочи
 
-- **URL:** `/investicionnaya-nedvizhimost/sochi/`
+- **URL:** `/sochi/`
 - **Status:** `stub`.
 - **Primary Intent:** честно сообщить, что регион находится в проработке.
 - **H1:** `Недвижимость Сочи — регион в проработке`.
@@ -297,7 +297,7 @@ local/staging preview она остаётся доступным владель�
 
 ### PAGE-012 — Архыз
 
-- **URL:** `/investicionnaya-nedvizhimost/arkhyz/`
+- **URL:** `/arkhyz/`
 - **Primary Intent:** купить апартаменты или недвижимость в Архызе.
 - **Secondary Intent:** оценить новостройки, курортное развитие и управление.
 - **H1:** `Купить апартаменты в Архызе для инвестиций`
@@ -313,7 +313,7 @@ local/staging preview она остаётся доступным владель�
 
 ### PAGE-013 — Алтай
 
-- **URL:** `/investicionnaya-nedvizhimost/altay/`
+- **URL:** `/altay/`
 - **Primary Intent:** купить недвижимость или апартаменты на Алтае.
 - **Secondary Intent:** оценить Манжерок, курортные проекты и управление.
 - **H1:** `Купить недвижимость на Алтае для инвестиций`
@@ -571,14 +571,14 @@ Content Gate. Первый экран сам по себе не разрешае
 |---|---|---|---|---|---|---|---|---|
 | PAGE-001 | недвижимость для инвестиций | курортная недвижимость для инвестиций | Недвижимость для инвестиций — курортные проекты \| Море и Горы | Недвижимость для инвестиций в Крыму, Архызе и на Алтае: сравниваем проекты, экономику, риски и сценарии выхода. | `/` | gate | gate | P1 |
 | PAGE-002 | инвестиции в курортную недвижимость | инвестиционная недвижимость на курортах России | Инвестиции в курортную недвижимость России \| Море и Горы | Инвестиции в курортную недвижимость: сравниваем Крым, Архыз и Алтай по бюджету, управлению, рискам и сценарию выхода. | `/investicionnaya-nedvizhimost/` | gate | gate | P1 |
-| PAGE-003 | недвижимость Сочи | регион в проработке | Недвижимость Сочи — регион в проработке \| Море и Горы | Регион Сочи находится в проработке. Можно оставить задачу для персонального инвестиционного разбора. | `/investicionnaya-nedvizhimost/sochi/` | noindex | no | — |
+| PAGE-003 | недвижимость Сочи | регион в проработке | Недвижимость Сочи — регион в проработке \| Море и Горы | Регион Сочи находится в проработке. Можно оставить задачу для персонального инвестиционного разбора. | `/sochi/` | noindex | no | — |
 | PAGE-007 | купить недвижимость в Крыму | недвижимость Крыма для инвестиций | Купить недвижимость в Крыму для инвестиций \| Море и Горы | Купить недвижимость в Крыму для инвестиций: сравниваем города, проекты, правовые особенности, управление, риски и выход. | `/krym/` | gate | gate | P1 |
 | PAGE-008 | купить квартиру в Ялте | недвижимость Ялты для инвестиций | Купить квартиру в Ялте для инвестиций \| Море и Горы | Купить квартиру в Ялте для инвестиций: сравним районы, форматы, бюджет, сезонность, ограничения и сценарии выхода. | `/krym/yalta/` | gate | gate | P1 |
 | PAGE-009 | купить квартиру в Севастополе | недвижимость Севастополя для инвестиций | Купить квартиру в Севастополе для инвестиций \| Море и Горы | Купить квартиру в Севастополе для инвестиций: оценим районы, бюджет, спрос, правовые ограничения, риски и ликвидность. | `/krym/sevastopol/` | gate | gate | P1 |
 | PAGE-010 | купить квартиру в Евпатории | недвижимость Евпатории для инвестиций | Купить квартиру в Евпатории для инвестиций \| Море и Горы | Купить квартиру в Евпатории для инвестиций: сравним курортные форматы, бюджет, сезонность, управление и риски проекта. | `/krym/evpatoriya/` | gate | gate | P2 |
 | PAGE-011 | купить квартиру в Алуште | недвижимость Алушты для инвестиций | Купить квартиру в Алуште для инвестиций \| Море и Горы | Купить квартиру в Алуште для инвестиций: разберём локации, проекты, бюджет входа, сезонность, ограничения и выход. | `/krym/alushta/` | gate | gate | P2 |
-| PAGE-012 | купить апартаменты в Архызе | недвижимость Архыза для инвестиций | Купить апартаменты в Архызе для инвестиций \| Море и Горы | Купить апартаменты в Архызе для инвестиций: оценим сезонность, оператора, этап проекта, бюджет, риски и сценарий выхода. | `/investicionnaya-nedvizhimost/arkhyz/` | gate | gate | P2 |
-| PAGE-013 | купить недвижимость на Алтае | недвижимость Алтая для инвестиций | Купить недвижимость на Алтае для инвестиций \| Море и Горы | Купить недвижимость на Алтае для инвестиций: сравним локации, форматы, управление, бюджет, инфраструктурные риски и выход. | `/investicionnaya-nedvizhimost/altay/` | gate | gate | P2 |
+| PAGE-012 | купить апартаменты в Архызе | недвижимость Архыза для инвестиций | Купить апартаменты в Архызе для инвестиций \| Море и Горы | Купить апартаменты в Архызе для инвестиций: оценим сезонность, оператора, этап проекта, бюджет, риски и сценарий выхода. | `/arkhyz/` | gate | gate | P2 |
+| PAGE-013 | купить недвижимость на Алтае | недвижимость Алтая для инвестиций | Купить недвижимость на Алтае для инвестиций \| Море и Горы | Купить недвижимость на Алтае для инвестиций: сравним локации, форматы, управление, бюджет, инфраструктурные риски и выход. | `/altay/` | gate | gate | P2 |
 | PAGE-024 | legacy: новостройки Крыма | migration candidate | Новостройки Крыма для инвестиций \| Море и Горы | Историческая концепция без активного standalone intent owner; решение принимает URL manifest. | `/investicionnaya-nedvizhimost/krym/novostroyki/` | noindex | no | — |
 | PAGE-025 | апартаменты Крыма | купить апартаменты в Крыму | Апартаменты Крыма для инвестиций \| Море и Горы | Апартаменты Крыма для инвестиций: сравниваем города, управление, расходы, сезонность, ограничения и риски. | `/krym/apartamenty/` | gate | gate | P2 |
 | PAGE-026 | новостройки Крыма каталог | жилые комплексы Крыма | Новостройки Крыма каталог ЖК \| Море и Горы | Каталог опубликованных жилых комплексов Крыма: застройщик, корпуса, планировки, доступный inventory, риски и следующий шаг. | `/novostroyki/` | gate | gate | P1 |
@@ -621,7 +621,7 @@ Index:
 - `/kontakty/`.
 
 Noindex / exclude from sitemap:
-- `/investicionnaya-nedvizhimost/sochi/` при `status=stub`;
+- `/sochi/` при `status=stub`;
 - filter states;
 - sort states;
 - draft content;
@@ -693,13 +693,16 @@ candidates с действием `REVIEW`:
 
 | Current path | Target candidate | Current decision |
 |---|---|---|
-| `/investicionnaya-nedvizhimost/krym/` | `/krym/` | REVIEW |
-| `/investicionnaya-nedvizhimost/krym/yalta/` | `/krym/yalta/` | REVIEW |
-| `/investicionnaya-nedvizhimost/krym/sevastopol/` | `/krym/sevastopol/` | REVIEW |
-| `/investicionnaya-nedvizhimost/krym/evpatoriya/` | `/krym/evpatoriya/` | REVIEW |
-| `/investicionnaya-nedvizhimost/krym/alushta/` | `/krym/alushta/` | REVIEW |
-| `/investicionnaya-nedvizhimost/krym/novostroyki/` | не назначен | REVIEW |
-| `/investicionnaya-nedvizhimost/krym/apartamenty/` | `/krym/apartamenty/` | REVIEW |
+| `/investicionnaya-nedvizhimost/krym/` | `/krym/` | REDIRECT_301 after target proof |
+| `/investicionnaya-nedvizhimost/krym/yalta/` | `/krym/yalta/` | REDIRECT_301 after target proof |
+| `/investicionnaya-nedvizhimost/krym/sevastopol/` | `/krym/sevastopol/` | REDIRECT_301 after target proof |
+| `/investicionnaya-nedvizhimost/krym/evpatoriya/` | `/krym/evpatoriya/` | REDIRECT_301 after target proof |
+| `/investicionnaya-nedvizhimost/krym/alushta/` | `/krym/alushta/` | REDIRECT_301 after target proof |
+| `/investicionnaya-nedvizhimost/krym/novostroyki/` | не назначен | NOINDEX_RETAIN |
+| `/investicionnaya-nedvizhimost/krym/apartamenty/` | `/krym/apartamenty/` | REDIRECT_301 after target proof |
+| `/investicionnaya-nedvizhimost/arkhyz/` | `/arkhyz/` | REDIRECT_301 after target proof |
+| `/investicionnaya-nedvizhimost/altay/` | `/altay/` | REDIRECT_301 after target proof |
+| `/investicionnaya-nedvizhimost/sochi/` | `/sochi/` | NOINDEX_RETAIN |
 
 Ни один redirect, removal, canonical switch или index activation не выполняется
 в этом архитектурном эпике. EPIC 70 фиксирует evidence и выбирает `KEEP`,

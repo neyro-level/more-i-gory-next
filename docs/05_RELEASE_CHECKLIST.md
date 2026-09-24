@@ -53,7 +53,7 @@ graph. При `MISSING` facts техническая работа продолж
   Product Structure и ADR;
 - [x] PAGE-024 переведён в legacy migration candidate, а `/novostroyki/` не
   объявлен replacement для `/obekty/`;
-- [ ] current/legacy URL manifest принял решение по каждому migration candidate;
+- [x] current/legacy URL manifest принял решение по каждому migration candidate;
 - [ ] runtime routes, canonical, robots и sitemap соответствуют target tree;
 - [ ] сильные утверждения подтверждены;
 - [ ] реальные проекты имеют sources и `verifiedAt`;

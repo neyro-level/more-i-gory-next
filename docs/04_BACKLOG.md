@@ -10,8 +10,8 @@
 Current execution source —
 `AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md` v1 APPROVED,
 Task Manager prefix `mggeo`. EPIC 68 смержен PR 111 и зафиксировал exact
-baseline. EPIC 69 замораживает GEO-first IA, intent ownership и ADR до
-изменения runtime routes.
+baseline. EPIC 69 смержен PR 112 и заморозил GEO-first IA. EPIC 70 фиксирует
+evidence-based решения по каждому current/legacy URL до изменения runtime routes.
 
 Публичный сайт читает Payload через Public Gateway и DTO. Business facts по
 Крыму и четырём городам остаются `MISSING`: технический graph выполняется, но
@@ -116,7 +116,8 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 | DONE | EPIC 60–66 | Next `16.3.6`, Payload `3.90.1`, runtime/security/ingest/leads/repository/delivery hardening смержены |
 | DONE | EPIC 67 | Plan №4 final verification и preview evidence закрыты |
 | DONE | EPIC 68 | baseline, route/SEO inventory и factual preflight; PR 111 |
-| NOW | EPIC 69 | GEO-first IA, intent ownership и четыре ADR |
+| DONE | EPIC 69 | GEO-first IA, intent ownership и четыре ADR; PR 112 |
+| NOW | EPIC 70 | current/legacy URL manifest, migration decisions и три детерминированных отчёта |
 | NEXT | EPIC 70–86 | URL manifest, route identity, SEO state, GEO pages, project passports и final proof по approved dependencies |
 | CONTENT GATE | Крым + четыре города | facts `MISSING`; index activation запрещена, technical work разрешена |
 | PRODUCTION GATE | Release/cutover | только отдельная release-команда после нового approved plan |

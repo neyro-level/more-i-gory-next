@@ -64,6 +64,7 @@ UI_CORE=AMS UI Core 5.0
 | История | [`MORE_I_GORY_PLAN_№ 3.md`](MORE_I_GORY_PLAN_№%203.md), [`More-i-gory-plan №2.md`](More-i-gory-plan%20№2.md) и `task-manager-inventory.v6.json`; новые задачи из них не создаются |
 | Указатель волны | [`DELIVERY_STATE.yaml`](DELIVERY_STATE.yaml) |
 | Baseline EPIC 68 | [`remediation/CURRENT_STATE_V5.md`](remediation/CURRENT_STATE_V5.md) |
+| URL migration evidence EPIC 70 | [`migration/V5_URL_MANIFEST.json`](migration/V5_URL_MANIFEST.json) и [`migration/V5_URL_DECISIONS.md`](migration/V5_URL_DECISIONS.md) |
 
 Нельзя описывать текущий `main` как «до Payload» или как состояние после EPIC 12.
 
