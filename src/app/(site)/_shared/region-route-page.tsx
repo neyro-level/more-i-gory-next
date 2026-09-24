@@ -8,11 +8,13 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { PageHero } from "@/components/marketing/page-hero";
 import { RiskBlock } from "@/components/marketing/risk-block";
+import { CrimeaRegionHub } from "@/components/templates/crimea-region-hub";
 import { ActionLink } from "@/components/navigation/action-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   getPublicRegionRelatedLinks,
   getRoutableRegionByPath,
+  listPublishedManualProperties,
   listPublicRegions,
   type PublicRegionDTO,
 } from "@/core/data-access/public";
@@ -20,6 +22,7 @@ import {
   getEditorialPreviewRegionByPath,
   getEditorialPreviewRegionRelatedLinks,
   isEditorialPreviewRegion,
+  listEditorialPreviewRegions,
 } from "@/core/data-access/preview/editorial-preview";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
@@ -44,9 +47,17 @@ export async function RegionRoutePage({ path }: Readonly<{ path: string }>) {
   if (!isVisibleRegionRoute(region)) notFound();
 
   const seo = getSeoEntry(region.pageId);
-  const relatedLinks = isEditorialPreviewRegion(region)
+  const isPreview = isEditorialPreviewRegion(region);
+  const regions = isPreview ? listEditorialPreviewRegions() : await listPublicRegions();
+
+  if (region.path === "/krym/" && region.kind === "region") {
+    const projects = isPreview ? [] : await listPublishedManualProperties();
+    return <CrimeaRegionHub projects={projects} region={region} regions={regions} title={seo.h1} />;
+  }
+
+  const relatedLinks = isPreview
     ? getEditorialPreviewRegionRelatedLinks(region)
-    : getPublicRegionRelatedLinks(region, await listPublicRegions());
+    : getPublicRegionRelatedLinks(region, regions);
 
   return (
     <main>
