@@ -47,8 +47,8 @@ export function getSeedPlan() {
   });
 }
 
-async function seed() {
-  const dryRun = process.argv.includes("--dry-run");
+export async function runMediaSeed(options = {}) {
+  const dryRun = options.dryRun ?? process.argv.includes("--dry-run");
   const plan = getSeedPlan();
 
   if (plan.length !== 4) {
@@ -74,5 +74,5 @@ async function seed() {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  await seed();
+  await runMediaSeed();
 }

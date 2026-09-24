@@ -284,7 +284,8 @@ test("CMS mutations map to CacheInvalidator targets after commit", () => {
   ]);
   assert.ok(cmsMutationCacheTargets("pages", { slug: "privacy" }).some((target) => target.kind === "tag" && target.tag === "page:privacy"));
   assert.ok(cmsMutationCacheTargets("properties", { slug: "sample-resort" }).some((target) => target.kind === "tag" && target.tag === "properties"));
-  assert.ok(cmsMutationCacheTargets("regions", { parent: { slug: "krym" }, slug: "yalta" }).some((target) => target.kind === "path" && target.path === "/krym/yalta/"));
+  assert.ok(cmsMutationCacheTargets("regions", { pageKey: "CITY", parent: { slug: "krym" }, slug: "yalta" }).some((target) => target.kind === "path" && target.path === "/krym/yalta/"));
+  assert.ok(cmsMutationCacheTargets("regions", { parent: { slug: "krym" }, slug: "novostroyki" }).some((target) => target.kind === "path" && target.path === "/investicionnaya-nedvizhimost/krym/novostroyki/"));
   assert.ok(cmsMutationCacheTargets("residential-complexes", { slug: "sample-complex" }).some((target) => target.kind === "tag" && target.tag === "complex:sample-complex"));
   assert.ok(cmsMutationCacheTargets("developers", { slug: "sample-developer" }).some((target) => target.kind === "path" && target.path === "/zastroyshchik/sample-developer/"));
   assert.ok(cmsMutationCacheTargets("redirects").some((target) => target.kind === "tag" && target.tag === "redirects"));

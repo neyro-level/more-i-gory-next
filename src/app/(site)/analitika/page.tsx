@@ -6,14 +6,14 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { articles } from "@/content/articles/articles";
 import { ArticleCard } from "@/components/marketing/article-card";
 import { CmsPage } from "@/components/page-blocks/cms-page";
-import { getCmsPageByPath } from "@/core/data-access/public";
+import { getCmsPageEnhancementByPath } from "@/core/data-access/public";
 import { ActionLink } from "@/components/navigation/action-link";
 import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
 
 const pagePath = "/analitika/";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = isEditorialPreviewEnabled() ? null : await getCmsPageByPath(pagePath);
+  const page = isEditorialPreviewEnabled() ? null : await getCmsPageEnhancementByPath(pagePath);
   if (page?.seo?.title && page.seo.description) {
     return buildCmsPageMetadata(page);
   }
@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AnalyticsPage() {
-  const page = isEditorialPreviewEnabled() ? null : await getCmsPageByPath(pagePath);
+  const page = isEditorialPreviewEnabled() ? null : await getCmsPageEnhancementByPath(pagePath);
   if (page) return <CmsPage page={page} />;
 
   const seo = getSeoEntry("PAGE-016");

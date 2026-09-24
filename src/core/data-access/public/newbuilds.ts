@@ -8,7 +8,7 @@ import { z } from "zod";
 import config from "../../../../payload.config.ts";
 import { publicMediaSchema } from "./media-contract.ts";
 import { publicMediaOrFallback } from "./missing-image.ts";
-import { publicReadWithFallback } from "./read-fallback.ts";
+import { publicReadOrThrow } from "./read-fallback.ts";
 import type { Developer, Media, Property, Region, ResidentialComplex } from "../../../payload-types.ts";
 
 const publicEntitySeoSchema = z.object({
@@ -190,8 +190,7 @@ function mapPublicNewbuildInventory(property: PublicNewbuildInventoryRecord): Pu
 }
 
 async function readPublishedComplexes(slug?: string): Promise<readonly PublicComplexDTO[]> {
-  return publicReadWithFallback({
-    fallback: [],
+  return publicReadOrThrow({
     reader: "published-complexes",
     read: async () => {
       const payload = await getPayload({ config });
@@ -211,8 +210,7 @@ async function readPublishedComplexes(slug?: string): Promise<readonly PublicCom
 }
 
 async function readPublishedDevelopers(slug?: string): Promise<readonly PublicDeveloperDTO[]> {
-  return publicReadWithFallback({
-    fallback: [],
+  return publicReadOrThrow({
     reader: "published-developers",
     read: async () => {
       const payload = await getPayload({ config });
@@ -276,8 +274,7 @@ export const listPublishedDeveloperSlugs = unstable_cache(
 );
 
 export async function listActiveNewbuildInventoryByComplex(complexId: string): Promise<readonly PublicNewbuildInventoryDTO[]> {
-  return publicReadWithFallback({
-    fallback: [],
+  return publicReadOrThrow({
     reader: "active-newbuild-inventory",
     read: async () => {
       const payload = await getPayload({ config });

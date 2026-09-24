@@ -5,7 +5,7 @@ import { getPayload } from "payload";
 
 import config from "../../../../payload.config.ts";
 import { sitemapPageSchema, type SitemapPageDTO } from "../../dto/sitemap-page.ts";
-import { publicReadWithFallback } from "./read-fallback.ts";
+import { publicReadOrThrow } from "./read-fallback.ts";
 
 const sitemapPageSelect = {
   path: true,
@@ -14,8 +14,7 @@ const sitemapPageSelect = {
 } satisfies SelectType;
 
 export async function listPublishedSitemapPages(): Promise<readonly SitemapPageDTO[]> {
-  return publicReadWithFallback({
-    fallback: [],
+  return publicReadOrThrow({
     reader: "sitemap-cms-pages",
     read: async () => {
       const payload = await getPayload({ config });

@@ -2,6 +2,7 @@ import "server-only";
 
 export { createPublicGateway } from "./gateway.ts";
 export {
+  getCmsPageEnhancementByPath,
   getCmsPageByPath,
 } from "./pages.ts";
 export {
@@ -40,7 +41,7 @@ export {
   propertyRouteWhere,
   publicPropertySelect,
 } from "./properties.ts";
-export { fallbackSiteChrome, getSiteChrome, mapSiteChrome } from "./site-chrome.ts";
+export { fallbackSiteChrome, getSiteChrome, getSiteChromeOrFallback, mapSiteChrome } from "./site-chrome.ts";
 export type {
   PublicGateway,
   PublicGatewayConfig,

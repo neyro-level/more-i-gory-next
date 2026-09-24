@@ -60,8 +60,12 @@ export function getRegionSeedPlan() {
   return regionSeedEntries.map((entry) => seedEntry(entry));
 }
 
-async function seed() {
-  const dryRun = process.argv.includes("--dry-run");
+export function getExecutableRegionSeedPlan() {
+  return getRegionSeedPlan().filter((entry) => entry.pageKey !== null || entry.kind === "segment");
+}
+
+export async function runRegionSeed(options = {}) {
+  const dryRun = options.dryRun ?? process.argv.includes("--dry-run");
   const plan = getRegionSeedPlan();
 
   if (dryRun) {
@@ -73,8 +77,8 @@ async function seed() {
   const payload = await getPayload({ config });
   const regionIds = new Map();
 
-  for (const entry of regionSeedEntries) {
-    const content = seedEntry(entry);
+  for (const entry of getExecutableRegionSeedPlan()) {
+    const content = entry;
     const heroMediaId = await resolveSeedRegionMediaId(payload, content.mediaSourceLabel);
     const parentId = entry.parentKey ? regionIds.get(entry.parentKey) : undefined;
     if (entry.parentKey && !parentId) throw new Error(`Parent "${entry.parentKey}" must be seeded before "${entry.key}".`);
@@ -88,5 +92,5 @@ async function seed() {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  await seed();
+  await runRegionSeed();
 }

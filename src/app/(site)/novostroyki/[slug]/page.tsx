@@ -9,7 +9,6 @@ import { ActionLink } from "@/components/navigation/action-link";
 import {
   getPublishedComplexBySlug,
   listActiveNewbuildInventoryByComplex,
-  listPublishedComplexSlugs,
 } from "@/core/data-access/public";
 import { buildPageMetadata } from "@/seo/metadata";
 import { sourceFromCmsSeo } from "@/seo/page-metadata";
@@ -19,10 +18,7 @@ type NewbuildComplexPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateStaticParams() {
-  const slugs = await listPublishedComplexSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: NewbuildComplexPageProps): Promise<Metadata> {
   const { slug } = await params;

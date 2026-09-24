@@ -124,33 +124,37 @@ test("Public Gateway propagates access denied without privileged fallback", asyn
   await assert.rejects(() => gateway.findMany({ slug: "krym" }), (error) => error === denied);
 });
 
-test("publicReadWithFallback logs infrastructure failure and keeps UI fallback", async () => {
-  const { PUBLIC_READ_FAILED, publicReadWithFallback } = await import(
+test("publicReadOrThrow logs infrastructure failure and propagates an operational error", async () => {
+  const { PUBLIC_READ_FAILED, PublicReadOperationalError, publicReadOrThrow } = await import(
     "../src/core/data-access/public/read-fallback.ts"
   );
   const issues = [];
-  const result = await publicReadWithFallback({
-    fallback: [],
+  const cause = new Error("payload unavailable");
+  await assert.rejects(() => publicReadOrThrow({
     logger: {
       error(_message, context) {
         issues.push(context);
       },
     },
     read: async () => {
-      throw new Error("payload unavailable");
+      throw cause;
     },
     reader: "published-manual-properties",
+  }), (error) => {
+    assert.equal(error instanceof PublicReadOperationalError, true);
+    assert.equal(error.cause, cause);
+    assert.equal(error.code, PUBLIC_READ_FAILED);
+    assert.equal(error.reader, "published-manual-properties");
+    return true;
   });
 
-  assert.deepEqual(result, []);
   assert.deepEqual(issues, [{ code: PUBLIC_READ_FAILED, reader: "published-manual-properties" }]);
 });
 
-test("publicReadWithFallback does not log empty published lists", async () => {
-  const { publicReadWithFallback } = await import("../src/core/data-access/public/read-fallback.ts");
+test("publicReadOrThrow keeps valid zero-row reads distinct from infrastructure failure", async () => {
+  const { publicReadOrThrow } = await import("../src/core/data-access/public/read-fallback.ts");
   let logged = false;
-  const result = await publicReadWithFallback({
-    fallback: [{ id: "fallback" }],
+  const result = await publicReadOrThrow({
     logger: {
       error() {
         logged = true;
@@ -164,7 +168,7 @@ test("publicReadWithFallback does not log empty published lists", async () => {
   assert.equal(logged, false);
 });
 
-test("public catalog readers wrap Payload outage with publicReadWithFallback", () => {
+test("public readers propagate operational failure instead of returning cacheable absence", () => {
   const sources = [
     "src/core/data-access/public/pages.ts",
     "src/core/data-access/public/properties.ts",
@@ -175,7 +179,7 @@ test("public catalog readers wrap Payload outage with publicReadWithFallback", (
 
   for (const file of sources) {
     const source = readFileSync(file, "utf8");
-    assert.match(source, /publicReadWithFallback\(/);
-    assert.doesNotMatch(source, /catch \{\s*return (null|\[\]|fallbackSiteChrome);/s);
+    assert.match(source, /publicReadOrThrow\(/);
+    assert.doesNotMatch(source, /fallback:\s*(null|\[\]|fallbackSiteChrome|listFallbackPublicRegions\(\))/s);
   }
 });

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { fallbackSiteChrome, getSiteChrome } from "@/core/data-access/public";
+import { fallbackSiteChrome, getSiteChromeOrFallback } from "@/core/data-access/public";
 import { siteUrl } from "@/seo/metadata";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -33,7 +33,7 @@ export default function RootLayout({
   const previewNavigation = getEditorialPreviewNavigation();
   const siteChromePromise = previewNavigation.length > 0
     ? Promise.resolve(fallbackSiteChrome)
-    : getSiteChrome();
+    : getSiteChromeOrFallback();
 
   return (
     <html lang="ru" className={cn("font-sans", montserrat.variable)}>
@@ -51,7 +51,7 @@ async function SiteChromeLayout({
 }: Readonly<{
   children: React.ReactNode;
   previewNavigation: ReturnType<typeof getEditorialPreviewNavigation>;
-  siteChromePromise: ReturnType<typeof getSiteChrome>;
+  siteChromePromise: ReturnType<typeof getSiteChromeOrFallback>;
 }>) {
   const siteChrome = await siteChromePromise;
 

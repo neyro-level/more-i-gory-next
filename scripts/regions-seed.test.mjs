@@ -3,7 +3,12 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { mediaAssets } from "../src/content/media/media-assets.ts";
-import { getPayloadRegionData, getRegionSeedPlan, regionSeedEntries } from "./seed-regions.mjs";
+import {
+  getExecutableRegionSeedPlan,
+  getPayloadRegionData,
+  getRegionSeedPlan,
+  regionSeedEntries,
+} from "./seed-regions.mjs";
 
 const mediaSourceLabels = new Set(mediaAssets.map((asset) => asset.id));
 
@@ -37,6 +42,20 @@ test("region seed keeps hierarchy, kinds and media references explicit", () => {
   assert.equal(byKey.get("krym-novostroyki").kind, "segment");
   assert.equal(byKey.get("krym-apartamenty").kind, "segment");
   assert.equal(getRegionSeedPlan().every((entry) => mediaSourceLabels.has(entry.mediaSourceLabel)), true);
+});
+
+test("runtime seed defers future regions without an approved canonical pageKey", () => {
+  const executableKeys = getExecutableRegionSeedPlan().map((entry) => entry.key);
+
+  assert.deepEqual(executableKeys, [
+    "krym",
+    "yalta",
+    "sevastopol",
+    "evpatoriya",
+    "alushta",
+    "krym-novostroyki",
+    "krym-apartamenty",
+  ]);
 });
 
 test("region payload data satisfies the collection requirements", () => {

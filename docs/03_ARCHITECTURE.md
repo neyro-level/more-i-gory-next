@@ -16,8 +16,11 @@ EPIC 2–13, 15–17, 19–66 в `main`
 (`cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452`): Payload 3.90.1, PostgreSQL
 migrations, Public Gateway, media/S3, regions, properties, newbuild/ingest,
 leads, jobs, preview Nginx/systemd и proof matrix. Публичный read идёт через
-`src/core/data-access/public/**` (Payload Local API + DTO); при недоступности
-Payload действует безопасный fallback.
+`src/core/data-access/public/**` (Payload Local API + DTO). При недоступности
+Payload entity detail, catalog и sitemap fail closed с operational error;
+контролируемый project-owned fallback разрешён только для presentation chrome,
+CMS enhancement и известного навигационного списка регионов, причём вне
+`unstable_cache`.
 
 Принятая цель — `AMS_PROFILE=REALTY_BASE`: Next.js + Payload в одном Node.js
 runtime, Managed PostgreSQL, S3 и один jobs owner. Решение принято в
@@ -398,6 +401,13 @@ Metadata и sitemap используют одно effective state. Canonical ove
 ограничены runtime-supported whitelist. Staging, preview, technical, draft,
 review, archived, noindex и незавершённый Content Gate не входят в sitemap.
 Инвариант: `sitemap=true` возможен только при `HTTP 200 + index=true`.
+
+HTTP materialization описан в
+[`ADR-013`](adr/ADR-013-http-lifecycle-and-read-failures.md): domain intent
+`410 gone` в App Router page boundary превращается в реальный `404`, а
+`permanentRedirect()` — в фактический `308`. Public Gateway различает валидный
+zero-row read и operational failure; сбой Payload/PostgreSQL логируется без PII
+и пробрасывается, поэтому `unstable_cache` не сохраняет его как отсутствие.
 
 Architecture обеспечивает:
 - HTML content at build;

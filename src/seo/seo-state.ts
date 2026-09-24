@@ -26,7 +26,7 @@ export type EffectiveSeoState = Readonly<{
   httpStatus: 200 | 404 | 410;
   index: boolean;
   reason: string;
-  redirectIntent: Readonly<{ status: 301 | 308; target: string }> | null;
+  redirectIntent: Readonly<{ status: 308; target: string }> | null;
   sitemap: boolean;
 }>;
 
@@ -37,7 +37,7 @@ export type SeoStateInput = Readonly<{
   lifecycle?: "active" | "archived" | "gone";
   preview?: boolean;
   publicationStatus?: SeoPublicationStatus;
-  redirectIntent?: Readonly<{ status: 301 | 308; target: string }> | null;
+  redirectIntent?: Readonly<{ status: 308; target: string }> | null;
   registry?: SeoRegistryPolicy | null;
   routeSupported?: boolean;
   runtimeContour?: SeoRuntimeContour;

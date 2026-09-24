@@ -68,7 +68,7 @@ test("final public gateway, hub and catch-all route retain the published-only co
   const gateway = readFileSync("src/core/data-access/public/regions.ts", "utf8");
   const route = readFileSync("src/app/(site)/investicionnaya-nedvizhimost/[...path]/page.tsx", "utf8");
 
-  assert.match(gateway, /export const listPublicRegions/);
+  assert.match(gateway, /export async function listPublicRegions/);
   assert.match(gateway, /where:\s*\{\s*status:\s*\{\s*equals:\s*"published"/s);
   assert.match(gateway, /listPublicHubRegions/);
   assert.match(gateway, /region\.status === "published" && region\.slug !== "sochi"/);

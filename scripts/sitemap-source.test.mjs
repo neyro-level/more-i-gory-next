@@ -33,8 +33,8 @@ test("CMS sitemap read logs infrastructure failure instead of silent merge-only 
   const reader = readFileSync("src/core/data-access/public/sitemap-pages.ts", "utf8");
 
   assert.match(source, /listPublishedSitemapPages\(/);
-  assert.doesNotMatch(source, /(?:from\s+["']payload["']|@payloadcms|payload\.config|publicReadWithFallback)/);
-  assert.match(reader, /publicReadWithFallback\(/);
+  assert.doesNotMatch(source, /(?:from\s+["']payload["']|@payloadcms|payload\.config|publicReadOrThrow)/);
+  assert.match(reader, /publicReadOrThrow\(/);
   assert.match(reader, /reader:\s*"sitemap-cms-pages"/);
   assert.match(reader, /overrideAccess:\s*false/);
   assert.match(reader, /depth:\s*0/);

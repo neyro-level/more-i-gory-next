@@ -4,7 +4,7 @@ import { unstable_cache } from "next/cache.js";
 import { getPayload } from "payload";
 
 import config from "../../../../payload.config.ts";
-import { publicReadWithFallback } from "./read-fallback.ts";
+import { isPublicReadOperationalError, publicReadOrThrow } from "./read-fallback.ts";
 import {
   isGenericPublicRegion,
   listFallbackPublicRegions,
@@ -24,8 +24,7 @@ export {
 } from "./regions-contract.ts";
 
 async function readPublicRegions(): Promise<readonly PublicRegionDTO[]> {
-  return publicReadWithFallback({
-    fallback: listFallbackPublicRegions(),
+  return publicReadOrThrow({
     reader: "public-regions",
     read: async () => {
       const payload = await getPayload({ config });
@@ -48,12 +47,21 @@ async function readPublicRegions(): Promise<readonly PublicRegionDTO[]> {
   });
 }
 
-export const listPublicRegions = unstable_cache(readPublicRegions, ["public-regions"], {
+const getCachedPublicRegions = unstable_cache(readPublicRegions, ["public-regions"], {
   tags: ["catalog", "sitemap"],
 });
 
+export async function listPublicRegions(): Promise<readonly PublicRegionDTO[]> {
+  try {
+    return await getCachedPublicRegions();
+  } catch (error) {
+    if (isPublicReadOperationalError(error)) return listFallbackPublicRegions();
+    throw error;
+  }
+}
+
 export async function getPublicRegionByPath(path: string): Promise<PublicRegionDTO | null> {
-  const regions = await listPublicRegions();
+  const regions = await getCachedPublicRegions();
   return regions.find((region) => region.path === path) ?? null;
 }
 

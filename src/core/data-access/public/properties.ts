@@ -22,11 +22,10 @@ import {
   publicPropertySelect,
   type PublicPropertyDTO,
 } from "./properties-contract.ts";
-import { publicReadWithFallback } from "./read-fallback.ts";
+import { publicReadOrThrow } from "./read-fallback.ts";
 
 async function readPublishedManualProperties(slug?: string): Promise<readonly PublicPropertyDTO[]> {
-  return publicReadWithFallback({
-    fallback: [],
+  return publicReadOrThrow({
     reader: "published-manual-properties",
     read: async () => {
       const payload = await getPayload({ config });
@@ -46,8 +45,7 @@ async function readPublishedManualProperties(slug?: string): Promise<readonly Pu
 }
 
 async function readManualPropertyRoutes(slug?: string): Promise<readonly PublicPropertyDTO[]> {
-  return publicReadWithFallback({
-    fallback: [],
+  return publicReadOrThrow({
     reader: "manual-property-routes",
     read: async () => {
       const payload = await getPayload({ config });

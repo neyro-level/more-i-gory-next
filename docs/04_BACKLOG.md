@@ -120,8 +120,9 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 | DONE | EPIC 70 | current/legacy URL manifest, migration decisions и три детерминированных отчёта; PR 113 |
 | DONE | EPIC 71 | typed reversible `RouteIdentity` grammar, reserved-root protection и round-trip tests; PR 114 |
 | DONE | EPIC 74 | normalized Crimea/city Payload model, DTO и manual project geo relations; PR 115 / RISKY run 176 |
-| NOW | EPIC 72 | unified SEO state resolver, CMS SEO runtime propagation и indexability invariants |
-| NEXT | EPIC 73–86 | HTTP adapters, GEO pages, project passports и final proof по approved dependencies |
+| DONE | EPIC 72 | unified SEO state resolver, CMS SEO runtime propagation и indexability invariants; PR 116 / RISKY run 177 |
+| NOW | EPIC 73 | real HTTP lifecycle adapters and cache-safe Public Gateway failures |
+| NEXT | EPIC 75–86 | GEO pages, project passports и final proof по approved dependencies |
 | CONTENT GATE | Крым + четыре города | facts `MISSING`; index activation запрещена, technical work разрешена |
 | PRODUCTION GATE | Release/cutover | только отдельная release-команда после нового approved plan |
 
@@ -146,6 +147,20 @@ execution state — CLEAN graph `mggeo`; DRAFT/legacy inventories повторн
 
 Merge gate: `RISKY` — единый resolver меняет cross-cutting SEO/runtime contract.
 Production и фактическая index activation не входят в scope.
+
+### EPIC 73 — HTTP lifecycle and cache failure semantics
+
+- [x] fake HTTP 200/`data-archive-status="410"` удалён;
+- [x] `gone` materialized как реальный Next 404 согласно ADR-013;
+- [x] permanent route redirect materialized и тестируется как 308;
+- [x] operational DB/Payload failure больше не возвращает cacheable
+  `[]`/`null`; entity detail, catalog и sitemap fail closed, а ограниченный
+  presentation fallback применяется только вне `unstable_cache`;
+- [x] valid zero-row read остаётся отдельным успешным состоянием;
+- [x] cache failure fixture доказывает retry после временного сбоя.
+
+Merge gate: `RISKY` — меняются HTTP и cross-cutting Public Gateway/cache
+semantics. Production не входит в scope.
 
 ## Appendix A — Completed EPIC-18 UI Constitution Conformance 2.0
 

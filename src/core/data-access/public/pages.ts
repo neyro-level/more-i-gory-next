@@ -5,11 +5,10 @@ import { getPayload } from "payload";
 
 import config from "../../../../payload.config.ts";
 import { mapCmsPage, publicCmsPageSelect, type CmsPageDTO } from "./cms-page-contract.ts";
-import { publicReadWithFallback } from "./read-fallback.ts";
+import { isPublicReadOperationalError, publicReadOrThrow } from "./read-fallback.ts";
 
 async function readCmsPageByPath(path: string): Promise<CmsPageDTO | null> {
-  return publicReadWithFallback({
-    fallback: null,
+  return publicReadOrThrow({
     reader: "cms-page-by-path",
     read: async () => {
       const payload = await getPayload({ config });
@@ -34,3 +33,12 @@ async function readCmsPageByPath(path: string): Promise<CmsPageDTO | null> {
 export const getCmsPageByPath = unstable_cache(readCmsPageByPath, ["cms-page-by-path"], {
   tags: ["page"],
 });
+
+export async function getCmsPageEnhancementByPath(path: string): Promise<CmsPageDTO | null> {
+  try {
+    return await getCmsPageByPath(path);
+  } catch (error) {
+    if (isPublicReadOperationalError(error)) return null;
+    throw error;
+  }
+}

@@ -10,6 +10,7 @@ import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { listPublishedManualProperties } from "@/core/data-access/public";
 import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
 
+export const dynamic = "force-dynamic";
 export const metadata = getStaticMetadata("PAGE-014");
 
 const criteria = [

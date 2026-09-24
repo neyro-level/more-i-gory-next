@@ -4,7 +4,7 @@ import test from "node:test";
 import { planCatalogLifecycle } from "../src/core/catalog/lifecycle.ts";
 import { catalogLifecycle } from "../src/core/data-access/system/catalog-lifecycle.ts";
 
-test("catalog lifecycle keeps recent archived objects noindex and expires old ones to 410 without listing 301", () => {
+test("catalog lifecycle keeps recent archived objects noindex and expires old ones without a generic redirect", () => {
   const plan = planCatalogLifecycle(
     [
       {
@@ -33,7 +33,7 @@ test("catalog lifecycle keeps recent archived objects noindex and expires old on
   });
 });
 
-test("catalog lifecycle plans a unique 301 when one published replacement matches type and region", () => {
+test("catalog lifecycle plans a unique permanent 308 when one published replacement matches type and region", () => {
   const plan = planCatalogLifecycle(
     [
       {
@@ -57,12 +57,12 @@ test("catalog lifecycle plans a unique 301 when one published replacement matche
 
   assert.deepEqual(plan.entries[0]?.action, {
     kind: "redirect",
-    status: 301,
+    status: 308,
     target: "/obekty/live-replacement/",
   });
 });
 
-test("catalog lifecycle system task loads published candidates and executes unique 301 redirects", async () => {
+test("catalog lifecycle system task loads published candidates and persists unique permanent redirects", async () => {
   const findCalls = [];
   const createCalls = [];
   const payload = {

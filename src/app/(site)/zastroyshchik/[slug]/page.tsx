@@ -8,7 +8,6 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { ActionLink } from "@/components/navigation/action-link";
 import {
   getPublishedDeveloperBySlug,
-  listPublishedDeveloperSlugs,
 } from "@/core/data-access/public";
 import { buildPageMetadata } from "@/seo/metadata";
 import { sourceFromCmsSeo } from "@/seo/page-metadata";
@@ -18,10 +17,7 @@ type DeveloperPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateStaticParams() {
-  const slugs = await listPublishedDeveloperSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: DeveloperPageProps): Promise<Metadata> {
   const { slug } = await params;

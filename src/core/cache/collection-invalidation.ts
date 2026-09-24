@@ -1,6 +1,9 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, GlobalAfterChangeHook } from "payload";
 
-import { composeRegionPathFromSlugs } from "../../content/regions/region-path-policy.ts";
+import {
+  composeLegacyRegionPathFromSlugs,
+  composeRegionPathFromSlugs,
+} from "../../content/regions/region-path-policy.ts";
 import type { StructuredLogger } from "../observability/index.ts";
 import {
   cacheTargets,
@@ -46,7 +49,12 @@ function regionPathSlug(doc: CmsDoc): string | null {
   const parent = parentSlug(doc.parent);
   if (parent) slugs.unshift(parent);
 
-  return composeRegionPathFromSlugs(slugs)
+  const pageKey = stringField(doc, "pageKey");
+  const path = pageKey === "REGION" || pageKey === "CITY"
+    ? composeRegionPathFromSlugs(slugs)
+    : composeLegacyRegionPathFromSlugs(slugs);
+
+  return path
     .replace(/^\//, "")
     .replace(/\/$/, "");
 }

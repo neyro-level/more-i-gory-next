@@ -136,7 +136,7 @@ test("public property DTO mapper does not leak private inventory data", () => {
   }
 });
 
-test("archived lifecycle serves noindex during retention, unique replacement 301, otherwise 410", () => {
+test("archived lifecycle serves noindex during retention, unique replacement 308, otherwise gone intent", () => {
   assert.equal(archiveRetentionDays, 60);
   const now = new Date("2026-09-17T00:00:00.000Z");
 
@@ -173,7 +173,7 @@ test("archived lifecycle serves noindex during retention, unique replacement 301
         slug: "other",
       },
     ]),
-    { kind: "redirect", status: 301, target: "/obekty/yalta-passport/" },
+    { kind: "redirect", status: 308, target: "/obekty/yalta-passport/" },
   );
   assert.deepEqual(
     getArchivedPropertyAction(expired, now, [
@@ -211,12 +211,13 @@ test("/obekty routes use Payload properties public gateway, not legacy project J
   assert.match(detailPage, /buildPassportPageMetadata/);
   assert.match(detailPage, /passportStructuredData/);
   assert.match(detailPage, /application\/ld\+json/);
-  assert.match(detailPage, /permanentRedirect\(archivedAction\.target\)/);
+  assert.match(detailPage, /materializeSeoHttpState/);
   assert.match(detailPage, /kind === "gone"/);
-  assert.match(detailPage, /data-archive-status="410"/);
+  assert.doesNotMatch(detailPage, /data-archive-status="410"/);
   assert.doesNotMatch(detailPage, /target: "\/obekty\/"/);
   assert.match(detailPage, /notFound/);
-  assert.match(detailPage, /generateStaticParams/);
+  assert.match(detailPage, /dynamic\s*=\s*"force-dynamic"/);
+  assert.doesNotMatch(detailPage, /generateStaticParams/);
   assert.doesNotMatch(detailPage, /dynamicParams\s*=\s*false/);
   assert.doesNotMatch(detailPage, /contentService|getProject/);
   assert.match(template, /Статус: не актуально/);

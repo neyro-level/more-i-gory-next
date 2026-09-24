@@ -12,7 +12,7 @@ test("selected routes are CMS-pages first with static fallback", () => {
   for (const route of convertedRoutes) {
     const source = readFileSync(route, "utf8");
 
-    assert.match(source, /getCmsPageByPath/);
+    assert.match(source, /getCmsPageEnhancementByPath/);
     assert.match(source, /<CmsPage page=\{page\}/);
     assert.match(source, /getStaticMetadata/);
     assert.match(source, /generateMetadata/);

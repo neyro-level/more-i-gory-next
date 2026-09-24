@@ -35,7 +35,7 @@ export const archiveRetentionDays = 60;
 
 export type ArchivedPropertyAction =
   | Readonly<{ kind: "serve-noindex" }>
-  | Readonly<{ kind: "redirect"; status: 301; target: string }>
+  | Readonly<{ kind: "redirect"; status: 308; target: string }>
   | Readonly<{ kind: "gone"; status: 410 }>;
 
 export type ArchiveReplacementCandidate = Readonly<{
@@ -248,7 +248,7 @@ export function getArchivedPropertyAction(
   );
 
   if (target && target !== "/obekty/" && target !== "/") {
-    return { kind: "redirect", status: 301, target };
+    return { kind: "redirect", status: 308, target };
   }
 
   return { kind: "gone", status: 410 };

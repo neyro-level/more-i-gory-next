@@ -38,8 +38,8 @@ test("canonical override is internal-only and redirect remains an adapter intent
   assert.equal(invalid.index, false);
   assert.equal(invalid.reason, "invalid-canonical-override");
 
-  const redirected = resolveSeoState({ canonical: "/old/", redirectIntent: { status: 301, target: "/new" } });
-  assert.deepEqual(redirected.redirectIntent, { status: 301, target: "/new/" });
+  const redirected = resolveSeoState({ canonical: "/old/", redirectIntent: { status: 308, target: "/new" } });
+  assert.deepEqual(redirected.redirectIntent, { status: 308, target: "/new/" });
   const source = readFileSync("src/seo/seo-state.ts", "utf8");
   assert.doesNotMatch(source, /redirect\(|permanentRedirect\(|notFound\(/);
 });

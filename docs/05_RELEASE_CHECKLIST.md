@@ -62,6 +62,9 @@ graph. При `MISSING` facts техническая работа продолж
 - [x] единый SEO state resolver синхронизирует metadata/robots/sitemap для
   registry, CMS SEO, publication/content gate, lifecycle и runtime contour;
 - [x] sitemap invariant закреплён тестом: только HTTP 200 + effective index;
+- [x] HTTP lifecycle adapter выдаёт real 404 для `gone` и real 308 для
+  permanent route redirect; fake 200/410 удалён;
+- [x] operational Public Gateway failure не превращается в cacheable absence;
 - [ ] runtime routes, canonical, robots и sitemap соответствуют target tree;
 - [ ] сильные утверждения подтверждены;
 - [ ] реальные проекты имеют sources и `verifiedAt`;

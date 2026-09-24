@@ -8,6 +8,7 @@ import { listPublishedComplexes } from "@/core/data-access/public";
 import { getStaticMetadata } from "@/seo/metadata";
 import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
 
+export const dynamic = "force-dynamic";
 export const metadata = getStaticMetadata("PAGE-026");
 
 export default async function NewbuildCatalogPage() {
