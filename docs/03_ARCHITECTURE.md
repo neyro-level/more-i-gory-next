@@ -1,8 +1,8 @@
 # Technical Architecture — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 3.0 Plan №4 technical implementation complete
-**Дата:** 2026-09-23
+**Версия:** 3.1 GEO-first architecture contract
+**Дата:** 2026-09-24
 **Engineering baseline:** AMS Realty Platform Core 5.5 (норматив стека)
 **Важно:** этот документ фиксирует только проектную конкретику. Стек, границы
 данных и jobs сверяются с
@@ -272,6 +272,21 @@ Raw HTML запрещён.
 
 ## 7. Routing
 
+- GEO-first route ownership:
+  - `/` — brand/trust;
+  - `/investicionnaya-nedvizhimost/` — federal market comparison;
+  - `/krym/` — Crimea market owner;
+  - `/krym/{city}/` — local market owner из registry;
+  - `/obekty/` — curated global investment catalog;
+  - `/obekty/{project}/` — global investment entity;
+- canonical проекта не зависит от региона: перенос проекта между регионами не
+  меняет `/obekty/{project}/`;
+- `/novostroyki/` обслуживает опубликованный newbuild inventory и не является
+  replacement для инвестиционного каталога `/obekty/`;
+- city×category routes не выводятся из данных автоматически; новый route
+  требует PAGE-ID, registry decision и Gate;
+- будущие регионы включаются registry-driven; глубина Крыма не навязывается
+  Архызу, Алтаю или Сочи;
 - все production routes известны build-time;
 - dynamic project/article routes используют static params;
 - route `/obekty/[slug]/` создаётся только при наличии минимум одного
@@ -345,6 +360,15 @@ Hydration warning блокирует release.
 ## 10. SEO Architecture
 
 Source of truth по URL/индексации — `02_PRODUCT_STRUCTURE.md`.
+
+Один поисковый intent имеет ровно одного page owner. PAGE-024 является legacy
+migration candidate, а не обязательным standalone owner. Current URL не
+удаляется и не перенаправляется до evidence-driven manifest EPIC 70.
+
+Будущий SEO state engine отделяет существование route от index activation:
+route/contract work может продолжаться при отсутствующих business facts, но
+индексация и sitemap остаются закрыты. Неподтверждённые факты не заменяются
+правдоподобным текстом.
 
 Architecture обеспечивает:
 - HTML content at build;
@@ -631,6 +655,10 @@ AI не имеет права без ADR:
 - `adr/ADR-001-static-next-export.md`
 - `adr/ADR-002-content-repository-boundary.md`
 - `adr/ADR-003-canonical-seo-url-model.md`
+- `adr/ADR-GEO-FIRST-INVESTMENT-IA.md`
+- `adr/ADR-GLOBAL-INVESTMENT-ENTITY-URL.md`
+- `adr/ADR-SEO-STATE-ENGINE.md`
+- `adr/ADR-NEWBUILD-INVENTORY-ROLE.md`
 
 ## 27. Architecture Risks and Revisit Triggers
 

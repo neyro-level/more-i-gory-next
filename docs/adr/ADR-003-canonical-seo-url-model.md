@@ -1,6 +1,6 @@
 # ADR-003: Canonical SEO URL Model
 
-Status: Accepted
+Status: Partially superseded by ADR-GEO-FIRST-INVESTMENT-IA
 Date: 2026-09-10
 
 ## Context
@@ -38,7 +38,9 @@ Lots, filters, sort states не индексируются.
 
 ## Consequences
 
-Expansion requires explicit Product Structure update and content/data gate.
+Региональный pattern superseded GEO-first contract; правило одного стабильного
+`/obekty/<project-slug>/` остаётся действующим. Expansion requires explicit
+Product Structure update and content/data gate.
 
 ## Revisit When
 

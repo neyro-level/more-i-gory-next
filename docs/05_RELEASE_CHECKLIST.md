@@ -1,13 +1,14 @@
 # Release Checklist — «Море и Горы»
 
-**Статус:** Active — release deferred; no active release program
-**Версия:** 3.7 — Plan №4 technical candidate verified
-**Дата:** 2026-09-23
+**Статус:** Active — GEO-first remediation; release deferred
+**Версия:** 4.0 — GEO-first release gates
+**Дата:** 2026-09-24
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
 пройденным. Production выполняется только по отдельной команде владельца.
-Открытые content/page пункты сохранены как будущие acceptance criteria, но
-явно отложены владельцем и не входят в текущую техническую нормализацию.
+Открытые content/page пункты являются acceptance criteria текущего approved
+graph. При `MISSING` facts техническая работа продолжается, но index activation
+и release claim остаются закрыты.
 
 ## 1. Technical foundation
 
@@ -47,6 +48,13 @@
 
 ## 3. Content and SEO gates
 
+- [x] GEO-first intent ownership зафиксирован без двух owners одного intent;
+- [x] target tree `/`, federal hub, `/krym/**`, `/obekty/**` зафиксирован в
+  Product Structure и ADR;
+- [x] PAGE-024 переведён в legacy migration candidate, а `/novostroyki/` не
+  объявлен replacement для `/obekty/`;
+- [ ] current/legacy URL manifest принял решение по каждому migration candidate;
+- [ ] runtime routes, canonical, robots и sitemap соответствуют target tree;
 - [ ] сильные утверждения подтверждены;
 - [ ] реальные проекты имеют sources и `verifiedAt`;
 - [ ] региональные страницы не являются шаблонными дублями;
@@ -125,11 +133,11 @@ SEO 69 объясняется единственным ожидаемым fail: 
 
 Активного release stream сейчас нет. До нового production-ready claim нужны:
 
-1. approved technical plan с critical Next.js `16.3.6` и Payload-group `3.90.1` upgrades;
-2. reconciliation ветки `work/ci-gate-split` и единый release contract;
-3. новый read-only property enum preflight и принятое recovery/restore решение;
-4. exact-main immutable candidate evidence вместо утраченных EPIC 54 ledgers;
-5. позднее — отдельный content/product plan и явная release-команда владельца.
+1. завершить APPROVED GEO-first graph EPIC 68–86 с CLEAN reconciliation;
+2. закрыть URL migration, route identity и единый SEO state contract;
+3. получить подтверждённые facts и пройти Content Gate для индексируемых страниц;
+4. выполнить final exact-main proof EPIC 85–86 без production activation;
+5. получить отдельную явную release-команду владельца.
 
 Credential rotation, Secret Master env, S3 и preview runtime уже доказаны и не
 являются текущими blockers. Актуальная классификация — в `OWNER_QUEUE.md`.

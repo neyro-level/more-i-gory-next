@@ -1,24 +1,21 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 4.7 — Plan №4 technical implementation complete
-**Дата:** 2026-09-23
+**Версия:** 5.0 — GEO-first remediation execution
+**Дата:** 2026-09-24
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
-Execution baseline Plan №4 — `main`
-`cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452` после EPIC 66 / PR 106.
-EPIC 60–66 закрыты; EPIC 67 завершает delivery и синхронизацию канона.
-Публичный сайт читает Payload через Public Gateway и DTO. Single-DB
-application, preview runtime, leads intake, observability и performance имеют
-live proof; restore rehearsal отложен решением владельца, production — нет.
+Current execution source —
+`AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md` v1 APPROVED,
+Task Manager prefix `mggeo`. EPIC 68 смержен PR 111 и зафиксировал exact
+baseline. EPIC 69 замораживает GEO-first IA, intent ownership и ADR до
+изменения runtime routes.
 
-NOW: финальная доставка Plan №4. Next/Payload обновлены, технический остаток
-закрыт, exact-main candidate установлен на preview и прошёл live smoke.
-
-Production не выпускался. По решению владельца страницы, business facts,
-коммерческая модель, методика и география запуска пока не входят в работу.
+Публичный сайт читает Payload через Public Gateway и DTO. Business facts по
+Крыму и четырём городам остаются `MISSING`: технический graph выполняется, но
+index activation закрыт. Production не выпускался и не разрешён.
 
 ## 2. Завершённые эпики
 
@@ -108,22 +105,25 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 - [x] обновить project router и SourceCraft path guards;
 - [x] выполнить финальную проверку ссылок и `pnpm verify`.
 
-## 4. NOW / NEXT — техническая нормализация
+## 4. NOW / NEXT — GEO-first remediation v1
 
-Код в `main` — Realty 5.5 контур без production. Plan №3 v3 закрыт; новый
-execution graph отсутствует.
+Код в `main` — Realty 5.5 контур без production. Approved graph содержит 19
+эпиков и выполняется строго через Beads.
 
 | Состояние | Эпик | Результат |
 |---|---|---|
 | DONE | EPIC 35–54 | код в `main` `21e484c98503550dbfbcbef38eb2e9eecd8d8308`; PR 100 / RISKY run 143; original EPIC 54 task ledgers утрачены |
 | DONE | EPIC 60–66 | Next `16.3.6`, Payload `3.90.1`, runtime/security/ingest/leads/repository/delivery hardening смержены |
-| NOW | EPIC 67 | full verify, exact-main artifact, preview install/migration/live smoke и docs sync выполнены; финальный PR/gate |
-| NEXT PLAN | Product/content | отдельный новый план после решения владельца; технический долг Plan №4 не переносится |
-| DEFERRED OWNER | Content/product | страницы, facts, коммерческая модель, методика, география и index gates отложены |
+| DONE | EPIC 67 | Plan №4 final verification и preview evidence закрыты |
+| DONE | EPIC 68 | baseline, route/SEO inventory и factual preflight; PR 111 |
+| NOW | EPIC 69 | GEO-first IA, intent ownership и четыре ADR |
+| NEXT | EPIC 70–86 | URL manifest, route identity, SEO state, GEO pages, project passports и final proof по approved dependencies |
+| CONTENT GATE | Крым + четыре города | facts `MISSING`; index activation запрещена, technical work разрешена |
 | PRODUCTION GATE | Release/cutover | только отдельная release-команда после нового approved plan |
 
-Старые открытые `mg-*` задачи не являются READY work нового плана. До approval
-нового exact plan Task Manager не импортируется и Developer не запускается.
+Старые `mg-*` задачи не являются READY work текущего плана. Единственное
+execution state — CLEAN graph `mggeo`; DRAFT/legacy inventories повторно не
+импортируются.
 
 ## Appendix A — Completed EPIC-18 UI Constitution Conformance 2.0
 
