@@ -11,10 +11,20 @@ import { publicMediaOrFallback } from "./missing-image.ts";
 import { publicReadWithFallback } from "./read-fallback.ts";
 import type { Developer, Media, Property, Region, ResidentialComplex } from "../../../payload-types.ts";
 
+const publicEntitySeoSchema = z.object({
+  canonicalOverride: z.string().optional(),
+  description: z.string().min(1),
+  ogImagePath: z.string().optional(),
+  priority: z.enum(["P1", "P2", "P3"]),
+  robots: z.enum(["index-follow", "noindex-follow"]),
+  title: z.string().min(1),
+});
+
 const publicDeveloperSchema = z.object({
   description: z.string().optional(),
   id: z.string().min(1),
   path: z.string().startsWith("/").endsWith("/"),
+  seo: publicEntitySeoSchema,
   slug: z.string().min(1),
   title: z.string().min(1),
 });
@@ -26,6 +36,7 @@ const publicComplexSchema = z.object({
   image: publicMediaSchema,
   path: z.string().startsWith("/").endsWith("/"),
   regionLabel: z.string().min(1),
+  seo: publicEntitySeoSchema,
   slug: z.string().min(1),
   title: z.string().min(1),
 });
@@ -44,10 +55,10 @@ export type PublicNewbuildInventoryDTO = z.infer<typeof publicNewbuildInventoryS
 
 type RelationDocument<T extends { id: number }> = number | T | null | undefined;
 
-type PublicDeveloperRecord = Readonly<Pick<Developer, "description" | "id" | "slug" | "status" | "title">>;
+type PublicDeveloperRecord = Readonly<Pick<Developer, "description" | "id" | "seo" | "slug" | "status" | "title">>;
 
 type PublicComplexRecord = Readonly<
-  Pick<ResidentialComplex, "address" | "developer" | "id" | "media" | "region" | "slug" | "status" | "title">
+  Pick<ResidentialComplex, "address" | "developer" | "id" | "media" | "region" | "seo" | "slug" | "status" | "title">
 >;
 
 type PublicNewbuildInventoryRecord = Readonly<
@@ -57,6 +68,7 @@ type PublicNewbuildInventoryRecord = Readonly<
 export const publicDeveloperSelect = {
   description: true,
   id: true,
+  seo: true,
   slug: true,
   status: true,
   title: true,
@@ -68,6 +80,7 @@ export const publicComplexSelect = {
   id: true,
   media: true,
   region: true,
+  seo: true,
   slug: true,
   status: true,
   title: true,
@@ -131,6 +144,7 @@ function mapPublicDeveloper(developer: PublicDeveloperRecord): PublicDeveloperDT
     description: developer.description ?? undefined,
     id: String(developer.id),
     path: `/zastroyshchik/${developer.slug}/`,
+    seo: developer.seo,
     slug: developer.slug,
     title: developer.title,
   });
@@ -139,7 +153,18 @@ function mapPublicDeveloper(developer: PublicDeveloperRecord): PublicDeveloperDT
 function mapPublicComplex(complex: PublicComplexRecord): PublicComplexDTO {
   const developer = isRelationDocument<Developer>(complex.developer)
     ? mapPublicDeveloper(complex.developer)
-    : { id: "unknown", path: "/zastroyshchik/", slug: "unknown", title: "Застройщик уточняется" };
+    : {
+        id: "unknown",
+        path: "/zastroyshchik/",
+        seo: {
+          description: "Данные застройщика уточняются.",
+          priority: "P3" as const,
+          robots: "noindex-follow" as const,
+          title: "Застройщик уточняется",
+        },
+        slug: "unknown",
+        title: "Застройщик уточняется",
+      };
 
   return publicComplexSchema.parse({
     address: complex.address?.publicAddress ?? complex.address?.locality ?? undefined,
@@ -148,6 +173,7 @@ function mapPublicComplex(complex: PublicComplexRecord): PublicComplexDTO {
     image: getImage(complex),
     path: `/novostroyki/${complex.slug}/`,
     regionLabel: getRegionLabel(complex),
+    seo: complex.seo,
     slug: complex.slug,
     title: complex.title,
   });

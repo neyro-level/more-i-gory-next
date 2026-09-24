@@ -1,6 +1,7 @@
 import type { PublicComplexDTO } from "@/core/data-access/public";
 import type { SitemapSourceEntry } from "./sitemap-source-contract.ts";
-import { normalizeSitemapCanonical } from "./sitemap-source-contract.ts";
+import { normalizeSitemapCanonical, publishedCatalogSitemapEntries } from "./sitemap-source-contract.ts";
+import type { SeoRuntimeContour } from "./seo-state.ts";
 
 const newbuildFilterIndexWhitelist = new Set<string>(["/novostroyki/"]);
 const newbuildLayoutIndexWhitelist = new Set<string>();
@@ -47,10 +48,12 @@ export function rejectDisallowedSitemapEntries(
 }
 
 export function newbuildComplexSitemapEntries(
-  complexes: readonly Pick<PublicComplexDTO, "path">[],
+  complexes: readonly Pick<PublicComplexDTO, "path" | "seo">[],
+  runtimeContour?: SeoRuntimeContour,
 ): readonly SitemapSourceEntry[] {
-  return complexes.map((complex) => ({
-    canonical: normalizeIndexPath(complex.path),
-    priority: "P1",
-  }));
+  return publishedCatalogSitemapEntries(
+    complexes.map((complex) => ({ ...complex, path: normalizeIndexPath(complex.path) })),
+    "P1",
+    runtimeContour,
+  );
 }

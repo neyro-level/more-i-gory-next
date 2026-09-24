@@ -382,10 +382,22 @@ Source of truth по URL/индексации — `02_PRODUCT_STRUCTURE.md`.
 migration candidate, а не обязательным standalone owner. Current URL не
 удаляется и не перенаправляется до evidence-driven manifest EPIC 70.
 
-Будущий SEO state engine отделяет существование route от index activation:
+SEO state engine отделяет существование route от index activation:
 route/contract work может продолжаться при отсутствующих business facts, но
 индексация и sitemap остаются закрыты. Неподтверждённые факты не заменяются
 правдоподобным текстом.
+
+`src/seo/seo-state.ts` — единый чистый resolver. Он принимает canonical,
+registry policy, publication/content status, CMS robots/canonical override,
+lifecycle, runtime contour и transport intent. Он возвращает effective
+`canonical/index/follow/sitemap/httpStatus/redirectIntent/reason`, но сам не
+вызывает `redirect`, `permanentRedirect` или `notFound`.
+
+Metadata и sitemap используют одно effective state. Canonical override
+допускается только как нормализованный внутренний path; CMS Pages дополнительно
+ограничены runtime-supported whitelist. Staging, preview, technical, draft,
+review, archived, noindex и незавершённый Content Gate не входят в sitemap.
+Инвариант: `sitemap=true` возможен только при `HTTP 200 + index=true`.
 
 Architecture обеспечивает:
 - HTML content at build;

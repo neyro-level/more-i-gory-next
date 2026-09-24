@@ -1,4 +1,6 @@
 import { buildPageMetadata, type PageMetadataSource } from "./page-metadata.ts";
+import { resolveRuntimeContour } from "../project/runtime-contour.ts";
+import { resolveSeoState } from "./seo-state.ts";
 import { siteUrl } from "./site-url.ts";
 
 export type PassportMetadataFacts = Readonly<{
@@ -19,11 +21,17 @@ function passportDescription(property: PassportMetadataFacts): string {
 }
 
 export function passportMetadataSource(property: PassportMetadataFacts): PageMetadataSource {
-  return {
+  const state = resolveSeoState({
     canonical: property.path,
+    lifecycle: property.status,
+    publicationStatus: property.status,
+    runtimeContour: resolveRuntimeContour(),
+  });
+  return {
+    canonical: state.canonical,
     description: passportDescription(property),
     ogImagePath: property.image?.src ?? null,
-    robots: property.status === "archived" ? "noindex-follow" : "index-follow",
+    robots: state.index ? "index-follow" : "noindex-follow",
     title: property.title,
   };
 }

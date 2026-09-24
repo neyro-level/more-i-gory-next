@@ -10,6 +10,9 @@ import {
   getPublishedDeveloperBySlug,
   listPublishedDeveloperSlugs,
 } from "@/core/data-access/public";
+import { buildPageMetadata } from "@/seo/metadata";
+import { sourceFromCmsSeo } from "@/seo/page-metadata";
+import { resolveRuntimeContour } from "@/project/runtime-contour";
 
 type DeveloperPageProps = {
   params: Promise<{ slug: string }>;
@@ -26,11 +29,14 @@ export async function generateMetadata({ params }: DeveloperPageProps): Promise<
 
   if (!developer) return {};
 
-  return {
-    alternates: { canonical: developer.path },
-    description: developer.description ?? `${developer.title}: опубликованные проекты и инвестиционный разбор застройщика.`,
-    title: `${developer.title} — застройщик | Море и Горы`,
-  };
+  return buildPageMetadata(sourceFromCmsSeo({
+    canonical: developer.path,
+    description: developer.seo.description,
+    ogImagePath: developer.seo.ogImagePath,
+    publicationStatus: "published",
+    runtimeContour: resolveRuntimeContour(),
+    seo: developer.seo,
+  }));
 }
 
 export default async function DeveloperPage({ params }: DeveloperPageProps) {

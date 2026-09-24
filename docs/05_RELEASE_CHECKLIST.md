@@ -59,6 +59,9 @@ graph. При `MISSING` facts техническая работа продолж
   deterministic round-trip suite;
 - [x] Крым и четыре города нормализованы в одной Payload geo model; canonical
   строится builder, manual project DTO имеет region и optional city/area context;
+- [x] единый SEO state resolver синхронизирует metadata/robots/sitemap для
+  registry, CMS SEO, publication/content gate, lifecycle и runtime contour;
+- [x] sitemap invariant закреплён тестом: только HTTP 200 + effective index;
 - [ ] runtime routes, canonical, robots и sitemap соответствуют target tree;
 - [ ] сильные утверждения подтверждены;
 - [ ] реальные проекты имеют sources и `verifiedAt`;

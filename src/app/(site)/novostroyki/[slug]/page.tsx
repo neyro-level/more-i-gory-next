@@ -11,6 +11,9 @@ import {
   listActiveNewbuildInventoryByComplex,
   listPublishedComplexSlugs,
 } from "@/core/data-access/public";
+import { buildPageMetadata } from "@/seo/metadata";
+import { sourceFromCmsSeo } from "@/seo/page-metadata";
+import { resolveRuntimeContour } from "@/project/runtime-contour";
 
 type NewbuildComplexPageProps = {
   params: Promise<{ slug: string }>;
@@ -27,11 +30,14 @@ export async function generateMetadata({ params }: NewbuildComplexPageProps): Pr
 
   if (!complex) return {};
 
-  return {
-    alternates: { canonical: complex.path },
-    description: `${complex.title}: застройщик, локация, доступные планировки и инвестиционные риски.`,
-    title: `${complex.title} — новостройка Крыма | Море и Горы`,
-  };
+  return buildPageMetadata(sourceFromCmsSeo({
+    canonical: complex.path,
+    description: complex.seo.description,
+    ogImagePath: complex.seo.ogImagePath,
+    publicationStatus: "published",
+    runtimeContour: resolveRuntimeContour(),
+    seo: complex.seo,
+  }));
 }
 
 export default async function NewbuildComplexPage({ params }: NewbuildComplexPageProps) {

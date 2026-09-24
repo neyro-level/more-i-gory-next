@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { buildMetadata } from "@/seo/metadata";
+import { buildMetadata, buildPageMetadata } from "@/seo/metadata";
+import { sourceFromArticle } from "@/seo/page-metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
@@ -8,6 +9,7 @@ import { RiskBlock } from "@/components/marketing/risk-block";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { ActionLink } from "@/components/navigation/action-link";
 import { articles, getArticleBySlug } from "@/content/articles/articles";
+import { resolveRuntimeContour } from "@/project/runtime-contour";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -29,15 +31,15 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     return buildMetadata(getSeoEntry("PAGE-017"));
   }
 
-  return buildMetadata({
-    ...getSeoEntry("PAGE-017"),
+  return buildPageMetadata(sourceFromArticle({
     canonical: article.path,
+    contentGate: "missing",
     description: article.description,
-    h1: article.title.replace(" | Море и Горы", ""),
-    primaryQuery: article.primaryQuery,
-    secondaryQueries: article.secondaryQueries,
+    registry: getSeoEntry("PAGE-017"),
+    runtimeContour: resolveRuntimeContour(),
+    status: article.status,
     title: article.title,
-  });
+  }));
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {

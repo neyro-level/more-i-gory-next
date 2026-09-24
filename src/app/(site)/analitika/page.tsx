@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { buildPageMetadata, getStaticMetadata } from "@/seo/metadata";
+import { buildCmsPageMetadata, getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
@@ -15,13 +15,7 @@ const pagePath = "/analitika/";
 export async function generateMetadata(): Promise<Metadata> {
   const page = isEditorialPreviewEnabled() ? null : await getCmsPageByPath(pagePath);
   if (page?.seo?.title && page.seo.description) {
-    return buildPageMetadata({
-      canonical: page.seo.canonicalOverride || page.path,
-      description: page.seo.description,
-      ogImagePath: page.seo.ogImagePath,
-      robots: page.seo.robots,
-      title: page.seo.title,
-    });
+    return buildCmsPageMetadata(page);
   }
 
   return getStaticMetadata("PAGE-016");

@@ -1,4 +1,5 @@
 import type { Field } from "payload";
+import { isControlledCanonicalOverride } from "../../seo/seo-state.ts";
 
 export const seoFields: Field = {
   name: "seo",
@@ -32,7 +33,7 @@ export const seoFields: Field = {
   ],
 };
 
-export function assertPublishedSeo(data: { seo?: { description?: unknown; title?: unknown }; status?: unknown }): void {
+export function assertPublishedSeo(data: { seo?: { canonicalOverride?: unknown; description?: unknown; title?: unknown }; status?: unknown }): void {
   if (data.status !== "published") return;
 
   const title = typeof data.seo?.title === "string" ? data.seo.title.trim() : "";
@@ -40,5 +41,10 @@ export function assertPublishedSeo(data: { seo?: { description?: unknown; title?
 
   if (!title || !description) {
     throw new Error("Published CMS page requires seo.title and seo.description.");
+  }
+
+  const canonicalOverride = typeof data.seo?.canonicalOverride === "string" ? data.seo.canonicalOverride : undefined;
+  if (!isControlledCanonicalOverride(canonicalOverride)) {
+    throw new Error("Published CMS canonicalOverride must be a normalized internal path without query or fragment.");
   }
 }

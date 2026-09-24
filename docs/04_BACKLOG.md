@@ -119,14 +119,33 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 | DONE | EPIC 69 | GEO-first IA, intent ownership и четыре ADR; PR 112 |
 | DONE | EPIC 70 | current/legacy URL manifest, migration decisions и три детерминированных отчёта; PR 113 |
 | DONE | EPIC 71 | typed reversible `RouteIdentity` grammar, reserved-root protection и round-trip tests; PR 114 |
-| NOW | EPIC 74 | normalized Crimea/city Payload model, DTO и manual project geo relations |
-| NEXT | EPIC 72–86 | SEO state, HTTP adapters, GEO pages, project passports и final proof по approved dependencies |
+| DONE | EPIC 74 | normalized Crimea/city Payload model, DTO и manual project geo relations; PR 115 / RISKY run 176 |
+| NOW | EPIC 72 | unified SEO state resolver, CMS SEO runtime propagation и indexability invariants |
+| NEXT | EPIC 73–86 | HTTP adapters, GEO pages, project passports и final proof по approved dependencies |
 | CONTENT GATE | Крым + четыре города | facts `MISSING`; index activation запрещена, technical work разрешена |
 | PRODUCTION GATE | Release/cutover | только отдельная release-команда после нового approved plan |
 
 Старые `mg-*` задачи не являются READY work текущего плана. Единственное
 execution state — CLEAN graph `mggeo`; DRAFT/legacy inventories повторно не
 импортируются.
+
+### EPIC 72 — Unified SEO state engine
+
+- [x] один чистый resolver определяет canonical, index/follow, sitemap,
+  HTTP-state intent, redirect intent и reason;
+- [x] static registry, regions, CMS pages, complexes, developers, passports и
+  article lifecycle используют согласованный effective state;
+- [x] CMS SEO проходит через Public DTO в runtime metadata и sitemap;
+- [x] canonical override ограничен внутренним нормализованным path, а CMS Pages
+  — runtime-supported whitelist;
+- [x] staging, preview, technical, draft/review/archived, noindex и страницы без
+  Content Gate исключены из sitemap;
+- [x] добавлены contract suites `seo-state-contract`,
+  `sitemap-indexability-invariant`, `article-indexing-lifecycle` и
+  `cms-seo-runtime`.
+
+Merge gate: `RISKY` — единый resolver меняет cross-cutting SEO/runtime contract.
+Production и фактическая index activation не входят в scope.
 
 ## Appendix A — Completed EPIC-18 UI Constitution Conformance 2.0
 

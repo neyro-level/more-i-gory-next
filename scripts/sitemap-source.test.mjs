@@ -14,16 +14,17 @@ test("sitemap route is dynamic and wired to the DB-backed source", () => {
 
 test("CMS sitemap excludes drafts, archived and noindex pages", () => {
   const entries = cmsPageSitemapEntries([
-    { path: "/draft/", status: "draft", seo: { robots: "index-follow", priority: "P2" } },
-    { path: "/archived/", status: "archived", seo: { robots: "index-follow", priority: "P2" } },
-    { path: "/noindex/", status: "published", seo: { robots: "noindex-follow", priority: "P2" } },
-    { path: "/published", status: "published", seo: { robots: "index-follow", priority: "P1" } },
-    { path: "/override/", status: "published", seo: { canonicalOverride: "/canonical/", robots: "index-follow", priority: "P3" } },
+    { path: "/analitika/", status: "draft", seo: { robots: "index-follow", priority: "P2" } },
+    { path: "/privacy/", status: "archived", seo: { robots: "index-follow", priority: "P2" } },
+    { path: "/consent/", status: "published", seo: { robots: "noindex-follow", priority: "P2" } },
+    { path: "/analitika", status: "published", seo: { robots: "index-follow", priority: "P1" } },
+    { path: "/privacy/", status: "published", seo: { canonicalOverride: "/privacy", robots: "index-follow", priority: "P3" } },
+    { path: "/privacy/", status: "published", seo: { canonicalOverride: "/unsupported/", robots: "index-follow", priority: "P3" } },
   ]);
 
   assert.deepEqual(entries, [
-    { canonical: "/published/", priority: "P1" },
-    { canonical: "/canonical/", priority: "P3" },
+    { canonical: "/analitika/", priority: "P1" },
+    { canonical: "/privacy/", priority: "P3" },
   ]);
 });
 
