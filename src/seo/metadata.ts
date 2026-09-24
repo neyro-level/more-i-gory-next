@@ -9,12 +9,12 @@ import { siteUrl } from "./site-url.ts";
 export { siteUrl };
 export { buildPageMetadata };
 
-export function buildMetadata(entry: SeoEntry): Metadata {
-  return buildPageMetadata(sourceFromSeoEntry(entry, resolveRuntimeContour()));
+export function buildMetadata(entry: SeoEntry, options: Readonly<{ technical?: boolean }> = {}): Metadata {
+  return buildPageMetadata(sourceFromSeoEntry(entry, resolveRuntimeContour(), options));
 }
 
-export function getStaticMetadata(pageId: string): Metadata {
-  return buildMetadata(getSeoEntry(pageId));
+export function getStaticMetadata(pageId: string, options: Readonly<{ technical?: boolean }> = {}): Metadata {
+  return buildMetadata(getSeoEntry(pageId), options);
 }
 
 export function buildCmsPageMetadata(page: CmsPageDTO): Metadata {

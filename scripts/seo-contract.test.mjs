@@ -40,6 +40,27 @@ test("buildPageMetadata supports CMS-style source and noindex robots", async () 
   assert.deepEqual(metadata.openGraph?.images, ["http://127.0.0.1:4311/images/og/default.webp"]);
 });
 
+test("technical query state stays noindex with the clean registry canonical", async () => {
+  const { sourceFromSeoEntry } = await import("../src/seo/page-metadata.ts");
+  const source = sourceFromSeoEntry({
+    canonical: "/obekty/",
+    contentGate: "fixture",
+    description: "Curated catalog",
+    h1: "Objects",
+    index: "yes",
+    kind: "static",
+    pageId: "TEST-CATALOG",
+    primaryQuery: "objects",
+    priority: "P1",
+    secondaryQueries: [],
+    sitemap: "yes",
+    title: "Objects",
+  }, "production", { technical: true });
+
+  assert.equal(source.canonical, "/obekty/");
+  assert.equal(source.robots, "noindex-follow");
+});
+
 test("manual passport metadata uses facts only: title, description, canonical, robots, OG and JSON-LD", async () => {
   const { buildPassportPageMetadata, passportStructuredData } = await import("../src/seo/passport-metadata.ts");
   const property = {

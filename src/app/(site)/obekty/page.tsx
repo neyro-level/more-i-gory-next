@@ -5,13 +5,29 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ObjectCard } from "@/components/marketing/object-card";
+import { CatalogFilters } from "@/components/marketing/catalog-filters";
 import { NumberedSteps } from "@/components/marketing/numbered-steps";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { listPublishedManualProperties } from "@/core/data-access/public";
 import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
+import {
+  buildCatalogFilterGroups,
+  filterCatalogProperties,
+  getPropertyFormatLabel,
+  hasCatalogQueryState,
+  minimumFilterableCatalogSize,
+  parseCatalogFilterQuery,
+} from "@/core/catalog/public-catalog";
 
 export const dynamic = "force-dynamic";
-export const metadata = getStaticMetadata("PAGE-014");
+
+type ObjectsPageProps = Readonly<{
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}>;
+
+export async function generateMetadata({ searchParams }: ObjectsPageProps) {
+  return getStaticMetadata("PAGE-014", { technical: hasCatalogQueryState(await searchParams) });
+}
 
 const criteria = [
   "понятный формат права и документов",
@@ -21,17 +37,21 @@ const criteria = [
   "сценарий выхода до сделки",
 ];
 
-export default async function ObjectsPage() {
+export default async function ObjectsPage({ searchParams }: ObjectsPageProps) {
   const seo = getSeoEntry("PAGE-014");
   const editorialPreview = isEditorialPreviewEnabled();
   const properties = await listPublishedManualProperties();
+  const query = parseCatalogFilterQuery(await searchParams);
+  const filterGroups = buildCatalogFilterGroups(properties);
+  const visibleProperties = filterCatalogProperties(properties, query, filterGroups);
+  const compactCatalog = properties.length < minimumFilterableCatalogSize;
 
   return (
     <main>
       <PageHero
         eyebrow="Каталог инвестиционных паспортов"
         title={seo.h1}
-        lead="Здесь будут только объекты, по которым можно показать инвестиционный вывод, факты, бюджет, управление, риски и источники. Пустой каталог не маскируется под выбор."
+        lead="Не массовая витрина квартир, а курируемый список проектов с инвестиционным выводом, фактами, рисками и источниками."
         primaryCta={{ href: "/podbor/", label: "Получить shortlist" }}
         secondaryCta={{ href: "/metodika/", label: "Как мы отбираем" }}
         image={{
@@ -40,7 +60,7 @@ export default async function ObjectsPage() {
           src: "/images/projects/sample-resort/cover.webp",
           width: 1478,
         }}
-        proof="Фильтры будут клиентским leaf-компонентом и не создадут индексируемых URL."
+        proof="Актуальность каждого паспорта подтверждается датой последней проверки. Фильтры не создают индексируемых страниц."
       />
 
       <SectionShell
@@ -51,31 +71,59 @@ export default async function ObjectsPage() {
         <NumberedSteps columns={5} items={criteria.map((title) => ({ title }))} />
       </SectionShell>
 
+      {filterGroups.length > 0 ? (
+        <SectionShell
+          rhythm="sm"
+          eyebrow="Фильтры"
+          title="Сравнить опубликованные паспорта"
+          lead="Параметры работают внутри каталога. Любое query-состояние закрыто от индексации и канонизируется на чистый /obekty/."
+        >
+          <CatalogFilters groups={filterGroups} query={query} />
+        </SectionShell>
+      ) : null}
+
       <SectionShell
         rhythm="sm"
         eyebrow="Первые карточки"
         title={properties.length > 0 ? "Опубликованные инвестиционные паспорта" : "Паспорта готовятся к публикации"}
         lead={
           properties.length > 0
-            ? "Каждая карточка ведёт на полный паспорт проекта."
+            ? compactCatalog
+              ? "Пока это компактная курируемая витрина без искусственных фильтров и счётчиков. Каждая карточка ведёт на полный паспорт."
+              : "Каждая карточка ведёт на полный паспорт проекта."
             : "Сейчас в коде есть draft-шаблон, но он не выходит в public build и sitemap до проверки фактов."
         }
       >
-        {properties.length > 0 ? (
+        {visibleProperties.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {properties.map((property) => (
+            {visibleProperties.map((property) => (
               <ObjectCard
+                budget={property.budgetNote}
+                cityOrArea={property.geoContext.cityOrArea?.title}
+                format={getPropertyFormatLabel(property)}
                 key={property.id}
                 href={property.path}
                 image={property.image}
-                location={property.regionLabel}
+                location={property.geoContext.region.title}
+                locationHref={property.geoContext.region.path}
                 risk={property.riskSummary}
-                status="published"
+                status="проверен"
                 thesis={property.verdict}
                 title={property.title}
+                verifiedAt={property.verifiedAt}
               />
             ))}
           </div>
+        ) : properties.length > 0 ? (
+          <Card className="rounded-large bg-card">
+            <CardHeader>
+              <CardTitle className="text-h3">По выбранным параметрам паспортов нет</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-5 text-body text-muted-foreground">
+              <p>Сбросьте фильтры или оставьте задачу на ручной shortlist — неподтверждённые объекты не добавляются ради количества.</p>
+              <ActionLink href="/obekty/" variant="outline">Сбросить фильтры</ActionLink>
+            </CardContent>
+          </Card>
         ) : (
           <Card className="rounded-large bg-card">
             <CardHeader>

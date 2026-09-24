@@ -11,6 +11,7 @@ const publicGeoEntitySchema = z.object({
 
 export const publicPropertySchema = z.object({
   budgetNote: z.string().optional(),
+  category: z.enum(["apartment", "commercial", "house", "land"]).optional(),
   deactivatedAt: z.string().optional(),
   description: z.string().optional(),
   facts: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).min(1),

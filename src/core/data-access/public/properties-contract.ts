@@ -13,6 +13,7 @@ type PublicPropertyRecord = Readonly<
       Pick<
         Property,
         | "budgetNote"
+        | "category"
         | "complex"
         | "cityOrArea"
         | "deactivatedAt"
@@ -48,6 +49,7 @@ export type ArchiveReplacementCandidate = Readonly<{
 
 export const publicPropertySelect = {
   budgetNote: true,
+  category: true,
   cityOrArea: true,
   complex: true,
   deactivatedAt: true,
@@ -171,6 +173,7 @@ function relationId(value: unknown): string | undefined {
 export function mapPublicProperty(property: PublicPropertyRecord): PublicPropertyDTO {
   return publicPropertySchema.parse({
     budgetNote: property.budgetNote ?? undefined,
+    category: property.category ?? undefined,
     complexId: relationId(property.complex),
     deactivatedAt: property.deactivatedAt ?? undefined,
     description: property.description ?? undefined,

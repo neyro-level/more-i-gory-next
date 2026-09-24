@@ -27,8 +27,17 @@ function normalizeCanonical(canonical: string): string {
   return canonical.startsWith("/") ? canonical : `/${canonical}`;
 }
 
-export function sourceFromSeoEntry(entry: SeoEntry, runtimeContour?: SeoRuntimeContour): PageMetadataSource {
-  const state = resolveSeoState({ canonical: entry.canonical, registry: entry, runtimeContour });
+export function sourceFromSeoEntry(
+  entry: SeoEntry,
+  runtimeContour?: SeoRuntimeContour,
+  options: Readonly<{ technical?: boolean }> = {},
+): PageMetadataSource {
+  const state = resolveSeoState({
+    canonical: entry.canonical,
+    registry: entry,
+    runtimeContour,
+    technical: options.technical,
+  });
   return {
     canonical: state.canonical,
     description: entry.description,

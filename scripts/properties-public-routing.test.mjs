@@ -11,6 +11,13 @@ import {
   publicPropertySelect,
   uniqueArchiveReplacementPath,
 } from "../src/core/data-access/public/properties-contract.ts";
+import {
+  buildCatalogFilterGroups,
+  filterCatalogProperties,
+  hasCatalogQueryState,
+  minimumFilterableCatalogSize,
+  parseCatalogFilterQuery,
+} from "../src/core/catalog/public-catalog.ts";
 
 const privateFields = ["unitNumber", "cadastralNumber", "internalComment", "ownerContact"];
 
@@ -103,6 +110,7 @@ test("public property DTO mapper does not leak private inventory data", () => {
     cadastralNumber: "23:00:0000000:0000",
     createdAt: "2026-09-17T00:00:00.000Z",
     facts: [{ label: "Документы", value: "Проверяются перед публикацией." }],
+    category: "apartment",
     id: 100,
     images: [],
     internalComment: "private",
@@ -125,6 +133,7 @@ test("public property DTO mapper does not leak private inventory data", () => {
   });
 
   assert.equal(dto.path, "/obekty/yalta-passport/");
+  assert.equal(dto.category, "apartment");
   assert.equal(dto.regionLabel, "Ялта");
   assert.deepEqual(dto.geoContext, {
     cityOrArea: { id: "7", path: "/krym/yalta/", slug: "yalta", title: "Ялта" },
@@ -134,6 +143,31 @@ test("public property DTO mapper does not leak private inventory data", () => {
   for (const name of privateFields) {
     assert.equal(name in dto, false, `${name} must not be present in public DTO`);
   }
+});
+
+test("catalog filters are data-driven, hidden for small inventory and never create path pages", () => {
+  const property = (index, overrides = {}) => ({
+    budgetNote: index < 4 ? "до 20 млн ₽" : "от 20 млн ₽",
+    category: index % 2 === 0 ? "apartment" : "house",
+    facts: [{ label: "Стратегия", value: index % 2 === 0 ? "Аренда" : "Сохранение капитала" }],
+    geoContext: {
+      cityOrArea: { id: `city-${index % 2}`, path: index % 2 === 0 ? "/krym/yalta/" : "/krym/alushta/", slug: index % 2 === 0 ? "yalta" : "alushta", title: index % 2 === 0 ? "Ялта" : "Алушта" },
+      region: { id: "region-krym", path: "/krym/", slug: "krym", title: "Крым" },
+    },
+    id: String(index),
+    ...overrides,
+  });
+  const inventory = Array.from({ length: minimumFilterableCatalogSize }, (_, index) => property(index));
+
+  assert.deepEqual(buildCatalogFilterGroups(inventory.slice(0, 2)), []);
+  const groups = buildCatalogFilterGroups(inventory);
+  assert.deepEqual(groups.map((group) => group.key), ["city", "format", "budget", "strategy"]);
+
+  const query = parseCatalogFilterQuery({ city: "yalta", format: ["apartment", "house"], ignored: "value" });
+  assert.deepEqual(query, { city: "yalta", format: "apartment" });
+  assert.equal(filterCatalogProperties(inventory, query, groups).length, 4);
+  assert.equal(hasCatalogQueryState({ sort: "verified-desc" }), true);
+  assert.equal(hasCatalogQueryState({}), false);
 });
 
 test("archived lifecycle serves noindex during retention, unique replacement 308, otherwise gone intent", () => {
@@ -203,6 +237,10 @@ test("/obekty routes use Payload properties public gateway, not legacy project J
   const template = await readFile("src/components/templates/project-passport-template.tsx", "utf8");
 
   assert.match(listPage, /listPublishedManualProperties/);
+  assert.match(listPage, /CatalogFilters/);
+  assert.match(listPage, /hasCatalogQueryState/);
+  assert.match(listPage, /locationHref=\{property\.geoContext\.region\.path\}/);
+  assert.match(listPage, /verifiedAt=\{property\.verifiedAt\}/);
   assert.match(listPage, /const properties = await listPublishedManualProperties\(\)/);
   assert.doesNotMatch(listPage, /editorialPreview \? \[\] : await listPublishedManualProperties/);
   assert.doesNotMatch(listPage, /contentService|listPublishedProjects/);
