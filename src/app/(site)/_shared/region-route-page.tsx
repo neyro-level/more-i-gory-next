@@ -30,6 +30,7 @@ import { getSeoEntry } from "@/seo/registry";
 import { isRegionPublicRoute } from "@/core/regions/activation";
 
 const cityHubLabels: Readonly<Record<string, Readonly<{ genitive: string; prepositional: string }>>> = {
+  "/krym/evpatoriya/": { genitive: "Евпатории", prepositional: "Евпатории" },
   "/krym/sevastopol/": { genitive: "Севастополя", prepositional: "Севастополе" },
   "/krym/yalta/": { genitive: "Ялты", prepositional: "Ялте" },
 };
