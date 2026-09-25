@@ -21,8 +21,8 @@ Source of Truth проекта.
 | Production server | Timeweb `Moregory`, регион `ru-1`, Ubuntu 26.04; SSH aliases `moreigory` (deploy, sudo) и `moreigory-root` |
 | Secret Master | project `more-i-gory-server`, env `prod` — единственный source of truth для server и DB credentials |
 | Production database | отдельная Timeweb Managed PostgreSQL, регион `ru-1`, достижима с сервера (проверено 2026-09-18) |
-| Preview database | существующая `default_db` на cluster `4210557`; это единственный project-owned data contour v3 |
-| Manual media | Timeweb S3 bucket `moreigory-media`, endpoint `s3.twcstorage.ru`, region `ru-1`, path-style, публичное чтение; создан и проверен 2026-09-18 |
+| Preview database | единственный project-owned managed data contour; host и имя базы берутся из валидированного `DATABASE_URI`, а не хранятся в Git |
+| Manual media | Timeweb S3 bucket из validated `S3_BUCKET`, endpoint `s3.twcstorage.ru`, region `ru-1`, path-style, публичное чтение; создан и проверен 2026-09-18 |
 | Repository | SourceCraft `integrator-p/more-i-gory-next` |
 | Last closed program baseline | Plan №3 v3 / PR 100 / `21e484c98503550dbfbcbef38eb2e9eecd8d8308` |
 
@@ -54,8 +54,8 @@ Production build на сервере запрещён.
 | Подсистема | Статус | Комментарий |
 |---|---|---|
 | Payload CMS / Admin / schema | IMPLEMENTED | Admin и public pages через Public Gateway; fallback при недоступности Payload |
-| PostgreSQL | IMPLEMENTED managed + local | clean chain 26/26 и upgrade fixture PASS; одна managed `default_db` утверждена v3 |
-| S3 | IMPLEMENTED + LIVE PROOF | `moreigory-media` path-style; keys synchronized to Secret Master; Put/Head/Delete PASS |
+| PostgreSQL | IMPLEMENTED managed + local | clean chain и upgrade fixture PASS; один managed-контур утверждён, его identity хранится вне Git |
+| S3 | IMPLEMENTED + LIVE PROOF | bucket identity из runtime env, path-style; keys synchronized to Secret Master; Put/Head/Delete PASS |
 | Leads intake | IMPLEMENTED + TAP | POST `/api/public/leads`; PII logs proof 14.K |
 | Lead delivery | IMPLEMENTED pipeline; channel DISABLED | внешний канал не подключается |
 | Newbuild schema / public catalog | IMPLEMENTED namespaces | живой XML-фид заморожен |
@@ -167,6 +167,11 @@ CACHE_INVALIDATION_MODE=http
   `/novostroyki/<complex-slug>/` и segment slices вроде
   `/investicionnaya-nedvizhimost/krym/novostroyki/`.
 
+Production runtime требует `REVALIDATE_SECRET` и
+`INTERNAL_REVALIDATE_BASE_URL`. Editorial preview выбирается через
+`AMS_EDITORIAL_PREVIEW=payload|seed`: staging default — `payload`, seed разрешён
+только локально без БД и не перезаписывает существующие записи.
+
 ## 7. Env mapping
 
 Значения и secrets в документации не хранятся.
@@ -178,6 +183,8 @@ CACHE_INVALIDATION_MODE=http
 | Database | `DATABASE_URI` | Secret Master source: `MOREIGORY_DATABASE_URL`; generic `DATABASE_URL` is legacy and not consumed |
 | Payload secret | `PAYLOAD_SECRET` | secret |
 | Public canonical server URL | `NEXT_PUBLIC_SERVER_URL` | проектное имя роли `NEXT_PUBLIC_SITE_URL` из Core 3.0 |
+| Runtime contour | `AMS_RUNTIME_CONTOUR` | обязателен в production runtime; отсутствие трактуется как fail-closed staging для SEO |
+| Editorial preview | `AMS_EDITORIAL_PREVIEW` | `payload` на staging; `seed` только local/no-DB |
 | Jobs ownership | `JOBS_AUTORUN` | `true` только у одного jobs-active runtime |
 | Cache mode | `CACHE_INVALIDATION_MODE` | `http` |
 | Internal revalidation URL | `INTERNAL_REVALIDATE_BASE_URL` | server-only |

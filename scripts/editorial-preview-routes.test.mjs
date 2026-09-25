@@ -7,6 +7,7 @@ import {
   getEditorialPreviewRegionStaticParams,
   isEditorialPreviewEnabled,
   listEditorialPreviewRegions,
+  resolveEditorialPreviewMode,
 } from "../src/core/data-access/preview/editorial-preview.ts";
 
 test("editorial preview is enabled only for local or staging contours", () => {
@@ -16,11 +17,20 @@ test("editorial preview is enabled only for local or staging contours", () => {
   assert.equal(isEditorialPreviewEnabled({ NODE_ENV: "production" }), false);
 });
 
-test("all planned region routes and seed articles are present in preview navigation", () => {
-  const staging = { NODE_ENV: "production", AMS_RUNTIME_CONTOUR: "staging" };
-  const regions = listEditorialPreviewRegions(staging);
-  const params = getEditorialPreviewRegionStaticParams(staging);
-  const hrefs = getEditorialPreviewNavigation(staging).flatMap((group) => group.links.map((link) => link.href));
+test("staging defaults to Payload and seed mode is local-only without DB", () => {
+  assert.equal(resolveEditorialPreviewMode({ NODE_ENV: "production", AMS_RUNTIME_CONTOUR: "staging" }), "payload");
+  assert.equal(resolveEditorialPreviewMode({ NODE_ENV: "development", AMS_EDITORIAL_PREVIEW: "seed" }), "seed");
+  assert.throws(
+    () => resolveEditorialPreviewMode({ NODE_ENV: "development", AMS_EDITORIAL_PREVIEW: "seed", DATABASE_URI: "postgresql://db" }),
+    /without a database/,
+  );
+});
+
+test("all planned region routes and seed articles are present in local seed preview navigation", async () => {
+  const localSeed = { NODE_ENV: "development", AMS_EDITORIAL_PREVIEW: "seed" };
+  const regions = await listEditorialPreviewRegions(localSeed);
+  const params = await getEditorialPreviewRegionStaticParams(localSeed);
+  const hrefs = (await getEditorialPreviewNavigation(localSeed)).flatMap((group) => group.links.map((link) => link.href));
 
   assert.equal(regions.length, 10);
   assert.equal(params.length, 9);

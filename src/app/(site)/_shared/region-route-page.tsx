@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   getPublicRegionRelatedLinks,
   getRoutableRegionByPath,
+  listEditorialPreviewManualProperties,
   listPublishedManualProperties,
   listPublicRegions,
   type PublicRegionDTO,
@@ -22,6 +23,7 @@ import {
 import {
   getEditorialPreviewRegionByPath,
   getEditorialPreviewRegionRelatedLinks,
+  isEditorialPreviewEnabled,
   isEditorialPreviewRegion,
   listEditorialPreviewRegions,
 } from "@/core/data-access/preview/editorial-preview";
@@ -39,11 +41,11 @@ const cityHubLabels: Readonly<Record<string, Readonly<{ genitive: string; prepos
 };
 
 export const getRegionRouteModel = cache(async (path: string): Promise<PublicRegionDTO | null> =>
-  getEditorialPreviewRegionByPath(path) ?? await getRoutableRegionByPath(path));
+  (await getEditorialPreviewRegionByPath(path)) ?? await getRoutableRegionByPath(path));
 
 export function isVisibleRegionRoute(region: PublicRegionDTO | null): region is PublicRegionDTO {
   return region !== null
-    && (region.id.startsWith("editorial-preview:") || isRegionPublicRoute(region.status));
+    && (isEditorialPreviewEnabled() || region.id.startsWith("editorial-preview:") || isRegionPublicRoute(region.status));
 }
 
 export async function getRegionRouteMetadata(path: string): Promise<Metadata> {
@@ -57,17 +59,17 @@ export async function RegionRoutePage({ path }: Readonly<{ path: string }>) {
   if (!isVisibleRegionRoute(region)) notFound();
 
   const seo = getSeoEntry(region.pageId);
-  const isPreview = isEditorialPreviewRegion(region);
-  const regions = isPreview ? listEditorialPreviewRegions() : await listPublicRegions();
+  const isPreview = isEditorialPreviewEnabled() || isEditorialPreviewRegion(region);
+  const regions = isPreview ? await listEditorialPreviewRegions() : await listPublicRegions();
 
   if (region.path === "/krym/" && region.kind === "region") {
-    const projects = isPreview ? [] : await listPublishedManualProperties();
+    const projects = isPreview ? await listEditorialPreviewManualProperties() : await listPublishedManualProperties();
     return <CrimeaRegionHub projects={projects} region={region} regions={regions} title={seo.h1} />;
   }
 
   const cityLabels = region.pageKey === "CITY" ? cityHubLabels[region.path] : undefined;
   if (cityLabels) {
-    const projects = isPreview ? [] : await listPublishedManualProperties();
+    const projects = isPreview ? await listEditorialPreviewManualProperties() : await listPublishedManualProperties();
     return (
       <CityMarketHub
         city={region}

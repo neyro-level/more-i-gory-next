@@ -7,7 +7,14 @@ import {
   type SeoPublicationStatus,
   type SeoRuntimeContour,
 } from "./seo-state.ts";
-import { siteUrl } from "./site-url.ts";
+import { getSiteUrl } from "./site-url.ts";
+
+export const DEFAULT_OG_IMAGE = {
+  alt: "Панорамный вид курортного побережья для сайта Море и Горы",
+  height: 1524,
+  url: "/images/og/default.webp",
+  width: 2560,
+} as const;
 
 export type PageMetadataSource = Readonly<{
   canonical: string;
@@ -41,6 +48,7 @@ export function sourceFromSeoEntry(
   return {
     canonical: state.canonical,
     description: entry.description,
+    ogImagePath: entry.ogImage,
     robots: state.index ? "index-follow" : "noindex-follow",
     title: entry.title,
   };
@@ -97,9 +105,17 @@ export function sourceFromArticle(input: Readonly<{
 }
 
 export function buildPageMetadata(source: PageMetadataSource): Metadata {
+  const siteUrl = getSiteUrl();
   const canonical = normalizeCanonical(source.canonical);
   const absoluteUrl = new URL(canonical, siteUrl).toString();
-  const images = source.ogImagePath ? [new URL(source.ogImagePath, siteUrl).toString()] : undefined;
+  const title = source.title.replace(/\s*\|\s*Море и Горы$/u, "");
+  const imageUrl = new URL(source.ogImagePath ?? DEFAULT_OG_IMAGE.url, siteUrl).toString();
+  const images = [{
+    alt: DEFAULT_OG_IMAGE.alt,
+    height: DEFAULT_OG_IMAGE.height,
+    url: imageUrl,
+    width: DEFAULT_OG_IMAGE.width,
+  }];
 
   return {
     alternates: {
@@ -112,11 +128,17 @@ export function buildPageMetadata(source: PageMetadataSource): Metadata {
       images,
       locale: "ru_RU",
       siteName: "Море и Горы",
-      title: source.title,
+      title,
       type: "website",
       url: absoluteUrl,
     },
     robots: buildRobots(source),
-    title: source.title,
+    title,
+    twitter: {
+      card: "summary_large_image",
+      description: source.description,
+      images: [imageUrl],
+      title,
+    },
   };
 }

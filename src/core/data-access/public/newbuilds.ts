@@ -26,6 +26,7 @@ const publicDeveloperSchema = z.object({
   path: z.string().startsWith("/").endsWith("/"),
   seo: publicEntitySeoSchema,
   slug: z.string().min(1),
+  status: z.enum(["hidden", "published", "archived"]),
   title: z.string().min(1),
 });
 
@@ -38,6 +39,7 @@ const publicComplexSchema = z.object({
   regionLabel: z.string().min(1),
   seo: publicEntitySeoSchema,
   slug: z.string().min(1),
+  status: z.enum(["hidden", "published", "archived"]),
   title: z.string().min(1),
 });
 
@@ -109,6 +111,12 @@ export function publishedComplexesWhere(slug?: string): Where {
   return { and };
 }
 
+export function previewEntitiesWhere(slug?: string): Where {
+  const and: Where[] = [{ status: { not_equals: "archived" } }];
+  if (slug) and.push({ slug: { equals: slug } });
+  return { and };
+}
+
 export function activeNewbuildInventoryWhere(complexId: string | number): Where {
   return {
     and: [
@@ -146,6 +154,7 @@ function mapPublicDeveloper(developer: PublicDeveloperRecord): PublicDeveloperDT
     path: `/zastroyshchik/${developer.slug}/`,
     seo: developer.seo,
     slug: developer.slug,
+    status: developer.status,
     title: developer.title,
   });
 }
@@ -163,6 +172,7 @@ function mapPublicComplex(complex: PublicComplexRecord): PublicComplexDTO {
           title: "Застройщик уточняется",
         },
         slug: "unknown",
+        status: "hidden" as const,
         title: "Застройщик уточняется",
       };
 
@@ -175,6 +185,7 @@ function mapPublicComplex(complex: PublicComplexRecord): PublicComplexDTO {
     regionLabel: getRegionLabel(complex),
     seo: complex.seo,
     slug: complex.slug,
+    status: complex.status,
     title: complex.title,
   });
 }
@@ -224,6 +235,44 @@ async function readPublishedDevelopers(slug?: string): Promise<readonly PublicDe
         where: publishedDevelopersWhere(slug),
       });
 
+      return result.docs.map((doc) => mapPublicDeveloper(doc as PublicDeveloperRecord));
+    },
+  });
+}
+
+async function readPreviewComplexes(slug?: string): Promise<readonly PublicComplexDTO[]> {
+  return publicReadOrThrow({
+    reader: "editorial-preview-complexes",
+    read: async () => {
+      const payload = await getPayload({ config });
+      const result = await payload.find({
+        collection: "residential-complexes",
+        depth: 2,
+        limit: slug ? 1 : 100,
+        overrideAccess: false,
+        pagination: false,
+        select: publicComplexSelect,
+        where: previewEntitiesWhere(slug),
+      });
+      return result.docs.map((doc) => mapPublicComplex(doc as PublicComplexRecord));
+    },
+  });
+}
+
+async function readPreviewDevelopers(slug?: string): Promise<readonly PublicDeveloperDTO[]> {
+  return publicReadOrThrow({
+    reader: "editorial-preview-developers",
+    read: async () => {
+      const payload = await getPayload({ config });
+      const result = await payload.find({
+        collection: "developers",
+        depth: 1,
+        limit: slug ? 1 : 100,
+        overrideAccess: false,
+        pagination: false,
+        select: publicDeveloperSelect,
+        where: previewEntitiesWhere(slug),
+      });
       return result.docs.map((doc) => mapPublicDeveloper(doc as PublicDeveloperRecord));
     },
   });
@@ -291,4 +340,20 @@ export async function listActiveNewbuildInventoryByComplex(complexId: string): P
       return result.docs.map((doc) => mapPublicNewbuildInventory(doc as PublicNewbuildInventoryRecord));
     },
   });
+}
+
+export async function listEditorialPreviewComplexes(): Promise<readonly PublicComplexDTO[]> {
+  return readPreviewComplexes();
+}
+
+export async function getEditorialPreviewComplexBySlug(slug: string): Promise<PublicComplexDTO | null> {
+  return (await readPreviewComplexes(slug))[0] ?? null;
+}
+
+export async function listEditorialPreviewDevelopers(): Promise<readonly PublicDeveloperDTO[]> {
+  return readPreviewDevelopers();
+}
+
+export async function getEditorialPreviewDeveloperBySlug(slug: string): Promise<PublicDeveloperDTO | null> {
+  return (await readPreviewDevelopers(slug))[0] ?? null;
 }

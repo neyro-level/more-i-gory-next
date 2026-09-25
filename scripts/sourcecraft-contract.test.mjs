@@ -27,6 +27,8 @@ test("one manual release workflow owns the single-build artifact path", () => {
   assert.match(release, /expected_commit_sha/);
   assert.match(release, /gate_run_slug/);
   assert.match(release, /previous_release_sha/);
+  assert.match(release, /target_server_url/);
+  assert.match(releaseScript, /NEXT_PUBLIC_SERVER_URL="\$TARGET_SERVER_URL"/);
   assert.match(release, /bash scripts\/ci\/sourcecraft-release\.sh/);
   for (const artifact of [
     "release.tar.gz",

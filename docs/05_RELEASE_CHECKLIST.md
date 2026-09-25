@@ -109,6 +109,12 @@ graph. При `MISSING` facts техническая работа продолж
 
 ## 5. Infrastructure and release
 
+- [x] release workflow requires an exact non-loopback `target_server_url` and
+  scans built route output for loopback origins;
+- [x] undefined/staging runtime contour is fail-closed for robots and sitemap;
+- [x] production runtime env rejects missing contour, HTTP revalidation
+  credentials and leads-without-jobs-owner;
+
 - [x] technical production hostname определён: `more-previu.tw1.ru`;
 - [x] TLS для technical hostname проверен на сервере;
 - [x] production database credentials identified in Secret Master `more-i-gory-server/prod`;

@@ -22,6 +22,11 @@ if [[ ! "${STORE_RELEASE_TAG:-}" =~ ^[a-z0-9][a-z0-9._-]{2,127}$ ]]; then
   echo "Release refused: store_release_tag is invalid." >&2
   exit 1
 fi
+if [[ ! "${TARGET_SERVER_URL:-}" =~ ^https?://[^/]+$ ]]; then
+  echo "Release refused: target_server_url must be an exact public HTTP(S) origin." >&2
+  exit 1
+fi
+export NEXT_PUBLIC_SERVER_URL="$TARGET_SERVER_URL"
 
 corepack enable
 [[ "$(node -p 'process.versions.node')" == "24.20.0" ]]

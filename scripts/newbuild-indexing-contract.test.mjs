@@ -41,7 +41,7 @@ test("published residential complexes produce indexable sitemap entries", () => 
     newbuildComplexSitemapEntries([
       { path: "/novostroyki/sample-complex/" },
       { path: "novostroyki/second-complex" },
-    ]),
+    ], "production"),
     [
       { canonical: "/novostroyki/sample-complex/", priority: "P1" },
       { canonical: "/novostroyki/second-complex/", priority: "P1" },

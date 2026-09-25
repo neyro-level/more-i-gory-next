@@ -33,7 +33,7 @@ test("nginx is the TLS edge and proxies only to loopback app-port", () => {
 test("media and database stay off the VPS disk contract", () => {
   const operations = read("docs/OPERATIONS.md");
   assert.match(operations, /Timeweb Managed PostgreSQL via DATABASE_URI/);
-  assert.match(operations, /Timeweb S3 bucket moreigory-media \(not VPS disk\)/);
+  assert.match(operations, /Timeweb S3 bucket from validated S3_BUCKET \(not VPS disk\)/);
   const s3 = read("src/project/storage/s3.ts");
-  assert.match(s3, /moreigory-media/);
+  assert.doesNotMatch(s3, /moreigory-media/);
 });

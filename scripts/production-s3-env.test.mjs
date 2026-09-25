@@ -12,6 +12,9 @@ const baseEnv = {
 };
 
 const s3Env = {
+  AMS_RUNTIME_CONTOUR: "staging",
+  INTERNAL_REVALIDATE_BASE_URL: "http://127.0.0.1:3000",
+  REVALIDATE_SECRET: "replace-with-at-least-32-random-characters",
   S3_ACCESS_KEY: "access-key",
   S3_BUCKET: "moreigory-media",
   S3_ENDPOINT: "https://s3.twcstorage.ru",
@@ -35,12 +38,27 @@ test("local and build profiles may omit S3", () => {
 test("production runtime fail-fast requires the full S3 contract", () => {
   assert.equal(isProductionRuntimeProfile({ NODE_ENV: "production" }), true);
   assert.throws(
-    () => parseProjectEnv({ ...baseEnv, NODE_ENV: "production" }),
+    () => parseProjectEnv({
+      ...baseEnv,
+      NODE_ENV: "production",
+      AMS_RUNTIME_CONTOUR: "staging",
+      INTERNAL_REVALIDATE_BASE_URL: s3Env.INTERNAL_REVALIDATE_BASE_URL,
+      REVALIDATE_SECRET: s3Env.REVALIDATE_SECRET,
+    }),
     /S3_ENDPOINT is required in the production profile/,
   );
   assert.doesNotThrow(() => parseProjectEnv({ ...baseEnv, NODE_ENV: "production", ...s3Env }));
 });
 
-test("public leads require no external CAPTCHA credentials", () => {
+test("non-runtime public lead rendering requires no external CAPTCHA credentials", () => {
   assert.doesNotThrow(() => parseProjectEnv({ ...baseEnv, NEXT_PUBLIC_LEADS_ENABLED: "true" }));
+});
+
+test("runtime contour, cache invalidation and lead delivery fail closed", () => {
+  assert.throws(() => parseProjectEnv({ ...baseEnv, NODE_ENV: "production", ...s3Env, AMS_RUNTIME_CONTOUR: undefined }), /AMS_RUNTIME_CONTOUR/);
+  assert.throws(() => parseProjectEnv({ ...baseEnv, NODE_ENV: "production", ...s3Env, REVALIDATE_SECRET: undefined }), /cache invalidation/);
+  assert.throws(
+    () => parseProjectEnv({ ...baseEnv, NODE_ENV: "production", ...s3Env, AMS_RUNTIME_CONTOUR: "production", NEXT_PUBLIC_LEADS_ENABLED: "true" }),
+    /JOBS_AUTORUN=true/,
+  );
 });

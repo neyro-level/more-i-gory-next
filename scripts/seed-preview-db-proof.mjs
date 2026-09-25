@@ -38,8 +38,14 @@ function git(args) {
 
 export function assertPreviewContour(source) {
   if (source.AMS_RUNTIME_CONTOUR !== "staging") fail("Preview proof seed requires AMS_RUNTIME_CONTOUR=staging.");
-  if (source.NEXT_PUBLIC_SERVER_URL !== "https://more-previu.tw1.ru") {
-    fail("Preview proof seed is pinned to https://more-previu.tw1.ru.");
+  let publicUrl;
+  try {
+    publicUrl = new URL(source.NEXT_PUBLIC_SERVER_URL ?? "");
+  } catch {
+    fail("Preview proof seed requires a valid NEXT_PUBLIC_SERVER_URL.");
+  }
+  if (publicUrl.protocol !== "https:" || publicUrl.pathname !== "/" || /^(?:localhost|127\.0\.0\.1|\[::1\])$/iu.test(publicUrl.hostname)) {
+    fail("Preview proof seed requires a public HTTPS origin.");
   }
 }
 

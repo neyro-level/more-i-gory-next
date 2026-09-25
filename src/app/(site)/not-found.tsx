@@ -1,16 +1,10 @@
-import type { Metadata } from "next";
-import { Container } from "@/components/layout/container";
+import { SectionShell } from "@/components/layout/section-shell";
 import { ActionLink } from "@/components/navigation/action-link";
-
-export const metadata: Metadata = {
-  robots: { follow: true, index: false },
-  title: "Страница не найдена | Море и Горы",
-};
 
 export default function NotFound() {
   return (
-    <main className="py-24">
-      <Container size="narrow" className="text-center">
+    <main>
+      <SectionShell rhythm="lg" className="text-center">
         <p className="text-caption font-semibold uppercase tracking-eyebrow text-action">Ошибка 404</p>
         <h1 className="mt-4 text-h1 font-semibold text-surface-dark">
           Такой страницы нет
@@ -22,7 +16,7 @@ export default function NotFound() {
           <ActionLink href="/">На главную</ActionLink>
           <ActionLink href="/investicionnaya-nedvizhimost/" variant="outline">Сравнить регионы</ActionLink>
         </div>
-      </Container>
+      </SectionShell>
     </main>
   );
 }

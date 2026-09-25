@@ -22,6 +22,7 @@ const baseEnv = {
   PAYLOAD_SECRET: "replace-with-at-least-32-random-characters",
   TZ: "Europe/Moscow",
 };
+const fixtureBucket = "project-media-fixture";
 
 test("S3 storage plugin is disabled without S3 env", () => {
   assert.equal(isS3StorageConfigured(baseEnv), false);
@@ -32,7 +33,7 @@ test("S3 storage plugin requires the approved env-only contract", () => {
   const env = {
     ...baseEnv,
     S3_ACCESS_KEY: "access-key",
-    S3_BUCKET: "moreigory-media",
+    S3_BUCKET: fixtureBucket,
     S3_ENDPOINT: "https://s3.twcstorage.ru",
     S3_REGION: "ru-1",
     S3_SECRET_KEY: "secret-key",
@@ -46,11 +47,11 @@ test("media upload does not use VPS disk as source of truth", () => {
   assert.equal(Media.upload.disableLocalStorage, true);
   assert.equal(isVpsDiskMediaSourceOfTruth(), false);
   assert.equal(
-    createPublicS3ObjectUrl("cover.webp"),
-    "https://s3.twcstorage.ru/moreigory-media/media/cover.webp",
+    createPublicS3ObjectUrl("cover.webp", fixtureBucket),
+    `https://s3.twcstorage.ru/${fixtureBucket}/media/cover.webp`,
   );
-  assert.equal(createPublicS3ObjectUrl("cover.webp").includes("/public/"), false);
-  assert.throws(() => createPublicS3ObjectUrl("../secret"), /safe relative/);
+  assert.equal(createPublicS3ObjectUrl("cover.webp", fixtureBucket).includes("/public/"), false);
+  assert.throws(() => createPublicS3ObjectUrl("../secret", fixtureBucket), /safe relative/);
 });
 
 test("Timeweb S3 recovery uses versioning and does not restore from VPS disk", () => {

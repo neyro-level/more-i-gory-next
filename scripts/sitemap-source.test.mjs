@@ -20,7 +20,7 @@ test("CMS sitemap excludes drafts, archived and noindex pages", () => {
     { path: "/analitika", status: "published", seo: { robots: "index-follow", priority: "P1" } },
     { path: "/privacy/", status: "published", seo: { canonicalOverride: "/privacy", robots: "index-follow", priority: "P3" } },
     { path: "/privacy/", status: "published", seo: { canonicalOverride: "/unsupported/", robots: "index-follow", priority: "P3" } },
-  ]);
+  ], "production");
 
   assert.deepEqual(entries, [
     { canonical: "/analitika/", priority: "P1" },
@@ -68,7 +68,7 @@ test("unified sitemap sources cover registry, CMS pages, passports, complexes an
 });
 
 test("published catalog paths become sitemap entries and articles stay empty until later", () => {
-  assert.deepEqual(publishedCatalogSitemapEntries([{ path: "/obekty/sample-resort" }, { path: "/zastroyshchik/sample-developer/" }]), [
+  assert.deepEqual(publishedCatalogSitemapEntries([{ path: "/obekty/sample-resort" }, { path: "/zastroyshchik/sample-developer/" }], "P1", "production"), [
     { canonical: "/obekty/sample-resort/", priority: "P1" },
     { canonical: "/zastroyshchik/sample-developer/", priority: "P1" },
   ]);
@@ -92,7 +92,7 @@ test("published region enters sitemap while hidden and stub regions stay absent"
       { ...base, id: "published", path: "/published/", slug: "published", status: "published" },
       { ...base, id: "hidden", path: "/hidden/", slug: "hidden", status: "hidden" },
       { ...base, id: "stub", path: "/stub/", slug: "stub", status: "stub" },
-    ]),
+    ], [], "production"),
     [{ canonical: "/published/", priority: "P1" }],
   );
 });
@@ -150,9 +150,9 @@ test("published property, complex and developer appear in sitemap after CMS reva
   function computeSitemap() {
     return rejectDisallowedSitemapEntries(
       mergeSitemapEntries([
-        ...publishedCatalogSitemapEntries(published.properties),
-        ...newbuildComplexSitemapEntries(published.complexes),
-        ...publishedCatalogSitemapEntries(published.developers),
+        ...publishedCatalogSitemapEntries(published.properties, "P1", "production"),
+        ...newbuildComplexSitemapEntries(published.complexes, "production"),
+        ...publishedCatalogSitemapEntries(published.developers, "P1", "production"),
       ]),
     );
   }

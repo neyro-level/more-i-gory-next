@@ -11,11 +11,11 @@ const registry = {
 const article = { contentGate: "pass", path: "/analitika/test/", registry, status: "published" };
 
 test("article lifecycle requires publication and its own content gate", () => {
-  assert.deepEqual(articleSitemapEntries([{ ...article, status: "draft" }]), []);
-  assert.deepEqual(articleSitemapEntries([{ ...article, status: "review" }]), []);
-  assert.deepEqual(articleSitemapEntries([{ ...article, contentGate: "missing" }]), []);
-  assert.deepEqual(articleSitemapEntries([{ ...article, status: "archived" }]), []);
-  assert.deepEqual(articleSitemapEntries([article]), [{ canonical: "/analitika/test/", priority: "P2" }]);
+  assert.deepEqual(articleSitemapEntries([{ ...article, status: "draft" }], "production"), []);
+  assert.deepEqual(articleSitemapEntries([{ ...article, status: "review" }], "production"), []);
+  assert.deepEqual(articleSitemapEntries([{ ...article, contentGate: "missing" }], "production"), []);
+  assert.deepEqual(articleSitemapEntries([{ ...article, status: "archived" }], "production"), []);
+  assert.deepEqual(articleSitemapEntries([article], "production"), [{ canonical: "/analitika/test/", priority: "P2" }]);
 });
 
 test("PAGE-017 policy cannot open a draft article namespace", async () => {

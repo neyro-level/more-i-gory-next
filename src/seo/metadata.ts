@@ -4,9 +4,7 @@ import { resolveRuntimeContour } from "@/project/runtime-contour";
 import { getSeoEntry, type SeoEntry } from "./registry";
 import { buildPageMetadata, sourceFromCmsSeo, sourceFromSeoEntry } from "./page-metadata.ts";
 import { isSupportedCmsPageCanonical } from "./sitemap-source-contract.ts";
-import { siteUrl } from "./site-url.ts";
-
-export { siteUrl };
+export { getSiteUrl } from "./site-url.ts";
 export { buildPageMetadata };
 
 export function buildMetadata(entry: SeoEntry, options: Readonly<{ technical?: boolean }> = {}): Metadata {

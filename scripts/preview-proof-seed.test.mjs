@@ -49,16 +49,13 @@ test("proof seed performs collection-specific idempotent privileged upserts", as
       calls.push(["find", options]);
       return options.where.slug.equals === "db-proof-published" ? { docs: [{ id: 1 }] } : { docs: [] };
     },
-    update: async (options) => {
-      calls.push(["update", options]);
-      return { id: options.id };
-    },
   };
 
   assert.deepEqual(await upsertPreviewProofRecords(payload), {
     draft: { id: 2, outcome: "created", slug: "db-proof-draft" },
-    published: { id: 1, outcome: "updated", slug: "db-proof-published" },
+    published: { id: 1, outcome: "existing", slug: "db-proof-published" },
   });
+  assert.equal(calls.some(([operation]) => operation === "update"), false);
   assert.equal(calls.every(([, options]) => options.collection === "properties"), true);
   assert.equal(calls.every(([, options]) => options.overrideAccess === true), true);
 });

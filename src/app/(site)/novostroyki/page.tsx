@@ -4,7 +4,7 @@ import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { ObjectCard } from "@/components/marketing/object-card";
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
-import { listPublishedComplexes } from "@/core/data-access/public";
+import { listEditorialPreviewComplexes, listPublishedComplexes } from "@/core/data-access/public";
 import { getStaticMetadata } from "@/seo/metadata";
 import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
 
@@ -13,7 +13,7 @@ export const metadata = getStaticMetadata("PAGE-026");
 
 export default async function NewbuildCatalogPage() {
   const editorialPreview = isEditorialPreviewEnabled();
-  const complexes = editorialPreview ? [] : await listPublishedComplexes();
+  const complexes = editorialPreview ? await listEditorialPreviewComplexes() : await listPublishedComplexes();
 
   return (
     <main>

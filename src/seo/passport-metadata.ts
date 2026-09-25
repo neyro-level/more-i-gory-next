@@ -1,7 +1,7 @@
 import { buildPageMetadata, type PageMetadataSource } from "./page-metadata.ts";
 import { resolveRuntimeContour } from "../project/runtime-contour.ts";
 import { resolveSeoState } from "./seo-state.ts";
-import { siteUrl } from "./site-url.ts";
+import { getSiteUrl } from "./site-url.ts";
 
 export type PassportMetadataFacts = Readonly<{
   description?: string;
@@ -42,6 +42,7 @@ export function buildPassportPageMetadata(property: PassportMetadataFacts) {
 }
 
 export function passportStructuredData(property: PassportMetadataFacts): Readonly<Record<string, unknown>> {
+  const siteUrl = getSiteUrl();
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "RealEstateListing",

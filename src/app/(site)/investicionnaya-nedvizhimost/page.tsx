@@ -14,7 +14,7 @@ export const metadata = getStaticMetadata("PAGE-002");
 
 export default async function FederalInvestmentHubPage() {
   const seo = getSeoEntry("PAGE-002");
-  const previewRegions = listEditorialPreviewRegions();
+  const previewRegions = await listEditorialPreviewRegions();
   const regions = previewRegions.length > 0 ? previewRegions : await listPublicHubRegions();
 
   return (

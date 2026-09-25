@@ -11,7 +11,7 @@ const valid = [
   "NEXT_PUBLIC_LEADS_ENABLED=false",
   "DATABASE_URI=postgresql://user:redacted@example.invalid:5432/default_db",
   "PAYLOAD_SECRET=payload-secret-at-least-32-characters",
-  "NEXT_PUBLIC_SERVER_URL=https://more-previu.tw1.ru",
+  "NEXT_PUBLIC_SERVER_URL=https://preview.example.test",
   "CACHE_INVALIDATION_MODE=http",
   "REVALIDATE_SECRET=revalidate-secret-at-least-32-characters",
   "INTERNAL_REVALIDATE_BASE_URL=http://127.0.0.1:3000",
@@ -40,4 +40,5 @@ test("rejects incomplete revalidation and unsafe contour values", () => {
   );
   assert.throws(() => validatePreviewEnv(valid.replace("AMS_RUNTIME_CONTOUR=staging", "AMS_RUNTIME_CONTOUR=production")), /AMS_RUNTIME_CONTOUR/);
   assert.throws(() => validatePreviewEnv(valid.replace("JOBS_AUTORUN=false", "JOBS_AUTORUN=true")), /JOBS_AUTORUN/);
+  assert.throws(() => validatePreviewEnv(valid.replace("https://preview.example.test", "http://127.0.0.1:3000")), /public HTTPS origin/);
 });

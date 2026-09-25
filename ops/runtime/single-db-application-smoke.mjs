@@ -3,8 +3,21 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const PREVIEW_ORIGIN = "https://more-previu.tw1.ru";
 const NOINDEX = "noindex, nofollow";
+
+function parsePublicOrigin(value, label) {
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    fail(`${label} must be a valid URL.`);
+  }
+  if (url.protocol !== "https:" || url.pathname !== "/" || url.search || url.hash) {
+    fail(`${label} must be an exact HTTPS origin.`);
+  }
+  if (/^(?:localhost|127\.0\.0\.1|\[::1\])$/iu.test(url.hostname)) fail(`${label} must not use loopback.`);
+  return url.origin;
+}
 
 function fail(message) {
   throw new Error(message);
@@ -27,17 +40,17 @@ export function parseArguments(argv) {
   const draftSlug = values.get("draft-slug") ?? "";
   const expectedTitle = values.get("expected-title") ?? "";
   const phase = values.get("phase") ?? "";
-  if (baseUrl !== PREVIEW_ORIGIN) fail(`--base-url must be ${PREVIEW_ORIGIN}.`);
+  const publicOrigin = parsePublicOrigin(baseUrl, "--base-url");
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(publishedSlug)) fail("--published-slug is invalid.");
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(draftSlug)) fail("--draft-slug is invalid.");
   if (!expectedTitle.trim()) fail("--expected-title is required.");
   if (!new Set(["before-restart", "after-restart"]).has(phase)) fail("--phase is invalid.");
-  return { baseUrl, publishedSlug, draftSlug, expectedTitle, phase };
+  return { baseUrl: publicOrigin, publishedSlug, draftSlug, expectedTitle, phase };
 }
 
 export function resolveTransportBaseUrl(source = process.env) {
   const value = source.DB_SMOKE_TRANSPORT_BASE_URL;
-  if (!value) return PREVIEW_ORIGIN;
+  if (!value) return parsePublicOrigin(source.NEXT_PUBLIC_SERVER_URL ?? "", "NEXT_PUBLIC_SERVER_URL");
   if (!/^http:\/\/127\.0\.0\.1:\d{2,5}$/u.test(value)) {
     fail("DB_SMOKE_TRANSPORT_BASE_URL must use loopback HTTP with an explicit port.");
   }
@@ -58,8 +71,9 @@ async function responseText(response, label, requireNoindex) {
 
 export async function runApplicationSmoke(options, dependencies = {}) {
   const fetchImpl = dependencies.fetchImpl ?? fetch;
-  const transportBaseUrl = dependencies.transportBaseUrl ?? resolveTransportBaseUrl();
-  const requireNoindex = transportBaseUrl === PREVIEW_ORIGIN;
+  const transportBaseUrl = dependencies.transportBaseUrl
+    ?? (process.env.DB_SMOKE_TRANSPORT_BASE_URL ? resolveTransportBaseUrl(process.env) : options.baseUrl);
+  const requireNoindex = !/^http:\/\/127\.0\.0\.1:/u.test(transportBaseUrl);
   const ownerEmail = dependencies.ownerEmail ?? process.env.DB_SMOKE_OWNER_EMAIL;
   const ownerPassword = dependencies.ownerPassword ?? process.env.DB_SMOKE_OWNER_PASSWORD;
   if (!ownerEmail || !ownerPassword) fail("DB_SMOKE_OWNER_EMAIL and DB_SMOKE_OWNER_PASSWORD are required.");

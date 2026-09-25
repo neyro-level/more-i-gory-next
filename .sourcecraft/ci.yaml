@@ -133,13 +133,17 @@ workflows:
         type: string
         required: true
         description: "Draft SourceCraft Release used as the durable artifact store"
+      target_server_url:
+        type: string
+        required: true
+        description: "Exact public origin compiled into the immutable artifact"
     tasks:
       - name: exact-sha-release-unit
         cubes:
           - name: build-pack-rehearse
             image: docker.io/library/node:24.20.0-bookworm
             script:
-              - EXPECTED_COMMIT_SHA=${{ inputs.expected_commit_sha }} GATE_RUN_SLUG=${{ inputs.gate_run_slug }} PREVIOUS_RELEASE_SHA=${{ inputs.previous_release_sha }} STORE_RELEASE_TAG=${{ inputs.store_release_tag }} bash scripts/ci/sourcecraft-release.sh
+              - EXPECTED_COMMIT_SHA=${{ inputs.expected_commit_sha }} GATE_RUN_SLUG=${{ inputs.gate_run_slug }} PREVIOUS_RELEASE_SHA=${{ inputs.previous_release_sha }} STORE_RELEASE_TAG=${{ inputs.store_release_tag }} TARGET_SERVER_URL=${{ inputs.target_server_url }} bash scripts/ci/sourcecraft-release.sh
             artifacts:
               paths:
                 - dist/sourcecraft-release/release.tar.gz

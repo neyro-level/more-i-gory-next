@@ -69,7 +69,7 @@ export function resolveSeoState(input: SeoStateInput): EffectiveSeoState {
   const canonical = overrideCanonical ?? baseCanonical;
   const lifecycle = input.lifecycle ?? "active";
   const routeSupported = input.routeSupported ?? true;
-  const runtimeContour = input.runtimeContour ?? "production";
+  const runtimeContour = input.runtimeContour ?? "staging";
   const redirectTarget = input.redirectIntent ? normalizeCanonicalPath(input.redirectIntent.target) : null;
   const redirectIntent = input.redirectIntent && redirectTarget
     ? { status: input.redirectIntent.status, target: redirectTarget }

@@ -27,12 +27,10 @@ const EXPECTED = new Map([
   ["AMS_RUNTIME_CONTOUR", "staging"],
   ["JOBS_AUTORUN", "false"],
   ["NEXT_PUBLIC_LEADS_ENABLED", "false"],
-  ["NEXT_PUBLIC_SERVER_URL", "https://more-previu.tw1.ru"],
   ["CACHE_INVALIDATION_MODE", "http"],
   ["INTERNAL_REVALIDATE_BASE_URL", "http://127.0.0.1:3000"],
   ["S3_ENDPOINT", "https://s3.twcstorage.ru"],
   ["S3_REGION", "ru-1"],
-  ["S3_BUCKET", "moreigory-media"],
   ["S3_MEDIA_PREFIX", "staging/media"],
 ]);
 
@@ -64,6 +62,14 @@ export function validatePreviewEnv(raw) {
   }
   if (!/^(postgresql|postgres):\/\//.test(values.get("DATABASE_URI") ?? "")) {
     fail("DATABASE_URI must be a PostgreSQL URL");
+  }
+  const databaseUrl = new URL(values.get("DATABASE_URI"));
+  if (!databaseUrl.hostname || !databaseUrl.pathname.replace(/^\//u, "")) {
+    fail("DATABASE_URI must include a host and database name");
+  }
+  const publicUrl = new URL(values.get("NEXT_PUBLIC_SERVER_URL"));
+  if (publicUrl.protocol !== "https:" || /^(?:localhost|127\.0\.0\.1|\[::1\])$/iu.test(publicUrl.hostname)) {
+    fail("NEXT_PUBLIC_SERVER_URL must be a public HTTPS origin");
   }
   for (const key of ["PAYLOAD_SECRET", "REVALIDATE_SECRET"]) {
     if ((values.get(key)?.length ?? 0) < 32) fail(`${key} must contain at least 32 characters`);

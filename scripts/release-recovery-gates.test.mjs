@@ -11,7 +11,7 @@ const checklist = await readFile(
 test('restore proof is release-only, isolated and temporary', () => {
   assert.match(operations, /Выпускаем production/)
   assert.match(operations, /ephemeral recovery target/i)
-  assert.match(operations, /Never restore over `default_db`/)
+  assert.match(operations, /Never restore over the managed database resolved from `DATABASE_URI`/)
   assert.match(operations, /Delete the temporary target/)
   assert.match(operations, /No standing\s+staging\/test\/restore database/)
   assert.match(checklist, /ephemeral recovery target/)

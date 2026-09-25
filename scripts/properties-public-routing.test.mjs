@@ -283,7 +283,8 @@ test("/obekty routes use Payload properties public gateway, not legacy project J
   assert.match(listPage, /hasCatalogQueryState/);
   assert.match(listPage, /locationHref=\{isDiscoverableGeoStatus\(property\.geoContext\.region\.status\)/);
   assert.match(listPage, /verifiedAt=\{property\.verifiedAt\}/);
-  assert.match(listPage, /const properties = await listPublishedManualProperties\(\)/);
+  assert.match(listPage, /listEditorialPreviewManualProperties\(\)/);
+  assert.match(listPage, /: await listPublishedManualProperties\(\)/);
   assert.doesNotMatch(listPage, /editorialPreview \? \[\] : await listPublishedManualProperties/);
   assert.doesNotMatch(listPage, /contentService|listPublishedProjects/);
   assert.match(detailPage, /getManualPropertyRouteBySlug/);

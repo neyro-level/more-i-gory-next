@@ -9,6 +9,7 @@ const rawEnvSchema = z
     AMS_PROFILE: z.literal("REALTY_BASE"),
     TZ: z.literal("Europe/Moscow"),
     AMS_RUNTIME_CONTOUR: z.enum(["staging", "production"]).optional(),
+    AMS_EDITORIAL_PREVIEW: z.enum(["payload", "seed"]).optional(),
     JOBS_AUTORUN: z.enum(["true", "false"]).default("false"),
     DATABASE_URI: z
       .string()
@@ -26,7 +27,7 @@ const rawEnvSchema = z
       }
     }, "NEXT_PUBLIC_SERVER_URL must be an exact HTTP(S) origin without a path, query, hash, or trailing slash"),
     NEXT_PUBLIC_LEADS_ENABLED: z.enum(["true", "false"]).default("false"),
-    CACHE_INVALIDATION_MODE: z.literal("http").optional(),
+    CACHE_INVALIDATION_MODE: z.literal("http").default("http"),
     REVALIDATE_SECRET: z.string().min(32).optional(),
     INTERNAL_REVALIDATE_BASE_URL: optionalUrl,
     S3_ENDPOINT: optionalUrl,
@@ -43,15 +44,6 @@ const rawEnvSchema = z
     ALERT_WEBHOOK_URL: optionalUrl,
   })
   .superRefine((value, context) => {
-    if (value.CACHE_INVALIDATION_MODE === "http") {
-      if (!value.REVALIDATE_SECRET) {
-        context.addIssue({ code: "custom", message: "REVALIDATE_SECRET is required for HTTP invalidation", path: ["REVALIDATE_SECRET"] });
-      }
-      if (!value.INTERNAL_REVALIDATE_BASE_URL) {
-        context.addIssue({ code: "custom", message: "INTERNAL_REVALIDATE_BASE_URL is required for HTTP invalidation", path: ["INTERNAL_REVALIDATE_BASE_URL"] });
-      }
-    }
-
     const s3Keys = ["S3_ENDPOINT", "S3_REGION", "S3_BUCKET", "S3_ACCESS_KEY", "S3_SECRET_KEY"] as const;
     if (s3Keys.some((key) => value[key])) {
       for (const key of s3Keys) {
@@ -60,6 +52,22 @@ const rawEnvSchema = z
     }
 
     const leadChannels = value.LEAD_CHANNELS?.split(",").map((channel) => channel.trim()).filter(Boolean) ?? [];
+    if (leadChannels.length > 0) {
+      if (!value.OUTBOUND_ALLOWED_HOSTS) {
+        context.addIssue({ code: "custom", message: "OUTBOUND_ALLOWED_HOSTS is required when lead channels are enabled", path: ["OUTBOUND_ALLOWED_HOSTS"] });
+      }
+      if (!value.LEAD_OUTBOUND_HOSTS) {
+        context.addIssue({ code: "custom", message: "LEAD_OUTBOUND_HOSTS is required when lead channels are enabled", path: ["LEAD_OUTBOUND_HOSTS"] });
+      }
+
+      const allowlisted = new Set(value.OUTBOUND_ALLOWED_HOSTS?.split(",").map((host) => host.trim().toLowerCase()).filter(Boolean));
+      const leadHosts = value.LEAD_OUTBOUND_HOSTS?.split(",").map((host) => host.trim().toLowerCase()).filter(Boolean) ?? [];
+      for (const host of leadHosts) {
+        if (!allowlisted.has(host)) {
+          context.addIssue({ code: "custom", message: `Lead outbound host is not allowlisted: ${host}`, path: ["LEAD_OUTBOUND_HOSTS"] });
+        }
+      }
+    }
     if (leadChannels.includes("telegram")) {
       for (const key of ["TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"] as const) {
         if (!value[key]) context.addIssue({ code: "custom", message: `${key} is required for the Telegram lead channel`, path: [key] });
@@ -80,6 +88,15 @@ export function parseProjectEnv(source: NodeJS.ProcessEnv) {
   const parsed = rawEnvSchema.parse(source);
 
   if (isProductionRuntimeProfile(source)) {
+    if (!parsed.AMS_RUNTIME_CONTOUR) {
+      throw new z.ZodError([{ code: "custom", message: "AMS_RUNTIME_CONTOUR is required in the production runtime", path: ["AMS_RUNTIME_CONTOUR"] }]);
+    }
+    if (!parsed.REVALIDATE_SECRET || !parsed.INTERNAL_REVALIDATE_BASE_URL) {
+      throw new z.ZodError([{ code: "custom", message: "HTTP cache invalidation requires REVALIDATE_SECRET and INTERNAL_REVALIDATE_BASE_URL in runtime", path: ["CACHE_INVALIDATION_MODE"] }]);
+    }
+    if (parsed.AMS_RUNTIME_CONTOUR === "production" && parsed.NEXT_PUBLIC_LEADS_ENABLED === "true" && parsed.JOBS_AUTORUN !== "true") {
+      throw new z.ZodError([{ code: "custom", message: "Production lead intake requires JOBS_AUTORUN=true", path: ["JOBS_AUTORUN"] }]);
+    }
     const s3Keys = ["S3_ENDPOINT", "S3_REGION", "S3_BUCKET", "S3_ACCESS_KEY", "S3_SECRET_KEY"] as const;
     for (const key of s3Keys) {
       if (!parsed[key]) {

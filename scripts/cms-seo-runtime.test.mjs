@@ -11,10 +11,10 @@ const page = (path, overrides = {}) => ({
 });
 
 test("CMS sitemap accepts only runtime-supported paths and respects robots", () => {
-  assert.deepEqual(cmsPageSitemapEntries([page("/analitika/")]), [{ canonical: "/analitika/", priority: "P2" }]);
-  assert.deepEqual(cmsPageSitemapEntries([page("/unknown-cms-page/")]), []);
-  assert.deepEqual(cmsPageSitemapEntries([page("/privacy/", { canonicalOverride: "/unknown-cms-page/" })]), []);
-  assert.deepEqual(cmsPageSitemapEntries([page("/privacy/", { robots: "noindex-follow" })]), []);
+  assert.deepEqual(cmsPageSitemapEntries([page("/analitika/")], "production"), [{ canonical: "/analitika/", priority: "P2" }]);
+  assert.deepEqual(cmsPageSitemapEntries([page("/unknown-cms-page/")], "production"), []);
+  assert.deepEqual(cmsPageSitemapEntries([page("/privacy/", { canonicalOverride: "/unknown-cms-page/" })], "production"), []);
+  assert.deepEqual(cmsPageSitemapEntries([page("/privacy/", { robots: "noindex-follow" })], "production"), []);
   assert.deepEqual(cmsPageSitemapEntries([page("/privacy/")], "staging"), []);
 });
 
@@ -28,6 +28,7 @@ test("CMS metadata and sitemap share controlled canonical override semantics", a
   const source = sourceFromCmsSeo({
     canonical: "/privacy/", description: "Policy", publicationStatus: "published",
     routeSupported: true,
+    runtimeContour: "production",
     seo: { canonicalOverride: "/privacy", robots: "index-follow", title: "Privacy" },
   });
   assert.equal(source.canonical, "/privacy/");

@@ -1,43 +1,45 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { fallbackSiteChrome, getSiteChromeOrFallback } from "@/core/data-access/public";
-import { siteUrl } from "@/seo/metadata";
+import { getSiteUrl } from "@/seo/metadata";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { getEditorialPreviewNavigation } from "@/core/data-access/preview/editorial-preview";
+import { getEditorialPreviewNavigation, resolveEditorialPreviewMode } from "@/core/data-access/preview/editorial-preview";
+import { montserrat } from "@/app/fonts";
+import { siteStructuredData } from "@/seo/structured-data";
 
-const montserrat = Montserrat({
-  display: "swap",
-  fallback: ["Arial", "sans-serif"],
-  subsets: ["cyrillic"],
-  style: "normal",
-  variable: "--font-montserrat",
-  weight: "variable",
-});
+export function generateMetadata(): Metadata {
+  return {
+    metadataBase: new URL(getSiteUrl()),
+    title: {
+      default: "Недвижимость для инвестиций — курортные проекты | Море и Горы",
+      template: "%s | Море и Горы",
+    },
+    icons: { icon: "/favicon.svg" },
+  };
+}
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: "Недвижимость для инвестиций — курортные проекты | Море и Горы",
-  icons: {
-    icon: "/favicon.svg",
-  },
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const previewNavigation = getEditorialPreviewNavigation();
-  const siteChromePromise = previewNavigation.length > 0
+  const previewNavigation = await getEditorialPreviewNavigation();
+  const siteChromePromise = previewNavigation.length > 0 && resolveEditorialPreviewMode() === "seed"
     ? Promise.resolve(fallbackSiteChrome)
     : getSiteChromeOrFallback();
 
   return (
     <html lang="ru" className={cn("font-sans", montserrat.variable)}>
       <body>
+        {siteStructuredData().map((entry) => (
+          <script
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(entry) }}
+            key={entry["@id"]}
+            type="application/ld+json"
+          />
+        ))}
         <SiteChromeLayout previewNavigation={previewNavigation} siteChromePromise={siteChromePromise}>{children}</SiteChromeLayout>
       </body>
     </html>
@@ -50,7 +52,7 @@ async function SiteChromeLayout({
   siteChromePromise,
 }: Readonly<{
   children: React.ReactNode;
-  previewNavigation: ReturnType<typeof getEditorialPreviewNavigation>;
+  previewNavigation: Awaited<ReturnType<typeof getEditorialPreviewNavigation>>;
   siteChromePromise: ReturnType<typeof getSiteChromeOrFallback>;
 }>) {
   const siteChrome = await siteChromePromise;

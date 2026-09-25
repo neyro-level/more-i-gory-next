@@ -55,7 +55,7 @@ test("final public boundary exposes published and rejects hidden plus stub in ev
 
   assert.deepEqual(published.map((region) => region.slug), ["published"]);
   assert.deepEqual(getPublicRegionStaticParams(fixture), [{ path: ["published"] }]);
-  assert.deepEqual(publicRegionSitemapEntries(fixture), [
+  assert.deepEqual(publicRegionSitemapEntries(fixture, [], "production"), [
     { canonical: "/published/", priority: "P1" },
   ]);
   assert.equal(isGenericPublicRegion(publishedRegion), true);

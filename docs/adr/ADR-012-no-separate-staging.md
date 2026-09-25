@@ -17,6 +17,12 @@ production и не разрешает реальный трафик.
 - Проверять миграции и restore только на одноразовых изолированных fixtures.
 - Сохранять preview под `noindex, nofollow`; feed, реальные лиды и внешний
   delivery остаются выключены.
+- Editorial preview в staging работает в режиме `AMS_EDITORIAL_PREVIEW=payload`:
+  опубликованные и редакционные сущности читаются через Public Gateway с
+  `overrideAccess: false`. Seed-режим допустим только локально, без production
+  contour и без `DATABASE_URI`; существующие записи seed не перезаписывает.
+- Identity preview host, managed database и bucket поступает из валидированного
+  runtime env / Secret Master и не закрепляется в Git.
 - Не выполнять production rollout, включение jobs owner, реальный трафик,
   DNS/domain cutover или снятие preview-ограничений без отдельной команды
   владельца `Выпускаем production` и release checklist.
@@ -37,3 +43,5 @@ production и не разрешает реальный трафик.
 - restore proof выполняется только на временной recovery target в отдельной
   release-фазе;
 - этот ADR не разрешает production и не меняет публичные страницы.
+- technical preview остаётся без реальных лидов и jobs owner:
+  `NEXT_PUBLIC_LEADS_ENABLED=false`, `JOBS_AUTORUN=false`.

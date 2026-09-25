@@ -292,7 +292,8 @@ const illegalClientFiles = sourceFiles.filter((file) => {
   const text = readFileSync(file, "utf8");
   const approvedClientLeaf =
     file.includes(`${join("src", "components", "ui")}`) ||
-    file.includes(`${join("src", "components", "marketing", "forms")}`);
+    file.includes(`${join("src", "components", "marketing", "forms")}`) ||
+    file === join(root, "src", "app", "(site)", "error.tsx");
   return (
     /^["']use client["'];?/.test(text) &&
     !approvedClientLeaf

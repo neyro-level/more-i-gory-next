@@ -19,7 +19,7 @@ export const metadata = getStaticMetadata("PAGE-001");
 
 export default async function HomePage() {
   const regions = (
-    isEditorialPreviewEnabled() ? listEditorialPreviewRegions() : await listPublicHubRegions()
+    isEditorialPreviewEnabled() ? await listEditorialPreviewRegions() : await listPublicHubRegions()
   ).filter((region) => region.kind === "region");
   const regionCards: HomeRegionCardModel[] = regions.map((region) => ({
     href: region.path,

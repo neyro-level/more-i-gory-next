@@ -3,16 +3,15 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { STAGING_CONTOUR, resolveS3MediaPrefix } from "../src/project/runtime-contour.ts";
-import { TIMEWEB_S3_CONTRACT, createStoragePlugins } from "../src/project/storage/s3.ts";
+import { createStoragePlugins } from "../src/project/storage/s3.ts";
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("preview contour pins host, single DB, S3 prefix, secret names, noindex and frozen ingest", () => {
-  assert.equal(STAGING_CONTOUR.publicHost, "more-previu.tw1.ru");
-  assert.equal(STAGING_CONTOUR.databaseName, "default_db");
+test("preview contour reads infrastructure identity from validated env and pins safe behavior", () => {
+  assert.equal(STAGING_CONTOUR.publicHostEnv, "NEXT_PUBLIC_SERVER_URL");
+  assert.equal(STAGING_CONTOUR.databaseEnv, "DATABASE_URI");
   assert.equal(STAGING_CONTOUR.s3Prefix, "staging/media");
-  assert.equal(STAGING_CONTOUR.s3Bucket, TIMEWEB_S3_CONTRACT.bucket);
-  assert.equal(STAGING_CONTOUR.databaseSecretName, "MOREIGORY_DATABASE_URL");
+  assert.equal(STAGING_CONTOUR.s3BucketEnv, "S3_BUCKET");
   assert.equal(STAGING_CONTOUR.forbiddenLeadSecretNames.includes("TELEGRAM_BOT_TOKEN"), true);
   assert.equal(STAGING_CONTOUR.jobsAutorun, "false");
   assert.equal(STAGING_CONTOUR.ingest, "frozen");
@@ -20,7 +19,7 @@ test("preview contour pins host, single DB, S3 prefix, secret names, noindex and
   assert.equal(resolveS3MediaPrefix({ AMS_RUNTIME_CONTOUR: "production" }), "media");
 
   const operations = read("docs/OPERATIONS.md");
-  assert.match(operations, /default_db/);
+  assert.match(operations, /validated `DATABASE_URI`/);
   assert.match(operations, /prefix staging\/media/);
   assert.match(operations, /JOBS_AUTORUN=false/);
 
@@ -37,9 +36,11 @@ test("preview contour pins host, single DB, S3 prefix, secret names, noindex and
 
 test("staging robots.txt disallows crawlers and does not advertise sitemap", () => {
   const source = read("src/app/robots.ts");
+  const policy = read("src/seo/robots-policy.ts");
   const runtimeVerifier = read("scripts/verify-runtime.mjs");
-  assert.match(source, /resolveRuntimeContour\(\) === "staging"/);
-  assert.match(source, /disallow: "\/"/);
+  assert.match(source, /buildRobotsPolicy\(resolveRuntimeContour\(\)\)/);
+  assert.match(policy, /contour !== "production"/);
+  assert.match(policy, /disallow: "\/"/);
   assert.match(runtimeVerifier, /Staging robots\.txt must disallow all crawlers/);
   assert.match(runtimeVerifier, /Staging robots\.txt must not advertise a sitemap/);
 });

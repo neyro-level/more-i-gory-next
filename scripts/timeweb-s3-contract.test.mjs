@@ -18,7 +18,7 @@ const env = {
   PAYLOAD_SECRET: "replace-with-at-least-32-random-characters",
   TZ: "Europe/Moscow",
   S3_ACCESS_KEY: "access-key",
-  S3_BUCKET: TIMEWEB_S3_CONTRACT.bucket,
+  S3_BUCKET: "project-media-fixture",
   S3_ENDPOINT: TIMEWEB_S3_CONTRACT.endpoint,
   S3_REGION: TIMEWEB_S3_CONTRACT.region,
   S3_SECRET_KEY: "secret-key",
@@ -40,19 +40,19 @@ test("Timeweb S3 uses path-style addressing on the approved endpoint and region"
 test("next/image remotePatterns match path-style Timeweb objects", () => {
   assert.deepEqual(
     createS3MediaRemotePatterns({
-      S3_BUCKET: TIMEWEB_S3_CONTRACT.bucket,
+      S3_BUCKET: env.S3_BUCKET,
       S3_ENDPOINT: TIMEWEB_S3_CONTRACT.endpoint,
     }),
     [
       {
         hostname: TIMEWEB_S3_CONTRACT.hostname,
-        pathname: `/${TIMEWEB_S3_CONTRACT.bucket}/${TIMEWEB_S3_CONTRACT.mediaPrefix}/**`,
+        pathname: `/${env.S3_BUCKET}/${TIMEWEB_S3_CONTRACT.mediaPrefix}/**`,
         port: "",
         protocol: "https",
       },
       {
         hostname: TIMEWEB_S3_CONTRACT.hostname,
-        pathname: `/${TIMEWEB_S3_CONTRACT.bucket}/${TIMEWEB_S3_CONTRACT.stagingMediaPrefix}/**`,
+        pathname: `/${env.S3_BUCKET}/${TIMEWEB_S3_CONTRACT.stagingMediaPrefix}/**`,
         port: "",
         protocol: "https",
       },

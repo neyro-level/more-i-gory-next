@@ -87,7 +87,7 @@ export async function runRegionSeed(options = {}) {
     const result = await upsertRegionSeed(payload, { data, slug: entry.slug });
 
     regionIds.set(entry.key, result.id);
-    payload.logger.info(`${result.outcome === "updated" ? "Updated" : "Created"} region seed ${entry.key}`);
+    payload.logger.info(`${result.outcome === "existing" ? "Kept existing" : "Created"} region seed ${entry.key}`);
   }
 }
 
