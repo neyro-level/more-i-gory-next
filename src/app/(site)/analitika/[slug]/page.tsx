@@ -10,6 +10,7 @@ import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { ActionLink } from "@/components/navigation/action-link";
 import { articles, getArticleBySlug } from "@/content/articles/articles";
 import { resolveRuntimeContour } from "@/project/runtime-contour";
+import { analyticsDataAttributes } from "@/core/analytics/dimensions";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -51,7 +52,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   }
 
   return (
-    <main>
+    <main {...analyticsDataAttributes({ page_key: "article", source_surface: "article" })}>
       <PageHero
         eyebrow="Аналитический материал"
         title={article.title.replace(" | Море и Горы", "")}
@@ -82,11 +83,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         rhythm="sm"
         eyebrow="Коммерческая связка"
         title="Перейти от материала к проверке рынка"
-        lead="Материал должен вести к региону, каталогу новостроек или персональному подбору, а не оставаться изолированной публикацией."
+        lead="Материал ведёт к одному основному коммерческому маршруту и к проверочной методике, не ссылаясь на скрытые региональные страницы."
       >
         <div className="grid gap-4 md:grid-cols-3">
           <ActionLink href="/novostroyki/" variant="outline">Каталог новостроек</ActionLink>
-          <ActionLink href="/investicionnaya-nedvizhimost/krym/novostroyki/" variant="outline">Новостройки Крыма</ActionLink>
+          <ActionLink href="/metodika/" variant="outline">Методика</ActionLink>
           <ActionLink href="/podbor/" variant="outline">Подбор</ActionLink>
         </div>
       </SectionShell>

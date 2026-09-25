@@ -76,7 +76,7 @@ export default async function DeveloperPage({ params }: DeveloperPageProps) {
       >
         <div className="grid gap-4 md:grid-cols-3">
           <ActionLink href="/novostroyki/" variant="outline">Все новостройки</ActionLink>
-          <ActionLink href="/investicionnaya-nedvizhimost/krym/novostroyki/" variant="outline">Сегмент Крым</ActionLink>
+          <ActionLink href="/investicionnaya-nedvizhimost/" variant="outline">Сравнить рынки</ActionLink>
           <ActionLink href="/analitika/" variant="outline">Аналитика</ActionLink>
         </div>
       </SectionShell>

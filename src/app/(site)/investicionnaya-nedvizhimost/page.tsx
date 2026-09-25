@@ -8,6 +8,7 @@ import { ProofBlock } from "@/components/marketing/proof-block";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { listPublicHubRegions } from "@/core/data-access/public";
 import { listEditorialPreviewRegions } from "@/core/data-access/preview/editorial-preview";
+import { analyticsDataAttributes } from "@/core/analytics/dimensions";
 
 export const metadata = getStaticMetadata("PAGE-002");
 
@@ -17,7 +18,7 @@ export default async function FederalInvestmentHubPage() {
   const regions = previewRegions.length > 0 ? previewRegions : await listPublicHubRegions();
 
   return (
-    <main>
+    <main {...analyticsDataAttributes({ page_key: "federal_hub", source_surface: "federal_hub" })}>
       <PageHero
         eyebrow="Федеральный инвестиционный хаб"
         title={seo.h1}

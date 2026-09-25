@@ -4,9 +4,12 @@ import { ObjectCard } from "@/components/marketing/object-card";
 import { PageHero } from "@/components/marketing/page-hero";
 import { RiskBlock } from "@/components/marketing/risk-block";
 import { ActionLink } from "@/components/navigation/action-link";
+import { StructuredBreadcrumbs } from "@/components/navigation/structured-breadcrumbs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { PublicPropertyDTO, PublicRegionDTO } from "@/core/dto";
 import { buildCityHubModel } from "@/core/regions/city-hub";
+import { analyticsDataAttributes } from "@/core/analytics/dimensions";
+import { isDiscoverableGeoStatus } from "@/core/navigation/public-link-policy";
 
 type CityMarketHubProps = Readonly<{
   city: PublicRegionDTO;
@@ -28,7 +31,7 @@ function ProjectGrid({ projects }: Readonly<{ projects: readonly PublicPropertyD
           image={project.image}
           key={project.id}
           location={project.geoContext.region.title}
-          locationHref={project.geoContext.region.path}
+          locationHref={isDiscoverableGeoStatus(project.geoContext.region.status) ? project.geoContext.region.path : undefined}
           risk={project.riskSummary}
           status="проверен"
           thesis={project.verdict}
@@ -44,7 +47,15 @@ export function CityMarketHub({ city, cityNameGenitive, cityNamePrepositional, p
   const model = buildCityHubModel(city, regions, projects);
 
   return (
-    <main>
+    <main {...analyticsDataAttributes({ page_key: "city", region_slug: city.parentSlug, city_slug: city.slug, source_surface: "city_hub" })}>
+      <SectionShell rhythm="sm">
+        <StructuredBreadcrumbs items={[
+          { href: "/", label: "Главная" },
+          { href: "/investicionnaya-nedvizhimost/", label: "Регионы" },
+          { href: "/krym/", label: "Крым" },
+          { label: city.title },
+        ]} />
+      </SectionShell>
       <PageHero
         eyebrow="Локальный рынок Крыма"
         title={title}

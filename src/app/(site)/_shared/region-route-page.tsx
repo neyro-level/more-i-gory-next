@@ -28,6 +28,8 @@ import {
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { isRegionPublicRoute } from "@/core/regions/activation";
+import { analyticsDataAttributes } from "@/core/analytics/dimensions";
+import { StructuredBreadcrumbs } from "@/components/navigation/structured-breadcrumbs";
 
 const cityHubLabels: Readonly<Record<string, Readonly<{ genitive: string; prepositional: string }>>> = {
   "/krym/alushta/": { genitive: "Алушты", prepositional: "Алуште" },
@@ -83,7 +85,14 @@ export async function RegionRoutePage({ path }: Readonly<{ path: string }>) {
     : getPublicRegionRelatedLinks(region, regions);
 
   return (
-    <main>
+    <main {...analyticsDataAttributes({ page_key: region.pageKey?.toLowerCase() ?? "region_segment", region_slug: region.parentSlug ?? region.slug, city_slug: region.pageKey === "CITY" ? region.slug : undefined, source_surface: "region_route" })}>
+      <SectionShell rhythm="sm">
+        <StructuredBreadcrumbs items={[
+          { href: "/", label: "Главная" },
+          { href: "/investicionnaya-nedvizhimost/", label: "Регионы" },
+          { label: region.title },
+        ]} />
+      </SectionShell>
       <PageHero
         eyebrow={region.kind === "segment" ? "Инвестиционный сегмент" : "Региональный инвестиционный хаб"}
         title={seo.h1}

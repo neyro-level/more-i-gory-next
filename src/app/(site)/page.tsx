@@ -13,6 +13,7 @@ import {
 import { listPublicHubRegions } from "@/core/data-access/public";
 import { isEditorialPreviewEnabled, listEditorialPreviewRegions } from "@/core/data-access/preview/editorial-preview";
 import { getStaticMetadata } from "@/seo/metadata";
+import { analyticsDataAttributes } from "@/core/analytics/dimensions";
 
 export const metadata = getStaticMetadata("PAGE-001");
 
@@ -30,7 +31,7 @@ export default async function HomePage() {
   }));
 
   return (
-    <main>
+    <main {...analyticsDataAttributes({ page_key: "home", source_surface: "home" })}>
       <PageHero
         eyebrow="Инвестиционное бюро курортной недвижимости"
         title="Курортная недвижимость для инвестиций — с понятной экономикой и рисками"

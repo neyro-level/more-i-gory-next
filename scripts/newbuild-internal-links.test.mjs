@@ -13,19 +13,21 @@ test("Crimea newbuild segment links back to the public newbuild catalog", () => 
   assert.ok(hrefs.includes("/novostroyki/"));
 });
 
-test("newbuild catalog links to Crimea segment and analytics", async () => {
+test("newbuild catalog links to the public market hub and analytics", async () => {
   const source = await readFile("src/app/(site)/novostroyki/page.tsx", "utf8");
 
-  assert.match(source, /\/investicionnaya-nedvizhimost\/krym\/novostroyki\//);
+  assert.match(source, /\/investicionnaya-nedvizhimost\//);
+  assert.doesNotMatch(source, /\/investicionnaya-nedvizhimost\/krym\/novostroyki\//);
   assert.match(source, /\/analitika\//);
   assert.match(source, /\/metodika\//);
 });
 
-test("newbuild complex detail links to catalog, developer, Crimea segment and analytics", async () => {
+test("newbuild complex detail links to catalog, developer, public market hub and analytics", async () => {
   const source = await readFile("src/app/(site)/novostroyki/[slug]/page.tsx", "utf8");
 
   assert.match(source, /\/novostroyki\//);
-  assert.match(source, /\/investicionnaya-nedvizhimost\/krym\/novostroyki\//);
+  assert.match(source, /\/investicionnaya-nedvizhimost\//);
+  assert.doesNotMatch(source, /\/investicionnaya-nedvizhimost\/krym\/novostroyki\//);
   assert.match(source, /complex\.developer\.path/);
   assert.match(source, /\/analitika\//);
 });
@@ -39,5 +41,6 @@ test("developer and analytics pages link into the newbuild catalog loop", async 
   assert.match(developerSource, /\/analitika\//);
   assert.match(analyticsSource, /\/novostroyki\//);
   assert.match(articleSource, /\/novostroyki\//);
-  assert.match(articleSource, /\/investicionnaya-nedvizhimost\/krym\/novostroyki\//);
+  assert.doesNotMatch(articleSource, /\/investicionnaya-nedvizhimost\/krym\/novostroyki\//);
+  assert.doesNotMatch(developerSource, /\/investicionnaya-nedvizhimost\/krym\/novostroyki\//);
 });

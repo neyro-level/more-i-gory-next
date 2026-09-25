@@ -96,7 +96,7 @@ export default async function NewbuildComplexPage({ params }: NewbuildComplexPag
       >
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <ActionLink href="/novostroyki/" variant="outline">Все новостройки</ActionLink>
-          <ActionLink href="/investicionnaya-nedvizhimost/krym/novostroyki/" variant="outline">Сегмент Крым</ActionLink>
+          <ActionLink href="/investicionnaya-nedvizhimost/" variant="outline">Сравнить рынки</ActionLink>
           <ActionLink href={complex.developer.path} variant="outline">Застройщик</ActionLink>
           <ActionLink href="/analitika/" variant="outline">Аналитика</ActionLink>
         </div>

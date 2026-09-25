@@ -5,10 +5,13 @@ import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { ObjectCard } from "@/components/marketing/object-card";
 import { PageHero } from "@/components/marketing/page-hero";
 import { ActionLink } from "@/components/navigation/action-link";
+import { StructuredBreadcrumbs } from "@/components/navigation/structured-breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { PublicPropertyDTO, PublicRegionDTO } from "@/core/dto";
 import { buildCrimeaHubModel } from "@/core/regions/crimea-hub";
+import { analyticsDataAttributes } from "@/core/analytics/dimensions";
+import { isDiscoverableGeoStatus } from "@/core/navigation/public-link-policy";
 
 type CrimeaRegionHubProps = Readonly<{
   projects: readonly PublicPropertyDTO[];
@@ -28,7 +31,14 @@ export function CrimeaRegionHub({ projects, region, regions, title }: CrimeaRegi
   const model = buildCrimeaHubModel(regions, projects);
 
   return (
-    <main>
+    <main {...analyticsDataAttributes({ page_key: "region", region_slug: region.slug, source_surface: "region_hub" })}>
+      <SectionShell rhythm="sm">
+        <StructuredBreadcrumbs items={[
+          { href: "/", label: "Главная" },
+          { href: "/investicionnaya-nedvizhimost/", label: "Регионы" },
+          { label: region.title },
+        ]} />
+      </SectionShell>
       <PageHero
         eyebrow="Региональный инвестиционный хаб"
         title={title}
@@ -114,7 +124,7 @@ export function CrimeaRegionHub({ projects, region, regions, title }: CrimeaRegi
                 image={project.image}
                 key={project.id}
                 location={project.geoContext.region.title}
-                locationHref={project.geoContext.region.path}
+                locationHref={isDiscoverableGeoStatus(project.geoContext.region.status) ? project.geoContext.region.path : undefined}
                 risk={project.riskSummary}
                 status="проверен"
                 thesis={project.verdict}

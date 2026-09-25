@@ -1,4 +1,5 @@
 import { ActionLink } from "@/components/navigation/action-link";
+import { isDiscoverableGeoStatus } from "@/core/navigation/public-link-policy";
 import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { PageHero } from "@/components/marketing/page-hero";
@@ -105,7 +106,7 @@ export default async function ObjectsPage({ searchParams }: ObjectsPageProps) {
                 href={property.path}
                 image={property.image}
                 location={property.geoContext.region.title}
-                locationHref={property.geoContext.region.path}
+                locationHref={isDiscoverableGeoStatus(property.geoContext.region.status) ? property.geoContext.region.path : undefined}
                 risk={property.riskSummary}
                 status="проверен"
                 thesis={property.verdict}

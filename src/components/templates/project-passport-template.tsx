@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { PageHero } from "@/components/marketing/page-hero";
 import { SectionShell } from "@/components/layout/section-shell";
 import { RiskBlock } from "@/components/marketing/risk-block";
@@ -10,14 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ObjectCard } from "@/components/marketing/object-card";
 import { ArticleCard } from "@/components/marketing/article-card";
 import { ActionLink } from "@/components/navigation/action-link";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { StructuredBreadcrumbs } from "@/components/navigation/structured-breadcrumbs";
+import { analyticsDataAttributes } from "@/core/analytics/dimensions";
+import { isDiscoverableGeoStatus } from "@/core/navigation/public-link-policy";
 
 type ProjectPassportTemplateProps = {
   property: PublicPropertyDTO;
@@ -46,17 +39,13 @@ export function ProjectPassportTemplate({ property, relatedArticles = [], relate
   const checkedAt = formatCheckedAt(property.verifiedAt);
 
   return (
-    <main>
+    <main {...analyticsDataAttributes({ page_key: "investment_project", project_slug: property.slug, region_slug: property.geoContext.region.slug, city_slug: property.geoContext.cityOrArea?.slug, source_surface: "project_passport" })}>
       <SectionShell rhythm="sm">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem><BreadcrumbLink render={<Link href="/" />}>Главная</BreadcrumbLink></BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem><BreadcrumbLink render={<Link href="/obekty/" />}>Объекты</BreadcrumbLink></BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem><BreadcrumbPage>{property.title}</BreadcrumbPage></BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <StructuredBreadcrumbs items={[
+          { href: "/", label: "Главная" },
+          { href: "/obekty/", label: "Объекты" },
+          { label: property.title },
+        ]} />
       </SectionShell>
 
       <PageHero
@@ -85,7 +74,7 @@ export function ProjectPassportTemplate({ property, relatedArticles = [], relate
                   href={candidate.path}
                   image={candidate.image}
                   location={candidate.geoContext.region.title}
-                  locationHref={candidate.geoContext.region.path}
+                  locationHref={isDiscoverableGeoStatus(candidate.geoContext.region.status) ? candidate.geoContext.region.path : undefined}
                   risk={candidate.riskSummary}
                   status="проверен"
                   thesis={candidate.verdict}
@@ -113,8 +102,10 @@ export function ProjectPassportTemplate({ property, relatedArticles = [], relate
 
       <SectionShell rhythm="sm" eyebrow="География" title="Контекст проекта">
         <div className="flex flex-wrap gap-3">
-          <ActionLink href={property.geoContext.region.path} variant="outline">{property.geoContext.region.title}</ActionLink>
-          {property.geoContext.cityOrArea ? (
+          {isDiscoverableGeoStatus(property.geoContext.region.status) ? (
+            <ActionLink href={property.geoContext.region.path} variant="outline">{property.geoContext.region.title}</ActionLink>
+          ) : null}
+          {property.geoContext.cityOrArea && isDiscoverableGeoStatus(property.geoContext.cityOrArea.status) ? (
             <ActionLink href={property.geoContext.cityOrArea.path} variant="outline">{property.geoContext.cityOrArea.title}</ActionLink>
           ) : null}
           <ActionLink href="/metodika/" variant="outline">Методика отбора</ActionLink>
@@ -149,7 +140,7 @@ export function ProjectPassportTemplate({ property, relatedArticles = [], relate
                 href={candidate.path}
                 image={candidate.image}
                 location={candidate.geoContext.region.title}
-                locationHref={candidate.geoContext.region.path}
+                locationHref={isDiscoverableGeoStatus(candidate.geoContext.region.status) ? candidate.geoContext.region.path : undefined}
                 risk={candidate.riskSummary}
                 status="проверен"
                 thesis={candidate.verdict}

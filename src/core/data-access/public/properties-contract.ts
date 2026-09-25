@@ -142,6 +142,7 @@ function getProjectGeoContext(property: PublicPropertyRecord) {
     id: String(property.region.id),
     path: routeGrammar.buildUrl({ pageKey: "REGION", regionSlug: property.region.slug }),
     slug: property.region.slug,
+    status: property.region.status,
     title: property.region.title,
   };
   const cityOrArea = isRelationDocument<Region>(property.cityOrArea) && property.cityOrArea.slug
@@ -153,6 +154,7 @@ function getProjectGeoContext(property: PublicPropertyRecord) {
           citySlug: property.cityOrArea.slug,
         }),
         slug: property.cityOrArea.slug,
+        status: property.cityOrArea.status,
         title: property.cityOrArea.title,
       }
     : undefined;

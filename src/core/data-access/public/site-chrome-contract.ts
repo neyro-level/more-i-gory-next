@@ -1,4 +1,5 @@
 import { siteChromeSchema, type SiteChrome, type SiteNavigationLink } from "../../dto/site-chrome.ts";
+import { filterPublicNavigationLinks } from "../../navigation/public-link-policy.ts";
 
 export { siteChromeSchema } from "../../dto/site-chrome.ts";
 export type { SiteChrome, SiteNavigationLink } from "../../dto/site-chrome.ts";
@@ -33,12 +34,11 @@ export const fallbackSiteChrome: SiteChrome = siteChromeSchema.parse({
       { href: "/podbor/", label: "Подбор", nofollow: false, openInNewTab: false },
     ],
     header: [
-      { href: "/investicionnaya-nedvizhimost/", label: "Регионы", nofollow: false, openInNewTab: false },
       { href: "/obekty/", label: "Объекты", nofollow: false, openInNewTab: false },
-      { href: "/metodika/", label: "Методика", nofollow: false, openInNewTab: false },
+      { href: "/investicionnaya-nedvizhimost/", label: "Регионы", nofollow: false, openInNewTab: false },
       { href: "/analitika/", label: "Аналитика", nofollow: false, openInNewTab: false },
+      { href: "/metodika/", label: "Методика", nofollow: false, openInNewTab: false },
       { href: "/o-kompanii/", label: "О компании", nofollow: false, openInNewTab: false },
-      { href: "/kontakty/", label: "Контакты", nofollow: false, openInNewTab: false },
     ],
     headerCta: { href: "/podbor/", label: "Получить разбор", nofollow: false, openInNewTab: false },
     legal: [
@@ -97,8 +97,8 @@ function mapHeaderCta(navigation: Record<string, unknown>): SiteNavigationLink {
 export function mapSiteChrome(settings: unknown, navigation: unknown): SiteChrome {
   const settingsRecord = asRecord(settings);
   const navigationRecord = navigation && typeof navigation === "object" ? asRecord(navigation) : null;
-  const header = firstNonEmpty(mapLinks(navigationRecord?.header), fallbackSiteChrome.navigation.header);
-  const footer = firstNonEmpty(mapLinks(navigationRecord?.footer), fallbackSiteChrome.navigation.footer);
+  const header = filterPublicNavigationLinks(firstNonEmpty(mapLinks(navigationRecord?.header), fallbackSiteChrome.navigation.header));
+  const footer = filterPublicNavigationLinks(firstNonEmpty(mapLinks(navigationRecord?.footer), fallbackSiteChrome.navigation.footer));
   const legal = firstNonEmpty(mapLinks(navigationRecord?.legal), fallbackSiteChrome.navigation.legal);
 
   return siteChromeSchema.parse({

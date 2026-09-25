@@ -6,6 +6,7 @@ const publicGeoEntitySchema = z.object({
   id: z.string().min(1),
   path: z.string().startsWith("/").endsWith("/"),
   slug: z.string().min(1),
+  status: z.enum(["hidden", "published", "stub"]).optional(),
   title: z.string().min(1),
 });
 

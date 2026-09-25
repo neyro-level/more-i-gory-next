@@ -120,8 +120,8 @@ test("public property DTO mapper does not leak private inventory data", () => {
     origin: "manual",
     ownerContact: "private",
     publishedAt: "2026-09-17T00:00:00.000Z",
-    region: { id: 1, kind: "region", slug: "krym", title: "Крым" },
-    cityOrArea: { id: 7, kind: "locality", slug: "yalta", title: "Ялта" },
+    region: { id: 1, kind: "region", slug: "krym", status: "published", title: "Крым" },
+    cityOrArea: { id: 7, kind: "locality", slug: "yalta", status: "published", title: "Ялта" },
     riskSummary: "Риск проверяется в паспорте.",
     slug: "yalta-passport",
     sources: [{ label: "Открытые данные объекта" }],
@@ -137,8 +137,8 @@ test("public property DTO mapper does not leak private inventory data", () => {
   assert.equal(dto.category, "apartment");
   assert.equal(dto.regionLabel, "Ялта");
   assert.deepEqual(dto.geoContext, {
-    cityOrArea: { id: "7", path: "/krym/yalta/", slug: "yalta", title: "Ялта" },
-    region: { id: "1", path: "/krym/", slug: "krym", title: "Крым" },
+    cityOrArea: { id: "7", path: "/krym/yalta/", slug: "yalta", status: "published", title: "Ялта" },
+    region: { id: "1", path: "/krym/", slug: "krym", status: "published", title: "Крым" },
   });
 
   for (const name of privateFields) {
@@ -281,7 +281,7 @@ test("/obekty routes use Payload properties public gateway, not legacy project J
   assert.match(listPage, /listPublishedManualProperties/);
   assert.match(listPage, /CatalogFilters/);
   assert.match(listPage, /hasCatalogQueryState/);
-  assert.match(listPage, /locationHref=\{property\.geoContext\.region\.path\}/);
+  assert.match(listPage, /locationHref=\{isDiscoverableGeoStatus\(property\.geoContext\.region\.status\)/);
   assert.match(listPage, /verifiedAt=\{property\.verifiedAt\}/);
   assert.match(listPage, /const properties = await listPublishedManualProperties\(\)/);
   assert.doesNotMatch(listPage, /editorialPreview \? \[\] : await listPublishedManualProperties/);
@@ -305,7 +305,7 @@ test("/obekty routes use Payload properties public gateway, not legacy project J
   assert.doesNotMatch(detailPage, /contentService|getProject/);
   assert.match(template, /Статус: не актуально/);
   assert.match(template, /альтернатив/iu);
-  assert.match(template, /BreadcrumbPage/);
+  assert.match(template, /StructuredBreadcrumbs/);
   assert.match(template, /property\.geoContext\.region\.path/);
   assert.match(template, /property\.geoContext\.cityOrArea\.path/);
   assert.match(template, /Источники паспорта/);

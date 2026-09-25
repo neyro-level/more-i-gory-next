@@ -34,6 +34,7 @@ export function buildCrimeaHubModel(
   const cityOrder = new Map(CRIMEA_HUB_CITY_SLUGS.map((slug, index) => [slug, index]));
   const cities = regions
     .filter((region) => region.parentSlug === "krym" && cityOrder.has(region.slug as typeof CRIMEA_HUB_CITY_SLUGS[number]))
+    .filter((region) => region.status === "published")
     .sort((left, right) => (cityOrder.get(left.slug as typeof CRIMEA_HUB_CITY_SLUGS[number]) ?? 99)
       - (cityOrder.get(right.slug as typeof CRIMEA_HUB_CITY_SLUGS[number]) ?? 99));
   const verifiedCities = cities.filter(isVerifiedCrimeaCity);

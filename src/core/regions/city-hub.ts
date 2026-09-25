@@ -48,6 +48,7 @@ export function buildCityHubModel(
     newbuildProjects: cityProjects.filter((project) => project.market === "newbuild"),
     projects: cityProjects,
     siblingCities: regions
-      .filter((region) => region.pageKey === "CITY" && region.parentSlug === city.parentSlug && region.id !== city.id),
+      .filter((region) => region.pageKey === "CITY" && region.parentSlug === city.parentSlug && region.id !== city.id)
+      .filter((region) => region.status === "published"),
   };
 }

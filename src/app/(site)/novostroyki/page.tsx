@@ -22,7 +22,7 @@ export default async function NewbuildCatalogPage() {
         title="Новостройки Крыма для инвестиционного разбора"
         lead="В каталог попадают только опубликованные жилые комплексы с проверенным застройщиком, регионом и публичной карточкой. Пустые фиды и скрытые проекты не создают витрину."
         primaryCta={{ href: "/podbor/", label: "Получить shortlist" }}
-        secondaryCta={{ href: "/investicionnaya-nedvizhimost/krym/novostroyki/", label: "Сегмент Крым" }}
+        secondaryCta={{ href: "/investicionnaya-nedvizhimost/", label: "Сравнить рынки" }}
         image={{
           alt: "Новостройка у моря для инвестиционного разбора",
           height: 1000,
@@ -82,7 +82,7 @@ export default async function NewbuildCatalogPage() {
         eyebrow="Связанные разделы"
         title="От рынка к конкретному ЖК"
         lead="Региональный сегмент объясняет спрос и риски Крыма, аналитика помогает проверить экономику, а карточки ЖК ведут к застройщику и активным предложениям."
-        actions={<ActionLink href="/investicionnaya-nedvizhimost/krym/novostroyki/" variant="outline">Сегмент Крым</ActionLink>}
+        actions={<ActionLink href="/investicionnaya-nedvizhimost/" variant="outline">Сравнить рынки</ActionLink>}
       >
         <div className="grid gap-4 md:grid-cols-2">
           <Card className="rounded-card bg-card">
