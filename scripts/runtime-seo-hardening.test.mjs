@@ -83,6 +83,13 @@ test("both 404 boundaries declare noindex metadata and an explicit title", () =>
   assert.match(siteNotFound, /robots: \{ follow: true, index: false \}/);
 });
 
+test("lead form input stays a native leaf without a Base UI client chunk", () => {
+  const input = readFileSync("src/components/ui/input.tsx", "utf8");
+
+  assert.match(input, /<input/);
+  assert.doesNotMatch(input, /@base-ui\/react\/input/);
+});
+
 test("structured data stays factual and Article exists only for published content", () => {
   const graph = siteStructuredData(runtime);
   assert.equal(graph[0].legalName, "Индивидуальный предприниматель Колобова Ольга Викторовна");
