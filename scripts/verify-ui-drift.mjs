@@ -83,7 +83,8 @@ for (const file of sourceFiles) {
   }
   const approvedClientLeaf =
     file.includes(join("src", "components", "ui")) ||
-    file.includes(join("src", "components", "marketing", "forms"));
+    file.includes(join("src", "components", "marketing", "forms")) ||
+    relativePath === "src/app/(site)/error.tsx";
   if (/^[\"']use client[\"'];?/m.test(content) && !approvedClientLeaf) {
     report("P1", file, "client boundary outside approved interactive leaf");
   }

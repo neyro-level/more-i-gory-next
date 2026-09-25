@@ -1,0 +1,7 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Environment variable identifier is not a credential"
+regexTarget = "match"
+stopwords = ["S3_SECRET_KEY"]

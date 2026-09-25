@@ -1,7 +1,7 @@
 import { TIMEWEB_S3_CONTRACT } from "./s3.ts";
 
 export const TIMEWEB_S3_RECOVERY_CONTRACT = {
-  bucket: TIMEWEB_S3_CONTRACT.bucket,
+  bucketIdentity: "runtime-env:S3_BUCKET",
   providerIndependentCopy: "required",
   region: TIMEWEB_S3_CONTRACT.region,
   restoreProcedure: [

@@ -39,16 +39,16 @@ test("operator rejects wrong SHA and dirty checkout before database access", () 
 });
 
 test("preflight accepts only the exact empty and unmigrated PostgreSQL 18 target", () => {
-  assert.deepEqual(validatePreflightRecord(emptyTarget), {
+  assert.deepEqual(validatePreflightRecord(emptyTarget, "default_db"), {
     database: "default_db",
     postgresMajor: 18,
     publicTables: 0,
   });
-  assert.throws(() => validatePreflightRecord({ ...emptyTarget, database: "other" }), /identity/);
-  assert.throws(() => validatePreflightRecord({ ...emptyTarget, server_version_num: 170010 }), /version/);
-  assert.throws(() => validatePreflightRecord({ ...emptyTarget, public_tables: 1 }), /Public tables/);
-  assert.throws(() => validatePreflightRecord({ ...emptyTarget, migration_table: true }), /history/);
-  assert.throws(() => validatePreflightRecord({ ...emptyTarget, migration_table: null }), /history/);
+  assert.throws(() => validatePreflightRecord({ ...emptyTarget, database: "other" }, "default_db"), /identity/);
+  assert.throws(() => validatePreflightRecord({ ...emptyTarget, server_version_num: 170010 }, "default_db"), /version/);
+  assert.throws(() => validatePreflightRecord({ ...emptyTarget, public_tables: 1 }, "default_db"), /Public tables/);
+  assert.throws(() => validatePreflightRecord({ ...emptyTarget, migration_table: true }, "default_db"), /history/);
+  assert.throws(() => validatePreflightRecord({ ...emptyTarget, migration_table: null }, "default_db"), /history/);
 });
 
 test("database query parser rejects malformed or extra output", () => {
@@ -72,8 +72,8 @@ test("registered and applied migration ledgers must match exactly", () => {
   const names = readRegisteredMigrationNames(indexSource);
   assert.equal(names.length, EXPECTED_MIGRATION_COUNT);
   const after = { database: "default_db", public_tables: EXPECTED_PUBLIC_TABLE_COUNT, migration_table: true };
-  assert.doesNotThrow(() => validatePostMigrationState(after, names, names));
-  assert.throws(() => validatePostMigrationState({ ...after, public_tables: 1 }, names, names), /table count/);
-  assert.throws(() => validatePostMigrationState(after, names.slice(1), names), /ledger count/);
-  assert.throws(() => validatePostMigrationState(after, [...names].reverse(), names), /order\/content/);
+  assert.doesNotThrow(() => validatePostMigrationState(after, names, names, "default_db"));
+  assert.throws(() => validatePostMigrationState({ ...after, public_tables: 1 }, names, names, "default_db"), /table count/);
+  assert.throws(() => validatePostMigrationState(after, names.slice(1), names, "default_db"), /ledger count/);
+  assert.throws(() => validatePostMigrationState(after, [...names].reverse(), names, "default_db"), /order\/content/);
 });

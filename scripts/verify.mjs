@@ -6,6 +6,7 @@ if (!pnpmCli) throw new Error("pnpm verify must be started through pnpm.");
 const verificationEnv = {
   ...process.env,
   AMS_PROFILE: process.env.AMS_PROFILE ?? "REALTY_BASE",
+  AMS_RUNTIME_CONTOUR: process.env.AMS_RUNTIME_CONTOUR ?? "staging",
   DATABASE_URI: process.env.DATABASE_URI ?? "postgresql://verify:verify@127.0.0.1:5432/moreigori_verify",
   JOBS_AUTORUN: process.env.JOBS_AUTORUN ?? "false",
   NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL ?? "http://127.0.0.1:4311",

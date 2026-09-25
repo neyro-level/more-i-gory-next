@@ -95,7 +95,7 @@ Exact toolchain первого релиза:
 | pnpm | `11.5.1` | `packageManager`, lockfile |
 | Next.js | `16.3.6` | App Router, Node.js runtime |
 | Payload / `@payloadcms/*` | `3.90.1` | CMS, Admin, auth, jobs, schema/migrations owner |
-| PostgreSQL | `18.6` local / `18.6` managed | one approved cluster `4210557` / database `default_db`; no second staging/restore resource |
+| PostgreSQL | `18.6` local / `18.6` managed | один утверждённый managed-контур; host и database identity поступают только из валидированного `DATABASE_URI`; второй постоянный staging/restore resource запрещён |
 | React / React DOM | `19.3.0` | Server First |
 | TypeScript | `6.0.3` | strict; TypeScript 7 не используется |
 | Tailwind CSS | `4.3.3` | CSS variables, global tokens |
@@ -344,7 +344,9 @@ Server by default:
 - deferred map;
 - calculator, если появится.
 
-`"use client"` запрещён в `src/app/**` и больших композиционных секциях.
+`"use client"` запрещён в `src/app/**` и больших композиционных секциях, кроме
+обязательного точечного Next.js error boundary `src/app/(site)/error.tsx`,
+зафиксированного в `docs/README.md` § Approved exceptions.
 
 Форма рендерится на сервере и получает минимальный client leaf в
 `src/components/marketing/forms/lead-form-client.tsx`; при отключённом JavaScript отправка
@@ -378,6 +380,15 @@ Browser preferences применяются после mount.
 Hydration warning блокирует release.
 
 ## 10. SEO Architecture
+
+Public origin вычисляется только в момент runtime/build вызова через
+`getSiteUrl()` из обязательного `NEXT_PUBLIC_SERVER_URL`; module-level URL
+запрещён. Release build получает exact target origin отдельным input и
+останавливается при loopback. Неизвестный или staging contour всегда отдаёт
+`robots.txt: Disallow /`; sitemap рекламируется только в production contour.
+Root metadata задаёт единый title template, Open Graph/Twitter используют
+реальный `/images/og/default.webp`, а Organization/WebSite JSON-LD содержит
+только факты из `LEGAL_DETAILS.md`.
 
 Source of truth по URL/индексации — `02_PRODUCT_STRUCTURE.md`.
 
@@ -433,8 +444,8 @@ public/assets/
 Rules:
 - `next/image` — единственный image component;
 - remote runtime images запрещены до включения точных S3 `remotePatterns`;
-- Timeweb S3: `https://s3.twcstorage.ru`, `ru-1`, bucket `moreigory-media`,
-  path-style addressing, `remotePatterns` pathname `/moreigory-media/media/**`;
+- Timeweb S3: `https://s3.twcstorage.ru`, `ru-1`, bucket из validated
+  `S3_BUCKET`, path-style addressing, `remotePatterns` строится из env bucket;
 - upload policy: `image/avif|jpeg|png|webp`, max 8 MiB, content kinds cannot
   be decorative; decorative empty alt only for `kind=ui`;
 - width/height или stable aspect ratio обязательны;
@@ -531,6 +542,10 @@ Preview и production остаются с autorun выключенным до о
 gate, а повторный запуск и recovery покрыты task-specific контрактами.
 
 ## 17. Caching
+
+Runtime default — `CACHE_INVALIDATION_MODE=http`. Production runtime обязан
+получить `REVALIDATE_SECRET` и `INTERNAL_REVALIDATE_BASE_URL`; отсутствие любого
+значения является startup error, а не переходом в тихий fallback.
 HTML получает `no-cache`; versioned CSS/JS/images — длительное кеширование на Nginx.
 
 Никакой request-time application cache в первом релизе.

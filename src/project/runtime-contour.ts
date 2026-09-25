@@ -1,10 +1,8 @@
 export const STAGING_CONTOUR = {
-  publicHost: "more-previu.tw1.ru",
-  databaseName: "default_db",
-  s3Bucket: "moreigory-media",
+  publicHostEnv: "NEXT_PUBLIC_SERVER_URL",
+  databaseEnv: "DATABASE_URI",
+  s3BucketEnv: "S3_BUCKET",
   s3Prefix: "staging/media",
-  secretProject: "more-i-gory-server/prod",
-  databaseSecretName: "MOREIGORY_DATABASE_URL",
   forbiddenLeadSecretNames: ["TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID", "LEAD_CHANNELS"],
   jobsAutorun: "false",
   ingest: "frozen",

@@ -339,3 +339,19 @@ test("Guard 13 allows a public regions reader with a published predicate", () =>
     }),
   );
 });
+
+test("Guard 14 rejects duplicate next/font declarations outside src/app/fonts.ts", () => {
+  const violations = findArchitectureGuardViolations({
+    files: [{ path: "src/app/(site)/layout.tsx", content: 'import { Montserrat } from "next/font/google";' }],
+    manifests: [],
+  });
+  assert.ok(violations.some((violation) => violation.startsWith("Guard 14:")));
+});
+
+test("Guard 14 allows the shared app font declaration", () => {
+  const violations = findArchitectureGuardViolations({
+    files: [{ path: "src/app/fonts.ts", content: 'import { Montserrat } from "next/font/google";' }],
+    manifests: [],
+  });
+  assert.equal(violations.some((violation) => violation.startsWith("Guard 14:")), false);
+});

@@ -9,10 +9,11 @@ process.env.DATABASE_URI ??= "postgresql://verify:verify@127.0.0.1:5432/moreigor
 process.env.PAYLOAD_SECRET ??= "ci-validation-only-payload-secret-not-for-production";
 process.env.NEXT_PUBLIC_SERVER_URL ??= "http://127.0.0.1:4311";
 
-test("siteUrl comes from env instead of a hardcoded production domain", async () => {
-  const { siteUrl } = await import("../src/seo/site-url.ts");
+test("site URL is resolved from the supplied runtime env at call time", async () => {
+  const { getSiteUrl } = await import("../src/seo/site-url.ts");
 
-  assert.equal(siteUrl, new URL(process.env.NEXT_PUBLIC_SERVER_URL).origin);
+  assert.equal(getSiteUrl({ NEXT_PUBLIC_SERVER_URL: "https://preview.example.test" }), "https://preview.example.test");
+  assert.equal(getSiteUrl({ NEXT_PUBLIC_SERVER_URL: "https://production.example.test" }), "https://production.example.test");
 });
 
 test("header and footer render from site chrome props, not local navigation arrays", () => {

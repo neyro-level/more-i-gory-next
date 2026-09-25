@@ -104,3 +104,7 @@ export async function listPublicHubRegions(): Promise<readonly PublicRegionDTO[]
   const regions = await listPublicRegions();
   return regions.filter(isGenericPublicRegion);
 }
+
+export async function listEditorialPreviewRegionsFromPayload(): Promise<readonly PublicRegionDTO[]> {
+  return getCachedRoutableRegions();
+}

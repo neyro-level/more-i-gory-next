@@ -86,7 +86,7 @@ completed_program:
     registered_migrations: 27
     first_migration: 20260915_171809_initial_users_jobs
     last_migration: 20260923_141141_add_reset_password_requested_at
-    expected_database: default_db
+    expected_database: from_validated_DATABASE_URI
     expected_postgres_major: 18
     live_mutation: additive_migration_only
     standing_test_database: false

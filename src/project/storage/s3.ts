@@ -7,7 +7,6 @@ import { resolveS3MediaPrefix } from "../runtime-contour.ts";
 type ProjectEnv = ReturnType<typeof parseProjectEnv>;
 
 export const TIMEWEB_S3_CONTRACT = {
-  bucket: "moreigory-media",
   endpoint: "https://s3.twcstorage.ru",
   forcePathStyle: true,
   hostname: "s3.twcstorage.ru",
@@ -37,8 +36,8 @@ export function assertTimewebS3Compatibility(env: Pick<ProjectEnv, "S3_BUCKET" |
   if (env.S3_REGION !== TIMEWEB_S3_CONTRACT.region) {
     throw new Error(`S3_REGION must be ${TIMEWEB_S3_CONTRACT.region}`);
   }
-  if (env.S3_BUCKET !== TIMEWEB_S3_CONTRACT.bucket) {
-    throw new Error(`S3_BUCKET must be ${TIMEWEB_S3_CONTRACT.bucket}`);
+  if (!env.S3_BUCKET || !/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/u.test(env.S3_BUCKET)) {
+    throw new Error("S3_BUCKET must be a valid bucket identity from runtime env.");
   }
 }
 
@@ -55,12 +54,17 @@ export function createS3SdkConfig(env: ProjectEnv) {
   };
 }
 
-export function createPublicS3ObjectUrl(filename: string, prefix = TIMEWEB_S3_CONTRACT.mediaPrefix): string {
+export function createPublicS3ObjectUrl(
+  filename: string,
+  bucket: string,
+  prefix = TIMEWEB_S3_CONTRACT.mediaPrefix,
+): string {
+  assertTimewebS3Compatibility({ S3_BUCKET: bucket, S3_ENDPOINT: TIMEWEB_S3_CONTRACT.endpoint, S3_REGION: TIMEWEB_S3_CONTRACT.region });
   const name = filename.trim().replace(/^\/+/, "");
   if (!name || name.includes("..") || name.includes("\\")) {
     throw new Error("S3 object filename must be a safe relative object name.");
   }
-  return `${TIMEWEB_S3_CONTRACT.endpoint}/${TIMEWEB_S3_CONTRACT.bucket}/${prefix}/${name}`;
+  return `${TIMEWEB_S3_CONTRACT.endpoint}/${bucket}/${prefix}/${name}`;
 }
 
 export function isVpsDiskMediaSourceOfTruth(): false {

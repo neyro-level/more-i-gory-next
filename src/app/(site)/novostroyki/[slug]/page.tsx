@@ -8,11 +8,19 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { ActionLink } from "@/components/navigation/action-link";
 import {
   getPublishedComplexBySlug,
+  getEditorialPreviewComplexBySlug,
   listActiveNewbuildInventoryByComplex,
 } from "@/core/data-access/public";
 import { buildPageMetadata } from "@/seo/metadata";
 import { sourceFromCmsSeo } from "@/seo/page-metadata";
 import { resolveRuntimeContour } from "@/project/runtime-contour";
+import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
+
+async function getVisibleComplex(slug: string) {
+  return isEditorialPreviewEnabled()
+    ? getEditorialPreviewComplexBySlug(slug)
+    : getPublishedComplexBySlug(slug);
+}
 
 type NewbuildComplexPageProps = {
   params: Promise<{ slug: string }>;
@@ -22,7 +30,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: NewbuildComplexPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const complex = await getPublishedComplexBySlug(slug);
+  const complex = await getVisibleComplex(slug);
 
   if (!complex) return {};
 
@@ -30,7 +38,7 @@ export async function generateMetadata({ params }: NewbuildComplexPageProps): Pr
     canonical: complex.path,
     description: complex.seo.description,
     ogImagePath: complex.seo.ogImagePath,
-    publicationStatus: "published",
+    publicationStatus: complex.status,
     runtimeContour: resolveRuntimeContour(),
     seo: complex.seo,
   }));
@@ -38,7 +46,7 @@ export async function generateMetadata({ params }: NewbuildComplexPageProps): Pr
 
 export default async function NewbuildComplexPage({ params }: NewbuildComplexPageProps) {
   const { slug } = await params;
-  const complex = await getPublishedComplexBySlug(slug);
+  const complex = await getVisibleComplex(slug);
 
   if (!complex) notFound();
 

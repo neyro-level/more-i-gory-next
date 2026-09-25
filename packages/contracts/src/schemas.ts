@@ -61,6 +61,7 @@ export const seoEntrySchema = z.object({
   h1: z.string().min(1),
   index: z.enum(["yes", "gate", "trust_gate", "noindex"]),
   kind: z.enum(["static", "dynamic"]),
+  ogImage: z.string().startsWith("/").default("/images/og/default.webp"),
   pageId: z.string().regex(/^PAGE-\d{3}$/),
   primaryQuery: z.string().min(1),
   priority: z.enum(["P1", "P2", "P3"]),

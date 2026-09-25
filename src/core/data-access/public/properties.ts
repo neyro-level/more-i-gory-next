@@ -95,3 +95,7 @@ export async function getManualPropertyRouteBySlug(slug: string): Promise<Public
 
   return (await cachedReader())[0] ?? null;
 }
+
+export async function listEditorialPreviewManualProperties(): Promise<readonly PublicPropertyDTO[]> {
+  return readManualPropertyRoutes();
+}

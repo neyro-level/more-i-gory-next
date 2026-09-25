@@ -7,13 +7,13 @@ import { resolveSeoState } from "../src/seo/seo-state.ts";
 const registry = (overrides = {}) => ({ canonical: "/sample/", index: "yes", sitemap: "yes", ...overrides });
 
 test("one pure resolver aligns registry gate, metadata robots and sitemap", () => {
-  const gated = resolveSeoState({ canonical: "/sample/", publicationStatus: "published", registry: registry({ index: "gate", sitemap: "gate" }) });
+  const gated = resolveSeoState({ canonical: "/sample/", publicationStatus: "published", registry: registry({ index: "gate", sitemap: "gate" }), runtimeContour: "production" });
   assert.deepEqual(gated, {
     canonical: "/sample/", follow: true, httpStatus: 200, index: false,
     reason: "registry-gate", redirectIntent: null, sitemap: false,
   });
 
-  const active = resolveSeoState({ canonical: "/sample/", publicationStatus: "published", registry: registry() });
+  const active = resolveSeoState({ canonical: "/sample/", publicationStatus: "published", registry: registry(), runtimeContour: "production" });
   assert.equal(active.index, true);
   assert.equal(active.sitemap, true);
 });

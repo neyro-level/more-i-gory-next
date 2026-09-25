@@ -5,7 +5,6 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const EXPECTED_DATABASE = "default_db";
 export const EXPECTED_POSTGRES_MAJOR = 18;
 export const EXPECTED_MIGRATION_COUNT = 28;
 export const EXPECTED_PUBLIC_TABLE_COUNT = 148;
@@ -56,9 +55,9 @@ export function parseSingleJsonLine(stdout, label) {
   }
 }
 
-export function validatePreflightRecord(record) {
+export function validatePreflightRecord(record, expectedDatabase) {
   if (!record || typeof record !== "object" || Array.isArray(record)) fail("Preflight result is malformed.");
-  if (record.database !== EXPECTED_DATABASE) fail("Database identity mismatch.");
+  if (!expectedDatabase || record.database !== expectedDatabase) fail("Database identity mismatch.");
   const versionNumber = Number(record.server_version_num);
   if (!Number.isInteger(versionNumber) || Math.floor(versionNumber / 10000) !== EXPECTED_POSTGRES_MAJOR) {
     fail("PostgreSQL major version mismatch.");
@@ -75,8 +74,8 @@ export function readRegisteredMigrationNames(indexSource) {
   return names;
 }
 
-export function validatePostMigrationState(record, appliedNames, expectedNames) {
-  if (record.database !== EXPECTED_DATABASE) fail("Post-migration database identity mismatch.");
+export function validatePostMigrationState(record, appliedNames, expectedNames, expectedDatabase) {
+  if (!expectedDatabase || record.database !== expectedDatabase) fail("Post-migration database identity mismatch.");
   if (Number(record.public_tables) !== EXPECTED_PUBLIC_TABLE_COUNT) fail("Post-migration table count mismatch.");
   if (record.migration_table !== true) fail("Payload migration ledger is absent after apply.");
   if (!Array.isArray(appliedNames) || appliedNames.length !== expectedNames.length) {
@@ -161,7 +160,8 @@ export function main(argv = process.argv.slice(2), environment = process.env) {
 
   const expectedNames = readRegisteredMigrationNames(readFileSync(path.join(root, "migrations/index.ts"), "utf8"));
   const pgEnv = buildPsqlEnvironment(environment.DATABASE_URI, environment);
-  const before = validatePreflightRecord(inspectTarget(pgEnv));
+  const expectedDatabase = pgEnv.PGDATABASE;
+  const before = validatePreflightRecord(inspectTarget(pgEnv), expectedDatabase);
 
   if (mode === "preflight") {
     process.stdout.write(`${JSON.stringify({ verdict: "PASS", mode, head: actualSha, ...before, migrations: expectedNames.length })}\n`);
@@ -172,12 +172,12 @@ export function main(argv = process.argv.slice(2), environment = process.env) {
   run(pnpm, ["payload:migrate"], { env: environment, stdio: "inherit" });
   const after = inspectTarget(pgEnv);
   const appliedNames = inspectAppliedNames(pgEnv);
-  validatePostMigrationState(after, appliedNames, expectedNames);
+  validatePostMigrationState(after, appliedNames, expectedNames, expectedDatabase);
   process.stdout.write(`${JSON.stringify({
     verdict: "PASS",
     mode,
     head: actualSha,
-    database: EXPECTED_DATABASE,
+    database: expectedDatabase,
     postgresMajor: EXPECTED_POSTGRES_MAJOR,
     migrations: expectedNames.length,
     publicTables: Number(after.public_tables),

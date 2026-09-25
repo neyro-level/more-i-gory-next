@@ -9,7 +9,7 @@ import { ObjectCard } from "@/components/marketing/object-card";
 import { CatalogFilters } from "@/components/marketing/catalog-filters";
 import { NumberedSteps } from "@/components/marketing/numbered-steps";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
-import { listPublishedManualProperties } from "@/core/data-access/public";
+import { listEditorialPreviewManualProperties, listPublishedManualProperties } from "@/core/data-access/public";
 import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
 import {
   buildCatalogFilterGroups,
@@ -41,7 +41,9 @@ const criteria = [
 export default async function ObjectsPage({ searchParams }: ObjectsPageProps) {
   const seo = getSeoEntry("PAGE-014");
   const editorialPreview = isEditorialPreviewEnabled();
-  const properties = await listPublishedManualProperties();
+  const properties = editorialPreview
+    ? await listEditorialPreviewManualProperties()
+    : await listPublishedManualProperties();
   const query = parseCatalogFilterQuery(await searchParams);
   const filterGroups = buildCatalogFilterGroups(properties);
   const visibleProperties = filterCatalogProperties(properties, query, filterGroups);

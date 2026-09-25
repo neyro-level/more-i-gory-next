@@ -1,6 +1,6 @@
 # ADR index — «Море и Горы»
 
-**Дата проверки:** 2026-09-24 (EPIC 69)
+**Дата проверки:** 2026-09-25 (EPIC 88)
 **Правило:** superseded static ADR не удаляются; статус указывает на действующий runtime ADR.
 
 | ID | Тема | Status | Notes |
@@ -18,6 +18,7 @@
 | [ADR-011](ADR-011-lead-delivery-duplicates.md) | Lead delivery duplicates | Accepted | Recipient dedup is not guaranteed; operator uses deliveryId |
 | [ADR-012](ADR-012-no-separate-staging.md) | Temporary no-separate-staging exception | Accepted / time-boxed | Preview is a production candidate only; expires at domain cutover |
 | [ADR-013](ADR-013-http-lifecycle-and-read-failures.md) | HTTP lifecycle and Public Gateway failures | Accepted | `gone` → real 404, permanent route redirect → 308, DB failure → operational error |
+| [ADR-014](ADR-014-code-owned-content.md) | Code-owned и Payload-owned content | Accepted | Staging preview читает Payload; seed только local/no-DB и create-missing |
 | [ADR GEO-first](ADR-GEO-FIRST-INVESTMENT-IA.md) | GEO-first IA and intent ownership | Accepted | Крым R1, registry-driven regions, no auto city×category |
 | [ADR global entity](ADR-GLOBAL-INVESTMENT-ENTITY-URL.md) | Global investment project URL | Accepted | `/obekty/{project}/` не зависит от geo |
 | [ADR SEO state](ADR-SEO-STATE-ENGINE.md) | Unified SEO state contract | Accepted | Fail-closed index/sitemap activation |

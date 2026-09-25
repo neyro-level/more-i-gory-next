@@ -18,12 +18,13 @@ test("EPIC 48 runbook keeps mutation behind exact SHA, confirmation and single-D
   assert.match(operations, /before-restart/);
   assert.match(operations, /after-restart/);
   assert.match(operations, /do not create a\s+second database/i);
-  assert.match(migration, /EXPECTED_DATABASE = "default_db"/);
+  assert.doesNotMatch(migration, /EXPECTED_DATABASE/);
+  assert.match(migration, /expectedDatabase = pgEnv\.PGDATABASE/);
   assert.match(migration, /EXPECTED_POSTGRES_MAJOR = 18/);
   assert.match(migration, /EXPECTED_MIGRATION_COUNT = 28/);
   assert.match(migration, /EXPECTED_PUBLIC_TABLE_COUNT = 148/);
   assert.match(seed, /AMS_RUNTIME_CONTOUR !== "staging"/);
-  assert.match(seed, /https:\/\/more-previu\.tw1\.ru/);
+  assert.match(seed, /public HTTPS origin/);
 });
 
 test("package aliases expose only the approved migrate, seed and smoke operators", () => {

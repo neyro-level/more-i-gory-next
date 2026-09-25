@@ -9,7 +9,7 @@ import {
 } from "../ops/runtime/single-db-application-smoke.mjs";
 
 const options = {
-  baseUrl: "https://more-previu.tw1.ru",
+  baseUrl: "https://preview.example.test",
   draftSlug: "db-proof-draft",
   expectedTitle: "Техническая проверка DB",
   phase: "before-restart",
@@ -34,7 +34,7 @@ function passingFetch(overrides = {}) {
   };
 }
 
-test("smoke is pinned to the technical preview and an explicit restart phase", () => {
+test("smoke requires a public HTTPS technical preview and an explicit restart phase", () => {
   assert.deepEqual(
     parseArguments([
       `--base-url=${options.baseUrl}`,
@@ -45,7 +45,7 @@ test("smoke is pinned to the technical preview and an explicit restart phase", (
     ]),
     options,
   );
-  assert.throws(() => parseArguments(["--base-url=https://moreigori.ru"]), /must be/);
+  assert.throws(() => parseArguments(["--base-url=http://127.0.0.1:3000"]), /must not use loopback|HTTPS origin/);
   assert.equal(
     parseArguments([
       `--base-url=${options.baseUrl}`,
@@ -59,7 +59,7 @@ test("smoke is pinned to the technical preview and an explicit restart phase", (
 });
 
 test("smoke permits only an explicit loopback transport for an exact-code rehearsal", () => {
-  assert.equal(resolveTransportBaseUrl({}), options.baseUrl);
+  assert.equal(resolveTransportBaseUrl({ NEXT_PUBLIC_SERVER_URL: options.baseUrl }), options.baseUrl);
   assert.equal(
     resolveTransportBaseUrl({ DB_SMOKE_TRANSPORT_BASE_URL: "http://127.0.0.1:3101" }),
     "http://127.0.0.1:3101",

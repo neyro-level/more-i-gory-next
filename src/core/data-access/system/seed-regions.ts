@@ -19,7 +19,7 @@ export async function resolveSeedRegionMediaId(payload: Payload, sourceLabel: st
 export async function upsertRegionSeed(
   payload: Payload,
   input: Readonly<{ data: RequiredDataFromCollectionSlug<"regions">; slug: string }>,
-): Promise<Readonly<{ id: number | string; outcome: "created" | "updated" }>> {
+): Promise<Readonly<{ id: number | string; outcome: "created" | "existing" }>> {
   const result = await payload.find({
     collection: "regions",
     depth: 0,
@@ -29,18 +29,12 @@ export async function upsertRegionSeed(
   });
   const existing = result.docs[0];
 
-  const document = existing
-    ? await payload.update({
-        collection: "regions",
-        data: input.data,
-        id: existing.id,
-        overrideAccess: true,
-      })
-    : await payload.create({
+  if (existing) return { id: existing.id, outcome: "existing" };
+  const document = await payload.create({
         collection: "regions",
         data: input.data,
         overrideAccess: true,
       });
 
-  return { id: document.id, outcome: existing ? "updated" : "created" };
+  return { id: document.id, outcome: "created" };
 }

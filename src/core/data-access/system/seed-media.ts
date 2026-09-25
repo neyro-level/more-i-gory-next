@@ -9,7 +9,7 @@ export async function upsertMediaSeedAsset(
     filename: string;
     filePath: string;
   }>,
-): Promise<"created" | "updated"> {
+): Promise<"created" | "existing"> {
   const result = await payload.find({
     collection: "media",
     limit: 1,
@@ -23,15 +23,7 @@ export async function upsertMediaSeedAsset(
   const existing = result.docs[0];
 
   if (existing) {
-    await payload.update({
-      collection: "media",
-      data: input.data,
-      filePath: input.filePath,
-      id: existing.id,
-      overrideAccess: true,
-      overwriteExistingFiles: true,
-    });
-    return "updated";
+    return "existing";
   }
 
   await payload.create({

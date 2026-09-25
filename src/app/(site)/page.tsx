@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { PageHero } from "@/components/marketing/page-hero";
 import {
   AnalyticsSection,
@@ -13,13 +15,19 @@ import {
 import { listPublicHubRegions } from "@/core/data-access/public";
 import { isEditorialPreviewEnabled, listEditorialPreviewRegions } from "@/core/data-access/preview/editorial-preview";
 import { getStaticMetadata } from "@/seo/metadata";
+import { getSeoEntry } from "@/seo/registry";
 import { analyticsDataAttributes } from "@/core/analytics/dimensions";
 
-export const metadata = getStaticMetadata("PAGE-001");
+const homeSeo = getSeoEntry("PAGE-001");
+
+export const metadata: Metadata = {
+  ...getStaticMetadata(homeSeo.pageId),
+  title: { absolute: homeSeo.title },
+};
 
 export default async function HomePage() {
   const regions = (
-    isEditorialPreviewEnabled() ? listEditorialPreviewRegions() : await listPublicHubRegions()
+    isEditorialPreviewEnabled() ? await listEditorialPreviewRegions() : await listPublicHubRegions()
   ).filter((region) => region.kind === "region");
   const regionCards: HomeRegionCardModel[] = regions.map((region) => ({
     href: region.path,

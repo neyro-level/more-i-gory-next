@@ -11,6 +11,7 @@ import { ActionLink } from "@/components/navigation/action-link";
 import { articles, getArticleBySlug } from "@/content/articles/articles";
 import { resolveRuntimeContour } from "@/project/runtime-contour";
 import { analyticsDataAttributes } from "@/core/analytics/dimensions";
+import { articleStructuredData } from "@/seo/structured-data";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -50,9 +51,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   if (!article || article.status === "archived") {
     notFound();
   }
+  const structuredData = articleStructuredData(article);
 
   return (
     <main {...analyticsDataAttributes({ page_key: "article", source_surface: "article" })}>
+      {structuredData ? (
+        <script dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} type="application/ld+json" />
+      ) : null}
       <PageHero
         eyebrow="Аналитический материал"
         title={article.title.replace(" | Море и Горы", "")}

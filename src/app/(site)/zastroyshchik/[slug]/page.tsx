@@ -8,10 +8,18 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { ActionLink } from "@/components/navigation/action-link";
 import {
   getPublishedDeveloperBySlug,
+  getEditorialPreviewDeveloperBySlug,
 } from "@/core/data-access/public";
 import { buildPageMetadata } from "@/seo/metadata";
 import { sourceFromCmsSeo } from "@/seo/page-metadata";
 import { resolveRuntimeContour } from "@/project/runtime-contour";
+import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
+
+async function getVisibleDeveloper(slug: string) {
+  return isEditorialPreviewEnabled()
+    ? getEditorialPreviewDeveloperBySlug(slug)
+    : getPublishedDeveloperBySlug(slug);
+}
 
 type DeveloperPageProps = {
   params: Promise<{ slug: string }>;
@@ -21,7 +29,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: DeveloperPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const developer = await getPublishedDeveloperBySlug(slug);
+  const developer = await getVisibleDeveloper(slug);
 
   if (!developer) return {};
 
@@ -29,7 +37,7 @@ export async function generateMetadata({ params }: DeveloperPageProps): Promise<
     canonical: developer.path,
     description: developer.seo.description,
     ogImagePath: developer.seo.ogImagePath,
-    publicationStatus: "published",
+    publicationStatus: developer.status,
     runtimeContour: resolveRuntimeContour(),
     seo: developer.seo,
   }));
@@ -37,7 +45,7 @@ export async function generateMetadata({ params }: DeveloperPageProps): Promise<
 
 export default async function DeveloperPage({ params }: DeveloperPageProps) {
   const { slug } = await params;
-  const developer = await getPublishedDeveloperBySlug(slug);
+  const developer = await getVisibleDeveloper(slug);
 
   if (!developer) notFound();
 

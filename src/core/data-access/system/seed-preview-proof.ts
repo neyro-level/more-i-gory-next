@@ -40,7 +40,7 @@ export const previewProofRecords = {
 async function upsertProperty(
   payload: Payload,
   data: PreviewPropertyData,
-): Promise<Readonly<{ id: number | string; outcome: "created" | "updated"; slug: string }>> {
+): Promise<Readonly<{ id: number | string; outcome: "created" | "existing"; slug: string }>> {
   const result = await payload.find({
     collection: "properties",
     depth: 0,
@@ -49,20 +49,14 @@ async function upsertProperty(
     where: { slug: { equals: data.slug } },
   });
   const existing = result.docs[0];
-  const document = existing
-    ? await payload.update({
-        collection: "properties",
-        data,
-        id: existing.id,
-        overrideAccess: true,
-      })
-    : await payload.create({
+  if (existing) return { id: existing.id, outcome: "existing", slug: data.slug };
+  const document = await payload.create({
         collection: "properties",
         data,
         overrideAccess: true,
       });
 
-  return { id: document.id, outcome: existing ? "updated" : "created", slug: data.slug };
+  return { id: document.id, outcome: "created", slug: data.slug };
 }
 
 export async function upsertPreviewProofRecords(payload: Payload) {

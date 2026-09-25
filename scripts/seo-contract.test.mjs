@@ -37,7 +37,13 @@ test("buildPageMetadata supports CMS-style source and noindex robots", async () 
   assert.equal(metadata.title, "CMS title");
   assert.deepEqual(metadata.robots, { follow: true, index: false });
   assert.equal(metadata.alternates?.canonical, "/cms-page/");
-  assert.deepEqual(metadata.openGraph?.images, [`${process.env.NEXT_PUBLIC_SERVER_URL}/images/og/default.webp`]);
+  assert.deepEqual(metadata.openGraph?.images, [{
+    alt: "Панорамный вид курортного побережья для сайта Море и Горы",
+    height: 1524,
+    url: `${process.env.NEXT_PUBLIC_SERVER_URL}/images/og/default.webp`,
+    width: 2560,
+  }]);
+  assert.equal(metadata.twitter?.card, "summary_large_image");
 });
 
 test("technical query state stays noindex with the clean registry canonical", async () => {
@@ -80,10 +86,10 @@ test("manual passport metadata uses facts only: title, description, canonical, r
   assert.equal(metadata.alternates?.canonical, "/obekty/yalta-passport/");
   assert.deepEqual(metadata.robots, {
     follow: true,
-    index: process.env.AMS_RUNTIME_CONTOUR !== "staging",
+    index: process.env.AMS_RUNTIME_CONTOUR === "production",
   });
   assert.equal(metadata.openGraph?.title, "Квартира в Ялте");
-  assert.deepEqual(metadata.openGraph?.images, [`${process.env.NEXT_PUBLIC_SERVER_URL}/images/projects/sample-resort/cover.webp`]);
+  assert.equal(metadata.openGraph?.images?.[0]?.url, `${process.env.NEXT_PUBLIC_SERVER_URL}/images/projects/sample-resort/cover.webp`);
 
   const jsonLd = passportStructuredData(property);
   assert.equal(jsonLd["@type"], "RealEstateListing");

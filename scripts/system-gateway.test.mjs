@@ -132,16 +132,12 @@ test("region seed operations are collection-specific and always privileged", asy
   assert.deepEqual(calls.map(([, options]) => options.collection), ["media", "regions", "regions"]);
 });
 
-test("media seed operation updates only the matched media asset", async () => {
+test("media seed operation preserves an existing media asset", async () => {
   const calls = [];
   const payload = {
     find: async (options) => {
       calls.push(["find", options]);
       return { docs: [{ id: 15 }] };
-    },
-    update: async (options) => {
-      calls.push(["update", options]);
-      return { id: 15 };
     },
   };
 
@@ -151,9 +147,8 @@ test("media seed operation updates only the matched media asset", async () => {
       filename: "crimea-coast.webp",
       filePath: "C:/fixture/crimea-coast.webp",
     }),
-    "updated",
+    "existing",
   );
   assert.equal(calls.every(([, options]) => options.collection === "media" && options.overrideAccess === true), true);
-  assert.equal(calls[1][1].id, 15);
-  assert.equal(calls[1][1].overwriteExistingFiles, true);
+  assert.equal(calls.length, 1);
 });

@@ -10,9 +10,10 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { breadcrumbStructuredData, type BreadcrumbEntry } from "@/core/navigation/breadcrumbs";
-import { siteUrl } from "@/seo/site-url";
+import { getSiteUrl } from "@/seo/site-url";
 
 export function StructuredBreadcrumbs({ items }: Readonly<{ items: readonly BreadcrumbEntry[] }>) {
+  const siteUrl = getSiteUrl();
   return (
     <>
       <script

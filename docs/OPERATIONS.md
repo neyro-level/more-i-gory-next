@@ -24,7 +24,10 @@ that must resolve dependencies or build on the production host.
 The only build-and-pack implementation is the manual SourceCraft workflow
 `release-single-build`. It requires the exact candidate SHA, the API-verified
 Merge Gate run, the previous rollback SHA and a release-store tag. The workflow
-builds once, reuses that output for runtime checks, creates one archive plus
+also requires `target_server_url`: the exact non-loopback public origin compiled
+into metadata, canonical, Open Graph, sitemap and structured data. The build and
+post-build guard stop if this value is missing, loopback or leaked into output.
+The workflow builds once, reuses that output for runtime checks, creates one archive plus
 checksum and evidence, and stops before any server connection or deploy. It is
 never triggered by push or Pull Request; running it still requires a separate
 owner release command. A durable-store upload is a later operator step and must
@@ -96,7 +99,7 @@ TLS terminator  : Nginx (ops/nginx/more-previu.tw1.ru.conf)
 app bind        : HOSTNAME=127.0.0.1 PORT=3000
 process         : Next standalone + Payload in one Node runtime
 database        : Timeweb Managed PostgreSQL via DATABASE_URI in /etc/moreigory/app.env
-media           : Timeweb S3 bucket moreigory-media (not VPS disk)
+media           : Timeweb S3 bucket from validated S3_BUCKET (not VPS disk)
 ```
 
 Canonical database secret route:
@@ -120,7 +123,7 @@ second database or tariff increase is not part of this project.
 The operation is allowed only by TASK 47.O from the exact merged EPIC 47 SHA:
 
 ```text
-verify cluster 4210557 + one administrator + current consumer smoke
+verify the managed target resolved from validated `DATABASE_URI` + one administrator + current consumer smoke
 → generate replacement password in process
 → change the existing administrator password in Timeweb
 → update Secret Master MOREIGORY_DATABASE_URL and password component
@@ -210,7 +213,7 @@ push, reset, dump or restore.
 ```text
 load /etc/moreigory/app.env without printing values
 → confirm exact merged SHA and clean checkout
-→ db:single:preflight (default_db, PostgreSQL 18, 0 public tables, no ledger)
+→ db:single:preflight (database from validated `DATABASE_URI`, PostgreSQL 18, 0 public tables, no ledger)
 → db:single:apply with explicit confirmation
 → bootstrap:owner with ephemeral Secret Master credentials
 → db:single:seed-proof with explicit confirmation
@@ -252,7 +255,7 @@ records: one published proof and one unpublished boundary proof.
 Stop before DDL on any identity/history/table mismatch. After successful DDL,
 recovery is forward-fix only: keep preview in maintenance, diagnose the exact
 failed step and finish the committed migration/seed/smoke chain. Do not create a
-second database and do not restore over `default_db`.
+second database and do not restore over the managed database resolved from `DATABASE_URI`.
 
 ## Backup and recovery boundary
 
@@ -264,7 +267,7 @@ and approves the provider cost, backup identifier and cleanup window.
 The proof must use a newly created **ephemeral recovery target** with separate
 credentials. Record the source backup identifier/time, target identity,
 migration/schema result and application read smoke without copying credentials
-or data into evidence. Never restore over `default_db` and never reuse preview
+or data into evidence. Never restore over the managed database resolved from `DATABASE_URI` and never reuse preview
 as the recovery target. Delete the temporary target after evidence is accepted;
 failure to delete it is an incident and a cost blocker for release completion.
 
@@ -276,7 +279,7 @@ staging/test/restore database is created by this plan.
 S3 media (TASK 31.5):
 
 ```text
-versioning     : enabled on moreigory-media (Timeweb S3 capability; operator must keep it on)
+versioning     : enabled on the bucket resolved from S3_BUCKET (Timeweb S3 capability; operator must keep it on)
 retention      : noncurrent versions at least 30 days; never empty-bucket as cleanup
 independent    : required — ru-1 is a single region; copy media/ off Timeweb — IMPROVEMENT / owner
 restore        : restore VersionId onto the same key; do not pull files from the VPS disk
@@ -399,9 +402,9 @@ get `403`. Do not flip `status` by hand in Admin; that skips audit and enqueue.
 
 ## S3 and media
 
-CODE EXISTS: Payload upload adapter и бакет `moreigory-media` (EPIC 6 + API
+CODE EXISTS: Payload upload adapter и bucket identity из `S3_BUCKET` (EPIC 6 + API
 smoke 2026-09-18). Object SoT: `disableLocalStorage: true`, path-style URL
-`https://s3.twcstorage.ru/moreigory-media/media/<filename>`. Restart/redeploy
+`https://s3.twcstorage.ru/<S3_BUCKET>/media/<filename>`. Restart/redeploy
 VPS не должен удалять объекты: они не пишутся на диск приложения. RUNTIME
 upload→HeadObject на живом runtime — TAP 14.G; PRODUCTION NOT PROVEN.
 VPS disk не является source of truth.
@@ -411,11 +414,18 @@ VPS disk не является source of truth.
 This preview host **is** the staging contour (TASK 13.7). `moreigori.ru` cutover
 is later and is not this task.
 
+Preview env identity (`NEXT_PUBLIC_SERVER_URL`, `DATABASE_URI`, `S3_BUCKET`) is
+resolved from validated environment/Secret Master; private resource IDs are not
+tracked in current runtime docs. Required safe flags are
+`AMS_RUNTIME_CONTOUR=staging`, `AMS_EDITORIAL_PREVIEW=payload`,
+`NEXT_PUBLIC_LEADS_ENABLED=false`, `JOBS_AUTORUN=false` and
+`CACHE_INVALIDATION_MODE=http`.
+
 ```text
 публичный хост     : more-previu.tw1.ru
 runtime            : тот же сервер, отдельный release-каталог / unit moreigory.service
-база               : единственная существующая default_db на cluster 4210557; сейчас 0 public tables
-S3                 : bucket moreigory-media, prefix staging/media
+база               : единственный managed target из валидированного DATABASE_URI; database identity не хранится в Git
+S3                 : bucket from validated S3_BUCKET, prefix staging/media
 secrets            : MOREIGORY_DATABASE_URL renders runtime DATABASE_URI;
                      отдельный staging/restore secret запрещён
 индексация         : X-Robots-Tag noindex, nofollow; robots.txt disallow

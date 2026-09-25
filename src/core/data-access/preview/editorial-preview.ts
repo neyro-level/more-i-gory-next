@@ -14,6 +14,22 @@ import { isRegionPreviewRoute } from "../../regions/activation.ts";
 import type { EditorialPreviewNavigationGroup, SiteNavigationLink } from "../../dto/site-chrome.ts";
 import { CANONICAL_MISSING_IMAGE, publicMediaOrFallback } from "../public/missing-image.ts";
 
+export type EditorialPreviewMode = "payload" | "seed";
+
+export function resolveEditorialPreviewMode(source: NodeJS.ProcessEnv = process.env): EditorialPreviewMode {
+  const contour = resolveRuntimeContour(source);
+  const explicit = source.AMS_EDITORIAL_PREVIEW?.trim();
+  const mode = explicit === "payload" || explicit === "seed"
+    ? explicit
+    : contour === "staging" || source.DATABASE_URI
+      ? "payload"
+      : "seed";
+  if (mode === "seed" && (contour === "production" || source.NODE_ENV === "production" || source.DATABASE_URI)) {
+    throw new Error("Seed editorial preview is allowed only outside production and without a database.");
+  }
+  return mode;
+}
+
 function previewLink(label: string, href: string): SiteNavigationLink {
   return { href, label, nofollow: true, openInNewTab: false };
 }
@@ -51,23 +67,26 @@ function buildPreviewRegions(): readonly PublicRegionDTO[] {
 
 const previewRegions = buildPreviewRegions();
 
-export function listEditorialPreviewRegions(source: NodeJS.ProcessEnv = process.env): readonly PublicRegionDTO[] {
-  return isEditorialPreviewEnabled(source) ? previewRegions : [];
+export async function listEditorialPreviewRegions(source: NodeJS.ProcessEnv = process.env): Promise<readonly PublicRegionDTO[]> {
+  if (!isEditorialPreviewEnabled(source)) return [];
+  if (resolveEditorialPreviewMode(source) === "seed") return previewRegions;
+  const { listEditorialPreviewRegionsFromPayload } = await import("../public/regions.ts");
+  return listEditorialPreviewRegionsFromPayload();
 }
 
-export function getEditorialPreviewRegionByPath(
+export async function getEditorialPreviewRegionByPath(
   path: string,
   source: NodeJS.ProcessEnv = process.env,
-): PublicRegionDTO | null {
-  return listEditorialPreviewRegions(source).find((region) => region.path === path) ?? null;
+): Promise<PublicRegionDTO | null> {
+  return (await listEditorialPreviewRegions(source)).find((region) => region.path === path) ?? null;
 }
 
 export function isEditorialPreviewRegion(region: PublicRegionDTO | null): region is PublicRegionDTO {
   return region?.id.startsWith("editorial-preview:") === true;
 }
 
-export function getEditorialPreviewRegionStaticParams(source: NodeJS.ProcessEnv = process.env) {
-  return listEditorialPreviewRegions(source)
+export async function getEditorialPreviewRegionStaticParams(source: NodeJS.ProcessEnv = process.env) {
+  return (await listEditorialPreviewRegions(source))
     .filter((region) => isRegionPreviewRoute(region.status))
     .map((region) => ({
       path: region.path.replace(/^\//, "").replace(/\/$/, "").split("/"),
@@ -90,10 +109,29 @@ export function getEditorialPreviewRegionRelatedLinks(region: PublicRegionDTO): 
   return getRegionRelatedLinks(entry, titles, includedKeys);
 }
 
-export function getEditorialPreviewNavigation(
+export async function getEditorialPreviewNavigation(
   source: NodeJS.ProcessEnv = process.env,
-): readonly EditorialPreviewNavigationGroup[] {
+): Promise<readonly EditorialPreviewNavigationGroup[]> {
   if (!isEditorialPreviewEnabled(source)) return [];
+
+  const mode = resolveEditorialPreviewMode(source);
+  let regions = previewRegions;
+  let properties = [] as Awaited<ReturnType<typeof import("../public/properties.ts").listEditorialPreviewManualProperties>>;
+  let complexes = [] as Awaited<ReturnType<typeof import("../public/newbuilds.ts").listEditorialPreviewComplexes>>;
+  let developers = [] as Awaited<ReturnType<typeof import("../public/newbuilds.ts").listEditorialPreviewDevelopers>>;
+  if (mode === "payload") {
+    const [regionGateway, propertyGateway, newbuildGateway] = await Promise.all([
+      import("../public/regions.ts"),
+      import("../public/properties.ts"),
+      import("../public/newbuilds.ts"),
+    ]);
+    [regions, properties, complexes, developers] = await Promise.all([
+      regionGateway.listEditorialPreviewRegionsFromPayload(),
+      propertyGateway.listEditorialPreviewManualProperties(),
+      newbuildGateway.listEditorialPreviewComplexes(),
+      newbuildGateway.listEditorialPreviewDevelopers(),
+    ]);
+  }
 
   return [
     {
@@ -114,7 +152,7 @@ export function getEditorialPreviewNavigation(
     },
     {
       label: "Регионы и сегменты",
-      links: previewRegions.map((region) => previewLink(region.title, region.path)),
+      links: regions.map((region) => previewLink(region.title, region.path)),
     },
     {
       label: "Черновики аналитики",
@@ -126,6 +164,9 @@ export function getEditorialPreviewNavigation(
         previewLink("Шаблон паспорта проекта", "/obekty/preview-project/"),
         previewLink("Шаблон карточки ЖК", "/novostroyki/preview-complex/"),
         previewLink("Шаблон застройщика", "/zastroyshchik/preview-developer/"),
+        ...properties.map((property) => previewLink(property.title, property.path)),
+        ...complexes.map((complex) => previewLink(complex.title, complex.path)),
+        ...developers.map((developer) => previewLink(developer.title, developer.path)),
       ],
     },
   ];

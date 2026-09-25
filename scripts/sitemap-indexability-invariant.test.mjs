@@ -34,6 +34,6 @@ test("published region cannot bypass a gated registry entry", () => {
     investmentThesis: "t", kind: "region", lead: "l", pageId: "PAGE-007", pageKey: "REGION",
     path: "/krym/", riskSummary: "r", slug: "krym", status: "published", title: "Крым",
   };
-  assert.deepEqual(publicRegionSitemapEntries([region], [registryEntry("gate", "gate")]), []);
-  assert.deepEqual(publicRegionSitemapEntries([region], [registryEntry("yes", "yes")]), [{ canonical: "/krym/", priority: "P1" }]);
+  assert.deepEqual(publicRegionSitemapEntries([region], [registryEntry("gate", "gate")], "production"), []);
+  assert.deepEqual(publicRegionSitemapEntries([region], [registryEntry("yes", "yes")], "production"), [{ canonical: "/krym/", priority: "P1" }]);
 });

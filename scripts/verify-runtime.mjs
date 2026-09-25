@@ -77,6 +77,12 @@ function routeFromCanonical(canonical) {
   return canonical === "/" ? "" : canonical.replace(/^\//, "").replace(/\/$/, "");
 }
 
+function expectedRenderedTitle(entry, pathname) {
+  if (pathname === "/") return entry.title;
+  const pageTitle = entry.title.replace(/\s*\|\s*Море и Горы$/u, "");
+  return `${pageTitle} | Море и Горы`;
+}
+
 function extract(html, pattern, label, route) {
   const match = html.match(pattern);
   assert(match, `Missing ${label} on /${route}/`);
@@ -245,7 +251,7 @@ try {
     const canonical = extract(html, /<link rel="canonical" href="([^"]*)"/, "canonical", route);
     const h1Matches = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)];
 
-    assert(title === entry.title, `Rendered title drift on ${pathname}: "${title}"`);
+    assert(title === expectedRenderedTitle(entry, pathname), `Rendered title drift on ${pathname}: "${title}"`);
     assert(description === entry.description, `Rendered description drift on ${pathname}`);
     assert(canonical === new URL(entry.canonical, siteUrl).toString(), `Canonical drift on ${pathname}`);
     assert(h1Matches.length === 1, `Expected one H1 on ${pathname}, got ${h1Matches.length}`);

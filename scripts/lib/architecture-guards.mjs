@@ -285,6 +285,10 @@ export function findArchitectureGuardViolations({ files, manifests, uiContract }
 
     if (!productionCode) continue;
 
+    if (/from\s+["']next\/font\/google["']/.test(content) && filePath !== "src/app/fonts.ts") {
+      addViolation(violations, 14, filePath, "next/font/google is allowed only in the shared app font declaration");
+    }
+
     localApiCallPattern.lastIndex = 0;
     for (const match of content.matchAll(localApiCallPattern)) {
       const objectLiteral = extractFirstObjectLiteral(content, match.index ?? 0);
