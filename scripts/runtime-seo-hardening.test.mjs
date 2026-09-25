@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const runtime = { NEXT_PUBLIC_SERVER_URL: "https://preview.example.test" };
@@ -56,6 +57,13 @@ test("home and catalog metadata use exact runtime canonical and the default OG i
     if (previous === undefined) delete process.env.NEXT_PUBLIC_SERVER_URL;
     else process.env.NEXT_PUBLIC_SERVER_URL = previous;
   }
+});
+
+test("home metadata preserves the registry title outside the root layout template", () => {
+  const homePage = readFileSync("src/app/(site)/page.tsx", "utf8");
+
+  assert.match(homePage, /const homeSeo = getSeoEntry\("PAGE-001"\)/);
+  assert.match(homePage, /title: \{ absolute: homeSeo\.title \}/);
 });
 
 test("structured data stays factual and Article exists only for published content", () => {
