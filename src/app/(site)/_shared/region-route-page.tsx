@@ -29,6 +29,11 @@ import { getStaticMetadata } from "@/seo/metadata";
 import { getSeoEntry } from "@/seo/registry";
 import { isRegionPublicRoute } from "@/core/regions/activation";
 
+const cityHubLabels: Readonly<Record<string, Readonly<{ genitive: string; prepositional: string }>>> = {
+  "/krym/sevastopol/": { genitive: "Севастополя", prepositional: "Севастополе" },
+  "/krym/yalta/": { genitive: "Ялты", prepositional: "Ялте" },
+};
+
 export const getRegionRouteModel = cache(async (path: string): Promise<PublicRegionDTO | null> =>
   getEditorialPreviewRegionByPath(path) ?? await getRoutableRegionByPath(path));
 
@@ -56,13 +61,14 @@ export async function RegionRoutePage({ path }: Readonly<{ path: string }>) {
     return <CrimeaRegionHub projects={projects} region={region} regions={regions} title={seo.h1} />;
   }
 
-  if (region.path === "/krym/yalta/" && region.pageKey === "CITY") {
+  const cityLabels = region.pageKey === "CITY" ? cityHubLabels[region.path] : undefined;
+  if (cityLabels) {
     const projects = isPreview ? [] : await listPublishedManualProperties();
     return (
       <CityMarketHub
         city={region}
-        cityNameGenitive="Ялты"
-        cityNamePrepositional="Ялте"
+        cityNameGenitive={cityLabels.genitive}
+        cityNamePrepositional={cityLabels.prepositional}
         projects={projects}
         regions={regions}
         title={seo.h1}

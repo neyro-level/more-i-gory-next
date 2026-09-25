@@ -145,6 +145,7 @@
     "test:regions-public-content": "node --conditions=react-server --test scripts/regions-public-content.test.mjs",
     "test:crimea-hub": "node --conditions=react-server --test scripts/crimea-hub.test.mjs",
     "test:yalta-city-hub": "node --conditions=react-server --test scripts/yalta-city-hub.test.mjs",
+    "test:sevastopol-city-hub": "node --conditions=react-server --test scripts/sevastopol-city-hub.test.mjs",
     "test:sochi-stub": "node --conditions=react-server --test scripts/sochi-stub.test.mjs",
     "test:redirects-validation": "node --conditions=react-server --test scripts/redirects-validation.test.mjs",
     "test:seo-contract": "node --conditions=react-server --test scripts/seo-contract.test.mjs",

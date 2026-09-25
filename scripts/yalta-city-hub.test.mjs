@@ -43,9 +43,9 @@ test("Yalta is a dedicated shared city hub without a city-category route", () =>
   const registry = JSON.parse(readFileSync("src/seo/registry.json", "utf8"));
   const seo = registry.find((entry) => entry.pageId === "PAGE-008");
 
-  assert.match(route, /region\.path === "\/krym\/yalta\/"/);
-  assert.match(route, /cityNameGenitive="Ялты"/);
-  assert.match(route, /cityNamePrepositional="Ялте"/);
+  assert.match(route, /"\/krym\/yalta\/": \{ genitive: "Ялты", prepositional: "Ялте" \}/);
+  assert.match(route, /cityNameGenitive=\{cityLabels\.genitive\}/);
+  assert.match(route, /cityNamePrepositional=\{cityLabels\.prepositional\}/);
   assert.match(template, /секция, а не новый SEO URL/);
   assert.doesNotMatch(route, /krym\/yalta\/novostroyki/);
   assert.equal(seo.canonical, "/krym/yalta/");
