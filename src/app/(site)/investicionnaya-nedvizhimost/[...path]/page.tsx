@@ -6,7 +6,7 @@ import {
   RegionRoutePage,
 } from "@/app/(site)/_shared/region-route-page";
 import { composeLegacyRegionPathFromSlugs } from "@/content/regions/region-path-policy";
-import { isEditorialPreviewRegion } from "@/core/data-access/preview/editorial-preview";
+import { isEditorialPreviewEnabled } from "@/core/data-access/preview/editorial-preview";
 import { getUrlMigrationByCurrentPath } from "@/core/routing/url-migration-manifest";
 
 export const dynamic = "force-dynamic";
@@ -31,7 +31,7 @@ async function getLegacyRouteDecision(params: LegacyRegionRoutePageProps["params
 
 async function materializeLegacyRedirect(target: string) {
   const region = await getRegionRouteModel(target);
-  if (region && (region.status === "published" || isEditorialPreviewRegion(region))) {
+  if (region && (region.status === "published" || isEditorialPreviewEnabled())) {
     permanentRedirect(target);
   }
   notFound();

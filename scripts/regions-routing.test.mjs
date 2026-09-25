@@ -127,6 +127,8 @@ test("legacy catch-all accepts only manifest-owned paths and activates redirects
   assert.match(page, /getUrlMigrationByCurrentPath/);
   assert.match(page, /migration\.migrationAction === "REDIRECT_301"/);
   assert.match(page, /region\.status === "published"/);
+  assert.match(page, /isEditorialPreviewEnabled\(\)/);
+  assert.doesNotMatch(page, /isEditorialPreviewRegion\(region\)/);
   assert.match(page, /permanentRedirect\(target\)/);
   assert.doesNotMatch(page, /export function generateStaticParams/);
   assert.equal(migrationByCurrentPath.get("/investicionnaya-nedvizhimost/krym/")?.targetUrl, "/krym/");
