@@ -3,6 +3,11 @@ import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import zlib from "node:zlib";
+import {
+  assertBreadcrumbAgreement,
+  inspectSeoDocument,
+  parseSitemapLocations,
+} from "./lib/seo-crawl-invariants.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const nextDir = path.join(projectRoot, ".next");
@@ -167,6 +172,19 @@ try {
   }
   const sitemap = await fetchRoute("/sitemap.xml");
   assert(sitemap.body.includes("<urlset"), "sitemap.xml must contain a URL set.");
+  const sitemapLocations = parseSitemapLocations(sitemap.body);
+  const sitemapPaths = new Set();
+  for (const location of sitemapLocations) {
+    const url = new URL(location);
+    assert(url.origin === siteUrl, `Sitemap URL has a foreign origin: ${location}`);
+    const crawled = await fetchRoute(url.pathname);
+    const document = inspectSeoDocument(crawled.body);
+    assert(!document.robots.includes("noindex"), `Sitemap URL is noindex: ${url.pathname}`);
+    assert(document.canonical === location, `Sitemap URL is not self-canonical: ${url.pathname}`);
+    assert(document.h1s.length === 1, `Sitemap URL must render exactly one H1: ${url.pathname}`);
+    assertBreadcrumbAgreement(document, url.pathname);
+    sitemapPaths.add(url.pathname);
+  }
   for (const pathname of unpublishedGenericRegionPaths) {
     const region = await fetchRoute(pathname, stagingContour ? 200 : 404);
     if (stagingContour) {
@@ -185,8 +203,9 @@ try {
   for (const entry of inactiveGeoRedirects) {
     const legacy = await fetchRoute(entry.currentCanonical, stagingContour ? 308 : 404);
     if (stagingContour) {
+      const location = legacy.response.headers.get("location");
       assert(
-        legacy.response.headers.get("location") === new URL(entry.targetUrl, baseUrl).toString(),
+        location && new URL(location, baseUrl).pathname === entry.targetUrl,
         `Legacy geo redirect target drift: ${entry.currentCanonical}`,
       );
     }
@@ -220,6 +239,7 @@ try {
     const route = routeFromCanonical(entry.canonical);
     const pathname = route ? `/${route}/` : "/";
     const { body: html } = await fetchRoute(pathname);
+    const inspected = inspectSeoDocument(html);
     const title = textContent(extract(html, /<title>([\s\S]*?)<\/title>/, "title", route));
     const description = extract(html, /<meta name="description" content="([^"]*)"/, "description", route);
     const canonical = extract(html, /<link rel="canonical" href="([^"]*)"/, "canonical", route);
@@ -233,12 +253,21 @@ try {
     assert(!renderedTitles.has(title), `Duplicate rendered title: ${title}`);
     assert(!renderedDescriptions.has(description), `Duplicate rendered description: ${description}`);
     assert(!renderedH1s.has(entry.h1), `Duplicate rendered H1: ${entry.h1}`);
+    assertBreadcrumbAgreement(inspected, pathname);
+    for (const href of inspected.internalLinks) {
+      const linkedPath = new URL(href, baseUrl).pathname;
+      if (!stagingContour) {
+        assert(!unpublishedGenericRegionPaths.has(linkedPath), `Public page ${pathname} links to PREPARED_OFF geo ${linkedPath}`);
+      }
+      assert(!/^\/krym\/(?:yalta|sevastopol|evpatoriya|alushta)\/(?:novostroyki|apartamenty)\/$/.test(linkedPath), `Unsupported city-category link on ${pathname}: ${linkedPath}`);
+    }
     renderedTitles.add(title);
     renderedDescriptions.add(description);
     renderedH1s.add(entry.h1);
 
     if (entry.index !== "yes") {
       assert(/name="robots" content="noindex, follow"/.test(html), `Expected noindex meta on ${pathname}`);
+      assert(!sitemapPaths.has(pathname), `Noindex route leaked into sitemap: ${pathname}`);
     }
 
     const manifestKey = manifestKeyForRoute(route, appPathRoutesManifest);
@@ -266,6 +295,21 @@ try {
   assert(/name="robots" content="noindex, follow"/.test(notFound.body), "404 must be noindex, follow.");
   assert(/<h1\b[^>]*>[\s\S]*?Такой страницы нет[\s\S]*?<\/h1>/.test(notFound.body), "404 H1 is missing.");
 
+  await fetchRoute("/krym/yalta/novostroyki/", 404);
+  await fetchRoute("/krym/unknown-market/", 404);
+
+  const filteredCatalog = await fetchRoute("/obekty/?city=yalta");
+  const filteredCatalogDocument = inspectSeoDocument(filteredCatalog.body);
+  assert(filteredCatalogDocument.robots.includes("noindex"), "Catalog query state must be noindex.");
+  assert(filteredCatalogDocument.canonical === new URL("/obekty/", siteUrl).toString(), "Catalog query canonical must resolve to /obekty/.");
+
+  if (stagingContour) {
+    const previewProject = await fetchRoute("/obekty/preview-project/");
+    assert(inspectSeoDocument(previewProject.body).robots.includes("noindex"), "Preview project must remain noindex.");
+  } else {
+    await fetchRoute("/obekty/preview-project/", 404);
+  }
+
   const initialRouteJsGzipKb = Math.round(maxInitialRouteJsGzipBytes / 1024);
   const largestChunkGzipKb = Math.round(largestChunkGzipBytes / 1024);
   assert(
@@ -285,6 +329,8 @@ try {
     largestChunkGzipKb,
     manifestRoutes: checkedManifestKeys.size,
     requiredRoutes: concreteSeoEntries.length,
+    sitemapMismatchCount: 0,
+    sitemapUrls: sitemapLocations.length,
     runtime: "next start",
     status: "PASS",
   }, null, 2));

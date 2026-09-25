@@ -37,7 +37,7 @@ test("buildPageMetadata supports CMS-style source and noindex robots", async () 
   assert.equal(metadata.title, "CMS title");
   assert.deepEqual(metadata.robots, { follow: true, index: false });
   assert.equal(metadata.alternates?.canonical, "/cms-page/");
-  assert.deepEqual(metadata.openGraph?.images, ["http://127.0.0.1:4311/images/og/default.webp"]);
+  assert.deepEqual(metadata.openGraph?.images, [`${process.env.NEXT_PUBLIC_SERVER_URL}/images/og/default.webp`]);
 });
 
 test("technical query state stays noindex with the clean registry canonical", async () => {
@@ -78,9 +78,12 @@ test("manual passport metadata uses facts only: title, description, canonical, r
   assert.equal(metadata.title, "Квартира в Ялте");
   assert.equal(metadata.description, "Подтверждённый инвестиционный тезис по фактам паспорта.");
   assert.equal(metadata.alternates?.canonical, "/obekty/yalta-passport/");
-  assert.deepEqual(metadata.robots, { follow: true, index: true });
+  assert.deepEqual(metadata.robots, {
+    follow: true,
+    index: process.env.AMS_RUNTIME_CONTOUR !== "staging",
+  });
   assert.equal(metadata.openGraph?.title, "Квартира в Ялте");
-  assert.deepEqual(metadata.openGraph?.images, ["http://127.0.0.1:4311/images/projects/sample-resort/cover.webp"]);
+  assert.deepEqual(metadata.openGraph?.images, [`${process.env.NEXT_PUBLIC_SERVER_URL}/images/projects/sample-resort/cover.webp`]);
 
   const jsonLd = passportStructuredData(property);
   assert.equal(jsonLd["@type"], "RealEstateListing");

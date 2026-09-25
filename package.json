@@ -50,6 +50,7 @@
     "test:site-globals": "node --conditions=react-server --test scripts/site-globals.test.mjs",
     "test:site-navigation": "node --conditions=react-server --test scripts/site-navigation.test.mjs",
     "test:geo-link-graph": "node --conditions=react-server --test scripts/geo-link-graph.test.mjs",
+    "test:seo-invariant-crawl": "node --test scripts/seo-invariant-crawl.test.mjs",
     "test:media-contract": "node --conditions=react-server --test scripts/media-contract.test.mjs",
     "test:media-seed": "node --conditions=react-server --test scripts/media-seed.test.mjs",
     "test:nginx-leads": "node --conditions=react-server --test scripts/nginx-leads-contract.test.mjs",
