@@ -1,9 +1,9 @@
 # Owner / deferred queue
 
-**Статус:** Active deferred-input register
-**Последний план:** `MORE_I_GORY_PLAN_№ 3` v3 APPROVED / CLOSED
-**Code baseline:** `21e484c98503550dbfbcbef38eb2e9eecd8d8308`
-**Дата нормализации:** 2026-09-23
+**Статус:** Active owner-gate register after GEO-first V5 candidate
+**Последний план:** `AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0` v1 APPROVED
+**Code baseline:** `7d373c3e621d72040aef3480f9b5564b926acefc`
+**Дата нормализации:** 2026-09-25
 
 Этот файл больше не изображает незавершённый EPIC 54. Он хранит только
 фактические внешние решения и входы будущих программ. Новый Task Manager graph
@@ -16,24 +16,26 @@
 
 | Область | Текущее безопасное состояние | Условие возврата |
 |---|---|---|
-| Business facts, команда, коммерческая модель, методика, география | `CONTENT_FACT_PACKET.md` сохранён; неподтверждённые claims не публикуются | отдельная команда владельца на content/product plan |
-| Коммерческие, региональные и аналитические страницы | draft/stub/noindex и publication gates сохраняются | утверждённый launch cohort и источники |
+| Business facts, команда, коммерческая модель, методика, география | `CONTENT_FACT_PACKET.md` сохранён; неподтверждённые claims не публикуются | отдельная команда владельца на factual content |
+| Крым и четыре city hub | route/DTO/SEO contracts готовы, но facts `MISSING`; страницы остаются вне sitemap | источники, review и прохождение Content Gate |
+| Проекты и аналитика | опубликованные сущности разрешены только при полном publication contract; fixtures и draft/review не индексируются | реальные паспорта/статьи, источники и `verifiedAt` |
+| Index activation | effective SEO state fail-closed; проверенный sitemap candidate содержит 0 URL | явное прохождение factual Content Gate, затем повторный crawl |
 | Адрес/карта/provider | карта отключена, provider/license не выбран | отдельное owner-решение |
 | Production и `moreigori.ru` | production не выпускался; DNS/TLS/cutover не менялись | отдельная release-команда после approved technical plan |
 
 ## NEXT_TECHNICAL_PLAN_INPUTS
 
-Эти пункты должны пройти triage в следующем master plan. Они не являются
-активными Beads-задачами до approval.
+Каноническое имя секции сохранено для project guard. Технические входы Plan №4
+и GEO-first routing/SEO contracts закрыты; ниже остались только внешние решения.
+Они не являются дефектами кода и не должны автоматически превращаться в новые
+Beads-задачи.
 
-| Приоритет | Вход | Evidence / ограничение | Требуемый результат |
+| Приоритет | Решение | Текущее безопасное состояние | Требуемый результат |
 |---:|---|---|---|
-| P0 | Critical Next/Payload upgrade | Next `16.3.4` и Payload `3.89.0` имеют подтверждённые critical security updates | Next `16.3.6`, Payload-group `3.90.1`, migration strategy, regression surface, RISKY gate |
-| P0 | Legacy `mg-*` Beads graph | 156 open, 149 blocked, 7 ложных ready; записи не имеют current Plan ID | validate history-preserving quarantine/supersede contract, затем убрать из ready-work без удаления evidence |
-| P0 | EPIC 54 exact-main candidate evidence | PR 100 / run 143 / merge `21e484c` известны; original task ledgers и installed digest отсутствуют | новый immutable tuple `SHA + digest + path + smoke` либо честное supersede |
-| P1 | `work/ci-gate-split` | отдельный clean stream, 5 commits поверх Plan №3 main | принять/перебазировать/отклонить до создания конкурирующего CI/release scope |
-| P1 | Property enum live preflight | до migration база была пустой; после minimal seed появились technical rows; старый `queried:false` больше не достаточен | новый read-only drift report; DDL только при фактической необходимости |
-| P1 | Recovery policy | restore rehearsal исключён решением Plan №3 v3; backup не считать доказанным restore | owner decision и отдельный recovery contract до production-ready claim |
+| P0 | Factual content cohort | все неподтверждённые страницы noindex/off и вне sitemap | утвердить источники, факты и launch cohort |
+| P0 | Index activation | effective SEO state и crawl fail closed | включать только страницы, реально прошедшие Content Gate |
+| P1 | Recovery policy | backup не считается доказанным restore | отдельный ephemeral restore rehearsal перед production-ready claim |
+| P1 | Production release | exact candidate не установлен на production | отдельная команда `Выпускаем production` после повторного release proof |
 
 ## RESOLVED — REMOVE FROM ACTIVE QUEUE
 
@@ -59,6 +61,6 @@ blocker:
 
 ## Правило следующего планирования
 
-Сначала technical plan: critical Next/Payload upgrade и перечисленные технические входы.
-Content/product plan формируется позже отдельным revision input владельца.
-Production всегда остаётся отдельным explicit gate.
+Следующий план нужен только для factual content/index activation либо для
+отдельного production release. Технический GEO-first V5 scope не расширять
+скрыто. Production всегда остаётся отдельным explicit gate.

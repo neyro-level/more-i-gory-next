@@ -1,8 +1,8 @@
 # Release Checklist — «Море и Горы»
 
-**Статус:** Active — GEO-first remediation; release deferred
-**Версия:** 4.0 — GEO-first release gates
-**Дата:** 2026-09-24
+**Статус:** Active — GEO-first V5 final candidate; production release deferred
+**Версия:** 4.1 — GEO-first closeout gates
+**Дата:** 2026-09-25
 
 `[x]` означает реально полученное доказательство. Непроверенное не считается
 пройденным. Production выполняется только по отдельной команде владельца.
@@ -46,6 +46,10 @@ graph. При `MISSING` facts техническая работа продолж
 - [x] Lighthouse accessibility audit on `/`;
 - [x] SourceCraft RISKY exact-head gate PR-19.
 - [x] SourceCraft RISKY exact-head gate PR-20 (run 21).
+- [x] EPIC 85 production-like HTTP crawl: `pnpm verify` PASS, sitemap mismatch
+  `0`, redirect chains `0`, P0/P1 `0`;
+- [x] EPIC 85 SourceCraft RISKY exact-head gate 198, PR 128, merged runtime
+  candidate `7d373c3e621d72040aef3480f9b5564b926acefc`.
 
 ## 3. Content and SEO gates
 
@@ -65,18 +69,20 @@ graph. При `MISSING` facts техническая работа продолж
 - [x] HTTP lifecycle adapter выдаёт real 404 для `gone` и real 308 для
   permanent route redirect; fake 200/410 удалён;
 - [x] operational Public Gateway failure не превращается в cacheable absence;
-- [ ] runtime routes, canonical, robots и sitemap соответствуют target tree;
+- [x] runtime routes, canonical, robots и sitemap соответствуют target tree;
 - [ ] сильные утверждения подтверждены;
 - [ ] реальные проекты имеют sources и `verifiedAt`;
 - [ ] региональные страницы не являются шаблонными дублями;
 - [ ] статьи завершены, имеют источники, review и publication date;
 - [ ] методика и сведения о команде утверждены;
-- [ ] legacy URL inventory и прямые redirects утверждены;
+- [x] legacy URL inventory имеет явное действие для 16/16 patterns; 7 прямых
+  redirect decisions не образуют цепочек и активируются только после target proof;
 - [ ] для прошедших gate страниц включены index/sitemap;
-- [ ] structured data добавлены только по видимому утверждённому контенту.
+- [x] Breadcrumb JSON-LD строится из той же иерархии, что видимые breadcrumbs;
+  entity structured data не создаёт неподтверждённые offers/claims.
 
-До выполнения раздела все текущие страницы сохраняют `noindex, follow`, а sitemap
-не рекламирует их поисковым системам.
+До выполнения оставшихся factual gates соответствующие страницы сохраняют
+`noindex, follow`, а sitemap не рекламирует их поисковым системам.
 
 ## 4. Forms, privacy and integrations
 
@@ -144,10 +150,10 @@ SEO 69 объясняется единственным ожидаемым fail: 
 
 Активного release stream сейчас нет. До нового production-ready claim нужны:
 
-1. завершить APPROVED GEO-first graph EPIC 68–86 с CLEAN reconciliation;
-2. закрыть URL migration, route identity и единый SEO state contract;
-3. получить подтверждённые facts и пройти Content Gate для индексируемых страниц;
-4. выполнить final exact-main proof EPIC 85–86 без production activation;
+1. смержить EPIC 86 после exact-head RISKY gate и сохранить delivery ledger;
+2. получить подтверждённые facts и пройти Content Gate для индексируемых страниц;
+3. повторить sitemap/crawl после фактической index activation;
+4. выполнить release-only restore/jobs handover proof;
 5. получить отдельную явную release-команду владельца.
 
 Credential rotation, Secret Master env, S3 и preview runtime уже доказаны и не

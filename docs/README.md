@@ -1,8 +1,8 @@
 # Документация проекта «Море и Горы»
 
 **Статус:** Active
-**Версия:** 3.7 — Plan №4 technical implementation complete
-**Дата:** 2026-09-23
+**Версия:** 4.0 — GEO-first V5 final candidate
+**Дата:** 2026-09-25
 **Стандарт:** AMS Product Development Standard 2.0
 
 ## Что создаём
@@ -19,12 +19,16 @@
 
 ## Текущий статус
 
-- Plan №4 EPIC 60–66 смержены; technical-preview candidate собран из
-  `cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452`;
+- GEO-first EPIC 68–85 смержены; runtime candidate —
+  `7d373c3e621d72040aef3480f9b5564b926acefc`;
+- target IA реализована: federal hub, `/krym/` и четыре city hub,
+  глобальные `/obekty/**`, future-region activation и единый SEO state;
 - публичный read идёт через Public Gateway / Payload Local API и DTO;
   при недоступности БД действует безопасный fallback, не local JSON adapters;
 - production не выпускался; technical preview — `more-previu.tw1.ru`;
-- коммерческие и аналитические страницы остаются под content/trust/index gate;
+- неподтверждённые коммерческие, региональные и аналитические страницы остаются
+  под content/trust/index gate; текущий проверенный sitemap пуст и не публикует
+  неподтверждённые URL;
 - цепочка из 27 migrations, upgrade fixture, single-DB application proof,
   credential rotation, immutable preview runtime и rollback доказаны;
   единственная новая migration Payload применена на preview, owner login и
@@ -32,20 +36,19 @@
   restore явно отложен решением владельца в Plan №3 v3;
   актуальные deferred и next-plan inputs собраны в
   [`OWNER_QUEUE.md`](OWNER_QUEUE.md);
-- exact-main RISKY gate 163, single-build run 164, digest, installed path и
-  smoke зафиксированы в
-  [`research/plan4-final-verification-evidence.md`](research/plan4-final-verification-evidence.md);
+- production-like crawl EPIC 85 прошёл локальный `pnpm verify`, schema proof и
+  SourceCraft RISKY gate 198; итоговая сверка находится в
+  [`proofs/V5_GEO_FIRST_FINAL_PROOF.md`](proofs/V5_GEO_FIRST_FINAL_PROOF.md);
 - production не разрешён; domain cutover, jobs, outbound channels и страницы
   не активировались.
 
 ## Audit / remediation baseline
 
-Plan №4 v1 прошёл реализацию EPIC 60–67 и финальную техническую проверку.
-SourceCraft API/Git восстановлены; exact-main candidate собран один раз и
-установлен на существующий technical preview. Production планом не разрешён.
+Plan №4 остаётся технической основой. GEO-first v1 прошёл EPIC 68–85 и находится
+на финальной reconciliation-стадии EPIC 86. Production планом не разрешён.
 
 ```text
-CODE_BASELINE=cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452  # Plan №4 EPIC 60–66 merged candidate
+CODE_BASELINE=7d373c3e621d72040aef3480f9b5564b926acefc  # GEO-first EPIC 68–85 merged runtime candidate
 PROFILE=REALTY_BASE
 TARGET_CORE=AMS Realty Platform 5.5
 UI_CORE=AMS UI Core 5.0
@@ -53,11 +56,11 @@ UI_CORE=AMS UI Core 5.0
 
 | Поле | Значение |
 |---|---|
-| Code baseline | SourceCraft `integrator-p/more-i-gory-next` @ `b253bf50b40d76b75fdfe1aca235c55763db97a2` |
+| Code baseline | SourceCraft `integrator-p/more-i-gory-next` @ `7d373c3e621d72040aef3480f9b5564b926acefc` |
 | Профиль | `AMS_PROFILE=REALTY_BASE`, режим BUILD |
 | Техническая конституция | [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) |
 | UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
-| Последний утверждённый мастер-план | [`AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md`](AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md) v1 APPROVED; execution active |
+| Последний утверждённый мастер-план | [`AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md`](AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md) v1 APPROVED; final candidate reconciliation |
 | Предыдущий план | [`MORE_I_GORY_PLAN_№ 4.md`](MORE_I_GORY_PLAN_№%204.md) v1 APPROVED / implementation complete |
 | Машинный inventory текущего плана | [`task-manager-inventory.geo-first.v1.json`](task-manager-inventory.geo-first.v1.json); Plan ID `AMS-MORE-I-GORY-GEO-FIRST-INVESTMENT-REMEDIATION`, prefix `mggeo` |
 | Исторический машинный inventory | [`task-manager-inventory.plan3.v3.json`](task-manager-inventory.plan3.v3.json); повторно не импортировать |
@@ -127,7 +130,8 @@ Research объясняет причины решений, но не являе�
 
 ## Current Focus
 
-NOW: GEO-first remediation v1, EPIC 68 baseline intake. Plan №4 остаётся
-закрытой технической основой. Business facts по Крыму и четырём городам пока
-`MISSING`: технические contracts/routes могут выполняться, но index activation
-остаётся закрытой Content Gate. Production не выпускался и не разрешён.
+NOW: GEO-first remediation v1, EPIC 86 final candidate reconciliation. EPIC
+68–85 закрыты и находятся в `main`. Business facts по Крыму и четырём городам
+по-прежнему `MISSING`, поэтому index activation остаётся закрытой Content Gate.
+Следующий разрешённый шаг после closeout — отдельное решение по factual content;
+production не выпускался и не разрешён.

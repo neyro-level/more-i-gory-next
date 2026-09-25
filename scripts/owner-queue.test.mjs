@@ -21,7 +21,7 @@ function tableSources(block) {
     .map((line) => line.split("|")[1].trim());
 }
 
-test("OWNER_QUEUE.md separates deferred owner scope, next technical plan inputs and resolved history", () => {
+test("OWNER_QUEUE.md separates deferred owner scope, remaining owner gates and resolved history", () => {
   const markdown = readFileSync(queuePath, "utf8");
 
   assert.match(markdown, /## DEFERRED_BY_OWNER/);
@@ -38,7 +38,9 @@ test("OWNER_QUEUE.md separates deferred owner scope, next technical plan inputs 
 
   for (const source of [
     "Business facts, команда, коммерческая модель, методика, география",
-    "Коммерческие, региональные и аналитические страницы",
+    "Крым и четыре city hub",
+    "Проекты и аналитика",
+    "Index activation",
     "Адрес/карта/provider",
     "Production и `moreigori.ru`",
   ]) {
@@ -46,12 +48,10 @@ test("OWNER_QUEUE.md separates deferred owner scope, next technical plan inputs 
   }
 
   for (const source of [
-    "Critical Next/Payload upgrade",
-    "Legacy `mg-*` Beads graph",
-    "EPIC 54 exact-main candidate evidence",
-    "`work/ci-gate-split`",
-    "Property enum live preflight",
+    "Factual content cohort",
+    "Index activation",
     "Recovery policy",
+    "Production release",
   ]) {
     assert.ok(technical.includes(source), `NEXT_TECHNICAL_PLAN_INPUTS missing ${source}`);
   }

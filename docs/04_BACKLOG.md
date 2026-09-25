@@ -107,8 +107,8 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 
 ## 4. NOW / NEXT — GEO-first remediation v1
 
-Код в `main` — Realty 5.5 контур без production. Approved graph содержит 19
-эпиков и выполняется строго через Beads.
+Код в `main` — Realty 5.5 GEO-first runtime candidate без production. Из 19
+эпиков 18 закрыты через Beads; EPIC 86 выполняет финальную reconciliation.
 
 | Состояние | Эпик | Результат |
 |---|---|---|
@@ -121,8 +121,13 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 | DONE | EPIC 71 | typed reversible `RouteIdentity` grammar, reserved-root protection и round-trip tests; PR 114 |
 | DONE | EPIC 74 | normalized Crimea/city Payload model, DTO и manual project geo relations; PR 115 / RISKY run 176 |
 | DONE | EPIC 72 | unified SEO state resolver, CMS SEO runtime propagation и indexability invariants; PR 116 / RISKY run 177 |
-| NOW | EPIC 73 | real HTTP lifecycle adapters and cache-safe Public Gateway failures |
-| NEXT | EPIC 75–86 | GEO pages, project passports и final proof по approved dependencies |
+| DONE | EPIC 73 | real HTTP lifecycle adapters and cache-safe Public Gateway failures; PR 117 |
+| DONE | EPIC 75–77 | target GEO routes, curated catalog и stable project entities; PR 118–120 |
+| DONE | EPIC 78–82 | Crimea hub и четыре независимых city hub; PR 122–126 |
+| DONE | EPIC 83 | future-region activation через общий registry/status contract; PR 121 |
+| DONE | EPIC 84 | crawlable linking graph, breadcrumbs и non-PII analytics; PR 127 |
+| DONE | EPIC 85 | production-like SEO invariant crawl; PR 128 / RISKY run 198 |
+| NOW | EPIC 86 | final candidate, document reconciliation и closeout без production |
 | CONTENT GATE | Крым + четыре города | facts `MISSING`; index activation запрещена, technical work разрешена |
 | PRODUCTION GATE | Release/cutover | только отдельная release-команда после нового approved plan |
 

@@ -15,7 +15,7 @@ const expectedMerged = new Map([
   ["EPIC-64", baselineSha],
 ]);
 
-test("Plan 4 canonical documents expose one unambiguous delivery state", () => {
+test("canonical documents expose GEO-first current state and preserve Plan 4 evidence", () => {
   const state = read("docs/DELIVERY_STATE.yaml");
   const readme = read("docs/README.md");
 
@@ -38,8 +38,10 @@ test("Plan 4 canonical documents expose one unambiguous delivery state", () => {
   assert.doesNotMatch(readme, /Активный машинный inventory/);
   assert.match(state, new RegExp(baselineSha));
   assert.doesNotMatch(state, /842b0cce/);
-  assert.match(state, /current_status: plan4_closed_candidate_installed_and_smoke_pass/);
-  assert.match(state, /next_step: prepare a separately approved product\/content plan/);
+  assert.match(state, /current_status: geo_first_v5_runtime_candidate_verified/);
+  assert.match(state, /active_program_status: epic86_final_candidate_reconciliation/);
+  assert.match(state, /next_step: merge EPIC 86 closeout after exact-head RISKY gate/);
+  assert.match(state, /code_baseline_sha: 7d373c3e621d72040aef3480f9b5564b926acefc/);
   assert.match(state, /plan_id: more-i-gory-technical-hardening-2026-09/);
   assert.match(state, /status: implementation_complete/);
   assert.match(state, /sourcecraft_access: pass_api_and_git/);
@@ -113,13 +115,20 @@ test("future inputs remain explicit and resolved blockers do not stay active", (
   const queue = read("docs/OWNER_QUEUE.md");
 
   for (const marker of [
-    "Critical Next/Payload upgrade",
-    "EPIC 54 exact-main candidate evidence",
-    "Property enum live preflight",
+    "Factual content cohort",
+    "Index activation",
     "Recovery policy",
+    "Production release",
     "Production и `moreigori.ru`",
   ]) {
     assert.ok(queue.includes(marker), `OWNER_QUEUE missing ${marker}`);
+  }
+  for (const resolvedInput of [
+    "Critical Next/Payload upgrade",
+    "EPIC 54 exact-main candidate evidence",
+    "Property enum live preflight",
+  ]) {
+    assert.equal(queue.includes(resolvedInput), false, `closed input remains active: ${resolvedInput}`);
   }
   assert.doesNotMatch(queue, /## BLOCKS_RELEASE/);
   assert.match(queue, /Managed PostgreSQL credential rotation \| PASS/);

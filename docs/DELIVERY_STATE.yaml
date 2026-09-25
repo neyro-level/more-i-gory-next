@@ -3,17 +3,17 @@ program: AMS-MORE-I-GORY-GEO-FIRST-INVESTMENT-REMEDIATION
 plan_path: docs/AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md
 plan_version: v1
 plan_status: approved_execution_active
-code_baseline_sha: b253bf50b40d76b75fdfe1aca235c55763db97a2
-last_verified_main_sha: b253bf50b40d76b75fdfe1aca235c55763db97a2
-verification_date: 2026-09-24
-current_status: plan4_closed_candidate_installed_and_smoke_pass
-active_program_status: epic68_baseline_intake_in_progress
+code_baseline_sha: 7d373c3e621d72040aef3480f9b5564b926acefc
+last_verified_main_sha: 7d373c3e621d72040aef3480f9b5564b926acefc
+verification_date: 2026-09-25
+current_status: geo_first_v5_runtime_candidate_verified
+active_program_status: epic86_final_candidate_reconciliation
 task_manager:
   plan_prefix: mggeo
-  active_items: 57
-  ready_implementation: mggeo-task-68-implement
-  closed_items: 0
-  recovery_note: plan4_execution_ledgers_retained_and_geo_first_graph_clean
+  completed_epics: 18
+  current_epic: mggeo-epic-86
+  ready_implementation: mggeo-task-86-implement
+  recovery_note: epics_68_85_closed_with_execution_and_delivery_ledgers
   legacy_mg_graph: deferred_queryable_superseded_by_plan4_v1
   legacy_mg_items: 156
 last_merged:
@@ -24,6 +24,11 @@ last_merged:
   - { epic: EPIC-66, pr: 106, sha: cb17f87a1b76ba613118d2551e7be17d7b39c6e8 }
   - { epic: EPIC-63, pr: 107, sha: d1d0d528e42144d187e0c7a884585a87992d60bd }
   - { epic: EPIC-64, pr: 108, sha: cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452 }
+geo_first_last_merged:
+  - { epic_id: 81, pr: 125, sha: ea207061cde88bb9879ca0747d4c7c4abbcbd3c0 }
+  - { epic_id: 82, pr: 126, sha: aadc3738593593b6664e585e90025c223eedc740 }
+  - { epic_id: 84, pr: 127, sha: 0b7c3503e5be8e957d584d03160c9d51bd2e870b }
+  - { epic_id: 85, pr: 128, sha: 7d373c3e621d72040aef3480f9b5564b926acefc }
 technical_preview:
   hostname: more-previu.tw1.ru
   last_proven_installed_sha: cfcc784f61bf9cbfe03f06dc4b724c8dac8b3452
@@ -86,5 +91,5 @@ completed_program:
     live_mutation: additive_migration_only
     standing_test_database: false
     restore_rehearsal: ephemeral_release_gate_only
-next_step: prepare a separately approved product/content plan; production remains separately authorized
+next_step: merge EPIC 86 closeout after exact-head RISKY gate; factual content, index activation and production remain separate owner gates
 production: not_authorized

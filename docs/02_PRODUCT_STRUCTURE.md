@@ -688,8 +688,9 @@ Project canonical глобален и не зависит от региона. P
 запрещены. Архыз, Алтай, Сочи и будущие регионы не обязаны повторять глубину
 Крыма и активируются только через registry/Gate.
 
-Существующие пути не удаляются молча. До EPIC 70 они являются migration
-candidates с действием `REVIEW`:
+Существующие пути не удаляются молча. EPIC 70 зафиксировал для каждого пути
+явное действие в `docs/migration/V5_URL_MANIFEST.json`; таблица ниже отражает
+действующий контракт:
 
 | Current path | Target candidate | Current decision |
 |---|---|---|
@@ -704,7 +705,6 @@ candidates с действием `REVIEW`:
 | `/investicionnaya-nedvizhimost/altay/` | `/altay/` | REDIRECT_301 after target proof |
 | `/investicionnaya-nedvizhimost/sochi/` | `/sochi/` | NOINDEX_RETAIN |
 
-Ни один redirect, removal, canonical switch или index activation не выполняется
-в этом архитектурном эпике. EPIC 70 фиксирует evidence и выбирает `KEEP`,
-`REDIRECT_301`, `NOINDEX_RETAIN`, `REMOVE_404`, `GONE_410` либо `REVIEW` для
-каждого current URL.
+`REDIRECT_301` материализуется только после доступности target route и её
+publication/preview proof. `NOINDEX_RETAIN` не получает скрытый replacement.
+Index activation остаётся отдельным результатом Content Gate.

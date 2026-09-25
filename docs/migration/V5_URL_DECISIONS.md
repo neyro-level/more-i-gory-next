@@ -2,14 +2,15 @@
 
 **Plan:** `AMS-MORE-I-GORY-GEO-FIRST-INVESTMENT-REMEDIATION` v1 APPROVED
 **Epic:** 70
-**Observed main:** `e3b99d117cb41a479614b70d03161d1910af280f`
-**Date:** 2026-09-24
+**Observed main:** `7d373c3e621d72040aef3480f9b5564b926acefc`
+**Reconciled:** 2026-09-25 / EPIC 86
 **Production/index evidence:** unavailable; production and domain cutover are
 unauthorized. Decisions use repository runtime and technical-preview contracts.
 
 The machine-readable source is [`V5_URL_MANIFEST.json`](V5_URL_MANIFEST.json).
-This epic records decisions only; it does not add redirects, routes, canonical
-switches or index activation.
+EPIC 70 recorded the decisions. EPIC 75 materialized target routes and the
+target-first runtime adapter; EPIC 85 proved redirect chains `0`. Index
+activation remains closed while factual Content Gates are missing.
 
 ## Decision rules
 
@@ -57,15 +58,15 @@ bulk redirect to the home page or `/obekty/`.
 
 ### Target existence report
 
-- Existing now (6): `/`, federal hub, `/obekty/**`, `/novostroyki/**`,
-  `/zastroyshchik/**`, `/analitika/**`.
-- Planned and target-gated: `/krym/**`, `/arkhyz/` and `/altay/`.
-- `/sochi/` is a planned target but the current stub remains `NOINDEX_RETAIN`
-  until registry/content evidence permits a separate migration decision.
+- Existing now: `/`, federal hub, `/krym/**`, `/arkhyz/`, `/altay/`, `/sochi/`,
+  `/obekty/**`, `/novostroyki/**`, `/zastroyshchik/**`, `/analitika/**`.
+- `/sochi/` remains a noindex stub; it is not an automatic redirect target.
+- All seven `REDIRECT_301` decisions point directly to an existing target and
+  materialize only when that target is published or available in the editorial
+  preview contour.
 
-The validator fails any redirect to a missing target unless an explicit
-`activationGate` is present. EPIC 75 must re-run the report after materializing
-target routes and before enabling redirects.
+The validator fails missing targets, loops and redirect chains. EPIC 85 runtime
+proof confirmed zero chains and no bulk redirect to `/` or `/obekty/`.
 
 ## EPIC 70 DoD evidence
 

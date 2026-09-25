@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "planId": "AMS-MORE-I-GORY-GEO-FIRST-INVESTMENT-REMEDIATION",
   "planVersion": "v1",
-  "observedMainSha": "e3b99d117cb41a479614b70d03161d1910af280f",
-  "observedAt": "2026-09-24",
+  "observedMainSha": "7d373c3e621d72040aef3480f9b5564b926acefc",
+  "observedAt": "2026-09-25",
   "evidenceScope": "repository runtime and technical preview contract; no production index evidence available",
   "allowedActions": [
     "KEEP",
