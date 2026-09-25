@@ -1,0 +1,734 @@
+{
+  "schema_version": 2,
+  "beads_prefix": "mgnight",
+  "source": {
+    "plan_id": "AMS-MORE-I-GORY-NIGHT-HARDENING-PREVIEW-2026-09",
+    "path": "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+    "version": "v1",
+    "status": "APPROVED",
+    "approved_by": "owner",
+    "approved_at": "2026-09-25T21:19:01.6219098+03:00",
+    "sha256": "04b08d781b695270be1870e8a4ca8518950e139b0dc2e8dd5695e3d0b21593bb",
+    "epic_anchors": [
+      "EPIC 87",
+      "EPIC 88",
+      "EPIC 89",
+      "EPIC 90"
+    ]
+  },
+  "repositories": [
+    {
+      "key": "more-i-gory-next",
+      "remote": "https://git.sourcecraft.dev/integrator-p/more-i-gory-next.git",
+      "default_branch": "main"
+    }
+  ],
+  "nodes": [
+    {
+      "key": "EPIC-87",
+      "title": "Freeze control state and execution baseline",
+      "type": "epic",
+      "source_anchor": "EPIC 87",
+      "goal": "Reconcile the completed GEO-first program, freeze exact current main/preview/test/CI state and remove stale execution status before code work.",
+      "scope": [
+        "All approved requirements, tasks, acceptance and prohibitions under EPIC 87 in night hardening plan v1"
+      ],
+      "acceptance_criteria": [
+        "Implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "Terminal delivery task is complete and the epic acceptance is satisfied"
+      ],
+      "depends_on": [],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:a",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-87-IMPLEMENT",
+      "title": "Implement EPIC 87: Freeze control state and execution baseline",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-87",
+      "source_anchor": "EPIC 87",
+      "goal": "Reconcile the completed GEO-first program, freeze exact current main/preview/test/CI state and remove stale execution status before code work.",
+      "scope": [
+        "Implement exactly the Tasks sections and reach Acceptance for EPIC 87"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 87 acceptance row maps to factual evidence",
+        "Required local/live checks are recorded at a pushed exact head SHA",
+        "EXECUTION_LEDGER_V1 is complete"
+      ],
+      "required_checks": [
+        "Git and Task Manager reconciliation",
+        "Read-only preview URL and installed-release inventory",
+        "Docs/current-state and SourceCraft workflow map"
+      ],
+      "depends_on": [],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:a",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-87-DELIVERY",
+      "title": "Deliver EPIC 87 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-87",
+      "source_anchor": "EPIC 87",
+      "goal": "Review, RISKY-gate and merge EPIC 87 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 87 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 87 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full diff against plan v1",
+        "Run exactly one risk-appropriate exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-87-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:a",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "EPIC-88",
+      "title": "Harden SEO runtime, env, security and Payload preview",
+      "type": "epic",
+      "source_anchor": "EPIC 88",
+      "goal": "Make URL/metadata/robots/env fail closed and move editorial preview reads to Payload Public Gateway without weakening access or introducing destructive schema changes.",
+      "scope": [
+        "All approved requirements, tasks, acceptance and prohibitions under EPIC 88 in night hardening plan v1"
+      ],
+      "acceptance_criteria": [
+        "Implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "Terminal delivery task is complete and the epic acceptance is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-87"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:b",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-88-IMPLEMENT",
+      "title": "Implement EPIC 88: Harden SEO runtime, env, security and Payload preview",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-88",
+      "source_anchor": "EPIC 88",
+      "goal": "Make URL/metadata/robots/env fail closed and move editorial preview reads to Payload Public Gateway without weakening access or introducing destructive schema changes.",
+      "scope": [
+        "Implement exactly the Tasks sections and reach Acceptance for EPIC 88"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 88 acceptance row maps to factual evidence",
+        "Required local/live checks are recorded at a pushed exact head SHA",
+        "EXECUTION_LEDGER_V1 is complete"
+      ],
+      "required_checks": [
+        "Targeted runtime, SEO, env, access and guard tests",
+        "pnpm verify and pnpm verify:schema on final head",
+        "Whole-history secret scan and full diff review"
+      ],
+      "depends_on": [
+        "TASK-87-DELIVERY"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-88-DELIVERY",
+      "title": "Deliver EPIC 88 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-88",
+      "source_anchor": "EPIC 88",
+      "goal": "Review, RISKY-gate and merge EPIC 88 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 88 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 88 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full diff against plan v1",
+        "Run exactly one risk-appropriate exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-88-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:b",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "EPIC-89",
+      "title": "Remediate UI, public copy, tests, docs archive and CI hygiene",
+      "type": "epic",
+      "source_anchor": "EPIC 89",
+      "goal": "Remove internal copy from public UI, improve navigation/forms/components, group tests and archive docs while preserving manual-only SourceCraft gates.",
+      "scope": [
+        "All approved requirements, tasks, acceptance and prohibitions under EPIC 89 in night hardening plan v1"
+      ],
+      "acceptance_criteria": [
+        "Implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "Terminal delivery task is complete and the epic acceptance is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-87"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:b",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-89-IMPLEMENT",
+      "title": "Implement EPIC 89: Remediate UI, public copy, tests, docs archive and CI hygiene",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-89",
+      "source_anchor": "EPIC 89",
+      "goal": "Remove internal copy from public UI, improve navigation/forms/components, group tests and archive docs while preserving manual-only SourceCraft gates.",
+      "scope": [
+        "Implement exactly the Tasks sections and reach Acceptance for EPIC 89"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 89 acceptance row maps to factual evidence",
+        "Required local/live checks are recorded at a pushed exact head SHA",
+        "EXECUTION_LEDGER_V1 is complete"
+      ],
+      "required_checks": [
+        "pnpm verify, verify:schema, verify:ui-drift and test:ui",
+        "360/768/1280 browser and keyboard proof",
+        "Test-count conservation, Lighthouse and full diff review"
+      ],
+      "depends_on": [
+        "TASK-87-DELIVERY"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:b",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-89-DELIVERY",
+      "title": "Deliver EPIC 89 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-89",
+      "source_anchor": "EPIC 89",
+      "goal": "Review, RISKY-gate and merge EPIC 89 without production.",
+      "scope": [
+        "Review and deliver only the completed EPIC 89 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 89 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full diff against plan v1",
+        "Run exactly one risk-appropriate exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-89-IMPLEMENT",
+        "TASK-88-DELIVERY"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:b",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "EPIC-90",
+      "title": "Install exact main on preview and record proof",
+      "type": "epic",
+      "source_anchor": "EPIC 90",
+      "goal": "Build once from exact merged main, install immutably on technical preview, prove live behavior or rollback, then merge a report-only docs PR.",
+      "scope": [
+        "All approved requirements, tasks, acceptance and prohibitions under EPIC 90 in night hardening plan v1"
+      ],
+      "acceptance_criteria": [
+        "Implementation task has complete EXECUTION_LEDGER_V1 evidence",
+        "Terminal delivery task is complete and the epic acceptance is satisfied"
+      ],
+      "depends_on": [
+        "EPIC-88",
+        "EPIC-89"
+      ],
+      "delivery_mode": "MERGE_AFTER_GATE",
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "plan"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "wave:c",
+        "plan:v1",
+        "role:implementation-program",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-90-IMPLEMENT",
+      "title": "Implement EPIC 90: Install exact main on preview and record proof",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "implementation",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-90",
+      "source_anchor": "EPIC 90",
+      "goal": "Build once from exact merged main, install immutably on technical preview, prove live behavior or rollback, then merge a report-only docs PR.",
+      "scope": [
+        "Implement exactly the Tasks sections and reach Acceptance for EPIC 90"
+      ],
+      "acceptance_criteria": [
+        "Every EPIC 90 acceptance row maps to factual evidence",
+        "Required local/live checks are recorded at a pushed exact head SHA",
+        "EXECUTION_LEDGER_V1 is complete"
+      ],
+      "required_checks": [
+        "Preview env/server/database preflight",
+        "Exact-main artifact digest and immutable install evidence",
+        "Live smoke, reversible content proof, rollback readiness and report reconciliation"
+      ],
+      "depends_on": [
+        "TASK-88-DELIVERY",
+        "TASK-89-DELIVERY"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "edit",
+        "test",
+        "commit",
+        "push",
+        "preview_preflight",
+        "preview_rollout",
+        "rollback"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:implementation",
+        "wave:c",
+        "plan:v1",
+        "risk:risky"
+      ]
+    },
+    {
+      "key": "TASK-90-DELIVERY",
+      "title": "Deliver EPIC 90 through exact-head gate",
+      "type": "task",
+      "role": "implementation",
+      "work_kind": "delivery",
+      "repository_key": "more-i-gory-next",
+      "parent_key": "EPIC-90",
+      "source_anchor": "EPIC 90",
+      "goal": "Merge the report-only proof PR after preview outcome is recorded; do not deploy the report commit.",
+      "scope": [
+        "Review and deliver only the completed EPIC 90 stream through SourceCraft"
+      ],
+      "acceptance_criteria": [
+        "EPIC 90 PR is merged at the exact attested head SHA",
+        "Delivery ledger records PR, gate and merge evidence",
+        "Production remains unauthorized"
+      ],
+      "required_checks": [
+        "Review the full diff against plan v1",
+        "Run exactly one risk-appropriate exact-head SourceCraft gate",
+        "Re-check PR head and merge without force"
+      ],
+      "depends_on": [
+        "TASK-90-IMPLEMENT"
+      ],
+      "required_context": [
+        "docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md",
+        "docs/01_PRD.md",
+        "docs/02_PRODUCT_STRUCTURE.md",
+        "docs/03_ARCHITECTURE.md",
+        "docs/04_BACKLOG.md",
+        "docs/05_RELEASE_CHECKLIST.md",
+        "docs/PROJECT.md",
+        "docs/OPERATIONS.md",
+        "docs/DESIGN.md",
+        "AGENTS.md"
+      ],
+      "allowed_actions": [
+        "read",
+        "review",
+        "test",
+        "commit",
+        "push",
+        "create_pr",
+        "merge"
+      ],
+      "stop_conditions": [
+        "production, moreigori.ru, DNS or domain cutover",
+        "jobs, feed, outbound lead channels, public lead intake or index activation",
+        "non-additive or rollback-incompatible migration",
+        "source plan or inventory drift",
+        "secret or PII exposure",
+        "guard weakening or unsupported public claims"
+      ],
+      "priority": 0,
+      "labels": [
+        "role:implementation",
+        "work:delivery",
+        "wave:c",
+        "plan:v1",
+        "delivery:merge-after-gate",
+        "risk:risky"
+      ]
+    }
+  ]
+}

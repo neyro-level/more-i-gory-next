@@ -1,8 +1,8 @@
 # Owner / deferred queue
 
-**Статус:** Active owner-gate register after GEO-first V5 candidate
-**Последний план:** `AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0` v1 APPROVED
-**Code baseline:** `7d373c3e621d72040aef3480f9b5564b926acefc`
+**Статус:** Active owner-gate register during night hardening v1
+**Последний план:** `AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1` v1 APPROVED
+**Code baseline:** `8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683`
 **Дата нормализации:** 2026-09-25
 
 Этот файл больше не изображает незавершённый EPIC 54. Он хранит только
@@ -61,6 +61,7 @@ blocker:
 
 ## Правило следующего планирования
 
-Следующий план нужен только для factual content/index activation либо для
-отдельного production release. Технический GEO-first V5 scope не расширять
-скрыто. Production всегда остаётся отдельным explicit gate.
+Текущий night hardening plan закрывает только перечисленный технический scope и
+technical preview. После него новый план нужен только для factual content/index
+activation либо для отдельного production release. GEO-first V5 scope не
+расширять скрыто. Production всегда остаётся отдельным explicit gate.

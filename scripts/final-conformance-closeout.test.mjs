@@ -38,10 +38,10 @@ test("canonical documents expose GEO-first current state and preserve Plan 4 evi
   assert.doesNotMatch(readme, /Активный машинный inventory/);
   assert.match(state, new RegExp(baselineSha));
   assert.doesNotMatch(state, /842b0cce/);
-  assert.match(state, /current_status: geo_first_v5_runtime_candidate_verified/);
-  assert.match(state, /active_program_status: epic86_final_candidate_reconciliation/);
-  assert.match(state, /next_step: merge EPIC 86 closeout after exact-head RISKY gate/);
-  assert.match(state, /code_baseline_sha: 7d373c3e621d72040aef3480f9b5564b926acefc/);
+  assert.match(state, /current_status: night_hardening_baseline_frozen/);
+  assert.match(state, /active_program_status: epic87_control_foundation/);
+  assert.match(state, /next_step: merge EPIC 87 baseline freeze after exact-head RISKY gate/);
+  assert.match(state, /code_baseline_sha: 8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683/);
   assert.match(state, /plan_id: more-i-gory-technical-hardening-2026-09/);
   assert.match(state, /status: implementation_complete/);
   assert.match(state, /sourcecraft_access: pass_api_and_git/);

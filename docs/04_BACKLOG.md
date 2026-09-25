@@ -1,17 +1,17 @@
 # Backlog — «Море и Горы»
 
 **Статус:** Active
-**Версия:** 5.0 — GEO-first remediation execution
-**Дата:** 2026-09-24
+**Версия:** 5.1 — night hardening execution
+**Дата:** 2026-09-25
 **Правило:** это единственный source of truth текущей разработки.
 
 ## 1. Текущая точка
 
 Current execution source —
-`AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md` v1 APPROVED,
-Task Manager prefix `mggeo`. EPIC 68 смержен PR 111 и зафиксировал exact
-baseline. EPIC 69 смержен PR 112 и заморозил GEO-first IA. EPIC 70 фиксирует
-evidence-based решения по каждому current/legacy URL до изменения runtime routes.
+`AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md` v1 APPROVED,
+Task Manager prefix `mgnight`. GEO-first EPIC 68–86 закрыты; exact baseline
+нового потока — `origin/main@8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683`.
+EPIC 87 фиксирует control foundation и read-only preview baseline.
 
 Публичный сайт читает Payload через Public Gateway и DTO. Business facts по
 Крыму и четырём городам остаются `MISSING`: технический graph выполняется, но
@@ -105,10 +105,10 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 - [x] обновить project router и SourceCraft path guards;
 - [x] выполнить финальную проверку ссылок и `pnpm verify`.
 
-## 4. NOW / NEXT — GEO-first remediation v1
+## 4. NOW / NEXT — night hardening and technical preview v1
 
-Код в `main` — Realty 5.5 GEO-first runtime candidate без production. Из 19
-эпиков 18 закрыты через Beads; EPIC 86 выполняет финальную reconciliation.
+Код в `main` — Realty 5.5 GEO-first baseline без production. Все 19 эпиков
+предыдущего `mggeo` graph закрыты. Текущий `mgnight` graph содержит EPIC 87–90.
 
 | Состояние | Эпик | Результат |
 |---|---|---|
@@ -127,13 +127,17 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 | DONE | EPIC 83 | future-region activation через общий registry/status contract; PR 121 |
 | DONE | EPIC 84 | crawlable linking graph, breadcrumbs и non-PII analytics; PR 127 |
 | DONE | EPIC 85 | production-like SEO invariant crawl; PR 128 / RISKY run 198 |
-| NOW | EPIC 86 | final candidate, document reconciliation и closeout без production |
+| DONE | EPIC 86 | final candidate, document reconciliation и closeout; `main` `8db1c1c…` |
+| NOW | EPIC 87 | control foundation, exact baseline и read-only preview inventory |
+| NEXT | EPIC 88 | runtime/SEO/env/security и Payload-backed editorial preview |
+| NEXT | EPIC 89 | UI/copy/tests/archive/manual-only CI cleanup после contract freeze |
+| LATER | EPIC 90 | exact-main technical preview rollout и отдельный proof PR; не production |
 | CONTENT GATE | Крым + четыре города | facts `MISSING`; index activation запрещена, technical work разрешена |
 | PRODUCTION GATE | Release/cutover | только отдельная release-команда после нового approved plan |
 
-Старые `mg-*` задачи не являются READY work текущего плана. Единственное
-execution state — CLEAN graph `mggeo`; DRAFT/legacy inventories повторно не
-импортируются.
+Старые `mg-*` и закрытые `mggeo-*` задачи не являются READY work текущего
+плана. Единственное активное execution state — CLEAN graph `mgnight`;
+DRAFT/legacy inventories повторно не импортируются.
 
 ### EPIC 72 — Unified SEO state engine
 

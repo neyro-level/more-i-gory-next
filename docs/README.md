@@ -1,7 +1,7 @@
 # Документация проекта «Море и Горы»
 
 **Статус:** Active
-**Версия:** 4.0 — GEO-first V5 final candidate
+**Версия:** 4.1 — night hardening execution baseline
 **Дата:** 2026-09-25
 **Стандарт:** AMS Product Development Standard 2.0
 
@@ -19,8 +19,8 @@
 
 ## Текущий статус
 
-- GEO-first EPIC 68–85 смержены; runtime candidate —
-  `7d373c3e621d72040aef3480f9b5564b926acefc`;
+- GEO-first EPIC 68–86 закрыты; итоговый baseline в `main` —
+  `8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683`;
 - target IA реализована: federal hub, `/krym/` и четыре city hub,
   глобальные `/obekty/**`, future-region activation и единый SEO state;
 - публичный read идёт через Public Gateway / Payload Local API и DTO;
@@ -37,18 +37,21 @@
   актуальные deferred и next-plan inputs собраны в
   [`OWNER_QUEUE.md`](OWNER_QUEUE.md);
 - production-like crawl EPIC 85 прошёл локальный `pnpm verify`, schema proof и
-  SourceCraft RISKY gate 198; итоговая сверка находится в
+  SourceCraft RISKY gate 198; EPIC 86 завершил reconciliation; итоговая сверка находится в
   [`proofs/V5_GEO_FIRST_FINAL_PROOF.md`](proofs/V5_GEO_FIRST_FINAL_PROOF.md);
+- новый утверждённый поток `AMS-MORE-I-GORY-NIGHT-HARDENING-PREVIEW-2026-09`
+  выполняет EPIC 87–90; сейчас активен EPIC 87 baseline freeze;
 - production не разрешён; domain cutover, jobs, outbound channels и страницы
   не активировались.
 
 ## Audit / remediation baseline
 
-Plan №4 остаётся технической основой. GEO-first v1 прошёл EPIC 68–85 и находится
-на финальной reconciliation-стадии EPIC 86. Production планом не разрешён.
+Plan №4 остаётся исторической технической основой. GEO-first v1 прошёл EPIC
+68–86 и закрыт. Текущий утверждённый план — night hardening v1; production им
+не разрешён, EPIC 90 ограничен technical preview.
 
 ```text
-CODE_BASELINE=7d373c3e621d72040aef3480f9b5564b926acefc  # GEO-first EPIC 68–85 merged runtime candidate
+CODE_BASELINE=8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683  # GEO-first EPIC 68–86 merged baseline
 PROFILE=REALTY_BASE
 TARGET_CORE=AMS Realty Platform 5.5
 UI_CORE=AMS UI Core 5.0
@@ -56,13 +59,15 @@ UI_CORE=AMS UI Core 5.0
 
 | Поле | Значение |
 |---|---|
-| Code baseline | SourceCraft `integrator-p/more-i-gory-next` @ `7d373c3e621d72040aef3480f9b5564b926acefc` |
+| Code baseline | SourceCraft `integrator-p/more-i-gory-next` @ `8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683` |
 | Профиль | `AMS_PROFILE=REALTY_BASE`, режим BUILD |
 | Техническая конституция | [`AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md`](AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md) |
 | UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
-| Последний утверждённый мастер-план | [`AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md`](AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md) v1 APPROVED; final candidate reconciliation |
+| Последний утверждённый мастер-план | [`AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md`](AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md) v1 APPROVED; EPIC 87–90 |
+| Закрытый GEO-first план | [`AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md`](AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md) v1 APPROVED; EPIC 68–86 closed |
 | Предыдущий план | [`MORE_I_GORY_PLAN_№ 4.md`](MORE_I_GORY_PLAN_№%204.md) v1 APPROVED / implementation complete |
-| Машинный inventory текущего плана | [`task-manager-inventory.geo-first.v1.json`](task-manager-inventory.geo-first.v1.json); Plan ID `AMS-MORE-I-GORY-GEO-FIRST-INVESTMENT-REMEDIATION`, prefix `mggeo` |
+| Машинный inventory текущего плана | [`task-manager-inventory.night-hardening.v1.json`](task-manager-inventory.night-hardening.v1.json); Plan ID `AMS-MORE-I-GORY-NIGHT-HARDENING-PREVIEW-2026-09`, prefix `mgnight` |
+| Закрытый GEO-first inventory | [`task-manager-inventory.geo-first.v1.json`](task-manager-inventory.geo-first.v1.json); prefix `mggeo`, 19/19 epics closed |
 | Исторический машинный inventory | [`task-manager-inventory.plan3.v3.json`](task-manager-inventory.plan3.v3.json); повторно не импортировать |
 | История | [`MORE_I_GORY_PLAN_№ 3.md`](MORE_I_GORY_PLAN_№%203.md), [`More-i-gory-plan №2.md`](More-i-gory-plan%20№2.md) и `task-manager-inventory.v6.json`; новые задачи из них не создаются |
 | Указатель волны | [`DELIVERY_STATE.yaml`](DELIVERY_STATE.yaml) |
@@ -130,8 +135,8 @@ Research объясняет причины решений, но не являе�
 
 ## Current Focus
 
-NOW: GEO-first remediation v1, EPIC 86 final candidate reconciliation. EPIC
-68–85 закрыты и находятся в `main`. Business facts по Крыму и четырём городам
+NOW: night hardening v1, EPIC 87 control foundation и baseline freeze. GEO-first
+EPIC 68–86 закрыты и находятся в `main`. Business facts по Крыму и четырём городам
 по-прежнему `MISSING`, поэтому index activation остаётся закрытой Content Gate.
 Следующий разрешённый шаг после closeout — отдельное решение по factual content;
 production не выпускался и не разрешён.
