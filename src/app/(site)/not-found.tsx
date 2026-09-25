@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
+
 import { SectionShell } from "@/components/layout/section-shell";
 import { ActionLink } from "@/components/navigation/action-link";
+
+export const metadata: Metadata = {
+  robots: { follow: true, index: false },
+  title: "Страница не найдена",
+};
 
 export default function NotFound() {
   return (

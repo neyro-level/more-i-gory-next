@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
+
 import "./(site)/globals.css";
 import { SectionShell } from "@/components/layout/section-shell";
 import { ActionLink } from "@/components/navigation/action-link";
 import { cn } from "@/lib/utils";
 import { montserrat } from "@/app/fonts";
+
+export const metadata: Metadata = {
+  robots: { follow: true, index: false },
+  title: "Страница не найдена | Море и Горы",
+};
 
 export default function GlobalNotFound() {
   return (

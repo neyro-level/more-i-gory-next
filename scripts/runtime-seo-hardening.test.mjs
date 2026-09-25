@@ -73,6 +73,16 @@ test("runtime verification applies the layout title template to nested routes", 
   assert.match(runtimeVerification, /return `\$\{pageTitle\} \| Море и Горы`/);
 });
 
+test("both 404 boundaries declare noindex metadata and an explicit title", () => {
+  const globalNotFound = readFileSync("src/app/global-not-found.tsx", "utf8");
+  const siteNotFound = readFileSync("src/app/(site)/not-found.tsx", "utf8");
+
+  assert.match(globalNotFound, /title: "Страница не найдена \| Море и Горы"/);
+  assert.match(siteNotFound, /title: "Страница не найдена"/);
+  assert.match(globalNotFound, /robots: \{ follow: true, index: false \}/);
+  assert.match(siteNotFound, /robots: \{ follow: true, index: false \}/);
+});
+
 test("structured data stays factual and Article exists only for published content", () => {
   const graph = siteStructuredData(runtime);
   assert.equal(graph[0].legalName, "Индивидуальный предприниматель Колобова Ольга Викторовна");
