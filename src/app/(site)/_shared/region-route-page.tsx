@@ -8,6 +8,7 @@ import { SectionShell } from "@/components/layout/section-shell";
 import { LeadFormSection } from "@/components/marketing/lead-form-section";
 import { PageHero } from "@/components/marketing/page-hero";
 import { RiskBlock } from "@/components/marketing/risk-block";
+import { CityMarketHub } from "@/components/templates/city-market-hub";
 import { CrimeaRegionHub } from "@/components/templates/crimea-region-hub";
 import { ActionLink } from "@/components/navigation/action-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,6 +54,20 @@ export async function RegionRoutePage({ path }: Readonly<{ path: string }>) {
   if (region.path === "/krym/" && region.kind === "region") {
     const projects = isPreview ? [] : await listPublishedManualProperties();
     return <CrimeaRegionHub projects={projects} region={region} regions={regions} title={seo.h1} />;
+  }
+
+  if (region.path === "/krym/yalta/" && region.pageKey === "CITY") {
+    const projects = isPreview ? [] : await listPublishedManualProperties();
+    return (
+      <CityMarketHub
+        city={region}
+        cityNameGenitive="Ялты"
+        cityNamePrepositional="Ялте"
+        projects={projects}
+        regions={regions}
+        title={seo.h1}
+      />
+    );
   }
 
   const relatedLinks = isPreview
