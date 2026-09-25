@@ -66,6 +66,13 @@ test("home metadata preserves the registry title outside the root layout templat
   assert.match(homePage, /title: \{ absolute: homeSeo\.title \}/);
 });
 
+test("runtime verification applies the layout title template to nested routes", () => {
+  const runtimeVerification = readFileSync("scripts/verify-runtime.mjs", "utf8");
+
+  assert.match(runtimeVerification, /if \(pathname === "\/"\) return entry\.title/);
+  assert.match(runtimeVerification, /return `\$\{pageTitle\} \| Море и Горы`/);
+});
+
 test("structured data stays factual and Article exists only for published content", () => {
   const graph = siteStructuredData(runtime);
   assert.equal(graph[0].legalName, "Индивидуальный предприниматель Колобова Ольга Викторовна");
