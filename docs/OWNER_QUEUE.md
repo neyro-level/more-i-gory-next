@@ -1,9 +1,9 @@
 # Owner / deferred queue
 
-**Статус:** Active owner-gate register during night hardening v1
+**Статус:** Active owner-gate register after night hardening v1 rollback
 **Последний план:** `AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1` v1 APPROVED
-**Code baseline:** `8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683`
-**Дата нормализации:** 2026-09-25
+**Code baseline:** `b98c416507ab1c4c1836fb80c010382ecd387555`
+**Дата нормализации:** 2026-09-26
 
 Этот файл больше не изображает незавершённый EPIC 54. Он хранит только
 фактические внешние решения и входы будущих программ. Новый Task Manager graph
@@ -36,6 +36,7 @@ Beads-задачи.
 | P0 | Index activation | effective SEO state и crawl fail closed | включать только страницы, реально прошедшие Content Gate |
 | P1 | Recovery policy | backup не считается доказанным restore | отдельный ephemeral restore rehearsal перед production-ready claim |
 | P1 | Production release | exact candidate не установлен на production | отдельная команда `Выпускаем production` после повторного release proof |
+| P0 | Preview publication diagnostic | candidate `b98c416…` откатан после red DB-backed smoke; активен `cfcc784…` | отдельный узкий план, новый exact SHA/artifact и полный smoke до повторного switch |
 
 ## RESOLVED — REMOVE FROM ACTIVE QUEUE
 

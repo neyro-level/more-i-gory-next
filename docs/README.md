@@ -1,8 +1,8 @@
 # Документация проекта «Море и Горы»
 
 **Статус:** Active
-**Версия:** 4.1 — night hardening execution baseline
-**Дата:** 2026-09-25
+**Версия:** 4.2 — night hardening closeout with preview rollback
+**Дата:** 2026-09-26
 **Стандарт:** AMS Product Development Standard 2.0
 
 ## Что создаём
@@ -29,18 +29,21 @@
 - неподтверждённые коммерческие, региональные и аналитические страницы остаются
   под content/trust/index gate; текущий проверенный sitemap пуст и не публикует
   неподтверждённые URL;
-- цепочка из 27 migrations, upgrade fixture, single-DB application proof,
+- цепочка из 29 migrations, upgrade fixture, single-DB application proof,
   credential rotation, immutable preview runtime и rollback доказаны;
-  единственная новая migration Payload применена на preview, owner login и
-  live smoke прошли;
+  две additive migrations и missing-only seeds применены на preview, owner
+  login прошёл, но новый candidate откатан после red расширенного smoke;
   restore явно отложен решением владельца в Plan №3 v3;
   актуальные deferred и next-plan inputs собраны в
   [`OWNER_QUEUE.md`](OWNER_QUEUE.md);
 - production-like crawl EPIC 85 прошёл локальный `pnpm verify`, schema proof и
   SourceCraft RISKY gate 198; EPIC 86 завершил reconciliation; итоговая сверка находится в
   [`proofs/V5_GEO_FIRST_FINAL_PROOF.md`](proofs/V5_GEO_FIRST_FINAL_PROOF.md);
-- новый утверждённый поток `AMS-MORE-I-GORY-NIGHT-HARDENING-PREVIEW-2026-09`
-  выполняет EPIC 87–90; сейчас активен EPIC 87 baseline freeze;
+- поток `AMS-MORE-I-GORY-NIGHT-HARDENING-PREVIEW-2026-09` выполнил EPIC 87–89;
+  EPIC 90 собрал и установил exact-main candidate `b98c416…`, но обязательный
+  расширенный smoke дал red, поэтому preview возвращён на `cfcc784…`;
+- полный ledger операции и неисполненные после stop проверки записаны в
+  [`proofs/night-run-report.md`](proofs/night-run-report.md);
 - production не разрешён; domain cutover, jobs, outbound channels и страницы
   не активировались.
 
@@ -140,8 +143,9 @@ Client Component, потому что Next.js error boundary требует `"us
 
 ## Current Focus
 
-NOW: night hardening v1, EPIC 87 control foundation и baseline freeze. GEO-first
-EPIC 68–86 закрыты и находятся в `main`. Business facts по Крыму и четырём городам
+NOW: night hardening v1 завершён безопасным preview rollback. EPIC 87–89 и
+release-fixes находятся в `main`; повторный candidate switch запрещён до
+отдельного диагностического решения. Business facts по Крыму и четырём городам
 по-прежнему `MISSING`, поэтому index activation остаётся закрытой Content Gate.
 Следующий разрешённый шаг после closeout — отдельное решение по factual content;
 production не выпускался и не разрешён.

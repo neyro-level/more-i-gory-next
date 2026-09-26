@@ -128,10 +128,10 @@ Proof: SourceCraft PR-20, RISKY exact-head gate run 21, merge commit
 | DONE | EPIC 84 | crawlable linking graph, breadcrumbs и non-PII analytics; PR 127 |
 | DONE | EPIC 85 | production-like SEO invariant crawl; PR 128 / RISKY run 198 |
 | DONE | EPIC 86 | final candidate, document reconciliation и closeout; `main` `8db1c1c…` |
-| NOW | EPIC 87 | control foundation, exact baseline и read-only preview inventory |
-| NEXT | EPIC 88 | runtime/SEO/env/security и Payload-backed editorial preview |
-| NEXT | EPIC 89 | UI/copy/tests/archive/manual-only CI cleanup после contract freeze |
-| LATER | EPIC 90 | exact-main technical preview rollout и отдельный proof PR; не production |
+| DONE | EPIC 87 | control foundation, exact baseline и read-only preview inventory; PR 130 |
+| DONE | EPIC 88 | runtime/SEO/env/security и Payload-backed editorial preview; PR 131 / RISKY run 207 |
+| DONE | EPIC 89 | UI/copy/tests/archive/manual-only CI cleanup; PR 132 / RISKY run 208 |
+| ROLLED BACK | EPIC 90 | candidate `b98c416…` built by run 215 and installed, extended smoke red, restored `cfcc784…`; see `proofs/night-run-report.md` |
 | CONTENT GATE | Крым + четыре города | facts `MISSING`; index activation запрещена, technical work разрешена |
 | PRODUCTION GATE | Release/cutover | только отдельная release-команда после нового approved plan |
 

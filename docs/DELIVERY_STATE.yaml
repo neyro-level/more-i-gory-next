@@ -10,9 +10,9 @@ current_status: night_hardening_baseline_frozen
 active_program_status: epic87_control_foundation
 task_manager:
   plan_prefix: mgnight
-  completed_epics: 0
-  current_epic: mgnight-epic-87
-  ready_implementation: mgnight-task-87-implement
+  completed_epics: 4
+  current_epic: none
+  ready_implementation: none_until_owner_diagnostic_decision
   recovery_note: previous_mggeo_graph_closed_19_of_19_before_import
   legacy_mg_graph: deferred_queryable_superseded_by_plan4_v1
   legacy_mg_items: 156
@@ -36,8 +36,15 @@ technical_preview:
   gate_run: 163
   build_run: 164
   sha256: 18a0eee21e8725dae3fcafbfdd18db825d6fa839e02d6afd44a64277685757b3
-  migration_count: 27
+  migration_count: 29
   live_smoke: pass
+  attempted_candidate_sha: b98c416507ab1c4c1836fb80c010382ecd387555
+  attempted_candidate_digest: 2ce20887be87ed59194875a5c773c080f17eee0a16164bb3b29313ddbe5dfbd0
+  release_gate_run: 214
+  release_build_run: 215
+  candidate_smoke: fail
+  rollback: pass
+  report: docs/proofs/night-run-report.md
 completed_program:
   plan_id: more-i-gory-technical-hardening-2026-09
   plan_path: docs/archive/more-i-gory-plan-4.md
@@ -91,5 +98,10 @@ completed_program:
     live_mutation: additive_migration_only
     standing_test_database: false
     restore_rehearsal: ephemeral_release_gate_only
+night_hardening_closeout:
+  status: implementation_complete_with_preview_rollback
+  code_main_sha: b98c416507ab1c4c1836fb80c010382ecd387555
+  verification_date: 2026-09-26
+  next_step: owner decision for a narrow Payload publication diagnostic before any new preview switch
 next_step: merge EPIC 87 baseline freeze after exact-head RISKY gate; continue EPIC 88 and 89; EPIC 90 technical preview only
 production: not_authorized
