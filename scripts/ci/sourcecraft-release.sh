@@ -35,6 +35,9 @@ corepack prepare pnpm@11.5.1 --activate
 
 pnpm verify:sourcecraft-contract
 pnpm install --frozen-lockfile --prefer-offline --reporter=append-only
+pnpm payload migrate
+pnpm media:seed
+pnpm regions:seed
 
 # Build exactly once; runtime proof and packaging consume the same output.
 pnpm verify:risk:runtime-release
