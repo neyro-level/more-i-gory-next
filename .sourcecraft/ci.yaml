@@ -119,9 +119,6 @@ workflows:
                 export NEXT_PUBLIC_LEADS_ENABLED=false
                 export PAYLOAD_SECRET=ci-validation-only-payload-secret-not-for-production
                 export TZ=Europe/Moscow
-                pnpm payload migrate
-                pnpm media:seed
-                pnpm regions:seed
                 EXPECTED_COMMIT_SHA=${{ inputs.expected_commit_sha }} GATE_RUN_SLUG=${{ inputs.gate_run_slug }} PREVIOUS_RELEASE_SHA=${{ inputs.previous_release_sha }} STORE_RELEASE_TAG=${{ inputs.store_release_tag }} TARGET_SERVER_URL=${{ inputs.target_server_url }} bash scripts/ci/sourcecraft-release.sh
             artifacts:
               paths:

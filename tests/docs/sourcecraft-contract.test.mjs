@@ -32,8 +32,8 @@ test("one manual release workflow owns the single-build artifact path", () => {
   assert.match(release, /bash scripts\/ci\/sourcecraft-release\.sh/);
   assert.match(release, /bash scripts\/ci\/bootstrap-verification-postgres\.sh/);
   assert.match(release, /AMS_EDITORIAL_PREVIEW=payload/);
-  assert.ok(release.indexOf("pnpm payload migrate") < release.indexOf("bash scripts/ci/sourcecraft-release.sh"));
-  assert.ok(release.indexOf("pnpm regions:seed") < release.indexOf("bash scripts/ci/sourcecraft-release.sh"));
+  assert.ok(releaseScript.indexOf("pnpm install --frozen-lockfile") < releaseScript.indexOf("pnpm payload migrate"));
+  assert.ok(releaseScript.indexOf("pnpm regions:seed") < releaseScript.indexOf("pnpm verify:risk:runtime-release"));
   for (const artifact of [
     "release.tar.gz",
     "release.tar.gz.sha256",
