@@ -86,13 +86,14 @@ operations. Custom Views допустимы только для workflow, кот
 ## Approved physical mapping
 
 - public UI и domain compositions: `src/components/**`;
+- home composition: `src/components/pages/home/**`; статические данные —
+  `src/content/home/**`; загрузка DTO — `src/core/data-access/home-page.ts`;
 - canonical primitives: `src/components/ui/**`;
 - минимальный client leaf формы: `src/components/marketing/forms/**`;
 - единственный numeric token source: `src/app/(site)/globals.css`;
 - `packages/ui` и `src/ui/interactive` не являются допустимыми owner trees;
-- исторические `More-i-gory-plan №2.md` и `MORE_I_GORY_PLAN_№ 3.md` остаются
-  на исходных путях как ненормативное evidence: move/rename запрещён, потому что
-  сломает существующие ссылки без runtime-пользы.
+- исторические планы хранятся в `docs/archive/` с переносимыми ASCII-именами;
+  они остаются ненормативным evidence и не создают новые задачи.
 
 ## Approved exceptions
 

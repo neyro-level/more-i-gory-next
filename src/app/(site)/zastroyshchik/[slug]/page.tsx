@@ -50,7 +50,7 @@ export default async function DeveloperPage({ params }: DeveloperPageProps) {
   if (!developer) notFound();
 
   return (
-    <main>
+    <main id="main">
       <PageHero
         eyebrow="Застройщик"
         title={developer.title}
@@ -66,7 +66,7 @@ export default async function DeveloperPage({ params }: DeveloperPageProps) {
       />
 
       <SectionShell eyebrow="Проверка" title="Карточка не заменяет юридическую экспертизу" lead="Перед сделкой нужны документы, сроки, договор, статус земли, разрешения и сценарий выхода.">
-        <Card className="rounded-large bg-card">
+        <Card radius="large" className="bg-card">
           <CardHeader>
             <CardTitle className="text-h3">Что проверяем по застройщику</CardTitle>
           </CardHeader>

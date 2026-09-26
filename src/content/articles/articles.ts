@@ -3,7 +3,7 @@ import { articleSchema } from "@more-i-gory/contracts";
 export const articles = articleSchema.array().parse([
   {
     description:
-      "Черновой первый экран аналитического материала о выборе между Сочи и Крымом для инвестиций в курортную недвижимость.",
+      "Сравнение Сочи и Крыма для инвестиций в курортную недвижимость: особенности рынков, ограничения и вопросы до выбора объекта.",
     id: "article-sochi-ili-krym",
     path: "/analitika/sochi-ili-krym/",
     primaryQuery: "Сочи или Крым для инвестиций",
@@ -18,7 +18,7 @@ export const articles = articleSchema.array().parse([
   },
   {
     description:
-      "Черновой первый экран о расчёте чистой доходности курортной недвижимости после расходов, сезонности, налогов и управления.",
+      "Как оценивать чистую доходность курортной недвижимости после расходов, сезонности, налогов и управления.",
     id: "article-kak-schitat-chistuyu-dohodnost",
     path: "/analitika/kak-schitat-chistuyu-dohodnost/",
     primaryQuery: "как считать чистую доходность недвижимости",
@@ -33,7 +33,7 @@ export const articles = articleSchema.array().parse([
   },
   {
     description:
-      "Черновой первый экран о рисках курортных апартаментов: статус, оператор, договор управления, расходы и ликвидность.",
+      "Ключевые риски курортных апартаментов: статус, оператор, договор управления, расходы и ликвидность.",
     id: "article-riski-kurortnyh-apartamentov",
     path: "/analitika/riski-kurortnyh-apartamentov/",
     primaryQuery: "риски курортных апартаментов",
@@ -48,7 +48,7 @@ export const articles = articleSchema.array().parse([
   },
   {
     description:
-      "Черновой первый экран о проверке оператора апартаментов, договора управления, комиссий, отчётности и ответственности.",
+      "Как проверить оператора апартаментов, договор управления, комиссии, отчётность и ответственность сторон.",
     id: "article-kak-proverit-operatora",
     path: "/analitika/kak-proverit-operatora/",
     primaryQuery: "как проверить оператора апартаментов",
@@ -63,7 +63,7 @@ export const articles = articleSchema.array().parse([
   },
   {
     description:
-      "Черновой первый экран о ликвидности курортной недвижимости, горизонте владения и сценариях выхода из объекта.",
+      "Ликвидность курортной недвижимости, горизонт владения и возможные сценарии выхода из объекта.",
     id: "article-likvidnost-i-vyhod",
     path: "/analitika/likvidnost-i-vyhod/",
     primaryQuery: "ликвидность инвестиционной недвижимости",

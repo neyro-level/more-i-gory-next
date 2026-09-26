@@ -26,7 +26,7 @@ export default async function ConsentPage() {
   const seo = getSeoEntry("PAGE-023");
 
   return (
-    <main>
+    <main id="main">
       <SectionShell
         containerSize="narrow"
         headingLevel={1}
@@ -34,7 +34,7 @@ export default async function ConsentPage() {
         title={seo.h1}
         lead="Это согласие применяется при отправке формы инвестиционного разбора на сайте «Море и Горы»."
       >
-        <Card className="rounded-large bg-card">
+        <Card radius="large" className="bg-card">
           <CardContent className="flex flex-col gap-8 p-6 text-body text-muted-foreground md:p-8">
             <section className="flex flex-col gap-3">
               <h2 className="text-title-sm text-foreground">1. Субъект и оператор</h2>

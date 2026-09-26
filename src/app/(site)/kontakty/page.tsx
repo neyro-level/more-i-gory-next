@@ -11,7 +11,7 @@ export default function ContactsPage() {
   const seo = getSeoEntry("PAGE-021");
 
   return (
-    <main>
+    <main id="main">
       <PageHero
         eyebrow="Контакты"
         title={seo.h1}
@@ -29,7 +29,7 @@ export default function ContactsPage() {
 
       <SectionShell eyebrow="Каналы" title="Публичные контакты">
         <div className="grid gap-5 md:grid-cols-3">
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Телефон</CardTitle>
             </CardHeader>
@@ -40,7 +40,7 @@ export default function ContactsPage() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Email</CardTitle>
             </CardHeader>
@@ -51,7 +51,7 @@ export default function ContactsPage() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Офис и режим работы</CardTitle>
             </CardHeader>

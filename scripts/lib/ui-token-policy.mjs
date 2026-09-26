@@ -20,6 +20,7 @@ export function themeTokens(globalsCss) {
 
 export function tokenHasConsumer(token, source) {
   if (source.includes(`var(${token.token})`)) return true;
+  if (source.includes(`(${token.token})`)) return true;
   return utilityPrefixes[token.category].some((prefix) => {
     const pattern = new RegExp(`(?:^|[^a-z0-9-])${prefix}-${token.name}(?![a-z0-9-])`);
     return pattern.test(source);

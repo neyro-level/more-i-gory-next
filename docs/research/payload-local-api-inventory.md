@@ -12,7 +12,6 @@
 
 | Location | Operation | Class | Snippet |
 |---|---|---|---|
-| `scripts/lead-delivery-proof-g.test.mjs:110` | `jobs.queue` | TEST | `await memory.payload.jobs.queue({` |
 | `scripts/run-payload-runtime-proof.mjs:23` | `getPayload` | TEST | `const payload = await getPayload({ config });` |
 | `scripts/run-payload-runtime-proof.mjs:35` | `create` | TEST | `const editor = await payload.create({` |
 | `scripts/run-payload-runtime-proof.mjs:41` | `create` | TEST | `const lockoutUser = await payload.create({` |
@@ -23,12 +22,6 @@
 | `scripts/seed-media-assets.mjs:64` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/seed-preview-db-proof.mjs:66` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
 | `scripts/seed-regions.mjs:77` | `getPayload` | ORCHESTRATION | `const payload = await getPayload({ config });` |
-| `scripts/verify-architecture-guards.test.mjs:56` | `find` | TEST | `files: [{ path: "src/core/data-access/public/pages.ts", content: 'payload.find({ collection: "pages" });' }],` |
-| `scripts/verify-architecture-guards.test.mjs:69` | `find` | TEST | `content: 'payload.find({ collection: "pages", overrideAccess: false });',` |
-| `scripts/verify-architecture-guards.test.mjs:118` | `find` | TEST | `files: [{ path: "src/core/data-access/system/jobs.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
-| `scripts/verify-architecture-guards.test.mjs:125` | `find` | TEST | `files: [{ path: "src/core/data-access/system/lead-delivery.ts", content: 'payload.find({ collection: "payload-jobs", overrideAccess: true });' }],` |
-| `scripts/verify-architecture-guards.test.mjs:322` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { slug: { exists: true } } });',` |
-| `scripts/verify-architecture-guards.test.mjs:335` | `find` | TEST | `content: 'payload.find({ collection: "regions", overrideAccess: false, where: { status: { equals: "published" } } });',` |
 | `src/core/data-access/public/newbuilds.ts:207` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |
 | `src/core/data-access/public/newbuilds.ts:208` | `find` | PUBLIC GATEWAY | `const result = await payload.find({` |
 | `src/core/data-access/public/newbuilds.ts:227` | `getPayload` | PUBLIC GATEWAY | `const payload = await getPayload({ config });` |

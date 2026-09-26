@@ -53,7 +53,7 @@ export default async function NewbuildComplexPage({ params }: NewbuildComplexPag
   const inventory = await listActiveNewbuildInventoryByComplex(complex.id);
 
   return (
-    <main>
+    <main id="main">
       <PageHero
         eyebrow="Жилой комплекс"
         title={complex.title}
@@ -72,7 +72,7 @@ export default async function NewbuildComplexPage({ params }: NewbuildComplexPag
         {inventory.length > 0 ? (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {inventory.map((item) => (
-              <Card key={item.id} className="rounded-card bg-card">
+              <Card key={item.id} radius="card" className="bg-card">
                 <CardHeader>
                   <CardTitle className="text-h3">{item.title}</CardTitle>
                 </CardHeader>
@@ -85,7 +85,7 @@ export default async function NewbuildComplexPage({ params }: NewbuildComplexPag
             ))}
           </div>
         ) : (
-          <Card className="rounded-large bg-card">
+          <Card radius="large" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Нет опубликованных активных предложений</CardTitle>
             </CardHeader>

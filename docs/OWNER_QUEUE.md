@@ -48,7 +48,7 @@ blocker:
 | Payload/S3/app env в Secret Master | PASS; единый canonical scope и полный 17-key env | `proofs/47.O-operational-rotation-ledger.md` |
 | Preview runtime install/rollback | PASS на exact preview SHA `f06fdb0…` | `proofs/49.O-preview-operation.md` |
 | S3 credential correction | PASS; Put/Head/Delete и синхронизация выполнены | `proofs/49.O-preview-operation.md` |
-| CAPTCHA / Turnstile account | superseded; внешний CAPTCHA исключён approved v3 | `MORE_I_GORY_PLAN_№ 3.md` v3 |
+| CAPTCHA / Turnstile account | superseded; внешний CAPTCHA исключён approved v3 | `archive/more-i-gory-plan-3.md` v3 |
 | Reserved `packages/ui` | PASS; consumer-free workspace удалён, возврат блокирует Guard 9 | Plan №4 EPIC 65.1 |
 
 ## REVISIT_ONLY_ON_TRIGGER

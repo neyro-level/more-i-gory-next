@@ -21,7 +21,7 @@ export function PreviewTemplateScaffold({
   title,
 }: PreviewTemplateScaffoldProps) {
   return (
-    <main>
+    <main id="main">
       <PageHero
         eyebrow={eyebrow}
         title={title}
@@ -44,7 +44,7 @@ export function PreviewTemplateScaffold({
       >
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {plannedBlocks.map((block) => (
-            <Card key={block} className="rounded-card bg-card">
+            <Card key={block} radius="card" className="bg-card">
               <CardHeader>
                 <CardTitle className="text-h3">{block}</CardTitle>
               </CardHeader>

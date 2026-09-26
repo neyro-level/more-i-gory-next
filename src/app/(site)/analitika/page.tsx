@@ -28,7 +28,7 @@ export default async function AnalyticsPage() {
   const seo = getSeoEntry("PAGE-016");
 
   return (
-    <main>
+    <main id="main">
       <PageHero
         eyebrow="Аналитика и разборы"
         title={seo.h1}
@@ -41,12 +41,12 @@ export default async function AnalyticsPage() {
           src: "/images/og/default.webp",
           width: 2560,
         }}
-        proof="Материалы стартуют как draft/noindex и открываются для индекса после полного текста, источников и редакционной проверки."
+        proof="Материалы публикуются после подготовки полного текста, проверки источников и редакционной оценки."
       />
 
       <SectionShell
         eyebrow="Контентное ядро"
-        title="Первые темы для SEO и продаж"
+        title="Материалы для взвешенного инвестиционного решения"
         lead="Каждая статья отвечает на отдельный информационно-коммерческий вопрос и должна вести к региону, объекту или подбору."
         actions={<ActionLink href="/novostroyki/" variant="outline">Каталог новостроек</ActionLink>}
       >
@@ -56,7 +56,6 @@ export default async function AnalyticsPage() {
               key={article.id}
               description={article.description}
               href={article.path}
-              status={`${article.status} / noindex до gate`}
               title={article.title}
             />
           ))}

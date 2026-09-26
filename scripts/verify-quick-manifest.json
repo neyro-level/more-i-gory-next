@@ -6,6 +6,7 @@
     "lint",
     "verify:guards",
     "verify:guards:test",
+    "verify:public-copy",
     "verify:quick-coverage"
   ],
   "testSelection": {
@@ -13,7 +14,9 @@
     "order": "package-json",
     "runtimeMetadataSource": "package-script"
   },
-  "excludedTests": {},
+  "excludedTests": {
+    "test:all": "Aggregate alias; verify:quick runs each area exactly once in package order."
+  },
   "postTestScripts": [
     "verify:foundation",
     "verify:ui-drift",

@@ -18,7 +18,7 @@ export default async function FederalInvestmentHubPage() {
   const regions = previewRegions.length > 0 ? previewRegions : await listPublicHubRegions();
 
   return (
-    <main {...analyticsDataAttributes({ page_key: "federal_hub", source_surface: "federal_hub" })}>
+    <main id="main" {...analyticsDataAttributes({ page_key: "federal_hub", source_surface: "federal_hub" })}>
       <PageHero
         eyebrow="Федеральный инвестиционный хаб"
         title={seo.h1}
@@ -38,8 +38,8 @@ export default async function FederalInvestmentHubPage() {
         eyebrow="Сравнение рынков"
         title="Карта регионов и сегментов для проверки"
         lead={previewRegions.length > 0
-          ? "В техническом preview показываем весь запланированный regions-контур, чтобы владелец видел страницы и мог последовательно их наполнить. Все черновики остаются noindex."
-          : "Показываем только опубликованные направления, прошедшие content gate."}
+          ? "В рабочей версии доступны направления, которые последовательно готовятся к публикации."
+          : "Показываем направления, по которым уже подготовлено проверяемое содержание."}
         actions={
           <ActionLink href="/metodika/" variant="outline">
             Как мы сравниваем
@@ -62,7 +62,7 @@ export default async function FederalInvestmentHubPage() {
 
       <SectionShell rhythm="sm">
         <ProofBlock
-          title="Что будет в полном хабе после content gate"
+          title="Что помогает сравнить региональный обзор"
           items={[
             {
               title: "Единая методология",

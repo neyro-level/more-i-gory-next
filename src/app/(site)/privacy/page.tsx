@@ -26,7 +26,7 @@ export default async function PrivacyPage() {
   const seo = getSeoEntry("PAGE-022");
 
   return (
-    <main>
+    <main id="main">
       <SectionShell
         containerSize="narrow"
         headingLevel={1}
@@ -34,7 +34,7 @@ export default async function PrivacyPage() {
         title={seo.h1}
         lead="Политика описывает, какие персональные данные получает сайт «Море и Горы», зачем они нужны и как можно обратиться по вопросам обработки данных."
       >
-        <Card className="rounded-large bg-card">
+        <Card radius="large" className="bg-card">
           <CardContent className="flex flex-col gap-8 p-6 text-body text-muted-foreground md:p-8">
             <section className="flex flex-col gap-3">
               <h2 className="text-title-sm text-foreground">1. Оператор персональных данных</h2>

@@ -144,14 +144,12 @@ export function LeadFormClient({
 
   return (
     <form
-      action="/api/public/leads/"
       className="rounded-large bg-card p-6 text-foreground shadow-sm md:p-8"
       data-consent-version={consentVersion}
       data-lead-form
       data-leads-enabled={String(enabled)}
       data-state="default"
       id={formId}
-      method="post"
       noValidate
       onSubmit={handleSubmit}
     >
@@ -186,8 +184,10 @@ export function LeadFormClient({
               aria-invalid="false"
               className={controlClassName}
               id="phone"
+              inputMode="tel"
               name="phone"
               placeholder="+7 или @username"
+              type="tel"
             />
             <FieldError data-error-for="phone" hidden id="phone-error">
               {messages.phone}
@@ -204,8 +204,10 @@ export function LeadFormClient({
               aria-invalid="false"
               className={controlClassName}
               id="email"
+              inputMode="email"
               name="email"
               placeholder="Если удобнее получить ответ письмом"
+              type="email"
             />
             <FieldDescription id="email-help">Необязательно.</FieldDescription>
           </Field>
@@ -261,6 +263,11 @@ export function LeadFormClient({
           </Field>
 
           <Input autoComplete="off" className="hidden" name="company" tabIndex={-1} type="text" />
+          <noscript>
+            <p className={statusClassName} data-state="warning">
+              Чтобы обсудить задачу без формы, позвоните по номеру +7 964 668-66-81 или напишите на moregory-info@yandex.com.
+            </p>
+          </noscript>
           {!enabled ? (
             <p className={statusClassName} data-state="warning" role="status">
               Отправка формы временно недоступна. Свяжитесь с нами через контакты на странице.

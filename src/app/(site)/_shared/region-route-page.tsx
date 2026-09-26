@@ -87,7 +87,7 @@ export async function RegionRoutePage({ path }: Readonly<{ path: string }>) {
     : getPublicRegionRelatedLinks(region, regions);
 
   return (
-    <main {...analyticsDataAttributes({ page_key: region.pageKey?.toLowerCase() ?? "region_segment", region_slug: region.parentSlug ?? region.slug, city_slug: region.pageKey === "CITY" ? region.slug : undefined, source_surface: "region_route" })}>
+    <main id="main" {...analyticsDataAttributes({ page_key: region.pageKey?.toLowerCase() ?? "region_segment", region_slug: region.parentSlug ?? region.slug, city_slug: region.pageKey === "CITY" ? region.slug : undefined, source_surface: "region_route" })}>
       <SectionShell rhythm="sm">
         <StructuredBreadcrumbs items={[
           { href: "/", label: "Главная" },
@@ -102,17 +102,17 @@ export async function RegionRoutePage({ path }: Readonly<{ path: string }>) {
         primaryCta={{ href: "/podbor/", label: "Получить подбор" }}
         secondaryCta={{ href: "/investicionnaya-nedvizhimost/", label: "Сравнить регионы" }}
         image={region.image}
-        proof="Путь страницы собирается из slug и parent relation в CMS по единому URL-контракту."
+        proof="Сравниваем локацию по инвестиционной логике, ограничениям и доступным для проверки фактам."
       />
 
       <SectionShell
         eyebrow="Инвестиционная рамка"
         title="Что важно проверить до выбора проекта"
-        lead="Страница публикует только разрешённое состояние региона: без обещаний доходности, неподтверждённых объектов и технических URL."
+        lead="До выбора объекта важно проверить рынок, правовые ограничения, расходы, управление и возможный сценарий выхода."
       >
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <RiskBlock title="Ключевое ограничение" text={region.riskSummary} />
-          <Card className="rounded-large bg-card">
+          <Card radius="large" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Инвестиционный тезис</CardTitle>
             </CardHeader>
@@ -131,7 +131,7 @@ export async function RegionRoutePage({ path }: Readonly<{ path: string }>) {
         <SectionShell rhythm="sm">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {relatedLinks.map((link) => (
-              <Card key={`${link.relation}-${link.href}`} className="rounded-card bg-card">
+              <Card key={`${link.relation}-${link.href}`} radius="card" className="bg-card">
                 <CardHeader>
                   <CardTitle className="text-h3">{link.label}</CardTitle>
                 </CardHeader>

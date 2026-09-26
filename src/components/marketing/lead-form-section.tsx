@@ -7,11 +7,11 @@ type LeadFormSectionProps = {
 };
 
 export function LeadFormSection({
-  text = "Опишите задачу капитала, регион и желаемый горизонт. Мы вернёмся с понятным следующим шагом после согласования реального процесса и Leads API.",
+  text = "Опишите задачу капитала, интересующий регион и желаемый горизонт. Мы предложим понятный следующий шаг для разбора.",
   title = "Получить инвестиционный разбор",
 }: LeadFormSectionProps) {
   return (
-    <Card className="rounded-large bg-surface-dark text-surface-dark-foreground">
+    <Card radius="large" className="bg-surface-dark text-surface-dark-foreground">
       <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
         <CardHeader className="gap-4 p-8 md:p-10">
           <CardTitle className="text-h2 text-surface-dark-foreground">{title}</CardTitle>

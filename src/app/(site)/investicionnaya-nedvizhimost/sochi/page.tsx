@@ -12,11 +12,11 @@ export const metadata = buildPageMetadata({
 
 export default function SochiPage() {
   return (
-    <main>
+    <main id="main">
       <PageHero
         eyebrow="Региональная заглушка"
         title="Недвижимость Сочи — регион в проработке"
-        lead="Регион в проработке: мы не публикуем старый SEO-кластер Сочи и не выводим его в sitemap или навигацию до нового решения по содержанию."
+        lead="Раздел о Сочи находится в проработке. Мы добавим его в основную навигацию после проверки структуры и содержания."
         primaryCta={{ href: "/podbor/", label: "Оставить задачу на подбор" }}
         secondaryCta={{ href: "/investicionnaya-nedvizhimost/", label: "Сравнить регионы" }}
         image={{
@@ -25,7 +25,7 @@ export default function SochiPage() {
           src: "/images/regions/sochi-coast.webp",
           width: 1408,
         }}
-        proof="Страница отдаёт 200 и остаётся noindex, follow. Дочерние маршруты Сочи удалены."
+        proof="Пока раздел не готов, используйте сравнение регионов или оставьте задачу для индивидуального разбора."
       />
 
       <SectionShell

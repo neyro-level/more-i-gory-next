@@ -47,7 +47,7 @@ export function CityMarketHub({ city, cityNameGenitive, cityNamePrepositional, p
   const model = buildCityHubModel(city, regions, projects);
 
   return (
-    <main {...analyticsDataAttributes({ page_key: "city", region_slug: city.parentSlug, city_slug: city.slug, source_surface: "city_hub" })}>
+    <main id="main" {...analyticsDataAttributes({ page_key: "city", region_slug: city.parentSlug, city_slug: city.slug, source_surface: "city_hub" })}>
       <SectionShell rhythm="sm">
         <StructuredBreadcrumbs items={[
           { href: "/", label: "Главная" },
@@ -64,13 +64,13 @@ export function CityMarketHub({ city, cityNameGenitive, cityNamePrepositional, p
         secondaryCta={{ href: "/krym/", label: "Сравнить города Крыма" }}
         image={city.image}
         proof={model.gate.state === "pass"
-          ? `Рынок проверен ${city.verifiedAt ?? ""}; Content Gate выполнен.`
-          : "Страница остаётся вне индекса до полной локальной аналитики и первого проверенного паспорта."}
+          ? "По рынку подготовлена локальная аналитика и проверен как минимум один инвестиционный паспорт."
+          : "Обзор дополняется локальной аналитикой и проверенными инвестиционными паспортами."}
       />
 
       <SectionShell eyebrow="Инвестиционный тезис" title={`Что проверяем в ${cityNamePrepositional}`}>
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <Card className="rounded-large bg-card">
+          <Card radius="large" className="bg-card">
             <CardHeader><CardTitle className="text-h3">Локальная гипотеза</CardTitle></CardHeader>
             <CardContent className="text-body text-muted-foreground">{city.investmentThesis}</CardContent>
           </Card>
@@ -81,7 +81,7 @@ export function CityMarketHub({ city, cityNameGenitive, cityNamePrepositional, p
       <SectionShell
         eyebrow="Рамка рынка"
         title="Локации, форматы, бюджет и экономика"
-        lead="Каждая ось заполняется только source-backed фактами; отсутствие данных не заменяется среднерыночным обещанием."
+        lead="Каждая ось опирается на проверяемые факты; отсутствие данных не заменяется среднерыночным обещанием."
       >
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[
@@ -90,7 +90,7 @@ export function CityMarketHub({ city, cityNameGenitive, cityNamePrepositional, p
             ["Спрос и сезонность", "Сценарий спроса, ограничения выборки и периоды простоя."],
             ["Управление и выход", "Оператор, договор, расходы и реалистичная ликвидность."],
           ].map(([heading, description]) => (
-            <Card className="rounded-card bg-card" key={heading}>
+            <Card radius="card" className="bg-card" key={heading}>
               <CardHeader><CardTitle className="text-h3">{heading}</CardTitle></CardHeader>
               <CardContent className="text-body-sm text-muted-foreground">{description}</CardContent>
             </Card>
@@ -100,26 +100,26 @@ export function CityMarketHub({ city, cityNameGenitive, cityNamePrepositional, p
 
       <SectionShell
         eyebrow={`Новостройки ${cityNameGenitive}`}
-        title="Проверенные новостройки — секция, а не новый SEO URL"
-        lead={`Маршрут /krym/${city.slug}/novostroyki/ не создаётся. Секция показывает только опубликованные паспорта с глобальными canonical URL.`}
+        title="Проверенные новостройки города"
+        lead="Показываем проекты с подготовленным паспортом и подтверждённой привязкой к городскому рынку."
       >
         {model.newbuildProjects.length > 0 ? <ProjectGrid projects={model.newbuildProjects} /> : (
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader><CardTitle className="text-h3">Проверенных новостроек пока нет</CardTitle></CardHeader>
-            <CardContent className="text-body text-muted-foreground">Пустая выборка не превращается в отдельную индексируемую страницу.</CardContent>
+            <CardContent className="text-body text-muted-foreground">Раздел появится после проверки первого подходящего проекта.</CardContent>
           </Card>
         )}
       </SectionShell>
 
       <SectionShell
-        eyebrow="Curated projects"
+        eyebrow="Отобранные проекты"
         title={`Инвестиционные паспорта: ${city.title}`}
         actions={<ActionLink href="/obekty/" variant="outline">Глобальный каталог</ActionLink>}
       >
         {model.projects.length > 0 ? <ProjectGrid projects={model.projects} /> : (
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader><CardTitle className="text-h3">Публичный shortlist не готов</CardTitle></CardHeader>
-            <CardContent className="text-body text-muted-foreground">До первого полного паспорта Content Gate остаётся в состоянии MISSING.</CardContent>
+            <CardContent className="text-body text-muted-foreground">Подборка появится после подготовки первого полного инвестиционного паспорта.</CardContent>
           </Card>
         )}
       </SectionShell>
@@ -135,12 +135,12 @@ export function CityMarketHub({ city, cityNameGenitive, cityNamePrepositional, p
         </div>
       </SectionShell>
 
-      <SectionShell eyebrow="Content Gate" title={model.gate.state === "pass" ? "Кандидат на индексацию готов" : "Индексирование пока закрыто"} rhythm="sm">
-        <Card className="rounded-card bg-card">
+      <SectionShell eyebrow="Готовность обзора" title={model.gate.state === "pass" ? "Данных достаточно для сравнения" : "Обзор ещё дополняется"} rhythm="sm">
+        <Card radius="card" className="bg-card">
           <CardContent className="flex flex-col gap-3 pt-6 text-body text-muted-foreground">
-            {model.gate.reasons.length > 0
-              ? model.gate.reasons.map((reason) => <p key={reason}>{reason}</p>)
-              : <p>Опубликованы самостоятельная локальная аналитика, дата проверки и минимум один полный паспорт.</p>}
+            <p>{model.gate.state === "pass"
+              ? "Подготовлены локальная аналитика, дата проверки и как минимум один полный паспорт."
+              : "Для полноценного сравнения нужны локальная аналитика, дата проверки и как минимум один полный паспорт."}</p>
           </CardContent>
         </Card>
       </SectionShell>

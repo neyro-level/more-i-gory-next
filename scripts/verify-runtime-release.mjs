@@ -21,11 +21,7 @@ assertRuntimeReleaseOrigin(verificationEnv);
 for (const script of [
   "build",
   "verify:runtime",
-  "test:runtime-topology",
-  "test:pack-release",
-  "test:install-release",
-  "test:rollback-release",
-  "test:release-evidence",
+  "test:runtime",
 ]) {
   const result = spawnSync(process.execPath, [pnpmCli, script], {
     env: verificationEnv,

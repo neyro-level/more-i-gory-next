@@ -3,7 +3,7 @@
   "beads_prefix": "mg5",
   "source": {
     "plan_id": "more-i-gory-technical-hardening-2026-09",
-    "path": "docs/MORE_I_GORY_PLAN_№ 4.md",
+    "path": "docs/archive/more-i-gory-plan-4.md",
     "version": "v1",
     "status": "APPROVED",
     "approved_by": "owner",
@@ -37,7 +37,7 @@
       "depends_on": [],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -84,7 +84,7 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -137,7 +137,7 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -190,7 +190,7 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -243,7 +243,7 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -302,7 +302,7 @@
         "TASK-60-4"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -352,7 +352,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -401,7 +401,7 @@
         "TASK-60-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -456,7 +456,7 @@
         "TASK-61-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -511,7 +511,7 @@
         "TASK-61-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -569,7 +569,7 @@
         "TASK-61-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -619,7 +619,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -668,7 +668,7 @@
         "TASK-61-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -723,7 +723,7 @@
         "TASK-61-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -779,7 +779,7 @@
         "TASK-62-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -837,7 +837,7 @@
         "TASK-62-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -887,7 +887,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -936,7 +936,7 @@
         "TASK-60-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -991,7 +991,7 @@
         "TASK-60-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1047,7 +1047,7 @@
         "TASK-63-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1102,7 +1102,7 @@
         "TASK-60-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1158,7 +1158,7 @@
         "TASK-63-4"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1218,7 +1218,7 @@
         "TASK-63-5"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1268,7 +1268,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1317,7 +1317,7 @@
         "TASK-60-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1372,7 +1372,7 @@
         "TASK-60-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1428,7 +1428,7 @@
         "TASK-64-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1486,7 +1486,7 @@
         "TASK-64-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1536,7 +1536,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1585,7 +1585,7 @@
         "TASK-60-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1640,7 +1640,7 @@
         "TASK-60-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1695,7 +1695,7 @@
         "TASK-60-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1752,7 +1752,7 @@
         "TASK-65-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1811,7 +1811,7 @@
         "TASK-65-4"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1863,7 +1863,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1913,7 +1913,7 @@
         "TASK-61-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -1968,7 +1968,7 @@
         "TASK-60-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -2023,7 +2023,7 @@
         "TASK-62-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -2080,7 +2080,7 @@
         "TASK-66-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -2139,7 +2139,7 @@
         "TASK-66-4"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -2193,7 +2193,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -2246,7 +2246,7 @@
         "TASK-66-D"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -2301,7 +2301,7 @@
         "TASK-67-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -2356,7 +2356,7 @@
         "TASK-67-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",
@@ -2414,7 +2414,7 @@
         "TASK-67-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 4.md",
+        "docs/archive/more-i-gory-plan-4.md",
         "docs/03_ARCHITECTURE.md",
         "docs/04_BACKLOG.md",
         "docs/05_RELEASE_CHECKLIST.md",

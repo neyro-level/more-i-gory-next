@@ -39,7 +39,7 @@ export function ProjectPassportTemplate({ property, relatedArticles = [], relate
   const checkedAt = formatCheckedAt(property.verifiedAt);
 
   return (
-    <main {...analyticsDataAttributes({ page_key: "investment_project", project_slug: property.slug, region_slug: property.geoContext.region.slug, city_slug: property.geoContext.cityOrArea?.slug, source_surface: "project_passport" })}>
+    <main id="main" {...analyticsDataAttributes({ page_key: "investment_project", project_slug: property.slug, region_slug: property.geoContext.region.slug, city_slug: property.geoContext.cityOrArea?.slug, source_surface: "project_passport" })}>
       <SectionShell rhythm="sm">
         <StructuredBreadcrumbs items={[
           { href: "/", label: "Главная" },
@@ -84,7 +84,7 @@ export function ProjectPassportTemplate({ property, relatedArticles = [], relate
               ))}
             </div>
           ) : (
-            <Card className="rounded-card bg-card">
+            <Card radius="card" className="bg-card">
               <CardHeader>
                 <CardTitle className="text-h3">Альтернативы подбираются вручную</CardTitle>
               </CardHeader>
@@ -160,7 +160,6 @@ export function ProjectPassportTemplate({ property, relatedArticles = [], relate
                 description={article.description}
                 href={article.path}
                 key={article.id}
-                status={article.reviewedAt ? `Проверено ${formatCheckedAt(article.reviewedAt)}` : "Опубликовано"}
                 title={article.title}
               />
             ))}
