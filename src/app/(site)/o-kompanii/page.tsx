@@ -12,7 +12,7 @@ export default function CompanyPage() {
   const seo = getSeoEntry("PAGE-020");
 
   return (
-    <main>
+    <main id="main">
       <PageHero
         eyebrow="О компании"
         title={seo.h1}
@@ -30,7 +30,7 @@ export default function CompanyPage() {
 
       <SectionShell eyebrow="Подтверждённые сведения" title="Кто отвечает за работу бюро">
         <div className="grid gap-5 md:grid-cols-2">
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Основатель и директор</CardTitle>
             </CardHeader>
@@ -39,7 +39,7 @@ export default function CompanyPage() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Юридический оператор</CardTitle>
             </CardHeader>
@@ -65,7 +65,7 @@ export default function CompanyPage() {
             },
             {
               title: "Паспорта вместо витрины",
-              text: "Проект публикуется только после фактов, источников, verifiedAt и инвестиционного вывода.",
+              text: "Проект публикуется только после проверки фактов, источников и инвестиционного вывода.",
             },
           ]}
         />

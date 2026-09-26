@@ -16,7 +16,7 @@ export default async function NewbuildCatalogPage() {
   const complexes = editorialPreview ? await listEditorialPreviewComplexes() : await listPublishedComplexes();
 
   return (
-    <main>
+    <main id="main">
       <PageHero
         eyebrow="Каталог новостроек"
         title="Новостройки Крыма для инвестиционного разбора"
@@ -57,14 +57,14 @@ export default async function NewbuildCatalogPage() {
             ))}
           </div>
         ) : (
-          <Card className="rounded-large bg-card">
+          <Card radius="large" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Каталог не имитирует выбор</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-5 text-body text-muted-foreground">
               <p>
                 До появления опубликованных ЖК страница остаётся точкой входа в персональный подбор,
-                а не SEO-списком без фактических данных.
+                а не списком без фактических данных.
               </p>
               <ActionLink href="/podbor/">Запросить подборку вручную</ActionLink>
               {editorialPreview ? (
@@ -85,7 +85,7 @@ export default async function NewbuildCatalogPage() {
         actions={<ActionLink href="/investicionnaya-nedvizhimost/" variant="outline">Сравнить рынки</ActionLink>}
       >
         <div className="grid gap-4 md:grid-cols-2">
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Аналитика перед выбором</CardTitle>
             </CardHeader>
@@ -94,7 +94,7 @@ export default async function NewbuildCatalogPage() {
               <ActionLink href="/analitika/" variant="link" className="w-fit p-0">Читать аналитику</ActionLink>
             </CardContent>
           </Card>
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Методика отбора</CardTitle>
             </CardHeader>

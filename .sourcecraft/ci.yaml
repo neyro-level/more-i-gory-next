@@ -21,24 +21,7 @@ workflows:
                 fi
                 echo "Exact-head verified: $actual_sha"
               - git diff --check
-              - test -f AGENTS.md
-              - test -f docs/README.md
-              - test -f docs/01_PRD.md
-              - test -f docs/02_PRODUCT_STRUCTURE.md
-              - test -f docs/03_ARCHITECTURE.md
-              - test -f docs/04_BACKLOG.md
-              - test -f docs/05_RELEASE_CHECKLIST.md
-              - test -f docs/06_DESIGN_SYSTEM.md
-              - test -f docs/PROJECT.md
-              - test -f docs/DESIGN.md
-              - test -f docs/OPERATIONS.md
-              - test -f docs/adr/ADR-004-realty-platform-runtime.md
-              - test -f docs/adr/ADR-005-crimea-core-ia.md
-              - test -f docs/adr/ADR-006-regions-collection.md
-              - test -f docs/adr/ADR-007-link-runtime-policy.md
-              - test -f docs/adr/ADR-008-image-pipeline.md
-              - test -f docs/adr/ADR-009-deferred-ingest.md
-              - test -f docs/adr/ADR-010-analytics-journal-module.md
+              - bash scripts/ci/docs-presence.sh
               - |
                 if [ -f package.json ]; then
                   corepack enable
@@ -79,24 +62,7 @@ workflows:
                 echo "Exact-head verified: $actual_sha"
               - git diff --check
               - test -f .sourcecraft/ci.yaml
-              - test -f AGENTS.md
-              - test -f docs/README.md
-              - test -f docs/01_PRD.md
-              - test -f docs/02_PRODUCT_STRUCTURE.md
-              - test -f docs/03_ARCHITECTURE.md
-              - test -f docs/04_BACKLOG.md
-              - test -f docs/05_RELEASE_CHECKLIST.md
-              - test -f docs/06_DESIGN_SYSTEM.md
-              - test -f docs/PROJECT.md
-              - test -f docs/DESIGN.md
-              - test -f docs/OPERATIONS.md
-              - test -f docs/adr/ADR-004-realty-platform-runtime.md
-              - test -f docs/adr/ADR-005-crimea-core-ia.md
-              - test -f docs/adr/ADR-006-regions-collection.md
-              - test -f docs/adr/ADR-007-link-runtime-policy.md
-              - test -f docs/adr/ADR-008-image-pipeline.md
-              - test -f docs/adr/ADR-009-deferred-ingest.md
-              - test -f docs/adr/ADR-010-analytics-journal-module.md
+              - bash scripts/ci/docs-presence.sh
               - corepack enable
               - pnpm --version
               - pnpm install --frozen-lockfile --reporter=append-only

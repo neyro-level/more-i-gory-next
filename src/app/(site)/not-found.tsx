@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main>
+    <main id="main">
       <SectionShell rhythm="lg" className="text-center">
         <p className="text-caption font-semibold uppercase tracking-eyebrow text-action">Ошибка 404</p>
         <h1 className="mt-4 text-h1 font-semibold text-surface-dark">

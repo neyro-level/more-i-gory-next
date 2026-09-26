@@ -65,11 +65,11 @@ UI_CORE=AMS UI Core 5.0
 | UI-конституция | [`AMS_UI_CORE_v5.0_FINAL.md`](AMS_UI_CORE_v5.0_FINAL.md) |
 | Последний утверждённый мастер-план | [`AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md`](AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md) v1 APPROVED; EPIC 87–90 |
 | Закрытый GEO-first план | [`AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md`](AMS_MORE_I_GORY_GEO_FIRST_REMEDIATION_MASTER_PLAN_V5_0.md) v1 APPROVED; EPIC 68–86 closed |
-| Предыдущий план | [`MORE_I_GORY_PLAN_№ 4.md`](MORE_I_GORY_PLAN_№%204.md) v1 APPROVED / implementation complete |
+| Предыдущий план | [`archive/more-i-gory-plan-4.md`](archive/more-i-gory-plan-4.md) v1 APPROVED / implementation complete |
 | Машинный inventory текущего плана | [`task-manager-inventory.night-hardening.v1.json`](task-manager-inventory.night-hardening.v1.json); Plan ID `AMS-MORE-I-GORY-NIGHT-HARDENING-PREVIEW-2026-09`, prefix `mgnight` |
 | Закрытый GEO-first inventory | [`task-manager-inventory.geo-first.v1.json`](task-manager-inventory.geo-first.v1.json); prefix `mggeo`, 19/19 epics closed |
 | Исторический машинный inventory | [`task-manager-inventory.plan3.v3.json`](task-manager-inventory.plan3.v3.json); повторно не импортировать |
-| История | [`MORE_I_GORY_PLAN_№ 3.md`](MORE_I_GORY_PLAN_№%203.md), [`More-i-gory-plan №2.md`](More-i-gory-plan%20№2.md) и `task-manager-inventory.v6.json`; новые задачи из них не создаются |
+| История | [`archive/more-i-gory-plan-4.md`](archive/more-i-gory-plan-4.md), [`archive/more-i-gory-plan-3.md`](archive/more-i-gory-plan-3.md), [`archive/more-i-gory-plan-2.md`](archive/more-i-gory-plan-2.md), [`archive/more-i-gory-realty-platform-legacy-plan-v2.md`](archive/more-i-gory-realty-platform-legacy-plan-v2.md) и исторические inventory; новые задачи из них не создаются |
 | Указатель волны | [`DELIVERY_STATE.yaml`](DELIVERY_STATE.yaml) |
 | Baseline EPIC 68 | [`remediation/CURRENT_STATE_V5.md`](remediation/CURRENT_STATE_V5.md) |
 | URL migration evidence EPIC 70 | [`migration/V5_URL_MANIFEST.json`](migration/V5_URL_MANIFEST.json) и [`migration/V5_URL_DECISIONS.md`](migration/V5_URL_DECISIONS.md) |

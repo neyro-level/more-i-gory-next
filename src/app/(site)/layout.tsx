@@ -33,6 +33,12 @@ export default async function RootLayout({
   return (
     <html lang="ru" className={cn("font-sans", montserrat.variable)}>
       <body>
+        <a
+          className="sr-only z-50 rounded-control bg-card px-4 py-3 text-label font-semibold text-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+          href="#main"
+        >
+          Перейти к содержимому
+        </a>
         {siteStructuredData().map((entry) => (
           <script
             dangerouslySetInnerHTML={{ __html: JSON.stringify(entry) }}

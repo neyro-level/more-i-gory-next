@@ -69,7 +69,6 @@
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
@@ -88,6 +87,7 @@
   --spacing-page-inline-sm: 1.5rem;
   --spacing-page-inline-lg: 2rem;
   --spacing-hero-media-min: 26.25rem;
+  --spacing-header: 5rem;
 
   --text-h1: clamp(2.25rem, 1.15rem + 4.6vw, 3.75rem);
   --text-h1--line-height: 1.05;
@@ -118,6 +118,10 @@
   --aspect-object: 8 / 5;
   --aspect-hero: 16 / 9;
   --shadow-surface: 0 1.5rem 4rem rgb(8 25 44 / 0.12);
+}
+
+.preview-navigation-panel {
+  max-height: calc(100dvh - var(--spacing-header));
 }
 
 @layer base {

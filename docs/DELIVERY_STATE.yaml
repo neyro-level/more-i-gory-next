@@ -40,7 +40,7 @@ technical_preview:
   live_smoke: pass
 completed_program:
   plan_id: more-i-gory-technical-hardening-2026-09
-  plan_path: docs/MORE_I_GORY_PLAN_№ 4.md
+  plan_path: docs/archive/more-i-gory-plan-4.md
   inventory_path: docs/task-manager-inventory.plan4.v1.json
   version: v1
   status: implementation_complete

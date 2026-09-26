@@ -50,7 +50,7 @@ export default async function ObjectsPage({ searchParams }: ObjectsPageProps) {
   const compactCatalog = properties.length < minimumFilterableCatalogSize;
 
   return (
-    <main>
+    <main id="main">
       <PageHero
         eyebrow="Каталог инвестиционных паспортов"
         title={seo.h1}
@@ -94,7 +94,7 @@ export default async function ObjectsPage({ searchParams }: ObjectsPageProps) {
             ? compactCatalog
               ? "Пока это компактная курируемая витрина без искусственных фильтров и счётчиков. Каждая карточка ведёт на полный паспорт."
               : "Каждая карточка ведёт на полный паспорт проекта."
-            : "Сейчас в коде есть draft-шаблон, но он не выходит в public build и sitemap до проверки фактов."
+            : "Пока подходящих паспортов нет: новые объекты появятся после проверки фактов и инвестиционной логики."
         }
       >
         {visibleProperties.length > 0 ? (
@@ -118,7 +118,7 @@ export default async function ObjectsPage({ searchParams }: ObjectsPageProps) {
             ))}
           </div>
         ) : properties.length > 0 ? (
-          <Card className="rounded-large bg-card">
+          <Card radius="large" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">По выбранным параметрам паспортов нет</CardTitle>
             </CardHeader>
@@ -128,14 +128,14 @@ export default async function ObjectsPage({ searchParams }: ObjectsPageProps) {
             </CardContent>
           </Card>
         ) : (
-          <Card className="rounded-large bg-card">
+          <Card radius="large" className="bg-card">
             <CardHeader>
               <CardTitle className="text-h3">Почему здесь нет фальшивых объектов</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-5 text-body text-muted-foreground">
               <p>
-                Объект без цены, источников, риска, verifiedAt и инвестиционного вывода не публикуется.
-                Это защищает SEO от thin content и пользователя от рекламной имитации выбора.
+                Объект без подтверждённых характеристик, источников, оценки рисков и инвестиционного вывода не публикуется.
+                Это защищает пользователя от рекламной имитации выбора.
               </p>
               <ActionLink href="/podbor/">
                 Запросить подборку вручную

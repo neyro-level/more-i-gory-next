@@ -45,7 +45,7 @@ export function PageHero({ eyebrow, image, lead, primaryCta, proof, secondaryCta
           {image ? (
             <div className="relative aspect-hero min-w-0 overflow-hidden rounded-large bg-surface-dark-foreground/10 lg:aspect-auto lg:min-h-hero-media-min">
               <Image src={image.src} alt={image.alt} fill preload sizes="(min-width: 1024px) 46vw, 100vw" className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/35 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-surface-dark/35 to-transparent" />
             </div>
           ) : null}
         </div>

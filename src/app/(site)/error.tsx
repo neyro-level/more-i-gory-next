@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function SiteError({ reset }: Readonly<{ error: Error & { digest?: string }; reset: () => void }>) {
   return (
-    <main>
+    <main id="main">
       <SectionShell
         className="text-center"
         eyebrow="Ошибка загрузки"

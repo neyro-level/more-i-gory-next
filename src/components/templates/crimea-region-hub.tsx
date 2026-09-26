@@ -31,7 +31,7 @@ export function CrimeaRegionHub({ projects, region, regions, title }: CrimeaRegi
   const model = buildCrimeaHubModel(regions, projects);
 
   return (
-    <main {...analyticsDataAttributes({ page_key: "region", region_slug: region.slug, source_surface: "region_hub" })}>
+    <main id="main" {...analyticsDataAttributes({ page_key: "region", region_slug: region.slug, source_surface: "region_hub" })}>
       <SectionShell rhythm="sm">
         <StructuredBreadcrumbs items={[
           { href: "/", label: "Главная" },
@@ -47,23 +47,23 @@ export function CrimeaRegionHub({ projects, region, regions, title }: CrimeaRegi
         secondaryCta={{ href: "/investicionnaya-nedvizhimost/", label: "Сравнить рынки" }}
         image={region.image}
         proof={model.gate.state === "pass"
-          ? "Content Gate собран из проверенных городов и опубликованных инвестиционных паспортов."
-          : "Страница остаётся вне индекса до завершения Content Gate; неподтверждённые факты не публикуются."}
+          ? "Обзор объединяет проверенные городские рынки и подготовленные инвестиционные паспорта."
+          : "Обзор дополняется по мере проверки городов и инвестиционных паспортов."}
       />
 
       <SectionShell
         eyebrow="Выбор локального рынка"
-        title="Четыре города — один проверяемый контракт сравнения"
-        lead="Каждый город раскрывается только после собственной проверки тезиса, рисков и даты актуальности. Черновой город не становится публичной SEO-страницей автоматически."
+        title="Четыре города — единая рамка сравнения"
+        lead="Каждый город раскрывается после проверки инвестиционного тезиса, рисков и даты актуальности."
       >
         {model.cities.length > 0 ? (
           <div className="grid gap-5 md:grid-cols-2">
             {model.cities.map((city) => (
-              <Card className="rounded-card bg-card" key={city.id}>
+              <Card radius="card" className="bg-card" key={city.id}>
                 <CardHeader>
                   <div className="flex flex-wrap gap-2">
                     <Badge variant={city.status === "published" ? "accent" : "secondary"}>
-                      {city.status === "published" ? "Опубликован" : "Черновик"}
+                      {city.status === "published" ? "Материал готов" : "В работе"}
                     </Badge>
                     <Badge variant="secondary">{formatVerifiedAt(city.verifiedAt)}</Badge>
                   </div>
@@ -79,10 +79,10 @@ export function CrimeaRegionHub({ projects, region, regions, title }: CrimeaRegi
             ))}
           </div>
         ) : (
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader><CardTitle className="text-h3">Городские рынки ещё не опубликованы</CardTitle></CardHeader>
             <CardContent className="text-body text-muted-foreground">
-              Сравнение появится после независимой проверки минимум трёх городов. Пустые или шаблонные city pages не создаются.
+              Сравнение появится после независимой проверки минимум трёх городов. Пустые или шаблонные страницы не создаются.
             </CardContent>
           </Card>
         )}
@@ -91,7 +91,7 @@ export function CrimeaRegionHub({ projects, region, regions, title }: CrimeaRegi
       <SectionShell
         eyebrow="Рамка сравнения"
         title="Что должно быть сопоставимо без перехода на другую страницу"
-        lead="Хаб не подменяет факты рекламными обещаниями: незаполненная ось остаётся явным пробелом Content Gate."
+        lead="Обзор не подменяет факты рекламными обещаниями: если данных недостаточно, это остаётся явным ограничением сравнения."
       >
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[
@@ -100,7 +100,7 @@ export function CrimeaRegionHub({ projects, region, regions, title }: CrimeaRegi
             ["Управление", "Оператор, договорная модель и фактические расходы владельца."],
             ["Риски и выход", "Правовые ограничения, ликвидность и реалистичный сценарий выхода."],
           ].map(([heading, description]) => (
-            <Card className="rounded-card bg-card" key={heading}>
+            <Card radius="card" className="bg-card" key={heading}>
               <CardHeader><CardTitle className="text-h3">{heading}</CardTitle></CardHeader>
               <CardContent className="text-body-sm text-muted-foreground">{description}</CardContent>
             </Card>
@@ -109,9 +109,9 @@ export function CrimeaRegionHub({ projects, region, regions, title }: CrimeaRegi
       </SectionShell>
 
       <SectionShell
-        eyebrow="Curated shortlist"
+        eyebrow="Отобранные проекты"
         title="Проверенные инвестиционные паспорта Крыма"
-        lead="Карточки ведут только на глобальные canonical URL `/obekty/<slug>/`; регион не становится вторым владельцем сущности."
+        lead="В подборку входят проекты с подготовленным паспортом, оценкой рисков и инвестиционным выводом."
         actions={<ActionLink href="/obekty/" variant="outline">Все объекты</ActionLink>}
       >
         {model.projects.length > 0 ? (
@@ -134,20 +134,20 @@ export function CrimeaRegionHub({ projects, region, regions, title }: CrimeaRegi
             ))}
           </div>
         ) : (
-          <Card className="rounded-card bg-card">
+          <Card radius="card" className="bg-card">
             <CardHeader><CardTitle className="text-h3">Публичный shortlist пока не собран</CardTitle></CardHeader>
             <CardContent className="text-body text-muted-foreground">
-              До четырёх полных паспортов хаб не заявляет наличие готовой подборки и остаётся вне sitemap.
+              Пока полных паспортов недостаточно, мы не заявляем о наличии готовой подборки.
             </CardContent>
           </Card>
         )}
       </SectionShell>
 
-      <SectionShell eyebrow="Content Gate" title={model.gate.state === "pass" ? "Минимальный порог выполнен" : "Индексирование пока закрыто"} rhythm="sm">
-        <Card className="rounded-card bg-card">
+      <SectionShell eyebrow="Готовность обзора" title={model.gate.state === "pass" ? "Данных достаточно для сравнения" : "Сравнение ещё дополняется"} rhythm="sm">
+        <Card radius="card" className="bg-card">
           <CardContent className="flex flex-col gap-4 pt-6 text-body text-muted-foreground">
             <p>Проверенные города: {model.gate.cityCount}/3. Опубликованные паспорта: {model.gate.projectCount}/4.</p>
-            {model.gate.reasons.map((reason) => <p key={reason}>{reason}</p>)}
+            <p>{model.gate.state === "pass" ? "Основные города и проекты представлены в единой рамке." : "Для полноценного сравнения нужны дополнительные проверенные города и проекты."}</p>
             <div className="flex flex-wrap gap-3">
               <ActionLink href="/analitika/" variant="outline">Аналитика</ActionLink>
               <ActionLink href="/metodika/" variant="outline">Методика отбора</ActionLink>

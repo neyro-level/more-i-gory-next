@@ -31,7 +31,7 @@ function formatVerifiedAt(value: string): string {
 
 export function ObjectCard({ budget, cityOrArea, format, href, image, location, locationHref, risk, status, thesis, title, verifiedAt }: ObjectCardProps) {
   return (
-    <Card className="rounded-card bg-card">
+    <Card radius="card" className="bg-card">
       <div className="relative aspect-object">
         <Image src={image.src} alt={image.alt} fill loading="lazy" sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
       </div>

@@ -9,7 +9,7 @@ type SourceListProps = {
 
 export function SourceList({ items, title = "Источники и проверка" }: SourceListProps) {
   return (
-    <Card className="rounded-card bg-card">
+    <Card radius="card" className="bg-card">
       <CardHeader>
         <CardTitle className="text-h3">{title}</CardTitle>
       </CardHeader>

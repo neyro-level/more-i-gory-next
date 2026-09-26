@@ -17,3 +17,4 @@ export type { PublicPropertyDTO } from "./property.ts";
 export type { CityOrAreaDTO, PublicNormalizedRegionDTO, PublicRegionDTO } from "./region.ts";
 export type { EditorialPreviewNavigationGroup, SiteChrome, SiteNavigationLink } from "./site-chrome.ts";
 export type { SitemapPageDTO } from "./sitemap-page.ts";
+export type { HomeArticleDTO, HomePageDTO, HomeRegionCardDTO } from "./home-page.ts";

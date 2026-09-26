@@ -54,7 +54,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const structuredData = articleStructuredData(article);
 
   return (
-    <main {...analyticsDataAttributes({ page_key: "article", source_surface: "article" })}>
+    <main id="main" {...analyticsDataAttributes({ page_key: "article", source_surface: "article" })}>
       {structuredData ? (
         <script dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} type="application/ld+json" />
       ) : null}
@@ -70,7 +70,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           src: "/images/og/default.webp",
           width: 2560,
         }}
-        proof={`Primary query: ${article.primaryQuery}. Статус: ${article.status}; noindex до editorial gate.`}
+        proof="Материал помогает сформулировать вопросы к объекту, оператору и экономике до принятия решения."
       />
 
       <SectionShell
@@ -80,7 +80,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       >
         <RiskBlock
           title="Почему статья пока не в индексе"
-          text="Без полного текста, источников и проверки экспертных утверждений статья остаётся draft/noindex и не попадает в sitemap."
+          text="Материал публикуется только после подготовки полного текста, проверки источников и экспертных утверждений."
         />
       </SectionShell>
 

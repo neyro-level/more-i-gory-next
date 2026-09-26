@@ -21,7 +21,7 @@ export default function MethodPage() {
   const seo = getSeoEntry("PAGE-018");
 
   return (
-    <main>
+    <main id="main">
       <PageHero
         eyebrow="Методика инвестиционного отбора"
         title={seo.h1}
@@ -34,7 +34,7 @@ export default function MethodPage() {
           src: "/images/og/default.webp",
           width: 2560,
         }}
-        proof="Полная методика публикуется после human gate; текущий экран фиксирует структуру и ограничения."
+        proof="Методика отделяет подтверждённые факты от предположений и помогает сравнивать варианты по единым критериям."
       />
 
       <SectionShell

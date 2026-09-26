@@ -268,7 +268,7 @@ for (const token of [
 }
 
 const rootPage = readFileSync(join(root, "src", "app", "(site)", "page.tsx"), "utf8");
-if (!rootPage.includes("CapitalTasksSection") || rootPage.split(/\r?\n/).length > 120) {
+if (!rootPage.includes("HomePageContent") || rootPage.split(/\r?\n/).length > 120) {
   throw new Error("Home page must remain composition-first and below 120 lines");
 }
 

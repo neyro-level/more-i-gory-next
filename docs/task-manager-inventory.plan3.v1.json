@@ -3,7 +3,7 @@
   "beads_prefix": "mg3",
   "source": {
     "plan_id": "more-i-gory-conformance-plan3-2026-09",
-    "path": "docs/MORE_I_GORY_PLAN_№ 3.md",
+    "path": "docs/archive/more-i-gory-plan-3.md",
     "version": "v1",
     "status": "APPROVED",
     "approved_by": "owner",
@@ -38,7 +38,7 @@
       "depends_on": [],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
         "docs/AMS_UI_CORE_v5.0_FINAL.md",
         "AGENTS.md"
@@ -82,8 +82,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.1"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 35.1"
       ],
       "allowed_actions": [
         "read",
@@ -129,8 +129,8 @@
         "TASK-35-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.2"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 35.2"
       ],
       "allowed_actions": [
         "read",
@@ -176,8 +176,8 @@
         "TASK-35-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.3"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 35.3"
       ],
       "allowed_actions": [
         "read",
@@ -221,8 +221,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.4"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 35.4"
       ],
       "allowed_actions": [
         "read",
@@ -266,8 +266,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.5"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 35.5"
       ],
       "allowed_actions": [
         "read",
@@ -314,8 +314,8 @@
         "TASK-35-4"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.6"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 35.6"
       ],
       "allowed_actions": [
         "read",
@@ -366,8 +366,8 @@
         "TASK-35-6"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 35.7"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 35.7"
       ],
       "allowed_actions": [
         "read",
@@ -423,7 +423,7 @@
         "TASK-35-7"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/05_RELEASE_CHECKLIST.md"
       ],
       "allowed_actions": [
@@ -462,7 +462,7 @@
       "depends_on": [],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
         "docs/AMS_UI_CORE_v5.0_FINAL.md",
         "AGENTS.md"
@@ -508,8 +508,8 @@
         "TASK-36-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 36.1"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 36.1"
       ],
       "allowed_actions": [
         "read",
@@ -553,8 +553,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 36.2"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 36.2"
       ],
       "allowed_actions": [
         "read",
@@ -601,8 +601,8 @@
         "TASK-36-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 36.3"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 36.3"
       ],
       "allowed_actions": [
         "read",
@@ -649,8 +649,8 @@
         "TASK-36-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 36.4"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 36.4"
       ],
       "allowed_actions": [
         "read",
@@ -699,8 +699,8 @@
         "TASK-36-4"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 36.5"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 36.5"
       ],
       "allowed_actions": [
         "read",
@@ -754,7 +754,7 @@
         "TASK-36-5"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/05_RELEASE_CHECKLIST.md"
       ],
       "allowed_actions": [
@@ -793,7 +793,7 @@
       "depends_on": [],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
         "docs/AMS_UI_CORE_v5.0_FINAL.md",
         "AGENTS.md"
@@ -837,8 +837,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 37.1"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 37.1"
       ],
       "allowed_actions": [
         "read",
@@ -884,8 +884,8 @@
         "TASK-37-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 37.2"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 37.2"
       ],
       "allowed_actions": [
         "read",
@@ -929,8 +929,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 37.3"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 37.3"
       ],
       "allowed_actions": [
         "read",
@@ -977,8 +977,8 @@
         "TASK-37-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 37.4"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 37.4"
       ],
       "allowed_actions": [
         "read",
@@ -1027,8 +1027,8 @@
         "TASK-37-4"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 37.5"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 37.5"
       ],
       "allowed_actions": [
         "read",
@@ -1082,7 +1082,7 @@
         "TASK-37-5"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/05_RELEASE_CHECKLIST.md"
       ],
       "allowed_actions": [
@@ -1123,7 +1123,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
         "docs/AMS_UI_CORE_v5.0_FINAL.md",
         "AGENTS.md"
@@ -1167,8 +1167,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.1"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.1"
       ],
       "allowed_actions": [
         "read",
@@ -1214,8 +1214,8 @@
         "TASK-38-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.2"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.2"
       ],
       "allowed_actions": [
         "read",
@@ -1262,8 +1262,8 @@
         "TASK-38-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.3"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.3"
       ],
       "allowed_actions": [
         "read",
@@ -1309,8 +1309,8 @@
         "TASK-38-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.4"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.4"
       ],
       "allowed_actions": [
         "read",
@@ -1354,8 +1354,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.5"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.5"
       ],
       "allowed_actions": [
         "read",
@@ -1399,8 +1399,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.6"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.6"
       ],
       "allowed_actions": [
         "read",
@@ -1446,8 +1446,8 @@
         "TASK-38-6"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.7"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.7"
       ],
       "allowed_actions": [
         "read",
@@ -1493,8 +1493,8 @@
         "TASK-38-7"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.8"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.8"
       ],
       "allowed_actions": [
         "read",
@@ -1538,8 +1538,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.9"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.9"
       ],
       "allowed_actions": [
         "read",
@@ -1583,8 +1583,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.10"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.10"
       ],
       "allowed_actions": [
         "read",
@@ -1636,8 +1636,8 @@
         "TASK-38-10"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.11"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.11"
       ],
       "allowed_actions": [
         "read",
@@ -1693,8 +1693,8 @@
         "TASK-38-11"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 38.12"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 38.12"
       ],
       "allowed_actions": [
         "read",
@@ -1755,7 +1755,7 @@
         "TASK-38-12"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/05_RELEASE_CHECKLIST.md"
       ],
       "allowed_actions": [
@@ -1796,7 +1796,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
         "docs/AMS_UI_CORE_v5.0_FINAL.md",
         "AGENTS.md"
@@ -1840,8 +1840,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.1"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 39.1"
       ],
       "allowed_actions": [
         "read",
@@ -1887,8 +1887,8 @@
         "TASK-39-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.2"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 39.2"
       ],
       "allowed_actions": [
         "read",
@@ -1935,8 +1935,8 @@
         "TASK-39-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.3"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 39.3"
       ],
       "allowed_actions": [
         "read",
@@ -1980,8 +1980,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.4"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 39.4"
       ],
       "allowed_actions": [
         "read",
@@ -2028,8 +2028,8 @@
         "TASK-39-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.5"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 39.5"
       ],
       "allowed_actions": [
         "read",
@@ -2073,8 +2073,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.6"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 39.6"
       ],
       "allowed_actions": [
         "read",
@@ -2118,8 +2118,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.7"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 39.7"
       ],
       "allowed_actions": [
         "read",
@@ -2165,8 +2165,8 @@
         "TASK-39-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.8"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 39.8"
       ],
       "allowed_actions": [
         "read",
@@ -2212,8 +2212,8 @@
         "TASK-39-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 39.9"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 39.9"
       ],
       "allowed_actions": [
         "read",
@@ -2271,7 +2271,7 @@
         "TASK-39-9"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/05_RELEASE_CHECKLIST.md"
       ],
       "allowed_actions": [
@@ -2310,7 +2310,7 @@
       "depends_on": [],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
         "docs/AMS_UI_CORE_v5.0_FINAL.md",
         "AGENTS.md"
@@ -2354,8 +2354,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.1"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 40.1"
       ],
       "allowed_actions": [
         "read",
@@ -2401,8 +2401,8 @@
         "TASK-40-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.2"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 40.2"
       ],
       "allowed_actions": [
         "read",
@@ -2449,8 +2449,8 @@
         "TASK-40-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.3"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 40.3"
       ],
       "allowed_actions": [
         "read",
@@ -2494,8 +2494,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.4"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 40.4"
       ],
       "allowed_actions": [
         "read",
@@ -2539,8 +2539,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.5"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 40.5"
       ],
       "allowed_actions": [
         "read",
@@ -2584,8 +2584,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.6"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 40.6"
       ],
       "allowed_actions": [
         "read",
@@ -2629,8 +2629,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.7"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 40.7"
       ],
       "allowed_actions": [
         "read",
@@ -2679,8 +2679,8 @@
         "TASK-40-7"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.8"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 40.8"
       ],
       "allowed_actions": [
         "read",
@@ -2733,8 +2733,8 @@
         "TASK-40-8"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 40.9"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 40.9"
       ],
       "allowed_actions": [
         "read",
@@ -2792,7 +2792,7 @@
         "TASK-40-9"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/05_RELEASE_CHECKLIST.md"
       ],
       "allowed_actions": [
@@ -2833,7 +2833,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
         "docs/AMS_UI_CORE_v5.0_FINAL.md",
         "AGENTS.md"
@@ -2877,8 +2877,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.1"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 41.1"
       ],
       "allowed_actions": [
         "read",
@@ -2924,8 +2924,8 @@
         "TASK-41-1"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.2"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 41.2"
       ],
       "allowed_actions": [
         "read",
@@ -2971,8 +2971,8 @@
         "TASK-41-2"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.3"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 41.3"
       ],
       "allowed_actions": [
         "read",
@@ -3016,8 +3016,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.4"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 41.4"
       ],
       "allowed_actions": [
         "read",
@@ -3061,8 +3061,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.5"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 41.5"
       ],
       "allowed_actions": [
         "read",
@@ -3109,8 +3109,8 @@
         "TASK-41-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.6"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 41.6"
       ],
       "allowed_actions": [
         "read",
@@ -3157,8 +3157,8 @@
         "TASK-41-3"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 41.7"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 41.7"
       ],
       "allowed_actions": [
         "read",
@@ -3214,7 +3214,7 @@
         "TASK-41-7"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/05_RELEASE_CHECKLIST.md"
       ],
       "allowed_actions": [
@@ -3261,7 +3261,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
         "docs/AMS_UI_CORE_v5.0_FINAL.md",
         "AGENTS.md"
@@ -3305,8 +3305,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.1"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 42.1"
       ],
       "allowed_actions": [
         "read",
@@ -3350,8 +3350,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.2"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 42.2"
       ],
       "allowed_actions": [
         "read",
@@ -3395,8 +3395,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.3"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 42.3"
       ],
       "allowed_actions": [
         "read",
@@ -3440,8 +3440,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.4"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 42.4"
       ],
       "allowed_actions": [
         "read",
@@ -3485,8 +3485,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.5"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 42.5"
       ],
       "allowed_actions": [
         "read",
@@ -3530,8 +3530,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.6"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 42.6"
       ],
       "allowed_actions": [
         "read",
@@ -3575,8 +3575,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.7"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 42.7"
       ],
       "allowed_actions": [
         "read",
@@ -3620,8 +3620,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.8"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 42.8"
       ],
       "allowed_actions": [
         "read",
@@ -3665,8 +3665,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.9"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 42.9"
       ],
       "allowed_actions": [
         "read",
@@ -3720,8 +3720,8 @@
         "TASK-42-9"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 42.10"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 42.10"
       ],
       "allowed_actions": [
         "read",
@@ -3780,7 +3780,7 @@
         "TASK-42-10"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/05_RELEASE_CHECKLIST.md"
       ],
       "allowed_actions": [
@@ -3821,7 +3821,7 @@
       ],
       "delivery_mode": "MERGE_AFTER_GATE",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
         "docs/AMS_UI_CORE_v5.0_FINAL.md",
         "AGENTS.md"
@@ -3865,8 +3865,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.1"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 43.1"
       ],
       "allowed_actions": [
         "read",
@@ -3910,8 +3910,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.2"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 43.2"
       ],
       "allowed_actions": [
         "read",
@@ -3955,8 +3955,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.3"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 43.3"
       ],
       "allowed_actions": [
         "read",
@@ -4000,8 +4000,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.4"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 43.4"
       ],
       "allowed_actions": [
         "read",
@@ -4045,8 +4045,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.5"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 43.5"
       ],
       "allowed_actions": [
         "read",
@@ -4090,8 +4090,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.6"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 43.6"
       ],
       "allowed_actions": [
         "read",
@@ -4135,8 +4135,8 @@
       ],
       "depends_on": [],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.7"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 43.7"
       ],
       "allowed_actions": [
         "read",
@@ -4188,8 +4188,8 @@
         "TASK-43-7"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.8"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 43.8"
       ],
       "allowed_actions": [
         "read",
@@ -4242,8 +4242,8 @@
         "TASK-43-8"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
-        "docs/MORE_I_GORY_PLAN_№ 3.md#TASK 43.9"
+        "docs/archive/more-i-gory-plan-3.md",
+        "docs/archive/more-i-gory-plan-3.md#TASK 43.9"
       ],
       "allowed_actions": [
         "read",
@@ -4301,7 +4301,7 @@
         "TASK-43-9"
       ],
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/05_RELEASE_CHECKLIST.md"
       ],
       "allowed_actions": [
@@ -4342,7 +4342,7 @@
       ],
       "delivery_mode": "PR_ONLY",
       "required_context": [
-        "docs/MORE_I_GORY_PLAN_№ 3.md",
+        "docs/archive/more-i-gory-plan-3.md",
         "docs/AMS_REALTY_PLATFORM_CORE_STANDARD_5.5_SOLO_AI_FINAL.md",
         "docs/AMS_UI_CORE_v5.0_FINAL.md",
         "AGENTS.md"

@@ -18,7 +18,7 @@ type RegionCardProps = {
 
 export function RegionCard({ href, image, risk, thesis, title }: RegionCardProps) {
   return (
-    <Card className="relative overflow-hidden rounded-card bg-card">
+    <Card radius="card" className="relative overflow-hidden bg-card">
       <div className="relative aspect-card">
         <Image src={image.src} alt={image.alt} fill loading="lazy" sizes="(min-width: 1024px) 25vw, 100vw" className="object-cover" />
       </div>
