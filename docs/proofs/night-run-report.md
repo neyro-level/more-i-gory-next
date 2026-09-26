@@ -22,6 +22,13 @@ Runs 209 and 211 failed before artifact creation and were superseded by PR 133
 and PR 134. Run 213 built the superseded `5660a99…` candidate; it was never
 installed. Final exact-main run 215 passed.
 
+The report-only closeout was delivered by
+[PR 136](https://sourcecraft.dev/integrator-p/more-i-gory-next/pr/136), passed
+[STANDARD run 217](https://api.sourcecraft.tech/repos/integrator-p/more-i-gory-next/cicd/runs/217)
+at exact head `5ef21f8c295aa9a1f3c7b7bb73f95ae1d7996d4b`, and merged as
+`56e6d53b3c52d995012c2aa73162f1225954c61f`. That docs commit was not installed
+on preview.
+
 ## Candidate tuple
 
 | Field | Evidence |
@@ -37,6 +44,13 @@ installed. Final exact-main run 215 passed.
 
 The archive checksum and embedded release manifest passed before installation.
 The runtime host did not build application code.
+
+Release evidence is retained in draft tag
+`preview-b98c416507ab1c4c1836fb80c010382ecd387555`; the authenticated SourceCraft
+[run evidence](https://api.sourcecraft.tech/repos/integrator-p/more-i-gory-next/cicd/runs/215)
+and [artifact index](https://api.sourcecraft.tech/repos/integrator-p/more-i-gory-next/cicd/artifacts/215/release-single-build/exact-sha-release-unit/build-pack-rehearse)
+contain `release.tar.gz`, its SHA-256 sidecar, `RELEASE_EVIDENCE.json` and
+`PACK_RESULT.json`.
 
 ## Database and seed evidence
 
@@ -67,6 +81,10 @@ The approved stop rule was followed: no second candidate switch was attempted.
 Consequently baseline URL parity, full canonical/OG crawl, reversible region
 title proof, browser lead-request proof and candidate Lighthouse measurements
 are `NOT RUN AFTER STOP`, not PASS.
+
+Candidate screenshots were not produced after the mandatory stop. EPIC 89 local
+browser and Lighthouse artifacts remain separate pre-release evidence and are
+not presented as candidate live screenshots.
 
 ## Boundary proof
 

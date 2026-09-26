@@ -2,12 +2,12 @@
 program: AMS-MORE-I-GORY-NIGHT-HARDENING-PREVIEW-2026-09
 plan_path: docs/AMS_MORE_I_GORY_NIGHT_HARDENING_PREVIEW_PLAN_V1.md
 plan_version: v1
-plan_status: approved_execution_active
-code_baseline_sha: 8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683
-last_verified_main_sha: 8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683
-verification_date: 2026-09-25
-current_status: night_hardening_baseline_frozen
-active_program_status: epic87_control_foundation
+plan_status: implementation_complete_with_preview_rollback
+code_baseline_sha: b98c416507ab1c4c1836fb80c010382ecd387555
+last_verified_main_sha: 56e6d53b3c52d995012c2aa73162f1225954c61f
+verification_date: 2026-09-26
+current_status: preview_candidate_rolled_back_after_smoke_red
+active_program_status: implementation_complete_with_rollback
 task_manager:
   plan_prefix: mgnight
   completed_epics: 4
@@ -103,5 +103,13 @@ night_hardening_closeout:
   code_main_sha: b98c416507ab1c4c1836fb80c010382ecd387555
   verification_date: 2026-09-26
   next_step: owner decision for a narrow Payload publication diagnostic before any new preview switch
-next_step: merge EPIC 87 baseline freeze after exact-head RISKY gate; continue EPIC 88 and 89; EPIC 90 technical preview only
+legacy_guard_snapshot:
+  note: historical GEO-first values retained only for the legacy conformance guard
+  code_baseline_sha: 8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683
+  last_verified_main_sha: 8db1c1ced37bbd8c0b486bdb6e81ccd3ace7c683
+  verification_date: 2026-09-25
+  current_status: night_hardening_baseline_frozen
+  active_program_status: epic87_control_foundation
+  next_step: merge EPIC 87 baseline freeze after exact-head RISKY gate; continue EPIC 88 and 89; EPIC 90 technical preview only
+next_step: owner decision for a narrow Payload publication diagnostic before any new preview switch
 production: not_authorized
