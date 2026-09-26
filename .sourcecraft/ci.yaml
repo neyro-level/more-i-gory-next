@@ -109,7 +109,20 @@ workflows:
           - name: build-pack-rehearse
             image: docker.io/library/node:24.20.0-bookworm
             script:
-              - EXPECTED_COMMIT_SHA=${{ inputs.expected_commit_sha }} GATE_RUN_SLUG=${{ inputs.gate_run_slug }} PREVIOUS_RELEASE_SHA=${{ inputs.previous_release_sha }} STORE_RELEASE_TAG=${{ inputs.store_release_tag }} TARGET_SERVER_URL=${{ inputs.target_server_url }} bash scripts/ci/sourcecraft-release.sh
+              - |
+                bash scripts/ci/bootstrap-verification-postgres.sh
+                export AMS_PROFILE=REALTY_BASE
+                export AMS_RUNTIME_CONTOUR=staging
+                export AMS_EDITORIAL_PREVIEW=payload
+                export DATABASE_URI=postgresql://verify:verify@127.0.0.1:5432/moreigori_verify
+                export JOBS_AUTORUN=false
+                export NEXT_PUBLIC_LEADS_ENABLED=false
+                export PAYLOAD_SECRET=ci-validation-only-payload-secret-not-for-production
+                export TZ=Europe/Moscow
+                pnpm payload migrate
+                pnpm media:seed
+                pnpm regions:seed
+                EXPECTED_COMMIT_SHA=${{ inputs.expected_commit_sha }} GATE_RUN_SLUG=${{ inputs.gate_run_slug }} PREVIOUS_RELEASE_SHA=${{ inputs.previous_release_sha }} STORE_RELEASE_TAG=${{ inputs.store_release_tag }} TARGET_SERVER_URL=${{ inputs.target_server_url }} bash scripts/ci/sourcecraft-release.sh
             artifacts:
               paths:
                 - dist/sourcecraft-release/release.tar.gz
