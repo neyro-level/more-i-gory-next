@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import { Media } from "../../src/project/collections/media.ts";
@@ -23,10 +24,14 @@ const baseEnv = {
   TZ: "Europe/Moscow",
 };
 const fixtureBucket = "project-media-fixture";
+const storageMigration = await readFile(
+  new URL("../../migrations/20260926_070539_add_s3_storage_fields.ts", import.meta.url),
+  "utf8",
+);
 
-test("S3 storage plugin is disabled without S3 env", () => {
+test("S3 storage adapter stays disabled without S3 env while schema fields remain stable", () => {
   assert.equal(isS3StorageConfigured(baseEnv), false);
-  assert.deepEqual(createStoragePlugins(baseEnv), []);
+  assert.equal(createStoragePlugins(baseEnv).length, 1);
 });
 
 test("S3 storage plugin requires the approved env-only contract", () => {
@@ -41,6 +46,11 @@ test("S3 storage plugin requires the approved env-only contract", () => {
 
   assert.equal(isS3StorageConfigured(env), true);
   assert.equal(createStoragePlugins(env).length, 1);
+});
+
+test("S3 runtime fields have an additive committed migration", () => {
+  assert.match(storageMigration, /ADD COLUMN "prefix" varchar DEFAULT 'staging\/media'/);
+  assert.match(storageMigration, /ADD COLUMN "_objectkey" varchar/);
 });
 
 test("media upload does not use VPS disk as source of truth", () => {

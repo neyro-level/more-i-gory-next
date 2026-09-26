@@ -211,6 +211,8 @@ export interface Media {
    */
   sourceLabel?: string | null;
   sourceUrl?: string | null;
+  prefix?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -1364,6 +1366,8 @@ export interface MediaSelect<T extends boolean = true> {
   caption?: T;
   sourceLabel?: T;
   sourceUrl?: T;
+  prefix?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

@@ -72,13 +72,13 @@ export function isVpsDiskMediaSourceOfTruth(): false {
 }
 
 export function createStoragePlugins(env: ProjectEnv): Plugin[] {
-  if (!isS3StorageConfigured(env)) return [];
-
-  const config = createS3SdkConfig(env);
+  const enabled = isS3StorageConfigured(env);
+  const config = enabled ? createS3SdkConfig(env) : {};
 
   return [
     s3Storage({
-      bucket: env.S3_BUCKET as string,
+      alwaysInsertFields: true,
+      bucket: enabled ? (env.S3_BUCKET as string) : "schema-only-disabled",
       collections: {
         media: {
           prefix: resolveS3MediaPrefix(env),
@@ -86,6 +86,7 @@ export function createStoragePlugins(env: ProjectEnv): Plugin[] {
       },
       config,
       disableLocalStorage: true,
+      enabled,
     }),
   ];
 }

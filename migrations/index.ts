@@ -26,6 +26,7 @@ import * as migration_20260919_123428 from './20260919_123428';
 import * as migration_20260919_202220_epic44_status_enum_collision from './20260919_202220_epic44_status_enum_collision';
 import * as migration_20260923_141141_add_reset_password_requested_at from './20260923_141141_add_reset_password_requested_at';
 import * as migration_20260924_161359_epic74_geo_model from './20260924_161359_epic74_geo_model';
+import * as migration_20260926_070539_add_s3_storage_fields from './20260926_070539_add_s3_storage_fields';
 
 export const migrations = [
   {
@@ -167,5 +168,10 @@ export const migrations = [
     up: migration_20260924_161359_epic74_geo_model.up,
     down: migration_20260924_161359_epic74_geo_model.down,
     name: '20260924_161359_epic74_geo_model'
+  },
+  {
+    up: migration_20260926_070539_add_s3_storage_fields.up,
+    down: migration_20260926_070539_add_s3_storage_fields.down,
+    name: '20260926_070539_add_s3_storage_fields',
   },
 ];

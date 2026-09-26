@@ -21,7 +21,7 @@ test("EPIC 48 runbook keeps mutation behind exact SHA, confirmation and single-D
   assert.doesNotMatch(migration, /EXPECTED_DATABASE/);
   assert.match(migration, /expectedDatabase = pgEnv\.PGDATABASE/);
   assert.match(migration, /EXPECTED_POSTGRES_MAJOR = 18/);
-  assert.match(migration, /EXPECTED_MIGRATION_COUNT = 28/);
+  assert.match(migration, /EXPECTED_MIGRATION_COUNT = 29/);
   assert.match(migration, /EXPECTED_PUBLIC_TABLE_COUNT = 148/);
   assert.match(seed, /AMS_RUNTIME_CONTOUR !== "staging"/);
   assert.match(seed, /public HTTPS origin/);
